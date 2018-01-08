@@ -1,0 +1,49 @@
+import jaci.openrio.gradle.GradleRIOPlugin
+import jaci.openrio.gradle.frc.FRCJavaArtifact
+import jaci.openrio.gradle.frc.RoboRIO
+
+plugins {
+    id "java"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.06"
+}
+
+group 'org.team1540'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile wpilib()
+    compile ctre()
+    compile navx()
+    // should be changed to master-SNAPSHOT when we merge the gradle-integration branch
+    compile "org.team1540:ROOSTER:gradle-integration-SNAPSHOT"
+}
+
+def TEAM = 1540
+def ROBOT_CLASS = "org.team1540.robot2018"
+
+deploy {
+    targets {
+        target("roborio", RoboRIO) {
+            team = TEAM
+        }
+    }
+    artifacts {
+        artifact('frcJava', FRCJavaArtifact) {
+            targets << "roborio"
+        }
+    }
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.4'
+}
