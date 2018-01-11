@@ -19,8 +19,7 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
-    // should be changed to master-SNAPSHOT when we merge the gradle-integration branch
-    compile "org.team1540:ROOSTER:gradle-integration-SNAPSHOT"
+    compile "org.team1540:ROOSTER:0.1.0"
 }
 
 def TEAM = 1540
