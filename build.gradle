@@ -4,7 +4,7 @@ import jaci.openrio.gradle.frc.RoboRIO
 
 plugins {
     id "java"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.06"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.11"
 }
 
 group 'org.team1540'
@@ -19,7 +19,7 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
-    compile "org.team1540:ROOSTER:0.1.0"
+    compile "org.team1540:rooster:0.1.1"
 }
 
 def TEAM = 1540
