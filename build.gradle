@@ -4,7 +4,7 @@ import jaci.openrio.gradle.frc.RoboRIO
 
 plugins {
     id "java"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.11"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.18"
 }
 
 group 'org.team1540'
