@@ -20,10 +20,11 @@ dependencies {
     compile ctre()
     compile navx()
     compile "org.team1540:rooster:master-SNAPSHOT"
+   // compile "org.team1540:rooster:0.3.0"
 }
 
 def TEAM = 1540
-def ROBOT_CLASS = "org.team1540.robot2018"
+def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
 deploy {
     targets {
@@ -31,6 +32,9 @@ deploy {
             team = TEAM
         }
     }
+
+
+
     artifacts {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"

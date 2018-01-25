@@ -10,4 +10,7 @@ public class RobotMap {
   public static final int right2 = 4;
   public static final int right3 = 5;
 
+  public static final int intake_1 = 6;
+  public static final int intake_2 = 7;
+
 }
