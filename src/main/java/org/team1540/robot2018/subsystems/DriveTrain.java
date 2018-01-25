@@ -1,7 +1,7 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
@@ -9,16 +9,35 @@ import org.team1540.base.ChickenSubsystem;
 
 public class DriveTrain extends ChickenSubsystem {
 
-  TalonSRX left = new TalonSRX(RobotMap.left);
-  TalonSRX left2 = new TalonSRX(RobotMap.left2);
-  TalonSRX left3 = new TalonSRX(RobotMap.left3);
+  private ChickenTalon left = new ChickenTalon(RobotMap.left);
+  private ChickenTalon left2 = new ChickenTalon(RobotMap.left2);
+  private ChickenTalon left3 = new ChickenTalon(RobotMap.left3);
 
-  TalonSRX right = new TalonSRX(RobotMap.right);
-  TalonSRX right2 = new TalonSRX(RobotMap.right2);
-  TalonSRX right3 = new TalonSRX(RobotMap.right3);
+  private ChickenTalon right = new ChickenTalon(RobotMap.right);
+  private ChickenTalon right2 = new ChickenTalon(RobotMap.right2);
+  private ChickenTalon right3 = new ChickenTalon(RobotMap.right3);
+
+
+  // public double getLeftVelocity() {return}
+  // public double getRightVelocity() {return}
+  // public void setLeftVelocity(double velocity) {
+  //
+  // }
+  // public void setLeftThrottle(double throttle){
+  //
+  // }
+  // public void setRightThrottle(double throttle){
+  //
+  // }
+  // public void setRightVelocity(double velocity){
+  //
+  // }
 
 
   public DriveTrain() {
+    this.add(left, left2, left3);
+    this.setPriority(10);
+
     left.setInverted(false);
     left2.setInverted(false);
     left3.setInverted(false);
@@ -37,7 +56,7 @@ public class DriveTrain extends ChickenSubsystem {
   public void drive() {
     double triggerValue = OI.getDriverLeftTrigger() + -OI.getDriverRightTrigger();
 
-    Robot.drivetrain.left.set(ControlMode.PercentOutput, OI.getDriverLeftX() + triggerValue);
-    Robot.drivetrain.right.set(ControlMode.PercentOutput, OI.getDriverRightX() + triggerValue);
+    this.left.set(ControlMode.PercentOutput, OI.getDriverLeftX() + triggerValue);
+    this.right.set(ControlMode.PercentOutput, OI.getDriverRightX() + triggerValue);
   }
 }
