@@ -44,6 +44,10 @@ public class OI {
   public static final int copilotLeftX = 1;  //Left thumbstick up/down
   public static final int copilotRightX = 0; //Right thumbstick up/down
 
+  public static final int autoIntake = 3; //Auto intake
+
+  static Button auto_intake = new JoystickButton(copilot, autoIntake);
+
   static final double DeadZone = 0.1;
 
   public static double getDriverLeftX(){
