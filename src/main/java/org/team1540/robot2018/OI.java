@@ -1,9 +1,9 @@
 package org.team1540.robot2018;
 
-import org.team1540.base.Utilities;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.team1540.base.Utilities;
 
 /*
  * Button Mapping
@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * Left joystick center: 10
  *
  * Axis Mapping:
- * Left analog trigger: 2 (Only positive)
- * Right analog trigger: 3 (Only positive)
+ * Left analog trigger: 2 (Only positive values)
+ * Right analog trigger: 3 (Only positive values)
  *
  * Left joystick:
  * Up/Down: 1 (Up is negative)
@@ -44,31 +44,40 @@ public class OI {
   public static final int copilotLeftX = 1;  //Left thumbstick up/down
   public static final int copilotRightX = 0; //Right thumbstick up/down
 
-  public static final int autoIntake = 3; //Auto intake
+  public static final int autoIntake = 3; //Auto intake (X)
+
+  public static final int manualEject = 4; //Run intake backwards (no auto control) (Y)
+  public static final int manualIntake = 1; //Run intake backwards (no auto control) (A)
+
+  public static final int manualElevatorUp = 5; //While held move elevator up (LB)
+  public static final int manualIntakeDown = 6; //While held move elevator down (RB)
+
 
   static Button auto_intake = new JoystickButton(copilot, autoIntake);
-
-  static final double DeadZone = 0.1;
+  static Button manual_eject = new JoystickButton(copilot, manualEject);
+  static Button manual_intake = new JoystickButton(copilot, manualIntake);
+  static Button manual_elevator_up = new JoystickButton(copilot, manualElevatorUp);
+  static Button manual_elevator_down = new JoystickButton(copilot, manualIntakeDown);
 
   public static double getDriverLeftX(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftX), DeadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftX), Tuning.deadZone);
   }
   public static double getCopilotLeftX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverLeftX), DeadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverLeftX), Tuning.deadZone);
   }
 
   public static double getDriverRightX(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverRightX), DeadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(driverRightX), Tuning.deadZone);
   }
   public static double getCopilotRightX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightX), DeadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightX), Tuning.deadZone);
   }
 
   public static double getDriverLeftTrigger(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftTrigger), DeadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftTrigger), Tuning.deadZone);
   }
   public static double getDriverRightTrigger(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightTrigger), DeadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightTrigger), Tuning.deadZone);
   }
 
 }

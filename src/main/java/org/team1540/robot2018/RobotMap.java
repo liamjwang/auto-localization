@@ -13,4 +13,7 @@ public class RobotMap {
   public static final int intake_1 = 6;
   public static final int intake_2 = 7;
 
+  public static final int elevator_1 = 8;
+  public static final int elevator_2 = 9;
+
 }

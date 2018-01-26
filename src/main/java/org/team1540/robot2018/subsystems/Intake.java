@@ -25,17 +25,30 @@ public class Intake extends ChickenSubsystem {
 
   public void IntakePowerup(double speed, double spikeCurrent, double spikeLength) {
 
-    if (timer.get() <= 0) { //If the timer hasn't started, start it
-      timer.start();
-    }else{ //If it has already started, reset it.
-      timer.reset();
-    }
+    // if (timer.get() <= 0) { //If the timer hasn't started, start it
+    //   timer.start();
+    // }else{ //If it has already started, reset it.
+    //   timer.reset();
+    // }
+    timer.reset();
 
     if (intake_1.getOutputCurrent() < spikeCurrent) {
       intake_1.set(ControlMode.PercentOutput, speed); //Start intaking at the speed specified
 
     } else if(timer.get() >= spikeLength){
-      intake_1.set(ControlMode.Follower, 0);
+      intake_1.set(ControlMode.PercentOutput, 0);
     }
+  }
+
+  public void ManualEject(){
+    intake_1.set(ControlMode.PercentOutput, -0.5); //TODO: check if negative makes it go backwards
+  }
+
+  public void ManualIntake(){
+    intake_1.set(ControlMode.PercentOutput, 0.5);
+  }
+
+  public void stop(){
+    intake_1.set(ControlMode.PercentOutput, 0);
   }
 }

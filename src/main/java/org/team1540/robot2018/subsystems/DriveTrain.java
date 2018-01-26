@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.OI;
-import org.team1540.robot2018.Robot;
 import org.team1540.base.ChickenSubsystem;
 
 public class DriveTrain extends ChickenSubsystem {

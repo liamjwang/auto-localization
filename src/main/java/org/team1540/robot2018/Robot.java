@@ -6,17 +6,28 @@ import org.team1540.base.adjustables.AdjustableManager;
 
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Intake;
+import org.team1540.robot2018.subsystems.Elevator;
 
 import org.team1540.robot2018.commands.AutoIntake;
+import org.team1540.robot2018.commands.ManualEject;
+import org.team1540.robot2018.commands.ManualIntake;
+import org.team1540.robot2018.commands.ManualElevatorUp;
+import org.team1540.robot2018.commands.ManualElevatorDown;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
+  public static final Elevator elevator = new Elevator();
 
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
-    OI.auto_intake.whileHeld(new AutoIntake());
+
+    OI.auto_intake.whenPressed(new AutoIntake());
+    OI.manual_eject.whileHeld(new ManualEject());
+    OI.manual_intake.whileHeld(new ManualIntake());
+    OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
+    OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
   }
 
   @Override
