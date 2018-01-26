@@ -52,10 +52,11 @@ public class DriveTrain extends ChickenSubsystem {
     right3.set(ControlMode.Follower, right.getDeviceID());
   }
 
-  public void drive() {
-    double triggerValue = OI.getDriverLeftTrigger() + -OI.getDriverRightTrigger();
+  public void setLeft(double value){
+    this.left.set(ControlMode.PercentOutput, value);
+  }
 
-    this.left.set(ControlMode.PercentOutput, OI.getDriverLeftX() + triggerValue);
-    this.right.set(ControlMode.PercentOutput, OI.getDriverRightX() + triggerValue);
+  public void setRight(double value){
+    this.right.set(ControlMode.PercentOutput, value);
   }
 }

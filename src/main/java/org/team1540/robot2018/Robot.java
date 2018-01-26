@@ -1,7 +1,9 @@
 package org.team1540.robot2018;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -13,11 +15,13 @@ import org.team1540.robot2018.commands.ManualEject;
 import org.team1540.robot2018.commands.ManualIntake;
 import org.team1540.robot2018.commands.ManualElevatorUp;
 import org.team1540.robot2018.commands.ManualElevatorDown;
+import org.team1540.robot2018.commands.JoystickDrive;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
   public static final Elevator elevator = new Elevator();
+
 
   @Override
   public void robotInit() {
@@ -50,6 +54,7 @@ public class Robot extends IterativeRobot {
   public void robotPeriodic() {
     Scheduler.getInstance().run();
     AdjustableManager.getInstance().update();
+    SmartDashboard.putData(new PowerDistributionPanel());
   }
 
   @Override
@@ -62,6 +67,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    drivetrain.drive();
+    new JoystickDrive();
   }
 }
