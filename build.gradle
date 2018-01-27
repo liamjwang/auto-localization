@@ -19,7 +19,7 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
-    compile "org.team1540:rooster:v0.1.2"
+    compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
 def TEAM = 1540
