@@ -11,13 +11,13 @@ public class JoystickDrive extends Command {
 
   @Override
   protected void initialize() {
-    double triggerValue = OI.getDriverLeftTrigger() + -OI.getDriverRightTrigger();
-    Robot.drivetrain.setLeft(OI.getDriverLeftX() + triggerValue);
-    Robot.drivetrain.setRight(OI.getDriverRightX() + triggerValue);
   }
 
   @Override
   protected void execute() {
+    double triggerValue = OI.getDriverLeftTrigger() + -OI.getDriverRightTrigger();
+    Robot.drivetrain.setLeft(OI.getDriverLeftX() + triggerValue);
+    Robot.drivetrain.setRight(OI.getDriverRightX() + triggerValue);
   }
 
   @Override
@@ -31,6 +31,5 @@ public class JoystickDrive extends Command {
 
   @Override
   protected void interrupted() {
-    Robot.intake.stop();
   }
 }

@@ -3,8 +3,8 @@ package org.team1540.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.robot2018.OI;
 import org.team1540.base.ChickenSubsystem;
+import org.team1540.robot2018.commands.JoystickDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
@@ -17,20 +17,12 @@ public class DriveTrain extends ChickenSubsystem {
   private ChickenTalon right3 = new ChickenTalon(RobotMap.right3);
 
 
-  // public double getLeftVelocity() {return}
-  // public double getRightVelocity() {return}
-  // public void setLeftVelocity(double velocity) {
-  //
-  // }
-  // public void setLeftThrottle(double throttle){
-  //
-  // }
-  // public void setRightThrottle(double throttle){
-  //
-  // }
-  // public void setRightVelocity(double velocity){
-  //
-  // }
+  // public double getLeftVelocity() {}
+  // public double getRightVelocity() {}
+  // public void setLeftVelocity(double velocity) {}
+  // public void setLeftThrottle(double throttle){}
+  // public void setRightThrottle(double throttle){}
+  // public void setRightVelocity(double velocity){}
 
 
   public DriveTrain() {
@@ -58,5 +50,10 @@ public class DriveTrain extends ChickenSubsystem {
 
   public void setRight(double value){
     this.right.set(ControlMode.PercentOutput, value);
+  }
+
+  @Override
+  public void initDefaultCommand() {
+    setDefaultCommand(new JoystickDrive());
   }
 }
