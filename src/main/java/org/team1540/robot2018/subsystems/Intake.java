@@ -6,10 +6,10 @@ import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 
-
 public class Intake extends ChickenSubsystem {
 
-  private final Timer timer = new Timer();
+  private final Timer IntakeTimer = new Timer();
+  private final Timer EjectTimer = new Timer();
 
   ChickenTalon intake_1 = new ChickenTalon(RobotMap.intake_1);
   ChickenTalon intake_2 = new ChickenTalon(RobotMap.intake_2);
@@ -24,18 +24,23 @@ public class Intake extends ChickenSubsystem {
   }
 
   public void IntakePowerup(double speed, double spikeCurrent, double spikeLength) {
-
-    // if (timer.get() <= 0) { //If the timer hasn't started, start it
-    //   timer.start();
-    // }else{ //If it has already started, reset it.
-    //   timer.reset();
-    // }
-    timer.reset();
+    IntakeTimer.reset();
 
     if (intake_1.getOutputCurrent() < spikeCurrent) {
-      intake_1.set(ControlMode.PercentOutput, speed); //Start intaking at the speed specified
+      intake_1.set(ControlMode.PercentOutput, speed);
 
-    } else if(timer.get() >= spikeLength){
+    } else if(IntakeTimer.get() >= spikeLength){
+      intake_1.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  public void EjectPowerup(double speed, double stopCurrent, double stopLength){
+    EjectTimer.reset();
+
+    if (intake_1.getOutputCurrent() > stopCurrent) {
+      intake_1.set(ControlMode.PercentOutput, speed);
+
+    } else if(EjectTimer.get() >= stopLength){
       intake_1.set(ControlMode.PercentOutput, 0);
     }
   }

@@ -3,14 +3,14 @@ package org.team1540.robot2018.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 
-public class AutoIntake extends Command {
-  public AutoIntake() {
+public class AutoEject extends Command {
+  public AutoEject() {
     requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-    Robot.intake.IntakePowerup(0.5, 10, 1.0);
+    Robot.intake.EjectPowerup(0.5, 10, 1.0);
   }
 
   @Override
