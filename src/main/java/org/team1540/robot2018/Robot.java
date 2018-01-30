@@ -15,13 +15,11 @@ import org.team1540.robot2018.commands.ManualEject;
 import org.team1540.robot2018.commands.ManualIntake;
 import org.team1540.robot2018.commands.ManualElevatorUp;
 import org.team1540.robot2018.commands.ManualElevatorDown;
-import org.team1540.robot2018.commands.JoystickDrive;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
   public static final Elevator elevator = new Elevator();
-
 
   @Override
   public void robotInit() {
@@ -67,6 +65,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    new JoystickDrive();
+
   }
 }

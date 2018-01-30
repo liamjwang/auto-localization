@@ -20,7 +20,7 @@ dependencies {
     compile ctre()
     compile navx()
     compile "org.team1540:rooster:master-SNAPSHOT"
-   // compile "org.team1540:rooster:0.3.0"
+    //compile "org.team1540:rooster:0.3.0"
 }
 
 def TEAM = 1540

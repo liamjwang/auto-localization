@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.Utilities;
 
 /*
@@ -60,6 +61,7 @@ public class OI {
   static Button manual_elevator_down = new JoystickButton(copilot, manualIntakeDown);
 
   public static double getDriverLeftX(){
+    SmartDashboard.putNumber("Throttle Left", driver.getRawAxis(driverLeftX));
     return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftX), Tuning.deadZone);
   }
   public static double getCopilotLeftX(){
@@ -67,6 +69,7 @@ public class OI {
   }
 
   public static double getDriverRightX(){
+    SmartDashboard.putNumber("Throttle Right", driver.getRawAxis(driverRightX));
     return Utilities.processAxisDeadzone(driver.getRawAxis(driverRightX), Tuning.deadZone);
   }
   public static double getCopilotRightX(){
