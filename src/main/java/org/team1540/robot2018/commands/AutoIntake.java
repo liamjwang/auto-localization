@@ -1,16 +1,20 @@
 package org.team1540.robot2018.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
+
 
 public class AutoIntake extends Command {
+
   public AutoIntake() {
     requires(Robot.intake);
   }
 
   @Override
-  protected void initialize() {
-    Robot.intake.IntakePowerup(0.5, 10, 1.0);
+  protected void initialize(){
+    Robot.intake.intake_1.set(ControlMode.PercentOutput, Tuning.IntakeSpeed);
   }
 
   @Override
@@ -19,11 +23,12 @@ public class AutoIntake extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return(Robot.intake.intake_1.getOutputCurrent() >= Tuning.IntakeSpikeCurrent && Robot.intake.intake_2.getOutputCurrent() >= Tuning.IntakeSpikeCurrent);
   }
 
   @Override
   protected void end() {
+    Robot.intake.stop();
   }
 
   @Override
