@@ -1,20 +1,23 @@
 package org.team1540.robot2018.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
-public class AutoEject extends Command {
-  public AutoEject() {
+public class AutoEject extends TimedCommand {
+
+  public AutoEject(){
+    super(Tuning.EjectTime);
     requires(Robot.intake);
   }
 
   @Override
-  protected void initialize() {
-    Robot.intake.EjectPowerup(0.5, 10, 1.0);
-  }
+  protected void initialize() {}
 
   @Override
   protected void execute() {
+    Robot.intake.intake_1.set(ControlMode.PercentOutput, Tuning.EjectSpeed);
   }
 
   @Override
@@ -24,6 +27,7 @@ public class AutoEject extends Command {
 
   @Override
   protected void end() {
+    Robot.intake.stop();
   }
 
   @Override

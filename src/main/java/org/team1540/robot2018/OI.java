@@ -46,6 +46,7 @@ public class OI {
   public static final int copilotRightX = 0; //Right thumbstick up/down
 
   public static final int autoIntake = 3; //Auto intake (X)
+  public static final int autoEject = 4;
 
   public static final int manualEject = 4; //Run intake backwards (no auto control) (Y)
   public static final int manualIntake = 1; //Run intake backwards (no auto control) (A)
@@ -59,6 +60,8 @@ public class OI {
   static Button manual_intake = new JoystickButton(copilot, manualIntake);
   static Button manual_elevator_up = new JoystickButton(copilot, manualElevatorUp);
   static Button manual_elevator_down = new JoystickButton(copilot, manualIntakeDown);
+  static Button auto_eject = new JoystickButton(copilot, autoEject);
+
 
   public static double getDriverLeftX(){
     SmartDashboard.putNumber("Throttle Left", driver.getRawAxis(driverLeftX));
