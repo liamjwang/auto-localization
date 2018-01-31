@@ -37,7 +37,7 @@ public class OI {
   public static Joystick copilot = new Joystick(1);
 
   public static final int driverLeftX = 1;  //Left thumbstick up/down
-  public static final int driverRightX = 0; //Right thumbstick up/down
+  public static final int driverRightX = 5; //Right thumbstick up/down
 
   public static final int driverLeftTrigger = 2;  //Left trigger
   public static final int driverRightTrigger = 3; //Right trigger
@@ -53,6 +53,9 @@ public class OI {
 
   public static final int manualElevatorUp = 5; //While held move elevator up (LB)
   public static final int manualIntakeDown = 6; //While held move elevator down (RB)
+
+  public static final int copilotLeftY =  0;
+  public static final int copilotRightY = 4;
 
 
   static Button auto_intake = new JoystickButton(copilot, autoIntake);
@@ -84,6 +87,13 @@ public class OI {
   }
   public static double getDriverRightTrigger(){
     return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightTrigger), Tuning.deadZone);
+  }
+
+  public static double getCopilotLeftY(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(copilotRightY), Tuning.deadZone);
+  }
+  public static double getCopilotRightY(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(copilotLeftY), Tuning.deadZone);
   }
 
 }

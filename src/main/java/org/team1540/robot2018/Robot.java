@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 
 import org.team1540.robot2018.commands.AutoEject;
+import org.team1540.robot2018.subsystems.Climber;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.Elevator;
@@ -21,6 +22,7 @@ public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
   public static final Elevator elevator = new Elevator();
+  public static final Climber climber = new Climber();
 
   @Override
   public void robotInit() {
@@ -67,6 +69,5 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-
   }
 }

@@ -18,4 +18,14 @@ public class RobotMap {
 
   public static final int wristMotor = 12;
 
+  public static final int winchA = 13;
+  public static final int winchB = 14;
+  public static final int winchC = 15;
+  public static final int winchD = 16;
+
+  public static final int tapeMeasureMotor = 17;
+
+  public static final int panServo = 0;
+  public static final int tiltServo = 1;
+
 }
