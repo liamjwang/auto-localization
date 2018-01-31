@@ -10,7 +10,7 @@ public class ManualElevatorDown extends Command {
 
   @Override
   protected void initialize() {
-    Robot.elevator.ManualElevatorDown();
+    Robot.elevator.manualElevatorDown();
   }
 
   @Override

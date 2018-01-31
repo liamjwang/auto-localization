@@ -10,7 +10,7 @@ public class ManualEject extends Command {
 
   @Override
   protected void initialize() {
-    Robot.intake.ManualEject();
+    Robot.intake.manualEject();
   }
 
   @Override

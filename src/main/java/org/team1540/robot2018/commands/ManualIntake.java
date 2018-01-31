@@ -10,7 +10,7 @@ public class ManualIntake extends Command {
 
   @Override
   protected void initialize() {
-    Robot.intake.ManualIntake();
+    Robot.intake.manualIntake();
   }
 
   @Override

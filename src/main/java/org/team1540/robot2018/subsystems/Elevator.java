@@ -20,15 +20,15 @@ public class Elevator extends ChickenSubsystem {
     elevator_2.set(ControlMode.Follower, elevator_1.getDeviceID());
   }
 
-  public void JoystickElevator(){
+  public void joystickElevator(){
     elevator_1.set(ControlMode.PercentOutput, OI.getCopilotLeftX());
   }
 
-  public void ManualElevatorUp(){
+  public void manualElevatorUp(){
     elevator_1.set(ControlMode.PercentOutput, -0.5); //TODO: What direction does negative make it go
   }
 
-  public void ManualElevatorDown(){
+  public void manualElevatorDown(){
     elevator_1.set(ControlMode.PercentOutput, 0.5);
   }
 
