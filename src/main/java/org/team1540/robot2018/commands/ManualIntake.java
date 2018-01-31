@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class ManualIntake extends Command {
   public ManualIntake() {
@@ -10,7 +11,7 @@ public class ManualIntake extends Command {
 
   @Override
   protected void initialize() {
-    Robot.intake.manualIntake();
+    Robot.intake.manualIntake(Tuning.IntakeSpeed);
   }
 
   @Override
