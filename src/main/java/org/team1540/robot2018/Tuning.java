@@ -20,4 +20,23 @@ public class Tuning {
 
   @Tunable("Eject Speed")
   public static double EjectSpeed = 0.5;
+
+  @Tunable("Wrist P")
+  public static double wristP = 1;
+
+  @Tunable("Wrist I")
+  public static double wristI = 1;
+
+  @Tunable("Wrist D")
+  public static double wristD = 1;
+
+  @Tunable("Wrist Up Setpoint")
+  public static double wristUpLimit = 0;
+
+  @Tunable("Wrist Down Setpoint")
+  public static double wristDownLimit = 0;
+
+  @Tunable("Wrist Bounce Back")
+  public static double wristBounceBack = 10;
+
 }
