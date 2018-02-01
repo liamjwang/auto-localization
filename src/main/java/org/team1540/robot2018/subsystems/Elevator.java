@@ -8,8 +8,8 @@ import org.team1540.base.ChickenSubsystem;
 
 public class Elevator extends ChickenSubsystem {
 
-  ChickenTalon elevator_1 = new ChickenTalon(RobotMap.elevator_1);
-  ChickenTalon elevator_2 = new ChickenTalon(RobotMap.elevator_2);
+  private ChickenTalon elevator_1 = new ChickenTalon(RobotMap.elevator_1);
+  private ChickenTalon elevator_2 = new ChickenTalon(RobotMap.elevator_2);
 
   public Elevator() {
     this.add(elevator_1, elevator_2);
