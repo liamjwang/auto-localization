@@ -8,8 +8,8 @@ import org.team1540.robot2018.Tuning;
 
 public class Intake extends ChickenSubsystem {
 
-  public ChickenTalon intake_1 = new ChickenTalon(RobotMap.intake_1);
-  public ChickenTalon intake_2 = new ChickenTalon(RobotMap.intake_2);
+  private ChickenTalon intake_1 = new ChickenTalon(RobotMap.intake_1);
+  private ChickenTalon intake_2 = new ChickenTalon(RobotMap.intake_2);
 
   public Intake() {
     this.add(intake_1, intake_2);
@@ -26,5 +26,16 @@ public class Intake extends ChickenSubsystem {
 
   public void stop(){
     intake_1.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void set(double value){
+    intake_1.set(ControlMode.PercentOutput, value);
+  }
+
+  public double getCurrent1(){
+    return intake_1.getOutputCurrent();
+  }
+  public double getCurrent2(){
+    return intake_2.getOutputCurrent();
   }
 }
