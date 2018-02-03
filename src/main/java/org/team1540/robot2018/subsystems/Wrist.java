@@ -1,6 +1,7 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
@@ -14,10 +15,12 @@ public class Wrist extends ChickenSubsystem {
     this.add(wristMotor);
     this.setPriority(11);
     wristMotor.setInverted(false);
+
+    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
   public void ManualUp(){
-    wristMotor.set(ControlMode.PercentOutput, -0.5); //TODO: check if negative makes it go backwards
+    wristMotor.set(ControlMode.PercentOutput, -0.5);
   }
 
   public void ManualDown(){
@@ -39,5 +42,9 @@ public class Wrist extends ChickenSubsystem {
     position = position >= Tuning.wristDownLimit ? position : 0 + Tuning.wristBounceBack;
     wristMotor.set(position);
     return position;
+  }
+
+  public double getPosition(){
+    return wristMotor.getSelectedSensorPosition();
   }
 }
