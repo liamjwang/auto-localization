@@ -39,4 +39,9 @@ public class Tuning {
   @Tunable("Wrist Bounce Back")
   public static double wristBounceBack = 10;
 
+  @Tunable("Wrist Multiplier")
+  public static double wristMult = 0.1;
+
+  @Tunable("Wrist Bounce Back")
+  public static double wristBouceBack = 1.0;
 }
