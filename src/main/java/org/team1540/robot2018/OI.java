@@ -33,6 +33,7 @@ import org.team1540.base.Utilities;
  */
 
 public class OI {
+
   public static Joystick driver = new Joystick(0);
   public static Joystick copilot = new Joystick(1);
 
@@ -57,6 +58,9 @@ public class OI {
   public static final int copilotLeftY =  0;
   public static final int copilotRightY = 4;
 
+  public static final int manualWinchIn = 1;
+  public static final int manualWinchOut = 2;
+
 
   static Button auto_intake = new JoystickButton(copilot, autoIntake);
   static Button manual_eject = new JoystickButton(copilot, manualEject);
@@ -64,6 +68,8 @@ public class OI {
   static Button manual_elevator_up = new JoystickButton(copilot, manualElevatorUp);
   static Button manual_elevator_down = new JoystickButton(copilot, manualIntakeDown);
   static Button auto_eject = new JoystickButton(copilot, autoEject);
+  static Button manual_winch_in = new JoystickButton(copilot, manualWinchIn);
+  static Button manual_winch_out = new JoystickButton(copilot, manualWinchOut);
 
 
   public static double getDriverLeftX(){
@@ -95,5 +101,4 @@ public class OI {
   public static double getCopilotRightY(){
     return Utilities.processAxisDeadzone(copilot.getRawAxis(copilotLeftY), Tuning.deadZone);
   }
-
 }

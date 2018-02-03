@@ -38,8 +38,12 @@ public class Climber extends ChickenSubsystem {
     SmartDashboard.putNumber("Tilt Value", tilt.get());
   }
 
-  public void manualWinch(double speed){
+  public void setWinch(double speed){
     winchA.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void stopWinch(){
+    winchA.set(ControlMode.PercentOutput, 0);
   }
 
   public void align(double x, double y){

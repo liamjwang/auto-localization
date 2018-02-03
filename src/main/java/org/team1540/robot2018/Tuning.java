@@ -44,4 +44,10 @@ public class Tuning {
 
   @Tunable("Wrist Bounce Back")
   public static double wristBouceBack = 1.0;
+
+  @Tunable("Winch In Speed")
+  public static double winchInSpeed = 0.2;
+
+  @Tunable("Winch Out Speed")
+  public static double winchOutSpeed = -0.75;
 }
