@@ -11,6 +11,7 @@ import org.team1540.robot2018.subsystems.Climber;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.Elevator;
+import org.team1540.robot2018.subsystems.Wrist;
 
 import org.team1540.robot2018.commands.AutoIntake;
 import org.team1540.robot2018.commands.ManualEject;
@@ -23,6 +24,7 @@ public class Robot extends IterativeRobot {
   public static final Intake intake = new Intake();
   public static final Elevator elevator = new Elevator();
   public static final Climber climber = new Climber();
+  public static final Wrist wrist = new Wrist();
 
   @Override
   public void robotInit() {
