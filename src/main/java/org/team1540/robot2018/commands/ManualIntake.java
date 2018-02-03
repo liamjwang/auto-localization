@@ -25,10 +25,10 @@ public class ManualIntake extends Command {
 
   @Override
   protected void end() {
+    Robot.intake.stop();
   }
 
   @Override
   protected void interrupted() {
-    Robot.intake.stop();
   }
 }
