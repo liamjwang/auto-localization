@@ -15,8 +15,7 @@ public class AlignClimber extends Command {
 
   @Override
   protected void execute() {
-    Robot.climber.pan.set(OI.getCopilotLeftX());
-    Robot.climber.tilt.set(OI.getCopilotLeftY());
+    Robot.climber.align(OI.getCopilotLeftX(), OI.getCopilotLeftY());
   }
 
   @Override

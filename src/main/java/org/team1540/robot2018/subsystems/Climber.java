@@ -10,12 +10,12 @@ import org.team1540.robot2018.commands.AlignClimber;
 
 public class Climber extends ChickenSubsystem {
 
-  ChickenTalon tapeMeasureMotor = new ChickenTalon(RobotMap.tapeMeasureMotor);
+  private ChickenTalon tapeMeasureMotor = new ChickenTalon(RobotMap.tapeMeasureMotor);
 
-  ChickenTalon winchA = new ChickenTalon(RobotMap.winchA);
-  ChickenTalon winchB = new ChickenTalon(RobotMap.winchB);
-  ChickenTalon winchC = new ChickenTalon(RobotMap.winchC);
-  ChickenTalon winchD = new ChickenTalon(RobotMap.winchD);
+  private ChickenTalon winchA = new ChickenTalon(RobotMap.winchA);
+  private ChickenTalon winchB = new ChickenTalon(RobotMap.winchB);
+  private ChickenTalon winchC = new ChickenTalon(RobotMap.winchC);
+  private ChickenTalon winchD = new ChickenTalon(RobotMap.winchD);
 
   public Servo pan = new Servo(RobotMap.panServo);
   public Servo tilt = new Servo(RobotMap.tiltServo);
@@ -40,6 +40,11 @@ public class Climber extends ChickenSubsystem {
 
   public void manualWinch(double speed){
     winchA.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void align(double x, double y){
+    pan.set(x);
+    tilt.set(y);
   }
 
   public void stop(){
