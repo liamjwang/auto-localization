@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 
 import org.team1540.robot2018.commands.AutoEject;
+import org.team1540.robot2018.commands.WinchIn;
+import org.team1540.robot2018.commands.WinchOut;
 import org.team1540.robot2018.subsystems.Climber;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Intake;
@@ -36,6 +38,8 @@ public class Robot extends IterativeRobot {
     OI.manual_intake.whileHeld(new ManualIntake());
     OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
     OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
+    OI.manual_winch_in.whileHeld(new WinchIn());
+    OI.manual_winch_out.whileHeld(new WinchOut());
   }
 
   @Override
@@ -57,7 +61,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    AdjustableManager.getInstance().update();
     SmartDashboard.putData(new PowerDistributionPanel());
   }
 
