@@ -42,12 +42,15 @@ public class Tuning {
   @Tunable("Wrist Multiplier")
   public static double wristMult = 0.1;
 
-  @Tunable("Wrist Bounce Back")
-  public static double wristBouceBack = 1.0;
-
   @Tunable("Winch In Speed")
   public static double winchInSpeed = 0.2;
 
   @Tunable("Winch Out Speed")
   public static double winchOutSpeed = -0.75;
+
+  @Tunable("Tape In Speed")
+  public static double tapeInSpeed = 0.5;
+
+  @Tunable("Tape Out Speed")
+  public static double tapeOutSpeed = -0.75;
 }

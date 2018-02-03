@@ -46,6 +46,9 @@ public class OI {
   public static final int copilotLeftX = 1;  //Left thumbstick up/down
   public static final int copilotRightX = 0; //Right thumbstick up/down
 
+  public static final int copilotLeftY =  0;
+  public static final int copilotRightY = 4;
+
   public static final int autoIntake = 3; //Auto intake (X)
   public static final int autoEject = 4;
 
@@ -55,11 +58,11 @@ public class OI {
   public static final int manualElevatorUp = 5; //While held move elevator up (LB)
   public static final int manualIntakeDown = 6; //While held move elevator down (RB)
 
-  public static final int copilotLeftY =  0;
-  public static final int copilotRightY = 4;
-
   public static final int manualWinchIn = 1;
   public static final int manualWinchOut = 2;
+
+  public static final int manualTapeIn = 0;
+  public static final int manualTapeOut = 0;
 
 
   static Button auto_intake = new JoystickButton(copilot, autoIntake);
@@ -70,6 +73,8 @@ public class OI {
   static Button auto_eject = new JoystickButton(copilot, autoEject);
   static Button manual_winch_in = new JoystickButton(copilot, manualWinchIn);
   static Button manual_winch_out = new JoystickButton(copilot, manualWinchOut);
+  static Button manual_tape_in = new JoystickButton(copilot, manualTapeIn);
+  static Button manual_tape_out = new JoystickButton(copilot, manualTapeOut);
 
 
   public static double getDriverLeftX(){

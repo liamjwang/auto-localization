@@ -21,6 +21,9 @@ import org.team1540.robot2018.commands.ManualIntake;
 import org.team1540.robot2018.commands.ManualElevatorUp;
 import org.team1540.robot2018.commands.ManualElevatorDown;
 
+import org.team1540.robot2018.commands.TapeIn;
+import org.team1540.robot2018.commands.TapeOut;
+
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
@@ -40,6 +43,8 @@ public class Robot extends IterativeRobot {
     OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
     OI.manual_winch_in.whileHeld(new WinchIn());
     OI.manual_winch_out.whileHeld(new WinchOut());
+    OI.manual_tape_in.whileHeld(new TapeIn());
+    OI.manual_tape_out.whileHeld(new TapeOut());
   }
 
   @Override

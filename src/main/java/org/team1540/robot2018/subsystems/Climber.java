@@ -46,6 +46,14 @@ public class Climber extends ChickenSubsystem {
     winchA.set(ControlMode.PercentOutput, 0);
   }
 
+  public void setTape(double speed){
+    tapeMeasureMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void stopTape(){
+    tapeMeasureMotor.set(ControlMode.PercentOutput, 0);
+  }
+
   public void align(double x, double y){
     pan.set(x);
     tilt.set(y);
