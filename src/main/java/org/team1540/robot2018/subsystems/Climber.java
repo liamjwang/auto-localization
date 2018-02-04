@@ -7,6 +7,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.commands.AlignClimber;
+import org.team1540.robot2018.Tuning;
 
 public class Climber extends ChickenSubsystem {
 
@@ -59,8 +60,16 @@ public class Climber extends ChickenSubsystem {
     tilt.set(y);
   }
 
+  public void runClimber(double value){
+    double tapeMeasureValue = value * Tuning.tapeMeasureMultiplier;
+    double winchValue = value * Tuning.winchMultiplier;
+    setTape(tapeMeasureValue);
+    setWinch(winchValue);
+  }
+
   public void stop(){
-    winchA.set(ControlMode.PercentOutput, 0);
+    stopTape();
+    stopWinch();
   }
 
   @Override
