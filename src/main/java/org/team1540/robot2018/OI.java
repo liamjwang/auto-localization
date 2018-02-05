@@ -4,7 +4,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.io.UTFDataFormatException;
+import javax.rmi.CORBA.Util;
 import org.team1540.base.Utilities;
+import org.team1540.base.triggers.DPadButton;
+import org.team1540.base.triggers.DPadButton.DPadAxis;
 
 /*
  * Button Mapping
@@ -32,78 +36,83 @@ import org.team1540.base.Utilities;
  * Left/Right: 4 (Left is negative)
  */
 
+
 public class OI {
 
   public static Joystick driver = new Joystick(0);
   public static Joystick copilot = new Joystick(1);
 
-  public static final int driverLeftX = 1;  //Left thumbstick up/down
-  public static final int driverRightX = 5; //Right thumbstick up/down
-
-  public static final int driverLeftTrigger = 2;  //Left trigger
-  public static final int driverRightTrigger = 3; //Right trigger
-
-  public static final int copilotLeftX = 1;  //Left thumbstick up/down
-  public static final int copilotRightX = 0; //Right thumbstick up/down
-
-  public static final int copilotLeftY =  0;
-  public static final int copilotRightY = 4;
-
-  public static final int autoIntake = 3; //Auto intake (X)
-  public static final int autoEject = 4;
-
-  public static final int manualEject = 4; //Run intake backwards (no auto control) (Y)
-  public static final int manualIntake = 1; //Run intake backwards (no auto control) (A)
-
-  public static final int manualElevatorUp = 5; //While held move elevator up (LB)
-  public static final int manualIntakeDown = 6; //While held move elevator down (RB)
-
-  public static final int manualWinchIn = 1;
-  public static final int manualWinchOut = 2;
-
-  public static final int manualTapeIn = 0;
-  public static final int manualTapeOut = 0;
+  //
+  // public static final int autoIntake = 3; //Auto intake (X)
+  // public static final int autoEject = 4;
+  //
+  // public static final int manualEject = 4; //Run intake backwards (no auto control) (Y)
+  // public static final int manualIntake = 1; //Run intake backwards (no auto control) (A)
+  //
+  // public static final int manualElevatorUp = 5; //While held move elevator up (LB)
+  // public static final int manualIntakeDown = 6; //While held move elevator down (RB)
+  //
+  // public static final int manualWinchIn = 1;
+  // public static final int manualWinchOut = 2;
+  //
+  // public static final int manualTapeIn = 0;
+  // public static final int manualTapeOut = 0;
 
 
-  static Button auto_intake = new JoystickButton(copilot, autoIntake);
-  static Button manual_eject = new JoystickButton(copilot, manualEject);
-  static Button manual_intake = new JoystickButton(copilot, manualIntake);
-  static Button manual_elevator_up = new JoystickButton(copilot, manualElevatorUp);
-  static Button manual_elevator_down = new JoystickButton(copilot, manualIntakeDown);
-  static Button auto_eject = new JoystickButton(copilot, autoEject);
-  static Button manual_winch_in = new JoystickButton(copilot, manualWinchIn);
-  static Button manual_winch_out = new JoystickButton(copilot, manualWinchOut);
-  static Button manual_tape_in = new JoystickButton(copilot, manualTapeIn);
-  static Button manual_tape_out = new JoystickButton(copilot, manualTapeOut);
+  public static final int X = 3;
+  public static final int Y = 4;
+  public static final int A = 1;
+  public static final int B = 2;
 
+  public static final int back = 7;
+  public static final int start = 8;
+  public static final int LB = 5;
+  public static final int RB = 6;
+
+  static Button auto_intake = new JoystickButton(copilot, LB);
+  static Button auto_eject = new JoystickButton(copilot, RB);
+
+  static Button manual_eject = new JoystickButton(copilot, X);
+  static Button manual_intake = new JoystickButton(copilot, A);
+  static Button manual_elevator_up = new JoystickButton(copilot, Y);
+  static Button manual_elevator_down = new JoystickButton(copilot, B);
+  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
+  static Button manual_tape_in = new JoystickButton(copilot, back);
+  static Button manual_tape_out = new JoystickButton(copilot, start);
 
   public static double getDriverLeftX(){
-    SmartDashboard.putNumber("Throttle Left", driver.getRawAxis(driverLeftX));
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftX), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(0), Tuning.deadZone);
   }
   public static double getCopilotLeftX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverLeftX), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(0), Tuning.deadZone);
   }
 
   public static double getDriverRightX(){
-    SmartDashboard.putNumber("Throttle Right", driver.getRawAxis(driverRightX));
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverRightX), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(4), Tuning.deadZone);
   }
   public static double getCopilotRightX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightX), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
   }
 
   public static double getDriverLeftTrigger(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(driverLeftTrigger), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(2), Tuning.deadZone);
   }
   public static double getDriverRightTrigger(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(driverRightTrigger), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(driver.getRawAxis(3), Tuning.deadZone);
+  }
+
+  public static double getCopilotLeftTrigger(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(2), Tuning.deadZone);
+  }
+  public static double getCopilotRightTrigger(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
   }
 
   public static double getCopilotLeftY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(copilotRightY), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
   }
   public static double getCopilotRightY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(copilotLeftY), Tuning.deadZone);
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
   }
 }
