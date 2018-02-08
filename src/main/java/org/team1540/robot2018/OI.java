@@ -39,23 +39,6 @@ public class OI {
   public static Joystick driver = new Joystick(0);
   public static Joystick copilot = new Joystick(1);
 
-  //
-  // public static final int autoIntake = 3; //Auto intake (X)
-  // public static final int autoEject = 4;
-  //
-  // public static final int manualEject = 4; //Run intake backwards (no auto control) (Y)
-  // public static final int manualIntake = 1; //Run intake backwards (no auto control) (A)
-  //
-  // public static final int manualElevatorUp = 5; //While held move elevator up (LB)
-  // public static final int manualIntakeDown = 6; //While held move elevator down (RB)
-  //
-  // public static final int manualWinchIn = 1;
-  // public static final int manualWinchOut = 2;
-  //
-  // public static final int manualTapeIn = 0;
-  // public static final int manualTapeOut = 0;
-
-
   public static final int X = 3;
   public static final int Y = 4;
   public static final int A = 1;
@@ -71,10 +54,13 @@ public class OI {
 
   static Button manual_eject = new JoystickButton(copilot, X);
   static Button manual_intake = new JoystickButton(copilot, A);
+
   static Button manual_elevator_up = new JoystickButton(copilot, Y);
   static Button manual_elevator_down = new JoystickButton(copilot, B);
+
   static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
   static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
+
   static Button manual_tape_in = new JoystickButton(copilot, back);
   static Button manual_tape_out = new JoystickButton(copilot, start);
 
