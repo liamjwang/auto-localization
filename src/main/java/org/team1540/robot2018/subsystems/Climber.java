@@ -29,20 +29,19 @@ public class Climber extends ChickenSubsystem{ //TODO: No all winch motors need 
     winchC.setInverted(false);
     winchD.setInverted(false);
 
-    winchB.set(ControlMode.Follower, winchA.getDeviceID());
-    winchC.set(ControlMode.Follower, winchA.getDeviceID());
-    winchD.set(ControlMode.Follower, winchA.getDeviceID());
-
     SmartDashboard.putNumber("Pan Value", pan.get());
     SmartDashboard.putNumber("Tilt Value", tilt.get());
   }
 
   public void setWinch(double speed){
     winchA.set(ControlMode.PercentOutput, speed);
+    winchB.set(ControlMode.PercentOutput, speed);
+    winchC.set(ControlMode.PercentOutput, speed);
+    winchD.set(ControlMode.PercentOutput, speed);
   }
 
   public void stopWinch(){
-    winchA.set(ControlMode.PercentOutput, 0);
+    setWinch(0);
   }
 
   public void setTape(double speed){
