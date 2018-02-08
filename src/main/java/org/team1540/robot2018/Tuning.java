@@ -12,14 +12,20 @@ public class Tuning {
   @Tunable("Auto Intake Spike Length")
   public static double IntakeSpikeLength = 1.0;
 
-  @Tunable("Auto Intake Speed")
-  public static double IntakeSpeed = 0.5;
+  @Tunable("Auto Intake Speed Motor A")
+  public static double IntakeSpeedA = 0.5;
+
+  @Tunable("Auto Intake Speed Motor B")
+  public static double IntakeSpeedB = 0.5;
 
   @Tunable("Eject Seconds")
   public static double EjectTime = 1.0;
 
-  @Tunable("Eject Speed")
-  public static double EjectSpeed = 0.5;
+  @Tunable("Eject Speed Motor A")
+  public static double EjectSpeedA = 0.5;
+
+  @Tunable("Eject Speed Motor B")
+  public static double EjectSpeedB = 0.5;
 
   @Tunable("Wrist P")
   public static double wristP = 1;

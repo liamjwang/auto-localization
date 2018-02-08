@@ -17,7 +17,7 @@ public class AutoEject extends TimedCommand {
 
   @Override
   protected void execute() {
-    Robot.intake.set(Tuning.EjectSpeed);
+    Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB);
   }
 
   @Override

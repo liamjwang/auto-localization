@@ -16,20 +16,21 @@ public class Intake extends ChickenSubsystem {
     this.setPriority(10);
     intake_1.setInverted(false);
     intake_2.setInverted(false);
-
-    intake_2.set(ControlMode.Follower, intake_1.getDeviceID());
   }
 
-  public void manualIntake(double speed){
-    intake_1.set(ControlMode.PercentOutput, speed);
+  public void manualIntake(double aValue, double bValue){
+    intake_1.set(ControlMode.PercentOutput, aValue);
+    intake_2.set(ControlMode.PercentOutput, bValue);
   }
 
   public void stop(){
     intake_1.set(ControlMode.PercentOutput, 0);
+    intake_2.set(ControlMode.PercentOutput, 0);
   }
 
-  public void set(double value){
-    intake_1.set(ControlMode.PercentOutput, value);
+  public void set(double aValue, double bValue){
+    intake_1.set(ControlMode.PercentOutput, aValue);
+    intake_2.set(ControlMode.PercentOutput, bValue);
   }
 
   public double getCurrent1(){

@@ -1,6 +1,7 @@
 package org.team1540.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.base.adjustables.Tunable;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
@@ -13,7 +14,7 @@ public class AutoIntake extends Command {
 
   @Override
   protected void initialize(){
-    Robot.intake.set(Tuning.IntakeSpeed);
+    Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
   }
 
   @Override
