@@ -92,6 +92,20 @@ public class OI {
     return Utilities.processAxisDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
   }
 
+  public static double getDriverLeftY(){
+    return Utilities.processAxisDeadzone(driver.getRawAxis(1), Tuning.deadZone);
+  }
+  public static double getCopilotLeftY(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
+  }
+
+  public static double getDriverRightY(){
+    return Utilities.processAxisDeadzone(driver.getRawAxis(5), Tuning.deadZone);
+  }
+  public static double getCopilotRightY(){
+    return Utilities.processAxisDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
+  }
+
   public static double getDriverLeftTrigger(){
     return Utilities.processAxisDeadzone(driver.getRawAxis(2), Tuning.deadZone);
   }
@@ -104,12 +118,5 @@ public class OI {
   }
   public static double getCopilotRightTrigger(){
     return Utilities.processAxisDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
-  }
-
-  public static double getCopilotLeftY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
-  }
-  public static double getCopilotRightY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
   }
 }
