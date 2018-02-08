@@ -3,15 +3,16 @@ package org.team1540.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.wrappers.ChickenTalon;
-import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
-import org.team1540.robot2018.commands.AlignClimber;
+import org.team1540.base.wrappers.ChickenTalon;
+import org.team1540.base.wrappers.ChickenVictor;
+import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.AlignClimber;
 
-public class Climber extends ChickenSubsystem {
+public class Climber extends ChickenSubsystem{
 
-  private ChickenTalon tapeMeasureMotor = new ChickenTalon(RobotMap.tapeMeasureMotor);
+  private ChickenVictor tapeMeasureMotor = new ChickenVictor(RobotMap.tapeMeasureMotor);
 
   private ChickenTalon winchA = new ChickenTalon(RobotMap.winchA);
   private ChickenTalon winchB = new ChickenTalon(RobotMap.winchB);
@@ -22,9 +23,6 @@ public class Climber extends ChickenSubsystem {
   public Servo tilt = new Servo(RobotMap.tiltServo);
 
   public Climber() {
-    this.add(tapeMeasureMotor, winchA, winchB, winchC, winchD);
-    this.setPriority(12);
-
     tapeMeasureMotor.setInverted(false);
     winchA.setInverted(false);
     winchB.setInverted(false);
@@ -38,6 +36,31 @@ public class Climber extends ChickenSubsystem {
     SmartDashboard.putNumber("Pan Value", pan.get());
     SmartDashboard.putNumber("Tilt Value", tilt.get());
   }
+  //
+  // @Override
+  // public double getPriority() {
+  //   return 12;
+  // }
+  //
+  // @Override
+  // public void setPriority(double priority) {
+  //
+  // }
+  //
+  // @Override
+  // public double getCurrent() {
+  //   return tapeMeasureMotor.getOutputCurrent() + winchA.getOutputCurrent() + winch;
+  // }
+  //
+  // @Override
+  // public void limitPower(double limit) {
+  //
+  // }
+  //
+  // @Override
+  // public void stopLimitingPower() {
+  //
+  // }
 
   public void setWinch(double speed){
     winchA.set(ControlMode.PercentOutput, speed);
