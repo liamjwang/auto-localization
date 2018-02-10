@@ -27,6 +27,29 @@ public class Tuning {
   @Tunable("Eject Speed Motor B")
   public static double EjectSpeedB = 0.5;
 
+
+  @Tunable("Elevator P")
+  public static double elevatorP = 1;
+
+  @Tunable("Elevator I")
+  public static double elevatorI = 1;
+
+  @Tunable("Elevator D")
+  public static double elevatorD = 1;
+
+  @Tunable("Elevator Up Setpoint")
+  public static double elevatorUpLimit = 0;
+
+  @Tunable("Elevator Down Setpoint")
+  public static double elevatorDownLimit = 0;
+
+  @Tunable("Elevator Bounce Back")
+  public static double elevatorBounceBack = 10;
+
+  @Tunable("Elevator Multiplier")
+  public static double elevatorMult = 0.1;
+
+
   @Tunable("Wrist P")
   public static double wristP = 1;
 
