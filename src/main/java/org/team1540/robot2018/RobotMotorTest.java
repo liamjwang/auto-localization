@@ -31,7 +31,7 @@ public class RobotMotorTest extends IterativeRobot {
     motorChooserA = new SendableChooser<Integer>();
     motorChooserB = new SendableChooser<Integer>();
 
-    for (int i = 1; i <= 16; i++) {
+    for (int i = 0; i <= 16; i++) {
       motorChooserA.addObject(Integer.toString(i), i);
       motorChooserB.addObject(Integer.toString(i), i);
     }
@@ -63,6 +63,7 @@ public class RobotMotorTest extends IterativeRobot {
     motorsA[15] = new ChickenVictor(15);
     motorsA[16] = new ChickenVictor(16);
 
+    motorsA[0] = null;
 
     motorsB[1] = new ChickenTalon(1);
     motorsB[2] = new ChickenTalon(2);
@@ -83,6 +84,8 @@ public class RobotMotorTest extends IterativeRobot {
     motorsB[14] = new ChickenTalon(14);
     motorsB[15] = new ChickenVictor(15);
     motorsB[16] = new ChickenVictor(16);
+
+    motorsB[0] = null;
   }
 
   @Override
@@ -104,6 +107,7 @@ public class RobotMotorTest extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Driver Right Y", OI.getDriverRightY());
+    SmartDashboard.putNumber("Driver Right X", OI.getDriverRightX());
     SmartDashboard.putNumber("Driver Left Y", OI.getDriverLeftY());
     SmartDashboard.putNumber("Driver Left X", OI.getDriverLeftX());
 
@@ -112,7 +116,7 @@ public class RobotMotorTest extends IterativeRobot {
       motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, OI.getDriverRightY());
     }
     if (motorChooserB.getSelected() != null) {
-      motorsA[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
+      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
     }
 
     if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
@@ -128,10 +132,6 @@ public class RobotMotorTest extends IterativeRobot {
       pan.set(processedPan);
       tilt.set(processedTilt);
 
-      /*
-      OI returns -1 to 1
-      I need 0 to 1
-       */
     }
   }
 
