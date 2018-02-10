@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class ManualElevatorDown extends Command {
   public ManualElevatorDown() {
@@ -10,7 +11,7 @@ public class ManualElevatorDown extends Command {
 
   @Override
   protected void initialize() {
-    Robot.elevator.set(-0.5);
+    Robot.elevator.set(Tuning.manualElevatorDownSpeed);
   }
 
   @Override

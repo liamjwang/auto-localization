@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class ManualElevatorUp extends Command {
   public ManualElevatorUp() {
@@ -10,7 +11,7 @@ public class ManualElevatorUp extends Command {
 
   @Override
   protected void initialize() {
-    Robot.elevator.set(0.5);
+    Robot.elevator.set(Tuning.manualElevatorUpSpeed);
   }
 
   @Override
@@ -19,7 +20,7 @@ public class ManualElevatorUp extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return false;
   }
 
   @Override

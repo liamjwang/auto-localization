@@ -91,4 +91,11 @@ public class Tuning {
 
   @Tunable("Climber In Speed")
   public static double climberInSpeed = 0.5;
+
+
+  @Tunable("Manual Elevator Up Speed")
+  public static double manualElevatorUpSpeed = 0.5;
+
+  @Tunable("Manual Elevator Down Speed")
+  public static double manualElevatorDownSpeed = -0.5;
 }
