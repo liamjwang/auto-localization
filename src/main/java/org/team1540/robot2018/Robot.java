@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    AdjustableManager.getInstance().update();
   }
 
   @Override
