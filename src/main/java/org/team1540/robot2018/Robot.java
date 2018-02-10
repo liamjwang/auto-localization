@@ -6,23 +6,23 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 
-import org.team1540.robot2018.commands.AutoEject;
-import org.team1540.robot2018.commands.WinchIn;
-import org.team1540.robot2018.commands.WinchOut;
+import org.team1540.robot2018.commands.intake.AutoEject;
+import org.team1540.robot2018.commands.climber.WinchIn;
+import org.team1540.robot2018.commands.climber.WinchOut;
 import org.team1540.robot2018.subsystems.Climber;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Wrist;
 
-import org.team1540.robot2018.commands.AutoIntake;
-import org.team1540.robot2018.commands.ManualEject;
-import org.team1540.robot2018.commands.ManualIntake;
+import org.team1540.robot2018.commands.intake.AutoIntake;
+import org.team1540.robot2018.commands.intake.ManualEject;
+import org.team1540.robot2018.commands.intake.ManualIntake;
 import org.team1540.robot2018.commands.ManualElevatorUp;
 import org.team1540.robot2018.commands.ManualElevatorDown;
 
-import org.team1540.robot2018.commands.TapeIn;
-import org.team1540.robot2018.commands.TapeOut;
+import org.team1540.robot2018.commands.climber.TapeIn;
+import org.team1540.robot2018.commands.climber.TapeOut;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
