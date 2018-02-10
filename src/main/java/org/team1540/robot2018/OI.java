@@ -105,4 +105,14 @@ public class OI {
   public static double getCopilotRightTrigger(){
     return Utilities.processAxisDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
   }
+
+  public static double isOutsideRange(double value) {
+    if (value > 1) {
+      return 1;
+    } else if (value < 0) {
+      return 0;
+    } else {
+      return value;
+    }
+  }
 }
