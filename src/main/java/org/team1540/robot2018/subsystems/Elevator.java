@@ -5,6 +5,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
+import org.team1540.robot2018.commands.JoystickElevator;
 
 public class Elevator extends ChickenSubsystem {
 
@@ -26,5 +27,10 @@ public class Elevator extends ChickenSubsystem {
   public void stop(){
     elevator_1.set(ControlMode.PercentOutput, 0);
     elevator_2.set(ControlMode.PercentOutput, 0);
+  }
+
+  @Override
+  public void initDefaultCommand(){
+    setDefaultCommand(new JoystickElevator());
   }
 }
