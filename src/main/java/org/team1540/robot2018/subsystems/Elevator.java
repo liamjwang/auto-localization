@@ -16,23 +16,15 @@ public class Elevator extends ChickenSubsystem {
     this.setPriority(10);
     elevator_1.setInverted(false);
     elevator_2.setInverted(false);
-
-    elevator_2.set(ControlMode.Follower, elevator_1.getDeviceID());
   }
 
-  public void joystickElevator(){
-    elevator_1.set(ControlMode.PercentOutput, OI.getCopilotLeftX());
-  }
-
-  public void manualElevatorUp(){
-    elevator_1.set(ControlMode.PercentOutput, -0.5); //TODO: What direction does negative make it go
-  }
-
-  public void manualElevatorDown(){
-    elevator_1.set(ControlMode.PercentOutput, 0.5);
+  public void set(double value){
+    elevator_1.set(ControlMode.PercentOutput, value);
+    elevator_2.set(ControlMode.PercentOutput, -value);
   }
 
   public void stop(){
     elevator_1.set(ControlMode.PercentOutput, 0);
+    elevator_2.set(ControlMode.PercentOutput, 0);
   }
 }
