@@ -5,8 +5,6 @@ import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-
-
 public class JoystickWrist extends Command {
   private double position = Robot.wrist.getPosition();
 
