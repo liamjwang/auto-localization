@@ -1,18 +1,17 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class TapeIn extends Command {
-
-  public TapeIn(){
-    requires(Robot.climber);
+public class ManualIntake extends Command {
+  public ManualIntake() {
+    requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setTape(Tuning.tapeInSpeed);
+    Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
   }
 
   @Override
@@ -26,7 +25,7 @@ public class TapeIn extends Command {
 
   @Override
   protected void end() {
-    Robot.climber.stopTape();
+    Robot.intake.stop();
   }
 
   @Override

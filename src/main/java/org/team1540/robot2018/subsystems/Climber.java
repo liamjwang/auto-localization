@@ -8,9 +8,9 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.AlignClimber;
+import org.team1540.robot2018.commands.climber.AlignClimber;
 
-public class Climber extends ChickenSubsystem{ //TODO: No all winch motors need to go the same direction.
+public class Climber extends ChickenSubsystem{
 
   private ChickenVictor tapeMeasureMotor = new ChickenVictor(RobotMap.tapeMeasureMotor);
 
@@ -40,16 +40,8 @@ public class Climber extends ChickenSubsystem{ //TODO: No all winch motors need 
     winchD.set(ControlMode.PercentOutput, speed);
   }
 
-  public void stopWinch(){
-    setWinch(0);
-  }
-
   public void setTape(double speed){
     tapeMeasureMotor.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void stopTape(){
-    tapeMeasureMotor.set(ControlMode.PercentOutput, 0);
   }
 
   public void align(double x, double y){
@@ -65,8 +57,8 @@ public class Climber extends ChickenSubsystem{ //TODO: No all winch motors need 
   }
 
   public void stop(){
-    stopTape();
-    stopWinch();
+    setTape(0);
+    setWinch(0);
   }
 
   @Override

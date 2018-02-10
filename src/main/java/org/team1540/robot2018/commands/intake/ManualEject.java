@@ -1,18 +1,17 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class TapeOut extends Command {
-
-  public TapeOut(){
-    requires(Robot.climber);
+public class ManualEject extends Command {
+  public ManualEject() {
+    requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setTape(Tuning.tapeOutSpeed);
+    Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB);
   }
 
   @Override
@@ -21,15 +20,15 @@ public class TapeOut extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return false;
   }
 
   @Override
   protected void end() {
-    Robot.climber.stopTape();
   }
 
   @Override
   protected void interrupted() {
+    Robot.intake.stop();
   }
 }

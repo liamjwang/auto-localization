@@ -18,11 +18,6 @@ public class Intake extends ChickenSubsystem {
     intake_2.setInverted(false);
   }
 
-  public void manualIntake(double aValue, double bValue){
-    intake_1.set(ControlMode.PercentOutput, aValue);
-    intake_2.set(ControlMode.PercentOutput, bValue);
-  }
-
   public void stop(){
     intake_1.set(ControlMode.PercentOutput, 0);
     intake_2.set(ControlMode.PercentOutput, 0);

@@ -1,17 +1,18 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class ManualEject extends Command {
-  public ManualEject() {
-    requires(Robot.intake);
+public class WinchOut extends Command {
+
+  public WinchOut(){
+    requires(Robot.climber);
   }
 
   @Override
   protected void initialize() {
-    Robot.intake.manualIntake(Tuning.EjectSpeedA, Tuning.EjectSpeedB);
+    Robot.climber.setWinch(Tuning.winchOutSpeed);
   }
 
   @Override
@@ -25,10 +26,10 @@ public class ManualEject extends Command {
 
   @Override
   protected void end() {
+    Robot.climber.setWinch(0);
   }
 
   @Override
   protected void interrupted() {
-    Robot.intake.stop();
   }
 }

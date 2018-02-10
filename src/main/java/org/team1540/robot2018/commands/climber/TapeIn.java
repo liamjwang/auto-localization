@@ -1,21 +1,22 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
-import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
-public class AlignClimber extends Command {
-  public AlignClimber() {
+public class TapeIn extends Command {
+
+  public TapeIn(){
     requires(Robot.climber);
   }
 
   @Override
   protected void initialize() {
+    Robot.climber.setTape(Tuning.tapeInSpeed);
   }
 
   @Override
   protected void execute() {
-    Robot.climber.align(OI.getCopilotLeftX(), OI.getCopilotLeftY());
   }
 
   @Override
@@ -25,6 +26,7 @@ public class AlignClimber extends Command {
 
   @Override
   protected void end() {
+    Robot.climber.setTape(0);
   }
 
   @Override

@@ -1,18 +1,18 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class WinchOut extends Command {
+public class TapeOut extends Command {
 
-  public WinchOut(){
+  public TapeOut(){
     requires(Robot.climber);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setWinch(Tuning.winchOutSpeed);
+    Robot.climber.setTape(Tuning.tapeOutSpeed);
   }
 
   @Override
@@ -26,7 +26,7 @@ public class WinchOut extends Command {
 
   @Override
   protected void end() {
-    Robot.climber.stopWinch();
+    Robot.climber.setTape(0);
   }
 
   @Override

@@ -1,4 +1,4 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
@@ -26,7 +26,7 @@ public class WinchIn extends Command {
 
   @Override
   protected void end() {
-    Robot.climber.stopWinch();
+    Robot.climber.setWinch(0);
   }
 
   @Override

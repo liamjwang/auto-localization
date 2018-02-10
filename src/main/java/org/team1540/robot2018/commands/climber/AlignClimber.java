@@ -1,21 +1,21 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
-import org.team1540.robot2018.Tuning;
 
-public class ManualIntake extends Command {
-  public ManualIntake() {
-    requires(Robot.intake);
+public class AlignClimber extends Command {
+  public AlignClimber() {
+    requires(Robot.climber);
   }
 
   @Override
   protected void initialize() {
-    Robot.intake.manualIntake(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
   }
 
   @Override
   protected void execute() {
+    Robot.climber.align(OI.getCopilotLeftX(), OI.getCopilotLeftY());
   }
 
   @Override
@@ -25,7 +25,6 @@ public class ManualIntake extends Command {
 
   @Override
   protected void end() {
-    Robot.intake.stop();
   }
 
   @Override
