@@ -18,8 +18,8 @@ import org.team1540.robot2018.subsystems.Wrist;
 import org.team1540.robot2018.commands.intake.AutoIntake;
 import org.team1540.robot2018.commands.intake.ManualEject;
 import org.team1540.robot2018.commands.intake.ManualIntake;
-import org.team1540.robot2018.commands.ManualElevatorUp;
-import org.team1540.robot2018.commands.ManualElevatorDown;
+import org.team1540.robot2018.commands.elevator.ManualElevatorUp;
+import org.team1540.robot2018.commands.elevator.ManualElevatorDown;
 
 import org.team1540.robot2018.commands.climber.TapeIn;
 import org.team1540.robot2018.commands.climber.TapeOut;

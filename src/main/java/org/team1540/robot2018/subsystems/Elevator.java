@@ -6,7 +6,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.JoystickElevator;
+import org.team1540.robot2018.commands.elevator.JoystickElevator;
 
 public class Elevator extends ChickenSubsystem {
 
