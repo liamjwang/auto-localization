@@ -15,11 +15,14 @@ import org.team1540.base.wrappers.ChickenVictor;
 public class RobotMotorTest extends IterativeRobot {
 
   private ChickenController[] motorsA = new ChickenController[17];
-  private ChickenController[] motorsB = new ChickenController[17];
+//  private ChickenController[] motorsB = new ChickenController[17];
   private SendableChooser<Integer> motorChooserA;
-  private SendableChooser<Integer> motorChooserB;
+//  private SendableChooser<Integer> motorChooserB;
 
-  Boolean enableServo = false;
+  private boolean enableServo = false;
+  private boolean invertA = false;
+  private boolean invertB = false;
+
   double servoDivisor = 30;
 
   Servo pan = new Servo(0);
@@ -29,15 +32,15 @@ public class RobotMotorTest extends IterativeRobot {
   public void robotInit() {
     LiveWindow.disableAllTelemetry();
     motorChooserA = new SendableChooser<Integer>();
-    motorChooserB = new SendableChooser<Integer>();
+//    motorChooserB = new SendableChooser<Integer>();
 
     for (int i = 0; i <= 16; i++) {
       motorChooserA.addObject(Integer.toString(i), i);
-      motorChooserB.addObject(Integer.toString(i), i);
+//      motorChooserB.addObject(Integer.toString(i), i);
     }
 
     SmartDashboard.putData("Motor ChooserA", motorChooserA);
-    SmartDashboard.putData("Motor ChooserB", motorChooserB);
+//    SmartDashboard.putData("Motor ChooserB", motorChooserB);
     SmartDashboard.putData("PDP", new PowerDistributionPanel());
     SmartDashboard.putBoolean("Enable Servo Control", enableServo);
 
@@ -63,29 +66,29 @@ public class RobotMotorTest extends IterativeRobot {
     motorsA[15] = new ChickenVictor(15);
     motorsA[16] = new ChickenVictor(16);
 
-    motorsA[0] = null;
+//    motorsA[0] = null;
 
-    motorsB[1] = new ChickenTalon(1);
-    motorsB[2] = new ChickenTalon(2);
-    motorsB[3] = new ChickenTalon(3);
-    motorsB[4] = new ChickenTalon(4);
-    motorsB[5] = new ChickenTalon(5);
-    motorsB[6] = new ChickenTalon(6);
-    motorsB[7] = new ChickenTalon(7);
-    motorsB[8] = new ChickenVictor(8);
-
-    motorsB[9] = new ChickenTalon(9);
-
-    motorsB[10] = new ChickenVictor(10);
-    motorsB[11] = new ChickenVictor(11);
-    motorsB[12] = new ChickenVictor(12);
-
-    motorsB[13] = new ChickenTalon(13);
-    motorsB[14] = new ChickenTalon(14);
-    motorsB[15] = new ChickenVictor(15);
-    motorsB[16] = new ChickenVictor(16);
-
-    motorsB[0] = null;
+//    motorsB[1] = new ChickenTalon(1);
+//    motorsB[2] = new ChickenTalon(2);
+//    motorsB[3] = new ChickenTalon(3);
+//    motorsB[4] = new ChickenTalon(4);
+//    motorsB[5] = new ChickenTalon(5);
+//    motorsB[6] = new ChickenTalon(6);
+//    motorsB[7] = new ChickenTalon(7);
+//    motorsB[8] = new ChickenVictor(8);
+//
+//    motorsB[9] = new ChickenTalon(9);
+//
+//    motorsB[10] = new ChickenVictor(10);
+//    motorsB[11] = new ChickenVictor(11);
+//    motorsB[12] = new ChickenVictor(12);
+//
+//    motorsB[13] = new ChickenTalon(13);
+//    motorsB[14] = new ChickenTalon(14);
+//    motorsB[15] = new ChickenVictor(15);
+//    motorsB[16] = new ChickenVictor(16);
+//
+//    motorsB[0] = null;
   }
 
   @Override
@@ -115,9 +118,9 @@ public class RobotMotorTest extends IterativeRobot {
     if (motorChooserA.getSelected() != null) {
       motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, OI.getDriverRightY());
     }
-    if (motorChooserB.getSelected() != null) {
-      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
-    }
+//    if (motorChooserB.getSelected() != null) {
+//      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
+//    }
 
     if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
 
