@@ -26,7 +26,7 @@ public class DriveTrain extends ChickenSubsystem {
 
 
   public DriveTrain() {
-    this.add(left, left2, left3);
+    this.add(left, left2, left3, right, right2, right3);
     this.setPriority(10);
 
     left.setInverted(false);
