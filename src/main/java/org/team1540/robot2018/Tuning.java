@@ -84,10 +84,10 @@ public class Tuning {
   public static double tapeOutSpeed = 0.25;
 
   @Tunable("Tape Measure Multiplier")
-  public static double tapeMeasureMultiplier = 0;
+  public static double tapeMeasureMultiplier = 1;
 
   @Tunable("Winch Multiplier")
-  public static double winchMultiplier = 0;
+  public static double winchMultiplier = 1;
 
   @Tunable("Climber In Speed")
   public static double climberInSpeed = 0.5;
