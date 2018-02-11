@@ -75,13 +75,13 @@ public class Tuning {
   public static double winchInSpeed = 0.2;
 
   @Tunable("Winch Out Speed")
-  public static double winchOutSpeed = 0.2; // 0.75
+  public static double winchOutSpeed = -0.2; // 0.75
 
   @Tunable("Tape In Speed")
   public static double tapeInSpeed = 0.5;
 
   @Tunable("Tape Out Speed")
-  public static double tapeOutSpeed = 0.25;
+  public static double tapeOutSpeed = -0.25;
 
   @Tunable("Tape Measure Multiplier")
   public static double tapeMeasureMultiplier = 1;
