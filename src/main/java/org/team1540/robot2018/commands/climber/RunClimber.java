@@ -22,11 +22,6 @@ public class RunClimber extends TimedCommand {
   }
 
   @Override
-  protected boolean isFinished() {
-    return false;
-  }
-
-  @Override
   protected void end() {
     Robot.climber.stop();
   }
