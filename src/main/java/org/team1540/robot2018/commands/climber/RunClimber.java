@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands.climber;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class RunClimber extends TimedCommand {
   private double speed;
@@ -9,15 +10,18 @@ public class RunClimber extends TimedCommand {
   public RunClimber(double seconds, double speed) {
     super(seconds);
     this.speed = speed;
-    requires(Robot.climber);
+    requires(Robot.winch);
+    requires(Robot.tape);
   }
   @Override
   protected void execute() {
-    Robot.climber.runClimber(speed);
+    Robot.winch.set(speed * Tuning.winchMultiplier);
+    Robot.tape.set(speed * Tuning.tapeMeasureMultiplier);
   }
 
   @Override
   protected void end() {
-    Robot.climber.stop();
+    Robot.tape.set(0);
+    Robot.winch.set(0);
   }
 }

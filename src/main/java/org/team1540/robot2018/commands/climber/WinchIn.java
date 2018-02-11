@@ -7,21 +7,21 @@ import org.team1540.robot2018.Tuning;
 public class WinchIn extends Command {
 
   public WinchIn(){
-    requires(Robot.climber);
+    requires(Robot.winch);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setWinch(Tuning.winchInSpeed);
+    Robot.winch.set(Tuning.winchInSpeed);
   }
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return false;
   }
 
   @Override
   protected void end() {
-    Robot.climber.setWinch(0);
+    Robot.winch.set(0);
   }
 }

@@ -6,7 +6,9 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.elevator.ManualElevatorDown;
 import org.team1540.robot2018.commands.elevator.ManualElevatorUp;
-import org.team1540.robot2018.subsystems.Climber;
+import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
+import org.team1540.robot2018.subsystems.ClimberTurret;
+import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
@@ -16,8 +18,10 @@ public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
   public static final Elevator elevator = new Elevator();
-  public static final Climber climber = new Climber();
   public static final Wrist wrist = new Wrist();
+  public static final ClimberTurret turret = new ClimberTurret();
+  public static final ClimberTapeMeasure tape = new ClimberTapeMeasure();
+  public static final ClimberWinch winch = new ClimberWinch();
 
   @Override
   public void robotInit() {
@@ -42,12 +46,12 @@ public class Robot extends IterativeRobot {
 //    OI.manual_tape_in.whileHeld(new TapeIn());
 //    OI.manual_tape_out.whileHeld(new TapeOut());
 
-    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> Robot.climber.setTape(Tuning.tapeInSpeed), climber));
+    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> Robot.tape.set(Tuning.tapeInSpeed), tape));
   }
 
   @Override
   public void disabledInit() {
-      climber.disableServos();
+    turret.disableServos();
   }
 
   @Override
