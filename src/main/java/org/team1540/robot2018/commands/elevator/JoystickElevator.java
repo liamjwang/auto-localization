@@ -30,12 +30,4 @@ public class JoystickElevator extends Command {
   protected boolean isFinished() {
     return false; //Return true to stop the command
   }
-
-  @Override
-  protected void end() {
-  }
-
-  @Override
-  protected void interrupted() {
-  }
 }

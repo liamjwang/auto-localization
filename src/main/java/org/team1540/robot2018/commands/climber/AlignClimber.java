@@ -10,10 +10,6 @@ public class AlignClimber extends Command {
   }
 
   @Override
-  protected void initialize() {
-  }
-
-  @Override
   protected void execute() {
 
     double processedPan =
@@ -28,13 +24,5 @@ public class AlignClimber extends Command {
   @Override
   protected boolean isFinished() {
     return false; //Return true to stop the command
-  }
-
-  @Override
-  protected void end() {
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }

@@ -16,10 +16,6 @@ public class WinchOut extends Command {
   }
 
   @Override
-  protected void execute() {
-  }
-
-  @Override
   protected boolean isFinished() {
     return false; //Return true to stop the command
   }
@@ -27,9 +23,5 @@ public class WinchOut extends Command {
   @Override
   protected void end() {
     Robot.climber.setWinch(0);
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }

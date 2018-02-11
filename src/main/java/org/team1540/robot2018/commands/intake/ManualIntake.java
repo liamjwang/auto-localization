@@ -15,10 +15,6 @@ public class ManualIntake extends Command {
   }
 
   @Override
-  protected void execute() {
-  }
-
-  @Override
   protected boolean isFinished() {
     return false; //Return true to stop the command
   }
@@ -26,9 +22,5 @@ public class ManualIntake extends Command {
   @Override
   protected void end() {
     Robot.intake.stop();
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }

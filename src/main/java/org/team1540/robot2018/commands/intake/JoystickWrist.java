@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotUtil;
-import org.team1540.robot2018.Tuning;
 
 public class JoystickWrist extends Command {
   private double position = Robot.wrist.getPosition();
@@ -30,14 +29,6 @@ public class JoystickWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
-  }
-
-  @Override
-  protected void end() {
-  }
-
-  @Override
-  protected void interrupted() {
+    return false;
   }
 }

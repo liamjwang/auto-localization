@@ -1,7 +1,6 @@
 package org.team1540.robot2018.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
-import org.team1540.base.adjustables.Tunable;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
@@ -18,10 +17,6 @@ public class AutoIntake extends Command {
   }
 
   @Override
-  protected void execute() {
-  }
-
-  @Override
   protected boolean isFinished() {
     return(Robot.intake.getCurrent1() >= Tuning.IntakeSpikeCurrent && Robot.intake.getCurrent2() >= Tuning.IntakeSpikeCurrent);
   }
@@ -29,9 +24,5 @@ public class AutoIntake extends Command {
   @Override
   protected void end() {
     Robot.intake.stop();
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }

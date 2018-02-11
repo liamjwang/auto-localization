@@ -41,6 +41,8 @@ public class Robot extends IterativeRobot {
 
 //    OI.manual_tape_in.whileHeld(new TapeIn());
 //    OI.manual_tape_out.whileHeld(new TapeOut());
+
+    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> Robot.climber.setTape(Tuning.tapeInSpeed), climber));
   }
 
   @Override

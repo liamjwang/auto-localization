@@ -11,11 +11,6 @@ public class RunClimber extends TimedCommand {
     this.speed = speed;
     requires(Robot.climber);
   }
-
-  @Override
-  protected void initialize() {
-  }
-
   @Override
   protected void execute() {
     Robot.climber.runClimber(speed);
@@ -24,9 +19,5 @@ public class RunClimber extends TimedCommand {
   @Override
   protected void end() {
     Robot.climber.stop();
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }
