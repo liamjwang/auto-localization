@@ -19,8 +19,8 @@ public class Climber extends ChickenSubsystem{
   private ChickenTalon winchC = new ChickenTalon(RobotMap.winchC);
   private ChickenTalon winchD = new ChickenTalon(RobotMap.winchD);
 
-  public Servo pan = new Servo(RobotMap.panServo);
-  public Servo tilt = new Servo(RobotMap.tiltServo);
+  private Servo pan = new Servo(RobotMap.panServo);
+  private Servo tilt = new Servo(RobotMap.tiltServo);
 
   public Climber() {
     tapeMeasureMotor.setInverted(false);
@@ -28,6 +28,7 @@ public class Climber extends ChickenSubsystem{
     winchB.setInverted(false);
     winchC.setInverted(true);
     winchD.setInverted(true);
+
 
     SmartDashboard.putNumber("Pan Value", pan.get());
     SmartDashboard.putNumber("Tilt Value", tilt.get());
@@ -67,6 +68,11 @@ public class Climber extends ChickenSubsystem{
   public void stop(){
     setTape(0);
     setWinch(0);
+  }
+
+  public void disableServos() {
+      pan.setDisabled();
+      tilt.setDisabled();
   }
 
   @Override

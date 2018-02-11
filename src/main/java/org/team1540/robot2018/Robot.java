@@ -45,6 +45,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
+      climber.disableServos();
   }
 
   @Override
