@@ -19,6 +19,6 @@ public class JoystickDrive extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return false;
   }
 }
