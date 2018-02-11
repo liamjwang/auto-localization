@@ -11,7 +11,7 @@ public class ManualIntake extends Command {
 
   @Override
   protected void initialize() {
-    Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
+      Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
   }
 
   @Override

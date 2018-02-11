@@ -26,8 +26,8 @@ public class Climber extends ChickenSubsystem{
     tapeMeasureMotor.setInverted(false);
     winchA.setInverted(false);
     winchB.setInverted(false);
-    winchC.setInverted(false);
-    winchD.setInverted(false);
+    winchC.setInverted(true);
+    winchD.setInverted(true);
 
     SmartDashboard.putNumber("Pan Value", pan.get());
     SmartDashboard.putNumber("Tilt Value", tilt.get());
@@ -47,6 +47,14 @@ public class Climber extends ChickenSubsystem{
   public void align(double x, double y){
     pan.set(x);
     tilt.set(y);
+  }
+
+  public double getPan() {
+    return pan.get();
+  }
+
+  public double getTilt() {
+    return tilt.get();
   }
 
   public void runClimber(double value){

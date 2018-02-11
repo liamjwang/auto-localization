@@ -5,6 +5,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.intake.ManualIntake;
 
 public class Intake extends ChickenSubsystem {
 
@@ -14,13 +15,18 @@ public class Intake extends ChickenSubsystem {
   public Intake() {
     this.add(intake_1, intake_2);
     this.setPriority(10);
-    intake_1.setInverted(false);
-    intake_2.setInverted(false);
+    intake_1.setInverted(true);
+    intake_2.setInverted(true);
   }
 
   public void stop(){
     intake_1.set(ControlMode.PercentOutput, 0);
     intake_2.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void set(double value) {
+      intake_1.set(ControlMode.PercentOutput, value);
+      intake_2.set(ControlMode.PercentOutput, value);
   }
 
   public void set(double aValue, double bValue){
@@ -34,4 +40,5 @@ public class Intake extends ChickenSubsystem {
   public double getCurrent2(){
     return intake_2.getOutputCurrent();
   }
+
 }

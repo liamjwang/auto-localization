@@ -15,7 +15,14 @@ public class AlignClimber extends Command {
 
   @Override
   protected void execute() {
-    Robot.climber.align(OI.getCopilotLeftX(), OI.getCopilotLeftY());
+
+    double processedPan =
+            OI.isOutsideRange((OI.getCopilotRightX() / 30) + Robot.climber.getPan());
+    double processedTilt =
+            OI.isOutsideRange((OI.getCopilotRightY() / 30) + Robot.climber.getTilt());
+
+    Robot.climber.align(processedPan, processedTilt);
+
   }
 
   @Override

@@ -35,16 +35,20 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
 
-    OI.auto_intake.whenPressed(new AutoIntake());
-    OI.auto_eject.whenPressed(new AutoEject());
+//    OI.auto_intake.whenPressed(new AutoIntake());
+//    OI.auto_eject.whenPressed(new AutoEject());
+
     OI.manual_eject.whileHeld(new ManualEject());
     OI.manual_intake.whileHeld(new ManualIntake());
+
     OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
     OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
-    OI.manual_winch_in.whileHeld(new WinchIn());
-    OI.manual_winch_out.whileHeld(new WinchOut());
-    OI.manual_tape_in.whileHeld(new TapeIn());
-    OI.manual_tape_out.whileHeld(new TapeOut());
+
+//    OI.manual_winch_in.whileHeld(new WinchIn());
+//    OI.manual_winch_out.whileHeld(new WinchOut());
+
+//    OI.manual_tape_in.whileHeld(new TapeIn());
+//    OI.manual_tape_out.whileHeld(new TapeOut());
   }
 
   @Override
@@ -66,7 +70,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putData(new PowerDistributionPanel());
+//    SmartDashboard.putData(new PowerDistributionPanel());
   }
 
   @Override
@@ -80,4 +84,5 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
   }
+
 }

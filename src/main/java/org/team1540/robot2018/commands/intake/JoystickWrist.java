@@ -3,6 +3,7 @@ package org.team1540.robot2018.commands.intake;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.RobotUtil;
 import org.team1540.robot2018.Tuning;
 
 public class JoystickWrist extends Command {
@@ -19,11 +20,12 @@ public class JoystickWrist extends Command {
 
   @Override
   protected void execute() {
-    position -= Tuning.wristMult * OI.getCopilotLeftY();
-    double actPos = Robot.wrist.setPosition(position);
-    if (actPos != position) {
-      position += (actPos > position ? 1 : -1) * Tuning.wristBounceBack;
-    }
+//    position -= Tuning.wristMult * OI.getCopilotLeftY();
+//    double actPos = Robot.wrist.setPosition(position);
+//    if (actPos != position) {
+//      position += (actPos > position ? 1 : -1) * Tuning.wristBounceBack;
+//    }
+      Robot.wrist.set(RobotUtil.deadzone(OI.getCopilotLeftY()));
   }
 
   @Override
