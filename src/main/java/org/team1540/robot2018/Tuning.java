@@ -13,19 +13,19 @@ public class Tuning {
   public static double IntakeSpikeLength = 1.0;
 
   @Tunable("Auto Intake Speed Motor A")
-  public static double IntakeSpeedA = 0.5;
+  public static double IntakeSpeedA = 1;
 
   @Tunable("Auto Intake Speed Motor B")
-  public static double IntakeSpeedB = 0.5;
+  public static double IntakeSpeedB = 0.4;
 
   @Tunable("Eject Seconds")
   public static double EjectTime = 1.0;
 
   @Tunable("Eject Speed Motor A")
-  public static double EjectSpeedA = 0.5;
+  public static double EjectSpeedA = -1;
 
   @Tunable("Eject Speed Motor B")
-  public static double EjectSpeedB = 0.5;
+  public static double EjectSpeedB = -1;
 
 
   @Tunable("Elevator P")
