@@ -3,10 +3,9 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.elevator.ManualElevatorDown;
 import org.team1540.robot2018.commands.elevator.ManualElevatorUp;
-import org.team1540.robot2018.commands.intake.ManualEject;
-import org.team1540.robot2018.commands.intake.ManualIntake;
 import org.team1540.robot2018.subsystems.Climber;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
@@ -27,8 +26,12 @@ public class Robot extends IterativeRobot {
 //    OI.auto_intake.whenPressed(new AutoIntake());
 //    OI.auto_eject.whenPressed(new AutoEject());
 
-    OI.manual_eject.whileHeld(new ManualEject());
-    OI.manual_intake.whileHeld(new ManualIntake());
+    OI.manual_eject.whileHeld(new SimpleCommand("Eject",
+        () -> Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB),
+        intake));
+    OI.manual_intake.whileHeld(new SimpleCommand("Eject",
+        () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),
+        intake));
 
     OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
     OI.manual_elevator_down.whileHeld(new ManualElevatorDown());

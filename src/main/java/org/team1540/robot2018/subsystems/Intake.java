@@ -2,6 +2,7 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.RobotMap;
 
@@ -26,6 +27,7 @@ public class Intake extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
+    setDefaultCommand(new SimpleCommand("Stop intake", () -> set(0), this));
   }
 
   public void set(double value) {
