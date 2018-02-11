@@ -46,7 +46,11 @@ public class Robot extends IterativeRobot {
 //    OI.manual_tape_in.whileHeld(new TapeIn());
 //    OI.manual_tape_out.whileHeld(new TapeOut());
 
-    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> Robot.tape.set(Tuning.tapeInSpeed), tape));
+    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
+    OI.manual_tape_out.whileHeld(new SimpleCommand("Tape out", () -> tape.set(-Tuning.tapeOutSpeed), tape));
+
+    OI.manual_winch_in.whileHeld(new SimpleCommand("Winch in", () -> winch.set(Tuning.winchInSpeed), winch));
+    OI.manual_winch_out.whileHeld(new SimpleCommand("Winch out", () -> winch.set(Tuning.winchOutSpeed), winch));
   }
 
   @Override
