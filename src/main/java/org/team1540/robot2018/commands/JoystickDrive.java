@@ -13,7 +13,7 @@ public class JoystickDrive extends Command {
   protected void execute() {
     double triggerValue = OI.getDriverRightTrigger() - OI.getDriverLeftTrigger();
     Robot.drivetrain.setLeft(-OI.getDriverLeftY() + triggerValue);
-    Robot.drivetrain.setRight(-OI.getDriverLeftY() + triggerValue);
+    Robot.drivetrain.setRight(-OI.getDriverRightY() + triggerValue);
   }
 
   @Override
