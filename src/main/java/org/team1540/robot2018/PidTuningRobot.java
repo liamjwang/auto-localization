@@ -97,12 +97,11 @@ public class PidTuningRobot extends IterativeRobot {
 
   @Override
   public void disabledPeriodic() {
-    super.disabledPeriodic();
   }
 
   @Override
   public void autonomousPeriodic() {
-    super.autonomousPeriodic();
+
   }
 
   @Override
@@ -116,6 +115,6 @@ public class PidTuningRobot extends IterativeRobot {
 
   @Override
   public void testPeriodic() {
-    super.testPeriodic();
+
   }
 }
