@@ -1,6 +1,5 @@
 package org.team1540.robot2018.commands.intake;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
@@ -11,9 +10,6 @@ public class AutoEject extends TimedCommand {
     super(Tuning.EjectTime);
     requires(Robot.intake);
   }
-
-  @Override
-  protected void initialize() {}
 
   @Override
   protected void execute() {
@@ -28,9 +24,5 @@ public class AutoEject extends TimedCommand {
   @Override
   protected void end() {
     Robot.intake.stop();
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }

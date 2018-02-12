@@ -6,6 +6,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.intake.JoystickWrist;
 
 public class Wrist extends ChickenSubsystem {
   
@@ -17,6 +18,10 @@ public class Wrist extends ChickenSubsystem {
     wristMotor.setInverted(false);
 
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+  }
+
+  public void set(double value) {
+    wristMotor.set(value);
   }
 
   public void ManualUp(){
@@ -47,4 +52,10 @@ public class Wrist extends ChickenSubsystem {
   public double getPosition(){
     return wristMotor.getSelectedSensorPosition();
   }
+
+  @Override
+  public void initDefaultCommand() {
+    setDefaultCommand(new JoystickWrist());
+  }
+
 }

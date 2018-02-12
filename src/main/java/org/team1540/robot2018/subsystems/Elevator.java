@@ -51,6 +51,6 @@ public class Elevator extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand(){
-    setDefaultCommand(new JoystickElevator());
+//    setDefaultCommand(new JoystickElevator());
   }
 }

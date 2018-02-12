@@ -17,10 +17,6 @@ public class AutoIntake extends Command {
   }
 
   @Override
-  protected void execute() {
-  }
-
-  @Override
   protected boolean isFinished() {
     return(Robot.intake.getCurrent1() >= Tuning.IntakeSpikeCurrent && Robot.intake.getCurrent2() >= Tuning.IntakeSpikeCurrent);
   }
@@ -28,9 +24,5 @@ public class AutoIntake extends Command {
   @Override
   protected void end() {
     Robot.intake.stop();
-  }
-
-  @Override
-  protected void interrupted() {
   }
 }
