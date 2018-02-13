@@ -58,8 +58,10 @@ public class OI {
   static Button manual_elevator_up = new JoystickButton(copilot, Y);
   static Button manual_elevator_down = new JoystickButton(copilot, B);
 
-  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
-  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
+//  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
+//  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
+  static Button manual_winch_in = new JoystickButton(copilot, LB);
+  static Button manual_winch_out = new JoystickButton(copilot, RB);
 
   static Button manual_tape_in = new JoystickButton(copilot, back);
   static Button manual_tape_out = new JoystickButton(copilot, start);

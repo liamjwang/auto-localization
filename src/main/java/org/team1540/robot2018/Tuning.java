@@ -16,19 +16,19 @@ public class Tuning {
   public static double IntakeSpikeLength = 1.0;
 
   @Tunable("Auto Intake Speed Motor A")
-  public static double IntakeSpeedA = 0.5;
+  public static double IntakeSpeedA = 1;
 
   @Tunable("Auto Intake Speed Motor B")
-  public static double IntakeSpeedB = 0.5;
+  public static double IntakeSpeedB = 0.4;
 
   @Tunable("Eject Seconds")
   public static double EjectTime = 1.0;
 
   @Tunable("Eject Speed Motor A")
-  public static double EjectSpeedA = 0.5;
+  public static double EjectSpeedA = -1;
 
   @Tunable("Eject Speed Motor B")
-  public static double EjectSpeedB = 0.5;
+  public static double EjectSpeedB = -1;
 
 
   @Tunable("Elevator P")
@@ -78,27 +78,32 @@ public class Tuning {
   public static double winchInSpeed = 0.2;
 
   @Tunable("Winch Out Speed")
-  public static double winchOutSpeed = -0.75;
+  public static double winchOutSpeed = -0.2; // 0.75
 
   @Tunable("Tape In Speed")
   public static double tapeInSpeed = 0.5;
 
   @Tunable("Tape Out Speed")
-  public static double tapeOutSpeed = -0.75;
+  public static double tapeOutSpeed = -0.25;
 
   @Tunable("Tape Measure Multiplier")
-  public static double tapeMeasureMultiplier = 0;
+  public static double tapeMeasureMultiplier = 1;
 
   @Tunable("Winch Multiplier")
-  public static double winchMultiplier = 0;
+  public static double winchMultiplier = 1;
 
   @Tunable("Climber In Speed")
   public static double climberInSpeed = 0.5;
 
 
   @Tunable("Manual Elevator Up Speed")
-  public static double manualElevatorUpSpeed = 0.5;
+  public static double manualElevatorUpSpeed = 1;
 
   @Tunable("Manual Elevator Down Speed")
   public static double manualElevatorDownSpeed = -0.5;
+
+
+  @Tunable("Standard Deadzone")
+  public static double standardDeadzone = 0.1;
+
 }

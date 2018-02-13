@@ -7,29 +7,21 @@ import org.team1540.robot2018.Tuning;
 public class TapeIn extends Command {
 
   public TapeIn(){
-    requires(Robot.climber);
+    requires(Robot.tape);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setTape(Tuning.tapeInSpeed);
-  }
-
-  @Override
-  protected void execute() {
+    Robot.tape.set(Tuning.tapeInSpeed);
   }
 
   @Override
   protected boolean isFinished() {
-    return false; //Return true to stop the command
+    return false;
   }
 
   @Override
   protected void end() {
-    Robot.climber.setTape(0);
-  }
-
-  @Override
-  protected void interrupted() {
+    Robot.tape.set(0);
   }
 }

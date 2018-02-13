@@ -7,16 +7,12 @@ import org.team1540.robot2018.Tuning;
 public class WinchOut extends Command {
 
   public WinchOut(){
-    requires(Robot.climber);
+    requires(Robot.winch);
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setWinch(Tuning.winchOutSpeed);
-  }
-
-  @Override
-  protected void execute() {
+    Robot.winch.set(-Tuning.winchOutSpeed);
   }
 
   @Override
@@ -26,10 +22,6 @@ public class WinchOut extends Command {
 
   @Override
   protected void end() {
-    Robot.climber.setWinch(0);
-  }
-
-  @Override
-  protected void interrupted() {
+    Robot.winch.set(0);
   }
 }

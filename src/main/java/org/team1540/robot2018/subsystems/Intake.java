@@ -1,37 +1,47 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import org.team1540.base.wrappers.ChickenTalon;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.base.util.SimpleCommand;
+import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.base.ChickenSubsystem;
-import org.team1540.robot2018.Tuning;
 
-public class Intake extends ChickenSubsystem {
+public class Intake extends Subsystem {
 
-  private ChickenTalon intake_1 = new ChickenTalon(RobotMap.intake_1);
-  private ChickenTalon intake_2 = new ChickenTalon(RobotMap.intake_2);
+  private ChickenVictor intake_1 = new ChickenVictor(RobotMap.intake_1);
+  private ChickenVictor intake_2 = new ChickenVictor(RobotMap.intake_2);
+  private double priority = 10;
 
   public Intake() {
-    this.add(intake_1, intake_2);
-    this.setPriority(10);
-    intake_1.setInverted(false);
-    intake_2.setInverted(false);
+    intake_1.setInverted(true);
+    intake_2.setInverted(true);
   }
 
-  public void stop(){
-    intake_1.set(ControlMode.PercentOutput, 0);
-    intake_2.set(ControlMode.PercentOutput, 0);
+  public double getCurrent1() {
+    return intake_1.getOutputCurrent();
   }
 
-  public void set(double aValue, double bValue){
+  public double getCurrent2() {
+    return intake_2.getOutputCurrent();
+  }
+
+  @Override
+  protected void initDefaultCommand() {
+    setDefaultCommand(new SimpleCommand("Stop intake", () -> set(0), this));
+  }
+
+  public void set(double value) {
+    intake_1.set(ControlMode.PercentOutput, value);
+    intake_2.set(ControlMode.PercentOutput, value);
+  }
+
+  public void set(double aValue, double bValue) {
     intake_1.set(ControlMode.PercentOutput, aValue);
     intake_2.set(ControlMode.PercentOutput, bValue);
   }
 
-  public double getCurrent1(){
-    return intake_1.getOutputCurrent();
-  }
-  public double getCurrent2(){
-    return intake_2.getOutputCurrent();
+  public void stop() {
+    intake_1.set(ControlMode.PercentOutput, 0);
+    intake_2.set(ControlMode.PercentOutput, 0);
   }
 }

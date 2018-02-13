@@ -20,6 +20,10 @@ public class Wrist extends ChickenSubsystem {
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  public void set(double value) {
+    wristMotor.set(value);
+  }
+
   public void ManualUp(){
     wristMotor.set(ControlMode.PercentOutput, -0.5);
   }

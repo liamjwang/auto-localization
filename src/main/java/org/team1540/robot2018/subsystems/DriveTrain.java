@@ -33,9 +33,9 @@ public class DriveTrain extends ChickenSubsystem {
     left2.setInverted(false);
     left3.setInverted(false);
 
-    right.setInverted(false);
-    right2.setInverted(false);
-    right3.setInverted(false);
+    right.setInverted(true);
+    right2.setInverted(true);
+    right3.setInverted(true);
 
     left2.set(ControlMode.Follower, left.getDeviceID());
     left3.set(ControlMode.Follower, left.getDeviceID());

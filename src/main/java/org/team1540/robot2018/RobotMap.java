@@ -25,7 +25,7 @@ public class RobotMap {
   public static final int intake_1 = 15;
   public static final int intake_2 = 16;
 
-  public static final int panServo = 1;
-  public static final int tiltServo = 0;
+  public static final int panServo = 9;
+  public static final int tiltServo = 8;
 
 }
