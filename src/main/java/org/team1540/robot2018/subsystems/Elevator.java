@@ -10,32 +10,32 @@ import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
-  private ChickenTalon elevator_1 = new ChickenTalon(RobotMap.elevator_1);
-  private ChickenTalon elevator_2 = new ChickenTalon(RobotMap.elevator_2);
+  private ChickenTalon talon1 = new ChickenTalon(RobotMap.elevator_1);
+  private ChickenTalon talon2 = new ChickenTalon(RobotMap.elevator_2);
 
   public Elevator() {
-    this.add(elevator_1, elevator_2);
+    this.add(talon1, talon2);
     this.setPriority(10);
-    elevator_1.setInverted(false);
-    elevator_2.setInverted(false);
+    talon1.setInverted(true);
+    talon2.setInverted(true);
 
-    elevator_1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder); // TODO: 2/9/18 Figure out which motor has the encoder
+    talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
   public void set(double value){
-    elevator_1.set(ControlMode.PercentOutput, value);
-    elevator_2.set(ControlMode.PercentOutput, -value);
+    talon1.set(ControlMode.PercentOutput, value);
+    talon2.set(ControlMode.PercentOutput, value);
   }
 
   public void stop(){
-    elevator_1.set(ControlMode.PercentOutput, 0);
-    elevator_2.set(ControlMode.PercentOutput, 0);
+    talon1.set(ControlMode.PercentOutput, 0);
+    talon2.set(ControlMode.PercentOutput, 0);
   }
 
   public void updatePID() {
-    elevator_1.config_kP(0, Tuning.elevatorP);
-    elevator_1.config_kI(0, Tuning.elevatorI);
-    elevator_1.config_kD(0, Tuning.elevatorD);
+    talon1.config_kP(0, Tuning.elevatorP);
+    talon1.config_kI(0, Tuning.elevatorI);
+    talon1.config_kD(0, Tuning.elevatorD);
   }
 
   public double setPosition(double position){
@@ -46,7 +46,7 @@ public class Elevator extends ChickenSubsystem {
   }
 
   public double getPosition(){
-    return elevator_1.getSelectedSensorPosition();
+    return talon1.getSelectedSensorPosition();
   }
 
   @Override

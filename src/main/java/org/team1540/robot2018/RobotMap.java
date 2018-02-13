@@ -19,8 +19,9 @@ public class RobotMap {
   public static final int winchC = 11;
   public static final int winchD = 12;
 
-  public static final int elevator_1 = 13;
-  public static final int elevator_2 = 14;
+  // Backwards on purpose as the encoder is on controller 14
+  public static final int elevator_1 = 14;
+  public static final int elevator_2 = 13;
 
   public static final int intake_1 = 15;
   public static final int intake_2 = 16;
