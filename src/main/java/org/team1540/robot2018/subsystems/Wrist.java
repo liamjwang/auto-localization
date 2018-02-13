@@ -2,10 +2,11 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.wrist.HoldWristPosition;
 
 public class Wrist extends ChickenSubsystem {
   
@@ -46,5 +47,10 @@ public class Wrist extends ChickenSubsystem {
 
   public double getPosition(){
     return wristMotor.getSelectedSensorPosition();
+  }
+
+  @Override
+  protected void initDefaultCommand() {
+    setDefaultCommand(new HoldWristPosition());
   }
 }

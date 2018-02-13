@@ -2,11 +2,11 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.elevator.JoystickElevator;
+import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
@@ -51,6 +51,6 @@ public class Elevator extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand(){
-    setDefaultCommand(new JoystickElevator());
+    setDefaultCommand(new HoldElevatorPosition());
   }
 }
