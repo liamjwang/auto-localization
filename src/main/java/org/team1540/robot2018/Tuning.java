@@ -40,6 +40,9 @@ public class Tuning {
   @Tunable("Elevator D")
   public static double elevatorD = 1;
 
+  @Tunable("Elevator Tolerance")
+  public static double elevatorTolerance;
+
   @Tunable("Elevator Up Setpoint")
   public static double elevatorUpLimit = 0;
 
@@ -51,7 +54,14 @@ public class Tuning {
 
   @Tunable("Elevator Multiplier")
   public static double elevatorMult = 0.1;
-
+  @Tunable("Elevator Ground Position")
+  public static double elevatorGroundPosition = 0;
+  @Tunable("Elevator Front Switch Position")
+  public static double elevatorFrontSwitchPosition = 0;
+  @Tunable("Elevator Back Switch Position")
+  public static double elevatorBackSwitchPosition = 0;
+  @Tunable("Elevator Scale Position")
+  public static double elevatorScalePosition = 0;
 
   @Tunable("Wrist P")
   public static double wristP = 1;
@@ -61,6 +71,9 @@ public class Tuning {
 
   @Tunable("Wrist D")
   public static double wristD = 1;
+
+  @Tunable("Wrist Stop Tolerance")
+  public static double wristTolerance;
 
   @Tunable("Wrist Up Setpoint")
   public static double wristUpLimit = 0;
@@ -73,6 +86,13 @@ public class Tuning {
 
   @Tunable("Wrist Multiplier")
   public static double wristMult = 0.1;
+
+  @Tunable("Wrist Out Position")
+  public static double wristOutPosition = 0;
+  @Tunable("Wrist Back Position")
+  public static double wristBackPosition = 0;
+  @Tunable("Wrist Transit Position")
+  public static double wristTransitPosition = 0;
 
   @Tunable("Winch In Speed")
   public static double winchInSpeed = 0.2;
@@ -105,5 +125,4 @@ public class Tuning {
 
   @Tunable("Standard Deadzone")
   public static double standardDeadzone = 0.1;
-
 }

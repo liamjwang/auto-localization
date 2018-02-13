@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class MoveElevatorToPosition extends Command {
   private final double target;
@@ -9,6 +10,10 @@ public class MoveElevatorToPosition extends Command {
   private final double stopTolerance;
 
   private double currentPosition;
+
+  public MoveElevatorToPosition(double target) {
+    this(target, Tuning.elevatorMult, Tuning.elevatorTolerance);
+  }
 
   public MoveElevatorToPosition(double target, double speed, double stopTolerance) {
     this.target = target;
