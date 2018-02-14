@@ -141,8 +141,12 @@ public class ElevatorTuningRobot extends IterativeRobot {
         motor1.set(ControlMode.Position, joystickPosition);
         break;
       case PID_MTP:
-        joystickPosition -= Math.copySign(joystickMultiplier,
-            motor1.getSelectedSensorPosition() - setpoint);
+        if (Math.abs(setpoint - joystickPosition) > Math.abs(setpoint - joystickMultiplier)) {
+          joystickPosition -= Math.copySign(joystickMultiplier,
+              motor1.getSelectedSensorPosition() - setpoint);
+        } else {
+          joystickPosition = setpoint;
+        }
         motor1.set(ControlMode.Position, joystickPosition);
     }
   }
