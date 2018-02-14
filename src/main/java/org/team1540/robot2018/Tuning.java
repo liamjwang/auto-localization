@@ -6,9 +6,11 @@ public class Tuning {
   public static final double MAX_ELEVATOR_DEVIATION = 200;
   public static final double MAX_WRIST_DEVIATION = 200;
 
+  // GENERAL
   @Tunable("Dead Zone")
   public static double deadZone = 0.1;
 
+  // INTAKE
   @Tunable("Auto Intake Spike Current")
   public static double IntakeSpikeCurrent = 5.0;
 
@@ -31,6 +33,7 @@ public class Tuning {
   public static double EjectSpeedB = -1;
 
 
+  // ELEVATOR
   @Tunable("Elevator P")
   public static double elevatorP = 1;
 
@@ -53,16 +56,24 @@ public class Tuning {
   public static double elevatorBounceBack = 10;
 
   @Tunable("Elevator Multiplier")
-  public static double elevatorMult = 0.1;
+  public static double elevatorMult = 100;
+
   @Tunable("Elevator Ground Position")
   public static double elevatorGroundPosition = 0;
-  @Tunable("Elevator Front Switch Position")
-  public static double elevatorFrontSwitchPosition = 0;
-  @Tunable("Elevator Back Switch Position")
-  public static double elevatorBackSwitchPosition = 0;
-  @Tunable("Elevator Scale Position")
-  public static double elevatorScalePosition = 0;
 
+  @Tunable("Elevator Exchange Position")
+  public static double elevatorExchangePosition = 500;
+
+  @Tunable("Elevator Front Switch Position")
+  public static double elevatorFrontSwitchPosition = 2900;
+
+  @Tunable("Elevator Scale Lower Position")
+  public static double elevatorScaleLowerPosition = 6200;
+
+  @Tunable("Elevator Scale Upper Position")
+  public static double elevatorScaleUpperPosition = 7400;
+
+  // WRIST
   @Tunable("Wrist P")
   public static double wristP = 1;
 
@@ -94,12 +105,14 @@ public class Tuning {
   @Tunable("Wrist Transit Position")
   public static double wristTransitPosition = 0;
 
+  // WINCH
   @Tunable("Winch In Speed")
   public static double winchInSpeed = 0.2;
 
   @Tunable("Winch Out Speed")
   public static double winchOutSpeed = -0.2; // 0.75
 
+  // TAPE
   @Tunable("Tape In Speed")
   public static double tapeInSpeed = 0.5;
 
