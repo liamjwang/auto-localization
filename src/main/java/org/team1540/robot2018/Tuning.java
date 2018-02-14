@@ -68,10 +68,7 @@ public class Tuning {
   public static double elevatorFrontSwitchPosition = 2900;
 
   @Tunable("Elevator Scale Lower Position")
-  public static double elevatorScaleLowerPosition = 6200;
-
-  @Tunable("Elevator Scale Upper Position")
-  public static double elevatorScaleUpperPosition = 7400;
+  public static double elevatorScalePosition = 6200;
 
   // WRIST
   @Tunable("Wrist P")
