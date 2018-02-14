@@ -16,6 +16,13 @@ import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 
 public class ElevatorTuningRobot extends IterativeRobot {
+  @Tunable("Ramp")
+  public double clr;
+  @Tunable("Peak out fwd")
+  private double pof;
+  @Tunable("Peak out reverse")
+  private double por;
+
   private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP}
 
   private SendableChooser<TuningMode> chooser = new SendableChooser<>();
@@ -91,9 +98,9 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor1.setBrake(true);
     motor1.setInverted(invert1);
     motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    motor1.configClosedloopRamp(0);
-    motor1.configPeakOutputForward(1);
-    motor1.configPeakOutputReverse(-1);
+    motor1.configClosedloopRamp(clr);
+    motor1.configPeakOutputForward(pof);
+    motor1.configPeakOutputReverse(por);
     motor1.config_kP(0, p);
     motor1.config_kI(0, i);
     motor1.config_kD(0, d);
@@ -134,7 +141,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
         motor1.set(ControlMode.Position, joystickPosition);
         break;
       case PID_MTP:
-        joystickPosition += Math.copySign(joystickMultiplier,
+        joystickPosition -= Math.copySign(joystickMultiplier,
             motor1.getSelectedSensorPosition() - setpoint);
         motor1.set(ControlMode.Position, joystickPosition);
     }
