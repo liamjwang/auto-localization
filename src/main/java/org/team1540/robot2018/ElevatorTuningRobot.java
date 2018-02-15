@@ -19,11 +19,11 @@ public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("Ramp")
   public double clr;
   @Tunable("Peak out fwd")
-  private double pof;
+  public double pof;
   @Tunable("Peak out reverse")
-  private double por;
+  public double por;
 
-  private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP}
+  private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP, MOT_MAGIC;}
 
   private SendableChooser<TuningMode> chooser = new SendableChooser<>();
   @Tunable("P")
@@ -32,6 +32,8 @@ public class ElevatorTuningRobot extends IterativeRobot {
   public double i;
   @Tunable("D")
   public double d;
+  @Tunable("F")
+  public double f;
   @Tunable("PID Mode")
   public boolean usingPid;
   @Tunable("PID Target")
@@ -47,6 +49,11 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   @Tunable("Joystick Multiplier")
   public double joystickMultiplier = 0;
+
+  @Tunable("Motion Magic Max Acceleration")
+  public int motionMaxAccel = 0;
+  @Tunable("Motion Magic Cruise Vel")
+  public int motionMaxVel = 0;
 
   private Joystick joystick = new Joystick(0);
 
@@ -65,6 +72,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
     chooser.addObject("PID With Setpoint", TuningMode.PID);
     chooser.addObject("PID With Joystick", TuningMode.PID_JOYSTICK);
     chooser.addObject("PID Move to Position", TuningMode.PID_MTP);
+    chooser.addObject("Motion Profiling", TuningMode.MOT_MAGIC);
 
     SmartDashboard.putData(chooser);
     SmartDashboard.putData("Zero Position", new SimpleCommand("Zero position", () -> motor1.setSelectedSensorPosition(0)));
@@ -104,15 +112,27 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor1.config_kP(0, p);
     motor1.config_kI(0, i);
     motor1.config_kD(0, d);
+    motor1.config_kF(0, f);
     motor1.setSensorPhase(invertSensor);
+    motor1.configMotionAcceleration(motionMaxAccel);
+    motor1.configMotionCruiseVelocity(motionMaxVel);
 
     motor2.set(ControlMode.Follower, motor1.getDeviceID());
     motor2.setInverted(invert2);
-    motor1.configClosedloopRamp(0);
+    motor1.configClosedloopRamp(clr);
     motor1.configPeakOutputForward(1);
     motor1.configPeakOutputReverse(-1);
     SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
     SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Trajectory Position", motor1.getActiveTrajectoryPosition());
+    SmartDashboard.putNumber("Trajectory Velocity", motor1.getActiveTrajectoryVelocity());
+    SmartDashboard.putNumber("Error", motor1.getClosedLoopError());
+
+    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
+    // camera.setResolution(640, 480);
+    // MjpegServer mjpegServer = new MjpegServer("Camera Server", 1182);
+    // mjpegServer.setSource(camera);
   }
 
   @Override
@@ -148,6 +168,9 @@ public class ElevatorTuningRobot extends IterativeRobot {
           joystickPosition = setpoint;
         }
         motor1.set(ControlMode.Position, joystickPosition);
+        break;
+      case MOT_MAGIC:
+        motor1.set(ControlMode.MotionMagic, setpoint);
     }
   }
 

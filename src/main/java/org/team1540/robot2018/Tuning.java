@@ -35,16 +35,25 @@ public class Tuning {
 
   // ELEVATOR
   @Tunable("Elevator P")
-  public static double elevatorP = 1;
+  public static double elevatorP = 2;
 
   @Tunable("Elevator I")
-  public static double elevatorI = 1;
+  public static double elevatorI = 0;
 
   @Tunable("Elevator D")
-  public static double elevatorD = 1;
+  public static double elevatorD = 0;
+
+  @Tunable("Elevator F")
+  public static double elevatorF = 2.5575;
 
   @Tunable("Elevator Tolerance")
   public static double elevatorTolerance;
+
+  @Tunable("Elevator Max Acceleration")
+  public static int elevatorMaxAccel = 750;
+
+  @Tunable("Elevator Cruise Velocity")
+  public static int elevatorCruiseVel = 400;
 
   @Tunable("Elevator Up Setpoint")
   public static double elevatorUpLimit = 0;
@@ -101,13 +110,17 @@ public class Tuning {
   public static double wristBackPosition = 0;
   @Tunable("Wrist Transit Position")
   public static double wristTransitPosition = 0;
+  @Tunable("Wrist 45 Back Position")
+  public static double wrist45BackPosition = 0;
+  @Tunable("Wrist 45 Forward Position")
+  public static double wrist45FwdPosition = 0;
 
   // WINCH
   @Tunable("Winch In Speed")
-  public static double winchInSpeed = 0.2;
+  public static double winchInSpeed = 1;
 
   @Tunable("Winch Out Speed")
-  public static double winchOutSpeed = -0.2; // 0.75
+  public static double winchOutSpeed = -1; // 0.75
 
   // TAPE
   @Tunable("Tape In Speed")
