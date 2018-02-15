@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.triggers.AxisButton;
 import org.team1540.base.triggers.DPadButton;
 import org.team1540.base.triggers.DPadButton.DPadAxis;
 
@@ -49,32 +50,33 @@ public class OI {
   public static final int LB = 5;
   public static final int RB = 6;
 
-  static Button auto_intake = new JoystickButton(copilot, LB);
-  static Button auto_eject = new JoystickButton(copilot, RB);
+  // auto intake
+  static Button copilotLB = new JoystickButton(copilot, LB);
+  // auto eject
+  static Button copilotRB = new JoystickButton(copilot, RB);
 
-  static Button manual_eject = new JoystickButton(copilot, X);
-  static Button manual_intake = new JoystickButton(copilot, A);
+  // wrist to forward 45 degrees
+  static Button copilotX = new JoystickButton(copilot, X);
+  // wrist to full down
+  static Button copilotA = new JoystickButton(copilot, A);
+  // wrist to backward 45 degrees
+  static Button copilotY = new JoystickButton(copilot, Y);
+  // wrist to full back
+  static Button copilotB = new JoystickButton(copilot, B);
 
-  static Button manual_elevator_up = new JoystickButton(copilot, Y);
-  static Button manual_elevator_down = new JoystickButton(copilot, B);
+  // to max height + wrist up
+  static Button copilotDPadUp = new DPadButton(copilot, 0, DPadAxis.UP);
+  // to lower scale height
+  static Button copilotDPadDown = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  // to max scale height (no wrist)
+  static Button copilotDPadLeft = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  // to switch height
+  static Button copilotDPadRight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
 
-  static Button toMaxHeightAndWrist = new DPadButton(copilot, 0, DPadAxis.UP);
-  static Button toLowerScaleHeight = new DPadButton(copilot, 0, DPadAxis.DOWN);
-  static Button toScaleHeight = new DPadButton(copilot, 0, DPadAxis.LEFT);
-  static Button toSwitchHeight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
-
-  static Button toFwd45Deg = new JoystickButton(copilot, X);
-  static Button toBack45Deg = new JoystickButton(copilot, Y);
-  static Button toFullDown = new JoystickButton(copilot, A);
-  static Button toFullBack = new JoystickButton(copilot, B);
-
-//  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
-//  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
-  static Button manual_winch_in = new JoystickButton(copilot, LB);
-  static Button manual_winch_out = new JoystickButton(copilot, RB);
-
-  static Button manual_tape_in = new JoystickButton(copilot, back);
-  static Button manual_tape_out = new JoystickButton(copilot, start);
+  // manual tape out
+  static Button copilotBack = new JoystickButton(copilot, back);
+  // manual tape in
+  static Button copilotStart = new JoystickButton(copilot, start);
 
   static Button elevatorJoystickActivation = new Button() {
     @Override
@@ -82,6 +84,9 @@ public class OI {
       return getCopilotLeftY() != 0; // zero values mean it's within the deadzone
     }
   };
+
+  static Button copilotLeftTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 2);
+  static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
 
   public static double getDriverLeftX(){
     return Utilities.processAxisDeadzone(driver.getRawAxis(0), Tuning.deadZone);

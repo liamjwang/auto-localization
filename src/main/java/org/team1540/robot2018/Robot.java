@@ -1,11 +1,17 @@
 package org.team1540.robot2018;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.base.adjustables.AdjustableManager;
-import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.TurretControl;
+import org.team1540.robot2018.commands.climber.RunClimber;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.groups.GroundPosition;
+import org.team1540.robot2018.commands.groups.IntakeSequence;
+import org.team1540.robot2018.commands.intake.AutoEject;
+import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -27,35 +33,46 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
 
-//    OI.auto_intake.whenPressed(new AutoIntake());
-//    OI.auto_eject.whenPressed(new AutoEject());
+    //    OI.copilotLB.whenPressed(new AutoIntake());
+    //    OI.copilotRB.whenPressed(new AutoEject());
 
-    OI.manual_eject.whileHeld(new SimpleCommand("Eject",
-        () -> Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB),
-        intake));
-    OI.manual_intake.whileHeld(new SimpleCommand("Eject",
-        () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),
-        intake));
+    // OI.copilotX.whileHeld(new SimpleCommand("Eject",
+    //     () -> Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB),
+    //     intake));
+    // OI.copilotA.whileHeld(new SimpleCommand("Intake",
+    //     () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),
+    //     intake));
 
-    // OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
-    // OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
+    // OI.manualElevatorUp.whileHeld(new ManualElevatorUp());
+    // OI.copilotB.whileHeld(new ManualElevatorDown());
 
-//    OI.manual_winch_in.whileHeld(new WinchIn());
-//    OI.manual_winch_out.whileHeld(new WinchOut());
+    //    OI.manualWinchIn.whileHeld(new WinchIn());
+    //    OI.manualWinchOut.whileHeld(new WinchOut());
 
-//    OI.manual_tape_in.whileHeld(new TapeIn());
-//    OI.manual_tape_out.whileHeld(new TapeOut());
+    //    OI.copilotBack.whileHeld(new TapeIn());
+    //    OI.copilotStart.whileHeld(new TapeOut());
+    //
+    //     OI.copilotBack.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
+    //     OI.copilotStart.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
 
-    OI.manual_tape_in.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
-    OI.manual_tape_out.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
+    OI.copilotA.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
+    OI.copilotB.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
+    OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
+    OI.copilotY.whenPressed(new GroundPosition());
 
-    OI.manual_winch_in.whileHeld(new SimpleCommand("Winch in", () -> winch.set(Tuning.winchInSpeed), winch));
-    OI.manual_winch_out.whileHeld(new SimpleCommand("Winch out", () -> winch.set(Tuning.winchOutSpeed), winch));
+    OI.copilotLB.whenPressed(new IntakeSequence());
+    OI.copilotRB.whenPressed(new AutoEject());
 
-    OI.toSwitchHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
-    OI.toScaleHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
-    OI.toLowerScaleHeight.whenPressed(new MoveElevatorToPosition(0));
+    OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(0));
+
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
+
+    Command turretControl = new TurretControl();
+    OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
+    OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
+    OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
   }
 
   @Override

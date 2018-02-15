@@ -5,6 +5,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class AutoClimb extends CommandGroup {
   public AutoClimb() {
-    addSequential(new RunClimber(2, 0.5));
+    addSequential(new RunClimberTimed(2, 0.5));
   }
 }
