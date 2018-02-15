@@ -2,11 +2,11 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.intake.JoystickWrist;
+import org.team1540.robot2018.commands.JoystickWrist;
 
 public class Wrist extends ChickenSubsystem {
   
@@ -22,14 +22,6 @@ public class Wrist extends ChickenSubsystem {
 
   public void set(double value) {
     wristMotor.set(value);
-  }
-
-  public void ManualUp(){
-    wristMotor.set(ControlMode.PercentOutput, -0.5);
-  }
-
-  public void ManualDown(){
-    wristMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void stop(){
@@ -57,5 +49,4 @@ public class Wrist extends ChickenSubsystem {
   public void initDefaultCommand() {
     setDefaultCommand(new JoystickWrist());
   }
-
 }
