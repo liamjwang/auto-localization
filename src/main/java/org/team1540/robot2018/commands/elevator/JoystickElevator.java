@@ -14,6 +14,7 @@ public class JoystickElevator extends Command {
 
   @Override
   protected void initialize() {
+    Robot.elevator.updatePID(); // TODO: 2/13/18 Do I actually need this?
     position = Robot.elevator.getPosition();
   }
 
