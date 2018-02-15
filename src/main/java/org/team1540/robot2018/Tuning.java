@@ -50,7 +50,7 @@ public class Tuning {
   public static double elevatorTolerance;
 
   @Tunable("Elevator Max Acceleration")
-  public static int elevatorMaxAccel = 750;
+  public static int elevatorMaxAccel = 300;
 
   @Tunable("Elevator Cruise Velocity")
   public static int elevatorCruiseVel = 400;
@@ -77,17 +77,17 @@ public class Tuning {
   public static double elevatorFrontSwitchPosition = 2900;
 
   @Tunable("Elevator Scale Lower Position")
-  public static double elevatorScalePosition = 6200;
+  public static double elevatorScalePosition = 7400;
 
   // WRIST
   @Tunable("Wrist P")
-  public static double wristP = 1;
+  public static double wristP = 0;
 
   @Tunable("Wrist I")
-  public static double wristI = 1;
+  public static double wristI = 0;
 
   @Tunable("Wrist D")
-  public static double wristD = 1;
+  public static double wristD = 0;
 
   @Tunable("Wrist Stop Tolerance")
   public static double wristTolerance;

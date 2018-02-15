@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.commands.elevator.ManualElevatorDown;
-import org.team1540.robot2018.commands.elevator.ManualElevatorUp;
+import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -37,8 +36,8 @@ public class Robot extends IterativeRobot {
         () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),
         intake));
 
-    OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
-    OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
+    // OI.manual_elevator_up.whileHeld(new ManualElevatorUp());
+    // OI.manual_elevator_down.whileHeld(new ManualElevatorDown());
 
 //    OI.manual_winch_in.whileHeld(new WinchIn());
 //    OI.manual_winch_out.whileHeld(new WinchOut());
@@ -51,6 +50,10 @@ public class Robot extends IterativeRobot {
 
     OI.manual_winch_in.whileHeld(new SimpleCommand("Winch in", () -> winch.set(Tuning.winchInSpeed), winch));
     OI.manual_winch_out.whileHeld(new SimpleCommand("Winch out", () -> winch.set(Tuning.winchOutSpeed), winch));
+
+    OI.toSwitchHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    OI.toScaleHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    OI.toLowerScaleHeight.whenPressed(new MoveElevatorToPosition(0));
   }
 
   @Override

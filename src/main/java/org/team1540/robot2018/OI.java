@@ -58,6 +58,16 @@ public class OI {
   static Button manual_elevator_up = new JoystickButton(copilot, Y);
   static Button manual_elevator_down = new JoystickButton(copilot, B);
 
+  static Button toMaxHeightAndWrist = new DPadButton(copilot, 0, DPadAxis.UP);
+  static Button toLowerScaleHeight = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  static Button toScaleHeight = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  static Button toSwitchHeight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+
+  static Button toFwd45Deg = new JoystickButton(copilot, X);
+  static Button toBack45Deg = new JoystickButton(copilot, Y);
+  static Button toFullDown = new JoystickButton(copilot, A);
+  static Button toFullBack = new JoystickButton(copilot, B);
+
 //  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
 //  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
   static Button manual_winch_in = new JoystickButton(copilot, LB);
