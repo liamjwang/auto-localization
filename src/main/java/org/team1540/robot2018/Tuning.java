@@ -79,6 +79,9 @@ public class Tuning {
   @Tunable("Elevator Scale Lower Position")
   public static double elevatorScalePosition = 7400;
 
+  @Tunable("Elevator Obstacle Position")
+  public static double elevatorObstaclePosition = 0;
+
   // WRIST
   @Tunable("Wrist P")
   public static double wristP = 0;
@@ -114,7 +117,6 @@ public class Tuning {
   public static double wrist45BackPosition = 0;
   @Tunable("Wrist 45 Forward Position")
   public static double wrist45FwdPosition = 0;
-
   // WINCH
   @Tunable("Winch In Speed")
   public static double winchInSpeed = 1;
