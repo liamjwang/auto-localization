@@ -28,11 +28,10 @@ public class Tuning {
   public static double EjectSpeedB = -1;
 
 
-  @Tunable("Elevator P")
-  public static double elevatorP = 1;
-
   @Tunable("Elevator I")
-  public static double elevatorI = 1;
+  public static double elevatorI = 0;
+  @Tunable("Elevator P")
+  public static double elevatorP = 0.1;
 
   @Tunable("Elevator D")
   public static double elevatorD = 1;
@@ -48,19 +47,15 @@ public class Tuning {
 
   @Tunable("Elevator Multiplier")
   public static double elevatorMult = 0.1;
-
-
-  @Tunable("Wrist P")
-  public static double wristP = 1;
-
   @Tunable("Wrist I")
-  public static double wristI = 1;
+  public static double wristI = 0;
+  @Tunable("Wrist P")
+  public static double wristP = 0.1;
 
   @Tunable("Wrist D")
   public static double wristD = 1;
-
   @Tunable("Wrist Up Setpoint")
-  public static double wristUpLimit = 0;
+  public static double wristUpLimit = -8300; //Wrist 45 deg: -7000, Vertical: 4500
 
   @Tunable("Wrist Down Setpoint")
   public static double wristDownLimit = 0;
