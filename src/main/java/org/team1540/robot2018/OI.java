@@ -126,12 +126,6 @@ public class OI {
   }
 
   public static double isOutsideRange(double value) {
-    if (value > 1) {
-      return 1;
-    } else if (value < 0) {
-      return 0;
-    } else {
-      return value;
-    }
+    return Utilities.constrain(value, 0, 1);
   }
 }
