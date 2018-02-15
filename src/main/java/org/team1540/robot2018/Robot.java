@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -54,6 +55,7 @@ public class Robot extends IterativeRobot {
     OI.toSwitchHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     OI.toScaleHeight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.toLowerScaleHeight.whenPressed(new MoveElevatorToPosition(0));
+    OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
   }
 
   @Override

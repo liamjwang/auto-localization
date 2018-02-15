@@ -76,6 +76,13 @@ public class OI {
   static Button manual_tape_in = new JoystickButton(copilot, back);
   static Button manual_tape_out = new JoystickButton(copilot, start);
 
+  static Button elevatorJoystickActivation = new Button() {
+    @Override
+    public boolean get() {
+      return getCopilotLeftY() != 0; // zero values mean it's within the deadzone
+    }
+  };
+
   public static double getDriverLeftX(){
     return Utilities.processAxisDeadzone(driver.getRawAxis(0), Tuning.deadZone);
   }
