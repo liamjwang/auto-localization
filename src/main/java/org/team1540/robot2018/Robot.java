@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TurretControl;
 import org.team1540.robot2018.commands.climber.RunClimber;
 import org.team1540.robot2018.commands.climber.WinchIn;
@@ -16,6 +15,7 @@ import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.AutoEject;
+import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -74,7 +74,9 @@ public class Robot extends IterativeRobot {
     OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(Tuning.elevatorGroundPosition));
 
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
-    OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
+    // OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
+
+    OI.wristJoystickActivation.whileHeld(new JoystickWrist());
 
     Command turretControl = new TurretControl();
     OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);

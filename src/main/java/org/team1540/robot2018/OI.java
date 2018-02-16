@@ -85,6 +85,13 @@ public class OI {
     }
   };
 
+  static Button wristJoystickActivation = new Button() {
+    @Override
+    public boolean get() {
+      return getCopilotRightY() != 0; // zero values mean it's within the deadzone
+    }
+  };
+
   static Button copilotLeftTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 2);
   static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
 

@@ -64,7 +64,7 @@ public class Wrist extends Subsystem implements PowerManageable {
   }
 
   public void set(double value) {
-    wristMotor.set(value);
+    wristMotor.set(ControlMode.PercentOutput, value);
   }
 
   public void stop(){
