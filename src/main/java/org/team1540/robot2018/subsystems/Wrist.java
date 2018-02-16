@@ -6,7 +6,6 @@ import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.JoystickWrist;
 
 public class Wrist extends ChickenSubsystem {
   
@@ -20,6 +19,11 @@ public class Wrist extends ChickenSubsystem {
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  @Override
+  public void initDefaultCommand() {
+    //setDefaultCommand();
+  }
+
   public void set(double value) {
     wristMotor.set(value);
   }
@@ -28,10 +32,12 @@ public class Wrist extends ChickenSubsystem {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  public void updatePID() {
-    wristMotor.config_kP(0, Tuning.wristP);
-    wristMotor.config_kI(0, Tuning.wristI);
-    wristMotor.config_kD(0, Tuning.wristD);
+  public void resetEncoder() {
+    wristMotor.setSelectedSensorPosition(0);
+  }
+
+  public void setMotionMagicPosition(double position) {
+    wristMotor.set(ControlMode.MotionMagic, position);
   }
 
   public double setPosition(double position){
@@ -45,8 +51,16 @@ public class Wrist extends ChickenSubsystem {
     return wristMotor.getSelectedSensorPosition();
   }
 
-  @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new JoystickWrist());
+  public void updatePID() {
+    wristMotor.config_kP(0, Tuning.wristP);
+    wristMotor.config_kI(0, Tuning.wristI);
+    wristMotor.config_kD(0, Tuning.wristD);
+
+    wristMotor.config_kF(0, Tuning.wristF);
+
+    wristMotor.config_IntegralZone(0, Tuning.wristIzone);
+
+    wristMotor.configMotionAcceleration(Tuning.motionMaxAccel);
+    wristMotor.configMotionCruiseVelocity(Tuning.motionCruiseVelocity);
   }
 }
