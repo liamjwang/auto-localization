@@ -85,14 +85,14 @@ public class Robot extends IterativeRobot {
     OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
 
     SimpleCommand winchInLow = new SimpleCommand("Winch In Low", () -> {
-      tape.set(Tuning.climberInLowSpeed * Tuning.tapeMeasureMultiplier);
+      // tape.set(Tuning.climberInLowSpeed * Tuning.tapeMeasureMultiplier);
       winch.set(Tuning.climberInLowSpeed * Tuning.winchMultiplier);
     }, tape, winch);
     OI.copilotLeftTriggerSmallPress.whenPressed(winchInLow);
     OI.copilotLeftTriggerLargePress.cancelWhenPressed(winchInLow);
 
     OI.copilotLeftTriggerLargePress.whenPressed(new SimpleCommand("Winch In High", () -> {
-      tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
+      // tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
       winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
     }, tape, winch));
   }
