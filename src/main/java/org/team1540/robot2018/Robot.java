@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.robot2018.commands.TurretControl;
 import org.team1540.robot2018.commands.climber.RunClimber;
@@ -97,6 +98,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("Wrist Encoder", wrist.getPosition());
 //    SmartDashboard.putData(new PowerDistributionPanel());
   }
 
@@ -111,5 +113,4 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
   }
-
 }

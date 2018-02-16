@@ -90,9 +90,8 @@ public class Tuning {
   @Tunable("Elevator Obstacle Upper Position")
   public static double elevatorObstacleUpperPosition = 3750;
 
-  // WRIST
   @Tunable("Wrist P")
-  public static double wristP = 0;
+  public static double wristP = 10.0;
 
   @Tunable("Wrist I")
   public static double wristI = 0;
@@ -100,11 +99,23 @@ public class Tuning {
   @Tunable("Wrist D")
   public static double wristD = 0;
 
+  @Tunable("Wrist F")
+  public static double wristF = 1.364;
+
+  @Tunable("Wrist I Zone")
+  public static int wristIzone = 0;
+
+  @Tunable("Motion Cruise Velocity")
+  public static int wristCruiseVelocity = 600;
+
+  @Tunable("Motion Max Accelleration")
+  public static int wristMaxAccel = 1000;
+
   @Tunable("Wrist Stop Tolerance")
   public static double wristTolerance;
 
   @Tunable("Wrist Up Setpoint")
-  public static double wristUpLimit = 0;
+  public static double wristUpLimit = -8300; //Wrist 45 deg: -7000, Vertical: 4500
 
   @Tunable("Wrist Down Setpoint")
   public static double wristDownLimit = 0;
@@ -125,6 +136,7 @@ public class Tuning {
   public static double wrist45BackPosition = 0;
   @Tunable("Wrist 45 Forward Position")
   public static double wrist45FwdPosition = 0;
+
   // WINCH
   @Tunable("Winch In Speed")
   public static double winchInSpeed = 1;
@@ -156,7 +168,6 @@ public class Tuning {
 
   @Tunable("Manual Elevator Down Speed")
   public static double manualElevatorDownSpeed = -0.5;
-
 
   @Tunable("Standard Deadzone")
   public static double standardDeadzone = 0.1;
