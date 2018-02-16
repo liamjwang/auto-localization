@@ -51,12 +51,12 @@ public class Tuning {
 
 
   @Tunable("Motion Cruise Velocity")
-  public static int motionCruiseVelocity = 600;
+  public static int wristCruiseVelocity = 600;
 
   @Tunable("Wrist I")
   public static double wristI = 0;
   @Tunable("Motion Max Accelleration")
-  public static int motionMaxAccel = 1000;
+  public static int wristMaxAccel = 1000;
   @Tunable("Wrist D")
   public static double wristD = 0;
   @Tunable("Wrist F")

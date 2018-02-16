@@ -60,7 +60,7 @@ public class Wrist extends ChickenSubsystem {
 
     wristMotor.config_IntegralZone(0, Tuning.wristIzone);
 
-    wristMotor.configMotionAcceleration(Tuning.motionMaxAccel);
-    wristMotor.configMotionCruiseVelocity(Tuning.motionCruiseVelocity);
+    wristMotor.configMotionAcceleration(Tuning.wristMaxAccel);
+    wristMotor.configMotionCruiseVelocity(Tuning.wristCruiseVelocity);
   }
 }
