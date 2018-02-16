@@ -180,4 +180,8 @@ public class Tuning {
 
   @Tunable("Standard Deadzone")
   public static double standardDeadzone = 0.1;
+  @Tunable("Climber In High Speed")
+  public static double climberInLowSpeed = 0.4;
+  @Tunable("Climber In Low Speed")
+  public static double climberInHighSpeed = 1;
 }

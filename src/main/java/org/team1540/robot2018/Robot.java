@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TurretControl;
 import org.team1540.robot2018.commands.climber.RunClimber;
 import org.team1540.robot2018.commands.climber.WinchIn;
@@ -69,9 +70,9 @@ public class Robot extends IterativeRobot {
     OI.copilotRB.whenPressed(new AutoEject());
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
-    OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorLowScalePosition));
+    OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.copilotDPadUp.whenPressed(new FrontScale());
-    OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(Tuning.elevatorGroundPosition));
+    OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
     // OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
@@ -82,6 +83,18 @@ public class Robot extends IterativeRobot {
     OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
     OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
     OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
+
+    SimpleCommand winchInLow = new SimpleCommand("Winch In Low", () -> {
+      tape.set(Tuning.climberInLowSpeed * Tuning.tapeMeasureMultiplier);
+      winch.set(Tuning.climberInLowSpeed * Tuning.winchMultiplier);
+    }, tape, winch);
+    OI.copilotLeftTriggerSmallPress.whenPressed(winchInLow);
+    OI.copilotLeftTriggerLargePress.cancelWhenPressed(winchInLow);
+
+    OI.copilotLeftTriggerLargePress.whenPressed(new SimpleCommand("Winch In High", () -> {
+      tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
+      winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
+    }, tape, winch));
   }
 
   @Override

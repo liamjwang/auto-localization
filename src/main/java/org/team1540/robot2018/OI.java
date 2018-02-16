@@ -95,6 +95,9 @@ public class OI {
   static Button copilotLeftTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 2);
   static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
 
+  static Button copilotRightTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 3);
+  static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
+
   public static double getDriverLeftX(){
     return Utilities.processAxisDeadzone(driver.getRawAxis(0), Tuning.deadZone);
   }
