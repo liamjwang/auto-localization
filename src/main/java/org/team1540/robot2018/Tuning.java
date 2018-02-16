@@ -96,6 +96,8 @@ public class Tuning {
   public static double intakeHoldSpeed = 0.1;
   @Tunable("Intake Min Time")
   public static double intakeMinTime = 1;
+  @Tunable("Intake Max Time")
+  public static double intakeMaxTime = 10;
 
   @Tunable("Wrist P")
   public static double wristP = 10.0;
