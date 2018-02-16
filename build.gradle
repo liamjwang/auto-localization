@@ -19,6 +19,7 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
+    compile pathfinder()
     compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
