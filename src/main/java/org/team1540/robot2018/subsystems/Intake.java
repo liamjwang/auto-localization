@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotMap;
+import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.intake.HoldIntake;
 
 public class Intake extends Subsystem {
@@ -21,13 +22,20 @@ public class Intake extends Subsystem {
     intake_2.setInverted(true);
   }
 
-  public double getCurrent() {
-    return pdp.getCurrent(10) + pdp.getCurrent(11) - Robot.wrist.getCurrent();
-  }
-
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new HoldIntake());
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("1 current", getCurrent());
+  }
+
+  public double getCurrent() {
+    return (Tuning.isPandora ?
+        pdp.getCurrent(10) + pdp.getCurrent(11) : pdp.getCurrent(5))
+        - Robot.wrist.getCurrent();
   }
 
   public void set(double value) {
@@ -43,10 +51,5 @@ public class Intake extends Subsystem {
   public void stop() {
     intake_1.set(ControlMode.PercentOutput, 0);
     intake_2.set(ControlMode.PercentOutput, 0);
-  }
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("1 current", getCurrent());
   }
 }

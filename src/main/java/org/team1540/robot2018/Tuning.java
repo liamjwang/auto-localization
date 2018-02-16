@@ -9,6 +9,8 @@ public class Tuning {
   // GENERAL
   @Tunable("Dead Zone")
   public static double deadZone = 0.1;
+  @Tunable("Is Pandora")
+  public static boolean isPandora = false;
 
   // INTAKE
   @Tunable("Auto Intake Spike Current")
