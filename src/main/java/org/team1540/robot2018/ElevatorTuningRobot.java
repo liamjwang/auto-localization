@@ -12,7 +12,6 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.adjustables.Telemetry;
 import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 
 public class ElevatorTuningRobot extends IterativeRobot {
@@ -23,7 +22,8 @@ public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("Peak out reverse")
   public double por;
 
-  private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP, MOT_MAGIC;}
+  @Tunable("I Zone")
+  public int iZone = 0;
 
   private SendableChooser<TuningMode> chooser = new SendableChooser<>();
   @Tunable("P")
@@ -43,6 +43,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
   public boolean invert1 = false;
   @Tunable("Invert Motor 2")
   public boolean invert2 = false;
+  private ChickenTalon motor1 = new ChickenTalon(7);
 
   @Tunable("Invert Sensor")
   public boolean invertSensor;
@@ -57,10 +58,45 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   private Joystick joystick = new Joystick(0);
 
-  private ChickenTalon motor1 = new ChickenTalon(14);
-  private ChickenController motor2 = new ChickenTalon(13);
+  @Override
+  public void robotPeriodic() {
+    Scheduler.getInstance().run();
+
+    motor1.setBrake(true);
+    motor1.setInverted(invert1);
+    motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    motor1.configClosedloopRamp(clr);
+    motor1.configPeakOutputForward(pof);
+    motor1.configPeakOutputReverse(por);
+    motor1.config_kP(0, p);
+    motor1.config_kI(0, i);
+    motor1.config_kD(0, d);
+    motor1.config_kF(0, f);
+    motor1.setSensorPhase(invertSensor);
+    motor1.configMotionAcceleration(motionMaxAccel);
+    motor1.configMotionCruiseVelocity(motionMaxVel);
+
+    motor1.config_IntegralZone(0, iZone);
+
+    motor1.configClosedloopRamp(clr);
+    motor1.configPeakOutputForward(1);
+    motor1.configPeakOutputReverse(-1);
+    SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
+    SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Trajectory Position", motor1.getActiveTrajectoryPosition());
+    SmartDashboard.putNumber("Trajectory Velocity", motor1.getActiveTrajectoryVelocity());
+    SmartDashboard.putNumber("Error", motor1.getClosedLoopError());
+
+    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
+    // camera.setResolution(640, 480);
+    // MjpegServer mjpegServer = new MjpegServer("Camera Server", 1182);
+    // mjpegServer.setSource(camera);
+  }
+
   @Telemetry("Joystick Position")
   public double joystickPosition = 0;
+
   @Override
   public void robotInit() {
     // zeroing command
@@ -99,41 +135,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-
-    motor1.setBrake(true);
-    motor1.setInverted(invert1);
-    motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    motor1.configClosedloopRamp(clr);
-    motor1.configPeakOutputForward(pof);
-    motor1.configPeakOutputReverse(por);
-    motor1.config_kP(0, p);
-    motor1.config_kI(0, i);
-    motor1.config_kD(0, d);
-    motor1.config_kF(0, f);
-    motor1.setSensorPhase(invertSensor);
-    motor1.configMotionAcceleration(motionMaxAccel);
-    motor1.configMotionCruiseVelocity(motionMaxVel);
-
-    motor2.set(ControlMode.Follower, motor1.getDeviceID());
-    motor2.setInverted(invert2);
-    motor1.configClosedloopRamp(clr);
-    motor1.configPeakOutputForward(1);
-    motor1.configPeakOutputReverse(-1);
-    SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
-    SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Trajectory Position", motor1.getActiveTrajectoryPosition());
-    SmartDashboard.putNumber("Trajectory Velocity", motor1.getActiveTrajectoryVelocity());
-    SmartDashboard.putNumber("Error", motor1.getClosedLoopError());
-
-    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
-    // camera.setResolution(640, 480);
-    // MjpegServer mjpegServer = new MjpegServer("Camera Server", 1182);
-    // mjpegServer.setSource(camera);
-  }
+  private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP, MOT_MAGIC}
 
   @Override
   public void disabledPeriodic() {
