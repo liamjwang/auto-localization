@@ -136,15 +136,15 @@ public class Tuning {
   public static double wristMult = 0.1;
 
   @Tunable("Wrist Out Position")
-  public static double wristOutPosition = 8200;
+  public static double wristOutPosition = 8250;
   @Tunable("Wrist Back Position")
   public static double wristBackPosition = 0;
   @Tunable("Wrist Transit Position")
   public static double wristTransitPosition = 3900;
   @Tunable("Wrist 45 Back Position")
-  public static double wrist45BackPosition = 1800;
+  public static double wrist45BackPosition = 1500;
   @Tunable("Wrist 45 Forward Position")
-  public static double wrist45FwdPosition = 5000;
+  public static double wrist45FwdPosition = 6200;
 
   // WINCH
   @Tunable("Winch In Speed")
