@@ -18,8 +18,8 @@ public class ClimberWinch extends Subsystem {
 
   public ClimberWinch() {
     winchA.setInverted(false);
-    winchB.setInverted(false);
-    winchC.setInverted(true);
+    winchB.setInverted(true);
+    winchC.setInverted(false);
     winchD.setInverted(true);
   }
 

@@ -7,13 +7,14 @@ public class MoveWristToPosition extends Command {
   private final double target;
 
   public MoveWristToPosition(double target) {
+    super("Move wrist to " + target);
     this.target = target;
     requires(Robot.wrist);
   }
 
   @Override
   protected void execute() {
-    Robot.wrist.setPosition(target);
+    Robot.wrist.setMotionMagicPosition(target);
   }
 
   @Override

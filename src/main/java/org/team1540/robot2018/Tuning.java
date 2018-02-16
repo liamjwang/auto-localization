@@ -38,15 +38,17 @@ public class Tuning {
   public static double elevatorP = 2;
 
   @Tunable("Elevator I")
-  public static double elevatorI = 0;
+  public static double elevatorI = 0.0025;
 
   @Tunable("Elevator D")
-  public static double elevatorD = 0;
+  public static double elevatorD = 10;
 
   @Tunable("Elevator F Upwards")
   public static double elevatorFGoingUp = 2.5575;
   @Tunable("Elevator F Downwards")
-  public static double elevatorFGoingDown;
+  public static double elevatorFGoingDown = 0.75;
+  @Tunable("Elevator I-Zone")
+  public static double elevatorIZone = 100;
 
   @Tunable("Elevator Tolerance")
   public static double elevatorTolerance;
@@ -70,7 +72,7 @@ public class Tuning {
   public static double elevatorMult = 100;
 
   @Tunable("Elevator Ground Position")
-  public static double elevatorGroundPosition = 0;
+  public static double elevatorGroundPosition = 5;
 
   @Tunable("Elevator Exchange Position")
   public static double elevatorExchangePosition = 500;
@@ -89,6 +91,8 @@ public class Tuning {
 
   @Tunable("Elevator Obstacle Upper Position")
   public static double elevatorObstacleUpperPosition = 3750;
+  @Tunable("Intake Min Time")
+  public static double intakeMinTime = 1;
 
   @Tunable("Wrist P")
   public static double wristP = 10.0;
@@ -127,15 +131,15 @@ public class Tuning {
   public static double wristMult = 0.1;
 
   @Tunable("Wrist Out Position")
-  public static double wristOutPosition = 0;
+  public static double wristOutPosition = 8200;
   @Tunable("Wrist Back Position")
   public static double wristBackPosition = 0;
   @Tunable("Wrist Transit Position")
-  public static double wristTransitPosition = 0;
+  public static double wristTransitPosition = 3900;
   @Tunable("Wrist 45 Back Position")
-  public static double wrist45BackPosition = 0;
+  public static double wrist45BackPosition = 1800;
   @Tunable("Wrist 45 Forward Position")
-  public static double wrist45FwdPosition = 0;
+  public static double wrist45FwdPosition = 5000;
 
   // WINCH
   @Tunable("Winch In Speed")

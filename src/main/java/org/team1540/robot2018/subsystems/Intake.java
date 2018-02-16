@@ -1,12 +1,16 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenVictor;
+import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotMap;
 
 public class Intake extends Subsystem {
+  PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private ChickenVictor intake_1 = new ChickenVictor(RobotMap.intake_1);
   private ChickenVictor intake_2 = new ChickenVictor(RobotMap.intake_2);
@@ -17,12 +21,8 @@ public class Intake extends Subsystem {
     intake_2.setInverted(true);
   }
 
-  public double getCurrent1() {
-    return intake_1.getOutputCurrent();
-  }
-
-  public double getCurrent2() {
-    return intake_2.getOutputCurrent();
+  public double getCurrent() {
+    return pdp.getCurrent(10) + pdp.getCurrent(11) - Robot.wrist.getCurrent();
   }
 
   @Override
@@ -43,5 +43,10 @@ public class Intake extends Subsystem {
   public void stop() {
     intake_1.set(ControlMode.PercentOutput, 0);
     intake_2.set(ControlMode.PercentOutput, 0);
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("1 current", getCurrent());
   }
 }

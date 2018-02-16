@@ -12,7 +12,7 @@ public class WinchOut extends Command {
 
   @Override
   protected void initialize() {
-    Robot.winch.set(-Tuning.winchOutSpeed);
+    Robot.winch.set(Tuning.winchOutSpeed);
   }
 
   @Override

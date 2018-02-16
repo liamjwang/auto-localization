@@ -17,11 +17,6 @@ public class AutoEject extends TimedCommand {
   }
 
   @Override
-  protected boolean isFinished() {
-    return false; //Return true to stop the command
-  }
-
-  @Override
   protected void end() {
     Robot.intake.stop();
   }

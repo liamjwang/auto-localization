@@ -2,21 +2,45 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import org.team1540.base.ChickenSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.base.power.PowerManageable;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 
-public class Wrist extends ChickenSubsystem {
+public class Wrist extends Subsystem implements PowerManageable {
   
   private ChickenTalon wristMotor = new ChickenTalon(RobotMap.wristMotor);
 
   public Wrist() {
-    this.add(wristMotor);
-    this.setPriority(11);
     wristMotor.setInverted(false);
 
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+  }
+
+  @Override
+  public double getPriority() {
+    return 11;
+  }
+
+  @Override
+  public void setPriority(double priority) {
+  }
+
+  @Override
+  public double getCurrent() {
+    return wristMotor.getOutputCurrent();
+  }
+
+  @Override
+  public void limitPower(double limit) {
+    wristMotor.enableCurrentLimit(true);
+    wristMotor.configContinuousCurrentLimit((int) limit);
+  }
+
+  @Override
+  public void stopLimitingPower() {
+    wristMotor.enableCurrentLimit(false);
   }
 
   @Override
@@ -53,6 +77,7 @@ public class Wrist extends ChickenSubsystem {
 
   @Override
   public void periodic() {
+    // System.out.println("periodic");
     wristMotor.config_kP(0, Tuning.wristP);
     wristMotor.config_kI(0, Tuning.wristI);
     wristMotor.config_kD(0, Tuning.wristD);

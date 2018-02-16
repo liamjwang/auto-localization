@@ -5,14 +5,17 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TurretControl;
 import org.team1540.robot2018.commands.climber.RunClimber;
+import org.team1540.robot2018.commands.climber.WinchIn;
+import org.team1540.robot2018.commands.climber.WinchOut;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.AutoEject;
+import org.team1540.robot2018.commands.intake.AutoIntake;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -48,8 +51,8 @@ public class Robot extends IterativeRobot {
     // OI.manualElevatorUp.whileHeld(new ManualElevatorUp());
     // OI.copilotB.whileHeld(new ManualElevatorDown());
 
-    //    OI.manualWinchIn.whileHeld(new WinchIn());
-    //    OI.manualWinchOut.whileHeld(new WinchOut());
+    OI.copilotStart.whileHeld(new WinchIn());
+    OI.copilotBack.whileHeld(new WinchOut());
 
     //    OI.copilotBack.whileHeld(new TapeIn());
     //    OI.copilotStart.whileHeld(new TapeOut());
@@ -62,15 +65,16 @@ public class Robot extends IterativeRobot {
     OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.copilotY.whenPressed(new GroundPosition());
 
-    OI.copilotLB.whenPressed(new IntakeSequence());
+    OI.copilotLB.whenPressed(new AutoIntake());
     OI.copilotRB.whenPressed(new AutoEject());
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorLowScalePosition));
     OI.copilotDPadUp.whenPressed(new FrontScale());
-    OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(0));
+    OI.copilotDPadDown.whenPressed(new MoveElevatorToPosition(Tuning.elevatorGroundPosition));
 
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
+    OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
 
     Command turretControl = new TurretControl();
     OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
@@ -97,6 +101,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putData("Scheduler", Scheduler.getInstance());
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Wrist Encoder", wrist.getPosition());
 //    SmartDashboard.putData(new PowerDistributionPanel());

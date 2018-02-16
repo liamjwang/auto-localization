@@ -8,6 +8,7 @@ import org.team1540.robot2018.Tuning;
 public class AutoIntake extends Command {
 
   public AutoIntake() {
+    super(Tuning.intakeMinTime);
     requires(Robot.intake);
   }
 
@@ -18,7 +19,7 @@ public class AutoIntake extends Command {
 
   @Override
   protected boolean isFinished() {
-    return(Robot.intake.getCurrent1() >= Tuning.IntakeSpikeCurrent && Robot.intake.getCurrent2() >= Tuning.IntakeSpikeCurrent);
+    return (Robot.intake.getCurrent() >= Tuning.IntakeSpikeCurrent) && isTimedOut();
   }
 
   @Override

@@ -12,6 +12,7 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.adjustables.Telemetry;
 import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 
 public class ElevatorTuningRobot extends IterativeRobot {
@@ -33,7 +34,9 @@ public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("D")
   public double d;
   @Tunable("F")
-  public double f;
+  public double fUpper;
+  @Tunable("F Down")
+  public double fDown;
   @Tunable("PID Mode")
   public boolean usingPid;
   @Tunable("PID Target")
@@ -43,7 +46,8 @@ public class ElevatorTuningRobot extends IterativeRobot {
   public boolean invert1 = false;
   @Tunable("Invert Motor 2")
   public boolean invert2 = false;
-  private ChickenTalon motor1 = new ChickenTalon(7);
+  private ChickenTalon motor1 = new ChickenTalon(14);
+  private ChickenController motor2 = new ChickenTalon(13);
 
   @Tunable("Invert Sensor")
   public boolean invertSensor;
@@ -71,7 +75,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor1.config_kP(0, p);
     motor1.config_kI(0, i);
     motor1.config_kD(0, d);
-    motor1.config_kF(0, f);
+    motor1.config_kF(0, motor1.getSelectedSensorVelocity() > 0 ? fDown : fUpper);
     motor1.setSensorPhase(invertSensor);
     motor1.configMotionAcceleration(motionMaxAccel);
     motor1.configMotionCruiseVelocity(motionMaxVel);
@@ -81,6 +85,9 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor1.configClosedloopRamp(clr);
     motor1.configPeakOutputForward(1);
     motor1.configPeakOutputReverse(-1);
+
+    motor2.set(ControlMode.Follower, motor1.getDeviceID());
+    motor2.setInverted(invert2);
     SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
     SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
     SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
