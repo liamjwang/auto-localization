@@ -3,7 +3,6 @@ package org.team1540.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import org.team1540.base.ChickenSubsystem;
-import org.team1540.base.util.SimpleLoopCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
@@ -20,8 +19,6 @@ public class Elevator extends ChickenSubsystem {
     talon2.setInverted(true);
 
     talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-
-    new SimpleLoopCommand("Update Elevator PIDs", this::updatePID).start();
   }
 
   public double getPosition() {
@@ -57,7 +54,8 @@ public class Elevator extends ChickenSubsystem {
     talon2.set(ControlMode.PercentOutput, 0);
   }
 
-  public void updatePID() {
+  @Override
+  public void periodic() {
     talon1.config_kP(0, Tuning.elevatorP);
     talon1.config_kI(0, Tuning.elevatorI);
     talon1.config_kD(0, Tuning.elevatorD);

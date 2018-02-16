@@ -51,7 +51,8 @@ public class Wrist extends ChickenSubsystem {
     return wristMotor.getSelectedSensorPosition();
   }
 
-  public void updatePID() {
+  @Override
+  public void periodic() {
     wristMotor.config_kP(0, Tuning.wristP);
     wristMotor.config_kI(0, Tuning.wristI);
     wristMotor.config_kD(0, Tuning.wristD);
