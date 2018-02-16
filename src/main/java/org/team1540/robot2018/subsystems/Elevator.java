@@ -61,7 +61,8 @@ public class Elevator extends ChickenSubsystem {
     talon1.config_kP(0, Tuning.elevatorP);
     talon1.config_kI(0, Tuning.elevatorI);
     talon1.config_kD(0, Tuning.elevatorD);
-    talon1.config_kF(0, Tuning.elevatorF);
+    talon1.config_kF(0, talon1.getSelectedSensorVelocity()
+        > 0 ? Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
     talon1.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
     talon1.configMotionAcceleration(Tuning.elevatorMaxAccel);
   }

@@ -43,8 +43,10 @@ public class Tuning {
   @Tunable("Elevator D")
   public static double elevatorD = 0;
 
-  @Tunable("Elevator F")
-  public static double elevatorF = 2.5575;
+  @Tunable("Elevator F Upwards")
+  public static double elevatorFGoingUp = 2.5575;
+  @Tunable("Elevator F Downwards")
+  public static double elevatorFGoingDown;
 
   @Tunable("Elevator Tolerance")
   public static double elevatorTolerance;
@@ -79,8 +81,14 @@ public class Tuning {
   @Tunable("Elevator Scale Lower Position")
   public static double elevatorScalePosition = 7400;
 
+  @Tunable("Elevator Low Scale Position")
+  public static double elevatorLowScalePosition = 6200;
+
   @Tunable("Elevator Obstacle Position")
-  public static double elevatorObstaclePosition = 0;
+  public static double elevatorObstaclePosition = 1300;
+
+  @Tunable("Elevator Obstacle Upper Position")
+  public static double elevatorObstacleUpperPosition = 3750;
 
   // WRIST
   @Tunable("Wrist P")

@@ -12,9 +12,13 @@ public class MoveElevatorToPosition extends CommandGroup {
     addSequential(new ConditionalCommand(new MoveWristToPosition(Tuning.wristTransitPosition)) {
       @Override
       protected boolean condition() {
-        return (target > Tuning.elevatorObstaclePosition
-            != Robot.elevator.getPosition() > Tuning.elevatorObstaclePosition)
-            && Robot.wrist.getPosition() > Tuning.wristTransitPosition;
+        return ((target > Tuning.elevatorObstaclePosition
+            && target < Tuning.elevatorObstacleUpperPosition)
+            || ((target > Tuning.elevatorObstacleUpperPosition
+            && Robot.elevator.getPosition() < Tuning.elevatorObstacleUpperPosition)
+            || (target < Tuning.elevatorObstaclePosition
+            && Robot.elevator.getPosition() > Tuning.elevatorObstaclePosition)))
+            && Robot.wrist.getPosition() < Tuning.wristTransitPosition;
       }
     });
     addSequential(new MoveElevator(target));
