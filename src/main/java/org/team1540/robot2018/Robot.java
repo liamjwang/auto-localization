@@ -14,8 +14,8 @@ import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
+import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.AutoEject;
-import org.team1540.robot2018.commands.intake.AutoIntake;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -65,7 +65,7 @@ public class Robot extends IterativeRobot {
     OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.copilotY.whenPressed(new GroundPosition());
 
-    OI.copilotLB.whenPressed(new AutoIntake());
+    OI.copilotLB.whenPressed(new IntakeSequence());
     OI.copilotRB.whenPressed(new AutoEject());
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));

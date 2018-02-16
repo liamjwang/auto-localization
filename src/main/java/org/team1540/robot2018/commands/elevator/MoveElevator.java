@@ -2,10 +2,11 @@ package org.team1540.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 /**
- * Move elevator command that ignores the wrist ({@link MoveElevatorToPosition} makes sure that the
- * wrist is clear)
+ * Move elevator command that ignores the elevator ({@link MoveElevatorToPosition} makes sure that the
+ * elevator is clear)
  */
 public class MoveElevator extends Command {
   private final double target;
@@ -22,6 +23,7 @@ public class MoveElevator extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return Robot.elevator.getError() < Tuning.elevatorTolerance
+        && Math.abs(Robot.elevator.getTrajPosition() - target) < Tuning.elevatorTolerance;
   }
 }

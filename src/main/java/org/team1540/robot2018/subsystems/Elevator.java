@@ -2,10 +2,14 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.ChickenSubsystem;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
@@ -19,29 +23,31 @@ public class Elevator extends ChickenSubsystem {
     talon2.setInverted(true);
 
     talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    Command command = new SimpleCommand("Zero Elevator", () -> talon1.setSelectedSensorPosition(0));
+    command.setRunWhenDisabled(true);
+    SmartDashboard.putData(command);
+  }
+
+  public int getError() {
+    return talon1.getClosedLoopError();
   }
 
   public double getPosition() {
     return talon1.getSelectedSensorPosition();
   }
 
+  public int getTrajPosition() {
+    return talon1.getActiveTrajectoryPosition();
+  }
+
   @Override
   public void initDefaultCommand() {
-    // setDefaultCommand(new JoystickElevator());
+    setDefaultCommand(new HoldElevatorPosition());
   }
 
   public void setMotionMagicPosition(double position) {
     talon1.set(ControlMode.MotionMagic, position);
     talon2.set(ControlMode.Follower, talon1.getDeviceID());
-  }
-
-  @Deprecated
-  public double setPosition(double position) {
-    position = position < Tuning.elevatorUpLimit ? position :
-        Tuning.elevatorUpLimit - Tuning.elevatorBounceBack;
-    position = position >= Tuning.elevatorDownLimit ? position : 0 + Tuning.elevatorBounceBack;
-    set(position);
-    return position;
   }
 
   public void set(double value) {

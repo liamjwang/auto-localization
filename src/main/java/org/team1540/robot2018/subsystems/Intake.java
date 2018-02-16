@@ -4,10 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotMap;
+import org.team1540.robot2018.commands.intake.HoldIntake;
 
 public class Intake extends Subsystem {
   PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -27,7 +27,7 @@ public class Intake extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new SimpleCommand("Stop intake", () -> set(0), this));
+    setDefaultCommand(new HoldIntake());
   }
 
   public void set(double value) {

@@ -2,11 +2,15 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.power.PowerManageable;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.wrist.HoldWristPosition;
 
 public class Wrist extends Subsystem implements PowerManageable {
   
@@ -16,6 +20,17 @@ public class Wrist extends Subsystem implements PowerManageable {
     wristMotor.setInverted(false);
 
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    Command command = new SimpleCommand("Zero Wrist", () -> wristMotor.setSelectedSensorPosition(0));
+    command.setRunWhenDisabled(true);
+    SmartDashboard.putData(command);
+  }
+
+  public double getTrajPosition() {
+    return wristMotor.getActiveTrajectoryPosition();
+  }
+
+  public double getError() {
+    return wristMotor.getClosedLoopError();
   }
 
   @Override
@@ -45,7 +60,7 @@ public class Wrist extends Subsystem implements PowerManageable {
 
   @Override
   public void initDefaultCommand() {
-    //setDefaultCommand();
+    setDefaultCommand(new HoldWristPosition());
   }
 
   public void set(double value) {
@@ -88,5 +103,7 @@ public class Wrist extends Subsystem implements PowerManageable {
 
     wristMotor.configMotionAcceleration(Tuning.wristMaxAccel);
     wristMotor.configMotionCruiseVelocity(Tuning.wristCruiseVelocity);
+    wristMotor.configPeakOutputForward(1);
+    wristMotor.configPeakOutputReverse(-1);
   }
 }

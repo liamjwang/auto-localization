@@ -2,6 +2,7 @@ package org.team1540.robot2018.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class MoveWristToPosition extends Command {
   private final double target;
@@ -19,6 +20,7 @@ public class MoveWristToPosition extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return Robot.wrist.getError() < Tuning.wristTolerance
+        && Math.abs(Robot.wrist.getTrajPosition() - target) < Tuning.wristTolerance;
   }
 }

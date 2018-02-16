@@ -10,7 +10,7 @@ import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
  */
 public class IntakeSequence extends CommandGroup {
   public IntakeSequence() {
-    addSequential(new GroundPosition());
+    addParallel(new GroundPosition());
     addSequential(new AutoIntake());
     addSequential(new MoveWristToPosition(Tuning.wristTransitPosition));
   }

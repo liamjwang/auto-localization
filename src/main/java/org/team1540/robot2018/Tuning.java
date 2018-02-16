@@ -51,7 +51,7 @@ public class Tuning {
   public static double elevatorIZone = 100;
 
   @Tunable("Elevator Tolerance")
-  public static double elevatorTolerance;
+  public static double elevatorTolerance = 50;
 
   @Tunable("Elevator Max Acceleration")
   public static int elevatorMaxAccel = 300;
@@ -91,6 +91,9 @@ public class Tuning {
 
   @Tunable("Elevator Obstacle Upper Position")
   public static double elevatorObstacleUpperPosition = 3750;
+
+  @Tunable("Intake Hold Speed")
+  public static double intakeHoldSpeed = 0.1;
   @Tunable("Intake Min Time")
   public static double intakeMinTime = 1;
 
@@ -116,7 +119,7 @@ public class Tuning {
   public static int wristMaxAccel = 1000;
 
   @Tunable("Wrist Stop Tolerance")
-  public static double wristTolerance;
+  public static double wristTolerance = 50;
 
   @Tunable("Wrist Up Setpoint")
   public static double wristUpLimit = -8300; //Wrist 45 deg: -7000, Vertical: 4500
