@@ -12,7 +12,7 @@ public class JoystickElevator extends Command {
 
   @Override
   protected void execute() {
-    Robot.elevator.set(OI.getCopilotLeftY());
+    Robot.elevator.set(-OI.getCopilotLeftY());
   }
 
   @Override
