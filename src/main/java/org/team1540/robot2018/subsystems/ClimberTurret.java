@@ -1,5 +1,6 @@
 package org.team1540.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2018.RobotMap;
@@ -7,6 +8,8 @@ import org.team1540.robot2018.RobotMap;
 public class ClimberTurret extends Subsystem {
   private Servo pan = new Servo(RobotMap.panServo);
   private Servo tilt = new Servo(RobotMap.tiltServo);
+
+  public Relay servoRelay = new Relay(3);
 
   @Override
   protected void initDefaultCommand() {
