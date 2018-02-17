@@ -1,5 +1,8 @@
 package org.team1540.robot2018;
 
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -95,6 +98,11 @@ public class Robot extends IterativeRobot {
       // tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
       winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
     }, tape, winch));
+
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
+    camera.setResolution(640, 480);
+    MjpegServer mjpegServer = new MjpegServer("Camera Server", 1181);
+    mjpegServer.setSource(camera);
   }
 
   @Override
@@ -119,6 +127,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Wrist Encoder", wrist.getPosition());
+    SmartDashboard.putNumber("Elevator", elevator.getPosition());
 //    SmartDashboard.putData(new PowerDistributionPanel());
   }
 
