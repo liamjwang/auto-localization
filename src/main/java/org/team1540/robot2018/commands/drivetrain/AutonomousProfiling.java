@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
+import openrio.powerup.MatchData.OwnedSide;
 import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.base.motionprofiling.RunMotionProfiles;
 import org.team1540.robot2018.Robot;
@@ -60,7 +61,9 @@ public class AutonomousProfiling extends Command {
   private static final double FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER = 12;
   private static final double FIELD_PORTAL_HEIGHT = 60;
   private static final double FIELD_STARTING_LINE = 30;
-  private static final double FIELD_SWITCH_NEAR_DISTANCE_FROM_EDGE = 85.75;
+  private static final double FIELD_SWITCH_TO_SIDE_WALLS = 85.75;
+  private static final double FIELD_SWITCH_TO_ALLIANCE_WALL = 151;
+  private static final double FIELD_SWITCH_MIDDLE_TO_CENTER = 54.53;
 
   // TODO Store these profiles instead of generating on the fly
   private List<Waypoint> waypoints = new LinkedList<>();
@@ -122,25 +125,28 @@ public class AutonomousProfiling extends Command {
             break;
         }
         break;
-      case SWITCH_SIMPLE:
+      case SWITCH_SAME_SIDE:
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT && startLocation == StartLocation.LEFT_EDGE) {
+          waypoints.add(EndLocation.LEFT_SWITCH_SIDE.getLocation());
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT && startLocation == StartLocation.RIGHT_EDGE) {
+          waypoints.add(EndLocation.RIGHT_SWITCH_SIDE.getLocation());
+        } else {
+          // Just cross the line
+          waypoints.add(makeTranslatedWaypoint(waypoints.get(0), FIELD_STARTING_LINE + BOT_EFFECTIVE_LENGTH, 0, 0));
+        }
+        break;
+      case SWITCH_ALL_SIDES:
         switch (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR)) {
           case LEFT:
-            // TODO
+            waypoints.add(EndLocation.LEFT_SWITCH_SIDE.getLocation());
             break;
           case RIGHT:
-            // TODO
+            waypoints.add(EndLocation.RIGHT_SWITCH_SIDE.getLocation());
             break;
         }
         break;
-      case SWITCH_COMPLEX:
-        switch (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR)) {
-          case LEFT:
-            // TODO
-            break;
-          case RIGHT:
-            // TODO
-            break;
-        }
+      case SWITCH_TOP:
+        // TODO
         break;
     }
     return Pathfinder.generate((Waypoint[]) waypoints.toArray(), config);
@@ -157,15 +163,17 @@ public class AutonomousProfiling extends Command {
   }
 
   public enum AutoType {
-    CROSS_LINE, SWITCH_SIMPLE, SWITCH_COMPLEX
+    CROSS_LINE, SWITCH_SAME_SIDE, SWITCH_ALL_SIDES, SWITCH_TOP
   }
 
-  public enum StartLocation {
+  public interface Location {
+    public Waypoint getLocation();
+  }
+
+  public enum StartLocation implements Location {
     LEFT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH - FIELD_PORTAL_HEIGHT, 0)),
     EXCHANGE_MIDDLE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH/2 + FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER - BOT_EFFECTIVE_WIDTH/2, 0)),
-    RIGHT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_PORTAL_HEIGHT, 0)),
-    LEFT_SWITCH_ALIGN(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH - FIELD_SWITCH_NEAR_DISTANCE_FROM_EDGE, 0)),
-    RIGHT_SWITCH_ALIGN(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH, 0));
+    RIGHT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_PORTAL_HEIGHT, 0));
 
     private final Waypoint location;
 
@@ -173,6 +181,23 @@ public class AutonomousProfiling extends Command {
       this.location = location;
     }
 
+    @Override
+    public Waypoint getLocation() {
+      return location;
+    }
+  }
+
+  public enum EndLocation implements Location {
+    LEFT_SWITCH_SIDE(new Waypoint(FIELD_SWITCH_TO_ALLIANCE_WALL - BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH - FIELD_SWITCH_MIDDLE_TO_CENTER, 0)),
+    RIGHT_SWITCH_SIDE(new Waypoint(FIELD_SWITCH_TO_ALLIANCE_WALL - BOT_EFFECTIVE_LENGTH/2, FIELD_SWITCH_MIDDLE_TO_CENTER, 0));
+
+    private final Waypoint location;
+
+    EndLocation(Waypoint location) {
+      this.location = location;
+    }
+
+    @Override
     public Waypoint getLocation() {
       return location;
     }
