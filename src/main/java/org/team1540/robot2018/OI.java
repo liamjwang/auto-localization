@@ -81,14 +81,16 @@ public class OI {
   static Button elevatorJoystickActivation = new Button() {
     @Override
     public boolean get() {
-      return getCopilotLeftY() != 0; // zero values mean it's within the deadzone
+      return Utilities.processAxisDeadzone(copilot.getRawAxis(1), Tuning.manualControlDeadzone)
+          != 0; // zero values mean it's within the deadzone
     }
   };
 
   static Button wristJoystickActivation = new Button() {
     @Override
     public boolean get() {
-      return getCopilotRightY() != 0; // zero values mean it's within the deadzone
+      return Utilities.processAxisDeadzone(copilot.getRawAxis(5), Tuning.manualControlDeadzone)
+          != 0; // zero values mean it's within the deadzone
     }
   };
 

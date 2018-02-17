@@ -182,6 +182,9 @@ public class Tuning {
 
   @Tunable("Standard Deadzone")
   public static double standardDeadzone = 0.1;
+
+  @Tunable("Manual Superstructure Control Deadzone")
+  public static double manualControlDeadzone = 0.2;
   @Tunable("Climber In Low Speed")
   public static double climberInLowSpeed = -0.4;
   @Tunable("Climber In HIgh Speed")
