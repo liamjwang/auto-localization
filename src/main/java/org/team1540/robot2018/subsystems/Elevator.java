@@ -70,5 +70,9 @@ public class Elevator extends ChickenSubsystem {
         > 0 ? Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
     talon1.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
     talon1.configMotionAcceleration(Tuning.elevatorMaxAccel);
+
+    talon1.setInverted(!Tuning.isPandora);
+    talon2.setInverted(!Tuning.isPandora);
+    talon1.setSensorPhase(false);
   }
 }
