@@ -1,10 +1,10 @@
 package org.team1540.robot2018;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,7 +34,7 @@ public class RobotMotorTest extends IterativeRobot {
     motorChooserA = new SendableChooser<Integer>();
 //    motorChooserB = new SendableChooser<Integer>();
 
-    for (int i = 0; i <= 16; i++) {
+    for (int i = 1; i <= 16; i++) {
       motorChooserA.addObject(Integer.toString(i), i);
 //      motorChooserB.addObject(Integer.toString(i), i);
     }
@@ -109,6 +109,15 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
+    for (ChickenController motor : motorsA) {
+      if (motor != null) {
+        motor.setBrake(true);
+        motor.configPeakOutputForward(1);
+        motor.configPeakOutputReverse(-1);
+        motor.configClosedloopRamp(0);
+        motor.configOpenloopRamp(0);
+      }
+    }
     SmartDashboard.putNumber("Driver Right Y", OI.getDriverRightY());
     SmartDashboard.putNumber("Driver Right X", OI.getDriverRightX());
     SmartDashboard.putNumber("Driver Left Y", OI.getDriverLeftY());
