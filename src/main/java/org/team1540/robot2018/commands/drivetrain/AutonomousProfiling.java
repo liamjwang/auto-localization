@@ -97,6 +97,8 @@ public class AutonomousProfiling extends Command {
     TankModifier modifier = new TankModifier(trajectory);
     modifier.modify(wheelbaseWidth);
 
+    Robot.drivetrain.prepareForMotionProfiling();
+
     MotionProfilingProperties leftProperties = new MotionProfilingProperties(Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
     MotionProfilingProperties rightProperties = new MotionProfilingProperties(Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
