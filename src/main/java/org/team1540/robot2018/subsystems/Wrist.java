@@ -5,14 +5,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.power.PowerManageable;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.wrist.HoldWristPosition;
 
-public class Wrist extends Subsystem implements PowerManageable {
+public class Wrist extends Subsystem {
   
   private ChickenTalon wristMotor = new ChickenTalon(RobotMap.wristMotor);
 
@@ -33,29 +32,8 @@ public class Wrist extends Subsystem implements PowerManageable {
     return wristMotor.getClosedLoopError();
   }
 
-  @Override
-  public double getPriority() {
-    return 11;
-  }
-
-  @Override
-  public void setPriority(double priority) {
-  }
-
-  @Override
   public double getCurrent() {
     return wristMotor.getOutputCurrent();
-  }
-
-  @Override
-  public void limitPower(double limit) {
-    wristMotor.enableCurrentLimit(true);
-    wristMotor.configContinuousCurrentLimit((int) limit);
-  }
-
-  @Override
-  public void stopLimitingPower() {
-    wristMotor.enableCurrentLimit(false);
   }
 
   @Override
