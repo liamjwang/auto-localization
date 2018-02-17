@@ -17,11 +17,11 @@ import org.team1540.base.wrappers.ChickenTalon;
 
 public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("Ramp")
-  public double clr;
+  public double clr = 0;
   @Tunable("Peak out fwd")
-  public double pof;
+  public double pof = 1;
   @Tunable("Peak out reverse")
-  public double por;
+  public double por = -1;
 
   @Tunable("I Zone")
   public int iZone = 0;
