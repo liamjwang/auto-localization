@@ -172,7 +172,7 @@ public class Tuning {
   public static double climberInSpeed = 0.5;
 
   @Tunable("Climber Out Speed")
-  public static double climberOutSpeed;
+  public static double climberOutSpeed = -0.4;
 
   @Tunable("Manual Elevator Up Speed")
   public static double manualElevatorUpSpeed = 1;
@@ -183,7 +183,7 @@ public class Tuning {
   @Tunable("Standard Deadzone")
   public static double standardDeadzone = 0.1;
   @Tunable("Climber In Low Speed")
-  public static double climberInLowSpeed = 0.4;
+  public static double climberInLowSpeed = -0.4;
   @Tunable("Climber In HIgh Speed")
-  public static double climberInHighSpeed = 1;
+  public static double climberInHighSpeed = -1;
 }
