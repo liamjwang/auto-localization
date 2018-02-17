@@ -92,10 +92,22 @@ public class OI {
     }
   };
 
-  static Button copilotLeftTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 2);
-  static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
+  // static Button copilotLeftTriggerSmallPress = new Button() {
+  //   @Override
+  //   public boolean get() {
+  //     return getCopilotLeftTrigger() > Tuning.deadZone && getCopilotLeftTrigger() < 0.5;
+  //   }
+  // };
+  // static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
 
-  static Button copilotRightTriggerSmallPress = new AxisButton(copilot, Tuning.deadZone, 3);
+  static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.deadZone, 2);
+
+  static Button copilotRightTriggerSmallPress = new Button() {
+    @Override
+    public boolean get() {
+      return getCopilotRightTrigger() > Tuning.deadZone && getCopilotRightTrigger() < 0.5;
+    }
+  };
   static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
 
   public static double getDriverLeftX(){

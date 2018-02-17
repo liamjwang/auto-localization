@@ -5,14 +5,13 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TurretControl;
-import org.team1540.robot2018.commands.climber.RunClimber;
-import org.team1540.robot2018.commands.climber.WinchIn;
-import org.team1540.robot2018.commands.climber.WinchOut;
+import org.team1540.robot2018.commands.climber.AlignClimber;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -54,9 +53,12 @@ public class Robot extends IterativeRobot {
 
     // OI.manualElevatorUp.whileHeld(new ManualElevatorUp());
     // OI.copilotB.whileHeld(new ManualElevatorDown());
-
-    OI.copilotStart.whileHeld(new WinchIn());
-    OI.copilotBack.whileHeld(new WinchOut());
+    //
+    IntakeSequence intakeSequence = new IntakeSequence();
+    OI.copilotLB.whenPressed(intakeSequence);
+    OI.copilotRB.whenPressed(new AutoEject());
+    OI.copilotStart.cancelWhenPressed(intakeSequence);
+    // OI.copilotBack.whileHeld(new WinchOut());
 
     //    OI.copilotBack.whileHeld(new TapeIn());
     //    OI.copilotStart.whileHeld(new TapeOut());
@@ -69,8 +71,6 @@ public class Robot extends IterativeRobot {
     OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.copilotY.whenPressed(new GroundPosition());
 
-    OI.copilotLB.whenPressed(new IntakeSequence());
-    OI.copilotRB.whenPressed(new AutoEject());
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
@@ -80,21 +80,24 @@ public class Robot extends IterativeRobot {
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
     // OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
 
-    OI.wristJoystickActivation.whileHeld(new JoystickWrist());
+    OI.wristJoystickActivation.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
+      @Override
+      protected boolean condition() {
+        return OI.copilotLeftTrigger.get();
+      }
+    });
 
     Command turretControl = new TurretControl();
-    OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
-    OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
-    OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
+    // OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
+    // OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
+    // OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
 
-    SimpleCommand winchInLow = new SimpleCommand("Winch In Low", () -> {
+    OI.copilotRightTriggerSmallPress.whileHeld(new SimpleCommand("Winch In Low", () -> {
       // tape.set(Tuning.climberInLowSpeed * Tuning.tapeMeasureMultiplier);
       winch.set(Tuning.climberInLowSpeed * Tuning.winchMultiplier);
-    }, tape, winch);
-    OI.copilotLeftTriggerSmallPress.whenPressed(winchInLow);
-    OI.copilotLeftTriggerLargePress.cancelWhenPressed(winchInLow);
+    }, tape, winch));
 
-    OI.copilotLeftTriggerLargePress.whenPressed(new SimpleCommand("Winch In High", () -> {
+    OI.copilotRightTriggerLargePress.whileHeld(new SimpleCommand("Winch In High", () -> {
       // tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
       winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
     }, tape, winch));
