@@ -51,6 +51,57 @@ public class DriveTrain extends ChickenSubsystem {
   public void setRight(double value){
     this.right.set(ControlMode.PercentOutput, value);
   }
+  
+  
+  public double getLeftPosition() {
+    return left.getQuadraturePosition();
+  }
+
+  public double getRightPosition() {
+    return right.getQuadraturePosition();
+  }
+  
+  public double getLeftVelocity() {
+    return left.getQuadratureVelocity();
+  }
+
+  public double getRightVelocity() {
+    return right.getQuadratureVelocity();
+  }
+
+  public void setLeftVelocity(double velocity) {
+    left.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setRightVelocity(double velocity) {
+    left.set(ControlMode.Velocity, velocity);
+  }
+
+  public void prepareForMotionProfiling() {
+    left.setControlMode(ControlMode.Velocity);
+    right.setControlMode(ControlMode.Velocity);
+
+    // driveRightTalon.setSensorPhase(false);
+    // driveLeftTalon.setSensorPhase(true);
+
+    // This needs to be here, as PIDFiZone values are stored in memory
+    // TODO clean up tuning
+    left.config_IntegralZone(left.getDefaultPidIdx(), 1000);
+    right.config_IntegralZone(right.getDefaultPidIdx(), 1000);
+    left.config_kI(left.getDefaultPidIdx(), 0.01);
+    right.config_kI(right.getDefaultPidIdx(), 0.01);
+    left.config_kF(left.getDefaultPidIdx(), 0.1);
+    right.config_kF(right.getDefaultPidIdx(), 0.1);
+    left.configClosedloopRamp(0);
+    left2.configClosedloopRamp(0);
+    left3.configClosedloopRamp(0);
+    right.configClosedloopRamp(0);
+    right2.configClosedloopRamp(0);
+    right3.configClosedloopRamp(0);
+
+    left.setSelectedSensorPosition(0);
+    right.setSelectedSensorPosition(0);
+  }
 
   @Override
   public void initDefaultCommand() {
