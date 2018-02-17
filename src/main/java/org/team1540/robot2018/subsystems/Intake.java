@@ -8,7 +8,6 @@ import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.intake.HoldIntake;
 
 public class Intake extends Subsystem {
   PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -24,17 +23,15 @@ public class Intake extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new HoldIntake());
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("1 current", getCurrent());
+    SmartDashboard.putNumber("Current", getCurrent());
   }
 
   public double getCurrent() {
-    return (Tuning.isPandora ?
-        pdp.getCurrent(10) + pdp.getCurrent(11) : pdp.getCurrent(5))
+    return (Tuning.isPandora ? pdp.getCurrent(5) : pdp.getCurrent(10) + pdp.getCurrent(11))
         - Robot.wrist.getCurrent();
   }
 
