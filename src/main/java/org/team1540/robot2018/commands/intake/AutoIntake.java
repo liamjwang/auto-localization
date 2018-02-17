@@ -28,4 +28,9 @@ public class AutoIntake extends Command {
   protected void end() {
     Robot.intake.set(Tuning.intakeHoldSpeed);
   }
+
+  @Override
+  protected void interrupted() {
+    Robot.intake.stop();
+  }
 }
