@@ -89,6 +89,8 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor2.set(ControlMode.Follower, motor1.getDeviceID());
     motor2.setInverted(invert2);
     SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
+    SmartDashboard.putNumber("Current", motor1.getOutputCurrent());
+    SmartDashboard.putNumber("Current 2", motor2.getOutputCurrent());
     SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
     SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Trajectory Position", motor1.getActiveTrajectoryPosition());
