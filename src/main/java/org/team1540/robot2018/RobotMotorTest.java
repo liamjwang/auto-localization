@@ -3,6 +3,8 @@ package org.team1540.robot2018;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -27,6 +29,7 @@ public class RobotMotorTest extends IterativeRobot {
 
   Servo pan = new Servo(0);
   Servo tilt = new Servo(1);
+  Relay servoRelay = new Relay(3);
 
   @Override
   public void robotInit() {
@@ -93,6 +96,7 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void disabledInit() {
+    servoRelay.set(Value.kOff);
   }
 
   @Override
@@ -101,6 +105,7 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void teleopInit() {
+    servoRelay.set(Value.kOn);
   }
 
   @Override
