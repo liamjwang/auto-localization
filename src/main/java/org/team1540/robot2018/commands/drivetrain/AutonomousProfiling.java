@@ -22,8 +22,10 @@ import org.team1540.robot2018.Robot;
 
 public class AutonomousProfiling extends Command {
 
-  private SendableChooser<Class<AutoType>> autoTypeChooser = new SendableChooser<>();
-  private SendableChooser<Class<StartLocation>> startLocationChooser = new SendableChooser<>();
+  // TODO Any changes based on the fact that the center of turning isn't in the center?
+
+  private SendableChooser<AutoType> autoTypeChooser = new SendableChooser<>();
+  private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
   // Default command does nothing; this shouldn't ever happen, since it will be set to the real thing during initialization
   private Command runMotionProfiles = new Command() {
     @Override
@@ -36,7 +38,12 @@ public class AutonomousProfiling extends Command {
   // Units in inches and seconds
 
   // Not a huge fan of having these all here
+  // TODO Set these to some real values
+  private final double wheelDiameter = 6;
   private final double wheelbaseWidth = 25.091;
+  private final double lEncoderTicksPerRev = 1023;
+  private final double rEncoderTicksPerRev = 1023;
+  private final double secondsFromNeutralToFull = 0;
 
   private final Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
   private final int sampleRate = Config.SAMPLES_HIGH;
@@ -70,14 +77,19 @@ public class AutonomousProfiling extends Command {
 
   public AutonomousProfiling() {
     // TODO Can this be done at declaration?
+    // TODO Is adding stuff to SmartDashboard in a decentralized manner okay?
+    // FIXME null pointers for days
     for (AutoType type : AutoType.values()) {
-      autoTypeChooser.addObject(type.getClass().getName(), (Class<AutoType>) type.getClass());
+      autoTypeChooser.addObject(type.name(), type);
     }
+    autoTypeChooser.addDefault("DEFAULT: SWITCH_SAME_SIDE", AutoType.SWITCH_SAME_SIDE);
+    autoTypeChooser.setName("Auto Type");
     SmartDashboard.putData(autoTypeChooser);
     for (StartLocation type : StartLocation.values()) {
-      startLocationChooser.addObject(type.getClass().getName(), (Class<StartLocation>) type.getClass());
+      startLocationChooser.addObject(type.name(), type);
     }
-    // TODO Is adding stuff to SmartDashboard in a decentralized manner okay?
+    startLocationChooser.addDefault("DEFAULT: LEFT_EDGE", StartLocation.LEFT_EDGE);
+    startLocationChooser.setName("Start Location");
     SmartDashboard.putData(startLocationChooser);
   }
 
@@ -87,14 +99,11 @@ public class AutonomousProfiling extends Command {
     Trajectory trajectory = null;
     try {
        trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity, maxAcceleration, maxJerk),
-          autoTypeChooser.getSelected().newInstance(), startLocationChooser.getSelected().newInstance());
+          autoTypeChooser.getSelected(), startLocationChooser.getSelected());
     // TODO exception handling
     } catch (InvalidPathException e) {
       e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
+      return;
     }
 
     TankModifier modifier = new TankModifier(trajectory);
@@ -102,8 +111,8 @@ public class AutonomousProfiling extends Command {
 
     Robot.drivetrain.prepareForMotionProfiling();
 
-    MotionProfilingProperties leftProperties = new MotionProfilingProperties(Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
-    MotionProfilingProperties rightProperties = new MotionProfilingProperties(Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
+    MotionProfilingProperties leftProperties = new MotionProfilingProperties(lEncoderTicksPerRev, wheelDiameter, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
+    MotionProfilingProperties rightProperties = new MotionProfilingProperties(rEncoderTicksPerRev, wheelDiameter, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
   }
 
@@ -149,7 +158,7 @@ public class AutonomousProfiling extends Command {
         // TODO
         break;
     }
-    return Pathfinder.generate((Waypoint[]) waypoints.toArray(), config);
+    return Pathfinder.generate(waypoints.toArray(new Waypoint[waypoints.size()]), config);
   }
 
   @Override

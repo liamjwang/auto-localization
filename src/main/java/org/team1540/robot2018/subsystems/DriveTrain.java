@@ -1,6 +1,7 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
@@ -74,7 +75,7 @@ public class DriveTrain extends ChickenSubsystem {
   }
 
   public void setRightVelocity(double velocity) {
-    left.set(ControlMode.Velocity, velocity);
+    right.set(ControlMode.Velocity, velocity);
   }
 
   public void prepareForMotionProfiling() {
