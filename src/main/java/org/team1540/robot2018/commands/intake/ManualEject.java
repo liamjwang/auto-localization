@@ -11,7 +11,7 @@ public class ManualEject extends Command {
 
   @Override
   protected void initialize() {
-    Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB);
+    Robot.intake.set(Tuning.ejectSpeedA, Tuning.ejectSpeedB);
   }
 
   @Override

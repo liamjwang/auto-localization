@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
     //    OI.copilotRB.whenPressed(new AutoEject());
 
     // OI.copilotX.whileHeld(new SimpleCommand("Eject",
-    //     () -> Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB),
+    //     () -> Robot.intake.set(Tuning.ejectSpeedA, Tuning.ejectSpeedB),
     //     intake));
     // OI.copilotA.whileHeld(new SimpleCommand("Intake",
     //     () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),

@@ -7,13 +7,18 @@ import org.team1540.robot2018.Tuning;
 public class AutoEject extends TimedCommand {
 
   public AutoEject(){
-    super(Tuning.EjectTime);
+    super(Tuning.ejectTime);
     requires(Robot.intake);
   }
 
   @Override
+  protected void initialize() {
+    setTimeout(Tuning.ejectTime);
+  }
+
+  @Override
   protected void execute() {
-    Robot.intake.set(Tuning.EjectSpeedA, Tuning.EjectSpeedB);
+    Robot.intake.set(Tuning.ejectSpeedA, Tuning.ejectSpeedB);
   }
 
   @Override

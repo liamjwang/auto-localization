@@ -18,7 +18,7 @@ public class HoldElevatorPosition extends Command {
 
   @Override
   protected void execute() {
-    if (Math.abs(Robot.elevator.getPosition() - setpoint) > Tuning.MAX_ELEVATOR_DEVIATION) {
+    if (Math.abs(Robot.elevator.getPosition() - setpoint) > Tuning.maxElevatorDeviation) {
       setpoint = Robot.elevator.getPosition();
     }
     Robot.elevator.setMotionMagicPosition(setpoint);

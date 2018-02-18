@@ -13,13 +13,14 @@ public class AutoIntake extends Command {
   }
 
   @Override
-  protected void initialize(){
+  protected void initialize() {
+    setTimeout(Tuning.intakeMaxTime);
     Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
   }
 
   @Override
   protected boolean isFinished() {
-    return ((Robot.intake.getCurrent() >= Tuning.IntakeSpikeCurrent)
+    return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
         && this.timeSinceInitialized() > Tuning.intakeMinTime)
         || isTimedOut();
   }

@@ -57,13 +57,6 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.MotionMagic, position);
   }
 
-  public double setPosition(double position){
-    position = position < Tuning.wristUpLimit ? position : Tuning.wristUpLimit - Tuning.wristBounceBack;
-    position = position >= Tuning.wristDownLimit ? position : 0 + Tuning.wristBounceBack;
-    wristMotor.set(position);
-    return position;
-  }
-
   public double getPosition(){
     return wristMotor.getSelectedSensorPosition();
   }

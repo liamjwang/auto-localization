@@ -22,7 +22,7 @@ public class HoldWristPosition extends Command {
 
   @Override
   protected void execute() {
-    if (Math.abs(Robot.wrist.getPosition() - setpoint) > Tuning.MAX_WRIST_DEVIATION) {
+    if (Math.abs(Robot.wrist.getPosition() - setpoint) > Tuning.maxWristDeviation) {
       setpoint = Robot.wrist.getPosition();
     }
 
