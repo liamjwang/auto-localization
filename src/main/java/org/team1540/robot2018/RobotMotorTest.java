@@ -130,7 +130,7 @@ public class RobotMotorTest extends IterativeRobot {
 
     Scheduler.getInstance().run();
     if (motorChooserA.getSelected() != null) {
-      motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, OI.getDriverRightY());
+      motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, OI.driver.getRawAxis(5));
     }
 //    if (motorChooserB.getSelected() != null) {
 //      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());

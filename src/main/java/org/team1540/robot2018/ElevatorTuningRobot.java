@@ -168,7 +168,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
         break;
       case PID_JOYSTICK:
         joystickPosition +=
-            Utilities.processAxisDeadzone(joystick.getRawAxis(1), 0.1) * joystickMultiplier;
+            Utilities.processDeadzone(joystick.getRawAxis(1), 0.1) * joystickMultiplier;
         motor1.set(ControlMode.Position, joystickPosition);
         break;
       case PID_MTP:
