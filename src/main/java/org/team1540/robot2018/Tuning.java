@@ -121,6 +121,10 @@ public class Tuning {
 
   @Tunable("Motion Max Accelleration")
   public static int wristMaxAccel = 1000;
+  @Tunable("Wrist Peak Current Limit")
+  public static int wristCurrentLimit;
+  @Tunable("Wrist Peak Duration")
+  public static int wristPeakDuration;
 
   @Tunable("Wrist Stop Tolerance")
   public static double wristTolerance = 50;

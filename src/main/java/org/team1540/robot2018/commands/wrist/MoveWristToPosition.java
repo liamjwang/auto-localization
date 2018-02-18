@@ -5,7 +5,9 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
 public class MoveWristToPosition extends Command {
-  private final double target;
+  private long spikeDuration;
+  private long lastExecTime;
+  private double target;
 
   public MoveWristToPosition(double target) {
     super("Move wrist to " + target);
@@ -14,7 +16,23 @@ public class MoveWristToPosition extends Command {
   }
 
   @Override
+  protected void initialize() {
+    spikeDuration = 0;
+    lastExecTime = System.currentTimeMillis();
+  }
+
+  @Override
   protected void execute() {
+    if (Robot.wrist.getCurrent() > Tuning.wristCurrentLimit) {
+      spikeDuration += System.currentTimeMillis() - lastExecTime;
+    } else {
+      spikeDuration = 0;
+    }
+    lastExecTime = System.currentTimeMillis();
+
+    if (spikeDuration > Tuning.wristPeakDuration) {
+      target = Robot.wrist.getPosition();
+    }
     Robot.wrist.setMotionMagicPosition(target);
   }
 
