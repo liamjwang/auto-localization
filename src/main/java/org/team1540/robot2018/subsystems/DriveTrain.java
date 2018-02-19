@@ -125,14 +125,14 @@ public class DriveTrain extends ChickenSubsystem {
 
   public MotionProfilingProperties createLeftProfileProperties(Trajectory trajectory) {
     MotionProfilingProperties properties = new MotionProfilingProperties(this::getLeftVelocity, this::setLeftVelocity, this::getLeftPosition, trajectory);
-    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTCU);
+    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTPU);
     properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
     return properties;
   }
 
   public MotionProfilingProperties createRightProfileProperties(Trajectory trajectory) {
     MotionProfilingProperties properties = new MotionProfilingProperties(this::getRightVelocity, this::setRightVelocity, this::getRightPosition, trajectory);
-    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTCU);
+    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTPU);
     properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
     return properties;
   }

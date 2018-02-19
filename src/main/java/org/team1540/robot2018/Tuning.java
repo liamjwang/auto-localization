@@ -190,5 +190,5 @@ public class Tuning {
 
   public static double drivetrainJoystickPower = 2;
 
-  public static double drivetrainEncoderTCU;
+  public static double drivetrainEncoderTPU;
 }
