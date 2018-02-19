@@ -66,7 +66,7 @@ public class DriveTrain extends ChickenSubsystem {
         .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
         .setInvertLeft(true)
         .setInvertRight(true)
-        .setInvertLeftBrakeDirection(false)
+        .setInvertLeftBrakeDirection(Tuning.isPandora)
         .setInvertRightBrakeDirection(true)
         .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
         .setBrakingStopZone(Tuning.deadZone)
