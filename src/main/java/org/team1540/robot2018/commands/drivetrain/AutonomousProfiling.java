@@ -39,10 +39,9 @@ public class AutonomousProfiling extends Command {
 
   // Not a huge fan of having these all here
   // TODO Set these to some real values
-  private final double wheelDiameter = 6;
   private final double wheelbaseWidth = 25.091;
-  private final double lEncoderTicksPerRev = 1023;
-  private final double rEncoderTicksPerRev = 1023;
+  private final double lEncoderTicksPerUnit = 1023 * 6 * Math.PI;
+  private final double rEncoderTicksPerUnit = 1023 * 6 * Math.PI;;
   private final double secondsFromNeutralToFull = 0;
 
   private final Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
@@ -111,8 +110,8 @@ public class AutonomousProfiling extends Command {
 
     Robot.drivetrain.prepareForMotionProfiling();
 
-    MotionProfilingProperties leftProperties = new MotionProfilingProperties(lEncoderTicksPerRev, wheelDiameter, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
-    MotionProfilingProperties rightProperties = new MotionProfilingProperties(rEncoderTicksPerRev, wheelDiameter, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
+    MotionProfilingProperties leftProperties = new MotionProfilingProperties(lEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
+    MotionProfilingProperties rightProperties = new MotionProfilingProperties(rEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
   }
 
