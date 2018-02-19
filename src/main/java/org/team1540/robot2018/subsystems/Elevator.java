@@ -19,9 +19,6 @@ public class Elevator extends ChickenSubsystem {
   public Elevator() {
     this.add(talon1, talon2);
     this.setPriority(10);
-    talon1.setInverted(!Tuning.isPandora);
-    talon2.setInverted(!Tuning.isPandora);
-    talon1.setSensorPhase(false);
 
     talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     Command command = new SimpleCommand("Zero Elevator", () -> talon1.setSelectedSensorPosition(0));
@@ -72,8 +69,8 @@ public class Elevator extends ChickenSubsystem {
     talon1.configMotionAcceleration(Tuning.elevatorMaxAccel);
     talon1.config_IntegralZone(0, Tuning.elevatorIZone);
 
-    talon1.setInverted(!Tuning.isPandora);
-    talon2.setInverted(!Tuning.isPandora);
-    talon1.setSensorPhase(false);
+    talon1.setInverted(true);
+    talon2.setInverted(true);
+    talon1.setSensorPhase(Tuning.isPandora);
   }
 }
