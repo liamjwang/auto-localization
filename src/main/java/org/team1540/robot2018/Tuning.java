@@ -86,7 +86,7 @@ public class Tuning {
   public static double elevatorObstacleUpperPosition = 3750;
 
   @Tunable("Max Elevator Deviation")
-  public static final double maxElevatorDeviation = 200;
+  public static double maxElevatorDeviation = 200;
 
   // WRIST
   @Tunable("Wrist P")
@@ -129,7 +129,7 @@ public class Tuning {
   public static double wrist45FwdPosition = 6200;
 
   @Tunable("Max wrist deviation")
-  public static final double maxWristDeviation = 200;
+  public static double maxWristDeviation = 200;
 
   // WINCH
   @Tunable("Winch In Speed")
