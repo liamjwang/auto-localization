@@ -1,9 +1,12 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import jaci.pathfinder.Trajectory;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.drive.PidDriveFactory;
 import org.team1540.base.drive.PowerJoystickScaling;
+import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
@@ -22,18 +25,12 @@ public class DriveTrain extends ChickenSubsystem {
   private ChickenTalon[] talons = new ChickenTalon[]{left, left2, left3, right, right2, right3};
   private ChickenTalon[] masters = new ChickenTalon[]{left, right};
 
-
-  // public double getLeftVelocity() {}
-  // public double getRightVelocity() {}
-  // public void setLeftVelocity(double velocity) {}
-  // public void setLeftThrottle(double throttle){}
-  // public void setRightThrottle(double throttle){}
-  // public void setRightVelocity(double velocity){}
-
-
   public DriveTrain() {
     this.add(talons);
     this.setPriority(10);
+
+    left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     left.setSensorPhase(false);
 
@@ -100,5 +97,43 @@ public class DriveTrain extends ChickenSubsystem {
     for (ChickenTalon talon : talons) {
       talon.configClosedloopRamp(Tuning.drivetrainRampRate);
     }
+  }
+
+  public double getLeftPosition() {
+    return left.getSelectedSensorPosition();
+  }
+
+  public double getRightPosition() {
+    return right.getSelectedSensorPosition();
+  }
+
+  public double getLeftVelocity() {
+    return left.getSelectedSensorVelocity();
+  }
+
+  public double getRightVelocity() {
+    return right.getSelectedSensorVelocity();
+  }
+
+  public void setLeftVelocity(double velocity) {
+    left.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setRightVelocity(double velocity) {
+    right.set(ControlMode.Velocity, velocity);
+  }
+
+  public MotionProfilingProperties createLeftProfileProperties(Trajectory trajectory) {
+    MotionProfilingProperties properties = new MotionProfilingProperties(this::getLeftVelocity, this::setLeftVelocity, this::getLeftPosition, trajectory);
+    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTCU);
+    properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
+    return properties;
+  }
+
+  public MotionProfilingProperties createRightProfileProperties(Trajectory trajectory) {
+    MotionProfilingProperties properties = new MotionProfilingProperties(this::getRightVelocity, this::setRightVelocity, this::getRightPosition, trajectory);
+    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTCU);
+    properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
+    return properties;
   }
 }
