@@ -163,4 +163,31 @@ public class Tuning {
   public static double climberInLowSpeed = -0.4;
   @Tunable("Climber In HIgh Speed")
   public static double climberInHighSpeed = -1;
+
+  // DRIVETRAIN
+  @Tunable("Drivetrain P")
+  public static double drivetrainP = 2;
+
+  @Tunable("Drivetrain I")
+  public static double drivetrainI = 0.001;
+
+  @Tunable("Drivetrain D")
+  public static double drivetrainD = 4;
+
+  @Tunable("Drivetrain F")
+  public static double drivetrainF = 1.2;
+
+  @Tunable("Drivetrain I-Zone")
+  public static int drivetrainIZone = 100;
+
+  public static double drivetrainBrakingPercent = 0.2;
+
+  public static double drivetrainBrakeOverrideThreshold = 0.9;
+
+  public static double drivetrainRampRate = 0.1;
+
+  public static double drivetrainVelocity = 750;
+
+  public static double drivetrainJoystickPower = 2;
+
 }
