@@ -38,19 +38,17 @@ public class AutonomousProfiling extends Command {
   // Units in inches and seconds
 
   // Not a huge fan of having these all here
-  // TODO Set these to some real values
   private final double wheelbaseWidth = 25.091;
-  private final double lEncoderTicksPerUnit = 1023 * 6 * Math.PI;
-  private final double rEncoderTicksPerUnit = 1023 * 6 * Math.PI;;
+  private final double lEncoderTicksPerUnit = 51;
+  private final double rEncoderTicksPerUnit = 51;
   private final double secondsFromNeutralToFull = 0;
 
   private final Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
   private final int sampleRate = Config.SAMPLES_HIGH;
   private final double timeStep = 0.05;
-  // TODO Set these to some real values
-  private final double maxVelocity = 24;
-  private final double maxAcceleration = 48;
-  private final double maxJerk = 96;
+  private final double maxVelocity = 80;
+  private final double maxAcceleration = 80;
+  private final double maxJerk = 2300;
 
   // X is the long side of the field, Y is the short side.
   // All measurements are relative to your alliance wall, since the field is fully symmetrical.

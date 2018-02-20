@@ -87,12 +87,20 @@ public class DriveTrain extends ChickenSubsystem {
 
     // This needs to be here, as PIDFiZone values are stored in memory
     // TODO clean up tuning
-    left.config_IntegralZone(left.getDefaultPidIdx(), 1000);
-    right.config_IntegralZone(right.getDefaultPidIdx(), 1000);
-    left.config_kI(left.getDefaultPidIdx(), 0.01);
-    right.config_kI(right.getDefaultPidIdx(), 0.01);
-    left.config_kF(left.getDefaultPidIdx(), 0.1);
-    right.config_kF(right.getDefaultPidIdx(), 0.1);
+    left.config_IntegralZone(left.getDefaultPidIdx(), 100);
+    right.config_IntegralZone(right.getDefaultPidIdx(), 100);
+    // p: 2
+    // i: 0.001
+    // d: 4
+    // f: 1.2
+    left.config_kP(left.getDefaultPidIdx(), 2);
+    right.config_kP(left.getDefaultPidIdx(), 2);;
+    left.config_kI(left.getDefaultPidIdx(), 0.001);
+    right.config_kI(right.getDefaultPidIdx(), 0.001);
+    left.config_kD(left.getDefaultPidIdx(), 4);
+    right.config_kD(right.getDefaultPidIdx(), 4);
+    left.config_kF(left.getDefaultPidIdx(), 1.2);
+    right.config_kF(right.getDefaultPidIdx(), 1.2);
     left.configClosedloopRamp(0);
     left2.configClosedloopRamp(0);
     left3.configClosedloopRamp(0);
