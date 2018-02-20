@@ -4,15 +4,15 @@ import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.commands.TurretControl;
 import org.team1540.robot2018.commands.climber.AlignClimber;
+import org.team1540.robot2018.commands.climber.RunClimber;
+import org.team1540.robot2018.commands.climber.TapeIn;
+import org.team1540.robot2018.commands.climber.TapeOut;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -61,16 +61,17 @@ public class Robot extends IterativeRobot {
     OI.copilotStart.cancelWhenPressed(intakeSequence);
     // OI.copilotBack.whileHeld(new WinchOut());
 
-    //    OI.copilotBack.whileHeld(new TapeIn());
-    //    OI.copilotStart.whileHeld(new TapeOut());
+       // OI.copilotBack.whileHeld(new TapeIn());
+       // OI.copilotStart.whileHeld(new TapeOut());
     //
-    //     OI.copilotBack.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
-    //     OI.copilotStart.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
+        OI.copilotBack.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
+        OI.copilotStart.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
 
     OI.copilotA.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
     OI.copilotB.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
     OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.copilotY.whenPressed(new GroundPosition());
+
 
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
@@ -88,7 +89,6 @@ public class Robot extends IterativeRobot {
       }
     });
 
-    Command turretControl = new TurretControl();
     // OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
     // OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
     // OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
@@ -111,8 +111,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
-    // turret.disableServos();
-    turret.servoRelay.set(Value.kOff);
+    turret.disableServos();
   }
 
   @Override
@@ -121,7 +120,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
-    turret.servoRelay.set(Value.kOn);
+    turret.enableServos();
   }
 
   @Override
@@ -135,6 +134,9 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("Wrist Encoder", wrist.getPosition());
     SmartDashboard.putNumber("Elevator", elevator.getPosition());
 //    SmartDashboard.putData(new PowerDistributionPanel());
+
+    SmartDashboard.putNumber("DT Left", drivetrain.getLeftVelocity());
+    SmartDashboard.putNumber("Drive Right", drivetrain.getRightVelocity());
   }
 
   @Override

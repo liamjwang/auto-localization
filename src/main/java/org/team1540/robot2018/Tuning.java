@@ -8,14 +8,14 @@ public class Tuning {
   @Tunable("Dead Zone")
   public static double deadZone = 0.1;
   @Tunable("Is Pandora")
-  public static boolean isPandora = false;
+  public static boolean isPandora = true;
 
   // INTAKE
   @Tunable("Auto Intake Spike Current")
   public static double intakeSpikeCurrent = 30.0;
 
   @Tunable("Auto Intake Speed Motor A")
-  public static double IntakeSpeedA = 1;
+  public static double IntakeSpeedA = -1;
 
   @Tunable("Auto Intake Speed Motor B")
   public static double IntakeSpeedB = 0.4;
@@ -32,7 +32,7 @@ public class Tuning {
   public static double ejectTime = 1.0;
 
   @Tunable("Eject Speed Motor A")
-  public static double ejectSpeedA = -1;
+  public static double ejectSpeedA = 1;
 
   @Tunable("Eject Speed Motor B")
   public static double ejectSpeedB = -1;
@@ -140,10 +140,10 @@ public class Tuning {
 
   // TAPE
   @Tunable("Tape In Speed")
-  public static double tapeInSpeed = 0.5;
+  public static double tapeInSpeed = .6;
 
   @Tunable("Tape Out Speed")
-  public static double tapeOutSpeed = -0.25;
+  public static double tapeOutSpeed = -.6;
 
   @Tunable("Tape Measure Multiplier")
   public static double tapeMeasureMultiplier = 1;
@@ -191,4 +191,8 @@ public class Tuning {
   public static double drivetrainJoystickPower = 2;
 
   public static double drivetrainEncoderTPU;
+
+  @Tunable("Climber Turret Divisor")
+  public static double turretDivisor = 260;
+
 }

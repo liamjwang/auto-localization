@@ -32,7 +32,7 @@ public class DriveTrain extends ChickenSubsystem {
     left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    left.setSensorPhase(false);
+    left.setSensorPhase(true);
 
     for (ChickenTalon talon : lefts) {
       talon.setInverted(false);
@@ -66,7 +66,7 @@ public class DriveTrain extends ChickenSubsystem {
         .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
         .setInvertLeft(true)
         .setInvertRight(true)
-        .setInvertLeftBrakeDirection(Tuning.isPandora)
+        .setInvertLeftBrakeDirection(true)
         .setInvertRightBrakeDirection(true)
         .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
         .setBrakingStopZone(Tuning.deadZone)

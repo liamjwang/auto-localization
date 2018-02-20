@@ -136,20 +136,20 @@ public class RobotMotorTest extends IterativeRobot {
 //      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
 //    }
 
-    if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
+    // if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
+    //
+    //   double processedPan =
+    //       OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 30)) + pan.get());
+    //   double processedTilt =
+    //       OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 30)) + tilt.get());
+    //
+    //   SmartDashboard.putNumber("Processed Pan", processedPan);
+    //   SmartDashboard.putNumber("Processed Tilt", processedTilt);
+    //
+    //   pan.set(processedPan);
+    //   tilt.set(processedTilt);
 
-      double processedPan =
-          OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 30)) + pan.get());
-      double processedTilt =
-          OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 30)) + tilt.get());
-
-      SmartDashboard.putNumber("Processed Pan", processedPan);
-      SmartDashboard.putNumber("Processed Tilt", processedTilt);
-
-      pan.set(processedPan);
-      tilt.set(processedTilt);
-
-    }
+    // }
   }
 
   @Override

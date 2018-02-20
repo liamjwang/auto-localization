@@ -28,7 +28,7 @@ public class AutoIntake extends Command {
   @Override
   protected void end() {
     if (!isTimedOut()) {
-      Robot.intake.set(Tuning.intakeHoldSpeed);
+      Robot.intake.set(-Tuning.intakeHoldSpeed, Tuning.intakeHoldSpeed);
     } else {
       Robot.intake.stop();
     }
