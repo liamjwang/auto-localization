@@ -22,8 +22,8 @@ public class DriveTrain extends ChickenSubsystem {
   private ChickenTalon[] masters = new ChickenTalon[]{left, right};
 
   public DriveTrain() {
-    this.add(talons);
-    this.setPriority(10);
+    add(talons);
+    setPriority(10);
 
     left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
