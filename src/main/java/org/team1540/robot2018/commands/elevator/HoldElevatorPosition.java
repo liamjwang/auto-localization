@@ -5,7 +5,7 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
 public class HoldElevatorPosition extends Command {
-  double setpoint;
+  private double setpoint;
 
   public HoldElevatorPosition() {
     requires(Robot.elevator);
@@ -18,6 +18,12 @@ public class HoldElevatorPosition extends Command {
 
   @Override
   protected void execute() {
+    /*
+    This command is supposed to HOLD the elevator position: while it should make corrections to a
+    certain extent it should never cause the elevator to move a significant amount.
+    If the robot is a certain distance away from its original setpoint it just accepts the new
+    status quo.
+    */
     if (Math.abs(Robot.elevator.getPosition() - setpoint) > Tuning.maxElevatorDeviation) {
       setpoint = Robot.elevator.getPosition();
     }
