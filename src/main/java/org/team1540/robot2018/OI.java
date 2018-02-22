@@ -94,14 +94,6 @@ public class OI {
     }
   };
 
-  // static Button copilotLeftTriggerSmallPress = new Button() {
-  //   @Override
-  //   public boolean get() {
-  //     return getCopilotLeftTrigger() > Tuning.deadZone && getCopilotLeftTrigger() < 0.5;
-  //   }
-  // };
-  // static Button copilotLeftTriggerLargePress = new AxisButton(copilot, 0.5, 2);
-
   static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.deadZone, 2);
 
   static Button copilotRightTriggerSmallPress = new Button() {
