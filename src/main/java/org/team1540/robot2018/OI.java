@@ -45,8 +45,8 @@ public class OI {
   public static final int A = 1;
   public static final int B = 2;
 
-  public static final int back = 7;
-  public static final int start = 8;
+  public static final int BACK = 7;
+  public static final int START = 8;
   public static final int LB = 5;
   public static final int RB = 6;
 
@@ -74,9 +74,9 @@ public class OI {
   static Button copilotDPadRight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
 
   // manual tape out
-  static Button copilotBack = new JoystickButton(copilot, back);
+  static Button copilotBack = new JoystickButton(copilot, BACK);
   // manual tape in
-  static Button copilotStart = new JoystickButton(copilot, start);
+  static Button copilotStart = new JoystickButton(copilot, START);
 
   static Button elevatorJoystickActivation = new Button() {
     @Override
