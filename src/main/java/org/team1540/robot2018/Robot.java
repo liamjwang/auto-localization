@@ -4,6 +4,7 @@ import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,10 +53,10 @@ public class Robot extends IterativeRobot {
     // OI.manualElevatorUp.whileHeld(new ManualElevatorUp());
     // OI.copilotB.whileHeld(new ManualElevatorDown());
     //
-    IntakeSequence intakeSequence = new IntakeSequence();
-    OI.copilotLB.whenPressed(intakeSequence);
+    Command intakeCommand = new IntakeSequence();
+    OI.copilotLB.whenPressed(intakeCommand);
     OI.copilotRB.whenPressed(new AutoEject());
-    OI.copilotStart.cancelWhenPressed(intakeSequence);
+    OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
     OI.copilotBack.whileHeld(new WinchOut());
 
        // OI.copilotBack.whileHeld(new TapeIn());
