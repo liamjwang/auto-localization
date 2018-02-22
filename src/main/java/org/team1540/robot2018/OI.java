@@ -37,8 +37,8 @@ import org.team1540.base.triggers.DPadButton.DPadAxis;
 
 public class OI {
 
-  public static Joystick driver = new Joystick(0);
-  public static Joystick copilot = new Joystick(1);
+  private static Joystick driver = new Joystick(0);
+  private static Joystick copilot = new Joystick(1);
 
   public static final int X = 3;
   public static final int Y = 4;

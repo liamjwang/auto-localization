@@ -2,6 +2,7 @@ package org.team1540.robot2018;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -10,12 +11,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.base.wrappers.ChickenVictor;
 
 public class RobotMotorTest extends IterativeRobot {
 
+  private Joystick driver = new Joystick(0);
   private ChickenController[] motorsA = new ChickenController[17];
   //  private ChickenController[] motorsB = new ChickenController[17];
   private SendableChooser<Integer> motorChooserA;
@@ -123,14 +126,14 @@ public class RobotMotorTest extends IterativeRobot {
         motor.configOpenloopRamp(0);
       }
     }
-    SmartDashboard.putNumber("Driver Right Y", OI.getDriverRightY());
-    SmartDashboard.putNumber("Driver Right X", OI.getDriverRightX());
-    SmartDashboard.putNumber("Driver Left Y", OI.getDriverLeftY());
-    SmartDashboard.putNumber("Driver Left X", OI.getDriverLeftX());
+    SmartDashboard.putNumber("Driver Right Y", Utilities.processDeadzone(driver.getRawAxis(5), Tuning.deadZone));
+    SmartDashboard.putNumber("Driver Right X", Utilities.processDeadzone(driver.getRawAxis(4), Tuning.deadZone));
+    SmartDashboard.putNumber("Driver Left Y", Utilities.processDeadzone(driver.getRawAxis(1), Tuning.deadZone));
+    SmartDashboard.putNumber("Driver Left X", Utilities.processDeadzone(driver.getRawAxis(0), Tuning.deadZone));
 
     Scheduler.getInstance().run();
     if (motorChooserA.getSelected() != null) {
-      motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, OI.driver.getRawAxis(5));
+      motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, driver.getRawAxis(5));
     }
     //    if (motorChooserB.getSelected() != null) {
     //      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
