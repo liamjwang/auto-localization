@@ -38,17 +38,19 @@ public class AutonomousProfiling extends Command {
   // Units in inches and seconds
 
   // Not a huge fan of having these all here
-  private final double wheelbaseWidth = 25.091;
-  private final double lEncoderTicksPerUnit = 51;
-  private final double rEncoderTicksPerUnit = 51;
-  private final double secondsFromNeutralToFull = 0;
+  private double wheelbaseWidth = 25.091;
+  private double distanceBetweenWheels = 11.875;
+  private double turningRadius = Math.sqrt(Math.pow(wheelbaseWidth, 2) + Math.pow(distanceBetweenWheels, 2));
+  private double lEncoderTicksPerUnit = 51;
+  private double rEncoderTicksPerUnit = 51;
+  private double secondsFromNeutralToFull = 0;
 
-  private final Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
-  private final int sampleRate = Config.SAMPLES_HIGH;
-  private final double timeStep = 0.05;
-  private final double maxVelocity = 80;
-  private final double maxAcceleration = 80;
-  private final double maxJerk = 2300;
+  private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
+  private int sampleRate = Config.SAMPLES_HIGH;
+  private double timeStep = 0.05;
+  private double maxVelocity = 80;
+  private double maxAcceleration = 80;
+  private double maxJerk = 2300;
 
   // X is the long side of the field, Y is the short side.
   // All measurements are relative to your alliance wall, since the field is fully symmetrical.
@@ -56,9 +58,9 @@ public class AutonomousProfiling extends Command {
   private static final double BOT_LENGTH = 32.625;
   private static final double BOT_WIDTH = 27.75;
   private static final double BOT_SHORT_DISTANCE_TO_TURNING = 27.75;
-  private static final double BUMPER_WIDTH = 3.25;
-  private static final double BOT_EFFECTIVE_LENGTH = BOT_LENGTH + 2 * BUMPER_WIDTH;
-  private static final double BOT_EFFECTIVE_WIDTH = BOT_WIDTH + 2 * BUMPER_WIDTH;
+  private static final double BOT_BUMPER_WIDTH = 3.25;
+  private static final double BOT_EFFECTIVE_LENGTH = BOT_LENGTH + 2 * BOT_BUMPER_WIDTH;
+  private static final double BOT_EFFECTIVE_WIDTH = BOT_WIDTH + 2 * BOT_BUMPER_WIDTH;
   private static final double FIELD_EFFECTIVE_LENGTH = 647.125;
   private static final double FIELD_EFFECTIVE_WIDTH = 324.5;
   // TODO Better way of storing these measurements
@@ -104,7 +106,7 @@ public class AutonomousProfiling extends Command {
     }
 
     TankModifier modifier = new TankModifier(trajectory);
-    modifier.modify(wheelbaseWidth);
+    modifier.modify(turningRadius);
 
     Robot.drivetrain.prepareForMotionProfiling();
 
