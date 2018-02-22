@@ -1,13 +1,9 @@
 package org.team1540.robot2018;
 
-import edu.wpi.cscore.MjpegServer;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.climber.AlignClimber;
@@ -40,35 +36,11 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
 
-    //    OI.copilotLB.whenPressed(new AutoIntake());
-    //    OI.copilotRB.whenPressed(new AutoEject());
-
-    // OI.copilotX.whileHeld(new SimpleCommand("Eject",
-    //     () -> Robot.intake.set(Tuning.ejectSpeedA, Tuning.ejectSpeedB),
-    //     intake));
-    // OI.copilotA.whileHeld(new SimpleCommand("Intake",
-    //     () -> Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB),
-    //     intake));
-
-    // OI.manualElevatorUp.whileHeld(new ManualElevatorUp());
-    // OI.copilotB.whileHeld(new ManualElevatorDown());
-    //
     Command intakeCommand = new IntakeSequence();
     OI.copilotLB.whenPressed(intakeCommand);
     OI.copilotRB.whenPressed(new EjectCube());
     OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
     OI.copilotBack.whileHeld(new WinchOut());
-
-       // OI.copilotBack.whileHeld(new TapeIn());
-       // OI.copilotStart.whileHeld(new TapeOut());
-    //
-    //     OI.copilotBack.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInSpeed), tape));
-    //     OI.copilotStart.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
-
-    // OI.copilotA.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
-    // OI.copilotB.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
-    // OI.copilotX.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
-    // OI.copilotY.whenPressed(new GroundPosition());
 
     OI.copilotA.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
@@ -81,7 +53,6 @@ public class Robot extends IterativeRobot {
     OI.copilotDPadDown.whenPressed(new GroundPosition());
 
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
-    // OI.elevatorJoystickActivation.whenReleased(new SimpleCommand("Stop Elevator", elevator::stop, elevator));
 
     OI.wristJoystickActivation.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
       @Override
@@ -90,24 +61,17 @@ public class Robot extends IterativeRobot {
       }
     });
 
-    // OI.copilotLeftTriggerSmallPress.whenPressed(turretControl);
-    // OI.copilotLeftTriggerLargePress.cancelWhenPressed(turretControl);
-    // OI.copilotLeftTriggerLargePress.whileHeld(new RunClimber(Tuning.climberOutSpeed));
-
     OI.copilotRightTriggerSmallPress.whileHeld(new SimpleCommand("Winch In Low", () -> {
-      // tape.set(Tuning.climberInLowSpeed * Tuning.tapeMeasureMultiplier);
+      // TODO: Also run tape
       winch.set(Tuning.climberInLowSpeed * Tuning.winchMultiplier);
-    }, tape, winch));
+      // TODO: Is winch out necessary with new design
+    }, winch));
 
     OI.copilotRightTriggerLargePress.whileHeld(new SimpleCommand("Winch In High", () -> {
-      // tape.set(Tuning.climberInHighSpeed * Tuning.tapeMeasureMultiplier);
+      // TODO: Also run tape
       winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
-    }, tape, winch));
-
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
-    camera.setResolution(640, 480);
-    MjpegServer mjpegServer = new MjpegServer("Camera Server", 1181);
-    mjpegServer.setSource(camera);
+      // TODO: Is winch out necessary with new design
+    }, winch));
   }
 
   @Override
@@ -131,14 +95,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putData("Scheduler", Scheduler.getInstance());
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("Wrist Encoder", wrist.getPosition());
-    SmartDashboard.putNumber("Elevator", elevator.getPosition());
-//    SmartDashboard.putData(new PowerDistributionPanel());
-
-    SmartDashboard.putNumber("DT Left", drivetrain.getLeftVelocity());
-    SmartDashboard.putNumber("Drive Right", drivetrain.getRightVelocity());
   }
 
   @Override
