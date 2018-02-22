@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.climber.AlignClimber;
-import org.team1540.robot2018.commands.climber.WinchOut;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -43,7 +42,6 @@ public class Robot extends IterativeRobot {
     OI.copilotLB.whenPressed(intakeCommand);
     OI.copilotRB.whenPressed(new EjectCube());
     OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
-    OI.copilotBack.whileHeld(new WinchOut());
 
     OI.copilotA.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
