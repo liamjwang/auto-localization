@@ -7,6 +7,8 @@ public class Tuning {
   // GENERAL
   @Tunable("Dead Zone")
   public static double deadZone = 0.1;
+  @Tunable("Manual Superstructure Control Deadzone")
+  public static double manualControlDeadzone = 0.2;
   @Tunable("Is Pandora")
   public static boolean isPandora = true;
 
@@ -132,9 +134,6 @@ public class Tuning {
   public static double maxWristDeviation = 200;
 
   // WINCH
-  @Tunable("Winch In Speed")
-  public static double winchInSpeed = 1;
-
   @Tunable("Winch Out Speed")
   public static double winchOutSpeed = 1; // 0.75
 
@@ -151,14 +150,6 @@ public class Tuning {
   @Tunable("Winch Multiplier")
   public static double winchMultiplier = 1;
 
-  @Tunable("Climber In Speed")
-  public static double climberInSpeed = 0.5;
-
-  @Tunable("Climber Out Speed")
-  public static double climberOutSpeed = -0.4;
-
-  @Tunable("Manual Superstructure Control Deadzone")
-  public static double manualControlDeadzone = 0.2;
   @Tunable("Climber In Low Speed")
   public static double climberInLowSpeed = -0.4;
   @Tunable("Climber In HIgh Speed")
@@ -192,6 +183,7 @@ public class Tuning {
 
   public static double drivetrainEncoderTPU;
 
+  // TURRET
   @Tunable("Climber Turret Divisor")
   public static double turretDivisor = 260;
 
