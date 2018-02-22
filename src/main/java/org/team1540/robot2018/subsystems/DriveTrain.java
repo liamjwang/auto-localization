@@ -2,13 +2,8 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import jaci.pathfinder.Trajectory;
 import org.team1540.base.ChickenSubsystem;
-import org.team1540.base.drive.PidDriveFactory;
-import org.team1540.base.drive.PowerJoystickScaling;
-import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.base.wrappers.ChickenTalon;
-import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.JoystickDrive;
@@ -58,28 +53,6 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    // setDefaultCommand(new PidDriveFactory()
-    //     .setSubsystem(this)
-    //     .setLeft(left)
-    //     .setRight(right)
-    //     .setJoystick(OI.driver)
-    //     .setLeftAxis(1)
-    //     .setRightAxis(5)
-    //     .setForwardTrigger(3)
-    //     .setBackTrigger(2)
-    //     .setDeadzone(Tuning.deadZone)
-    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-    //     .setInvertLeft(true)
-    //     .setInvertRight(true)
-    //     .setInvertLeftBrakeDirection(true
-    //     )
-    //     .setInvertRightBrakeDirection(true)
-    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-    //     .setBrakingStopZone(Tuning.deadZone)
-    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-    //     .setMaxVel(Tuning.drivetrainVelocity)
-    //     .createPidDrive()
-    // );
     setDefaultCommand(new JoystickDrive());
   }
 
@@ -128,19 +101,5 @@ public class DriveTrain extends ChickenSubsystem {
 
   public void setRightVelocity(double velocity) {
     right.set(ControlMode.Velocity, velocity);
-  }
-
-  public MotionProfilingProperties createLeftProfileProperties(Trajectory trajectory) {
-    MotionProfilingProperties properties = new MotionProfilingProperties(this::getLeftVelocity, this::setLeftVelocity, this::getLeftPosition, trajectory);
-    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTPU);
-    properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
-    return properties;
-  }
-
-  public MotionProfilingProperties createRightProfileProperties(Trajectory trajectory) {
-    MotionProfilingProperties properties = new MotionProfilingProperties(this::getRightVelocity, this::setRightVelocity, this::getRightPosition, trajectory);
-    properties.setEncoderTicksPerUnit(Tuning.drivetrainEncoderTPU);
-    properties.setSecondsFromNeutralToFull(Tuning.drivetrainRampRate);
-    return properties;
   }
 }
