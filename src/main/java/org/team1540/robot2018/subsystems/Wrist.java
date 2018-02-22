@@ -24,7 +24,7 @@ public class Wrist extends Subsystem {
     SmartDashboard.putData(command);
   }
 
-  public double getTrajPosition() {
+  public double getTrajectoryPosition() {
     return wristMotor.getActiveTrajectoryPosition();
   }
 
@@ -63,7 +63,6 @@ public class Wrist extends Subsystem {
 
   @Override
   public void periodic() {
-    // System.out.println("periodic");
     wristMotor.config_kP(0, Tuning.wristP);
     wristMotor.config_kI(0, Tuning.wristI);
     wristMotor.config_kD(0, Tuning.wristD);
