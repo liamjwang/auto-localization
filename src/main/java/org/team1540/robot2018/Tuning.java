@@ -15,10 +15,10 @@ public class Tuning {
   public static double intakeSpikeCurrent = 30.0;
 
   @Tunable("Auto Intake Speed Motor A")
-  public static double IntakeSpeedA = -1;
+  public static double intakeSpeedA = -1;
 
   @Tunable("Auto Intake Speed Motor B")
-  public static double IntakeSpeedB = 0.4;
+  public static double intakeSpeedB = 0.4;
 
   @Tunable("Auto Intake Min Time")
   public static double intakeMinTime = 1;

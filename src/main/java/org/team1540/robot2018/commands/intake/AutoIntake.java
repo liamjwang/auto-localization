@@ -15,7 +15,7 @@ public class AutoIntake extends Command {
   @Override
   protected void initialize() {
     setTimeout(Tuning.intakeMaxTime);
-    Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
+    Robot.intake.set(Tuning.intakeSpeedA, Tuning.intakeSpeedB);
   }
 
   @Override
