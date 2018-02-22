@@ -54,6 +54,16 @@ public class Robot extends IterativeRobot {
 
     OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
 
+    /*
+    The left trigger changes the mode of the right joystick. Normally (the left trigger is not
+    pressed) the JoystickWrist command is run and the right stick controls the wrist. When the left
+    trigger is pressed, the JoystickWrist command does not run, while the AlignClimber command does;
+    therefore, the right stick controls the climber turret.
+
+    The wristJoystickActivation activates when the joystick is outside of its deadzone, and only
+    runs the joystick control commands when the joystick is in fact being moved. This allows other
+    commands that require the wrist (or turret) to run when the joystick is not being moved.
+    */
     OI.wristJoystickActivation.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
       @Override
       protected boolean condition() {
