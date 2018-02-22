@@ -2,10 +2,7 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
@@ -19,9 +16,6 @@ public class Wrist extends Subsystem {
     wristMotor.setInverted(false);
 
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    Command command = new SimpleCommand("Zero Wrist", () -> wristMotor.setSelectedSensorPosition(0));
-    command.setRunWhenDisabled(true);
-    SmartDashboard.putData(command);
   }
 
   public double getTrajectoryPosition() {

@@ -2,10 +2,7 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.ChickenSubsystem;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
@@ -21,9 +18,6 @@ public class Elevator extends ChickenSubsystem {
     this.setPriority(10);
 
     talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    Command command = new SimpleCommand("Zero Elevator", () -> talon1.setSelectedSensorPosition(0));
-    command.setRunWhenDisabled(true);
-    SmartDashboard.putData(command);
   }
 
   public int getError() {
@@ -56,6 +50,10 @@ public class Elevator extends ChickenSubsystem {
   public void stop() {
     talon1.set(ControlMode.PercentOutput, 0);
     talon2.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void resetEncoder() {
+    talon1.setSelectedSensorPosition(0);
   }
 
   @Override

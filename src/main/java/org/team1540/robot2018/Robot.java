@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.climber.AlignClimber;
@@ -35,6 +36,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
+
+    // configure controls
 
     Command intakeCommand = new IntakeSequence();
     OI.copilotLB.whenPressed(intakeCommand);
@@ -82,6 +85,15 @@ public class Robot extends IterativeRobot {
       winch.set(Tuning.climberInHighSpeed * Tuning.winchMultiplier);
       // TODO: Is winch out necessary with new design
     }, winch));
+
+    // configure SmartDashboard
+    Command zeroWrist = new SimpleCommand("Zero Wrist", wrist::resetEncoder);
+    zeroWrist.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroWrist);
+
+    Command zeroElevator = new SimpleCommand("Zero Elevator", elevator::resetEncoder);
+    zeroElevator.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroElevator);
   }
 
   @Override
