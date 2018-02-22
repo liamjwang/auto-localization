@@ -32,10 +32,10 @@ public class Tuning {
   public static double ejectTime = 1.0;
 
   @Tunable("Eject Speed Motor A")
-  public static double ejectSpeedA = 1;
+  public static double ejectSpeedA = 0.5;
 
   @Tunable("Eject Speed Motor B")
-  public static double ejectSpeedB = -1;
+  public static double ejectSpeedB = -0.5;
 
 
   // ELEVATOR
@@ -136,14 +136,14 @@ public class Tuning {
   public static double winchInSpeed = 1;
 
   @Tunable("Winch Out Speed")
-  public static double winchOutSpeed = -1; // 0.75
+  public static double winchOutSpeed = 1; // 0.75
 
   // TAPE
   @Tunable("Tape In Speed")
-  public static double tapeInSpeed = .6;
+  public static double tapeInSpeed = .5;
 
   @Tunable("Tape Out Speed")
-  public static double tapeOutSpeed = -.6;
+  public static double tapeOutSpeed = -.5;
 
   @Tunable("Tape Measure Multiplier")
   public static double tapeMeasureMultiplier = 1;

@@ -11,6 +11,7 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.JoystickDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
@@ -49,31 +50,37 @@ public class DriveTrain extends ChickenSubsystem {
 
     right2.set(ControlMode.Follower, right.getDeviceID());
     right3.set(ControlMode.Follower, right.getDeviceID());
+
+    for (ChickenTalon talon : talons) {
+      talon.setBrake(true);
+    }
   }
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new PidDriveFactory()
-        .setSubsystem(this)
-        .setLeft(left)
-        .setRight(right)
-        .setJoystick(OI.driver)
-        .setLeftAxis(1)
-        .setRightAxis(5)
-        .setForwardTrigger(3)
-        .setBackTrigger(2)
-        .setDeadzone(Tuning.deadZone)
-        .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-        .setInvertLeft(true)
-        .setInvertRight(true)
-        .setInvertLeftBrakeDirection(true)
-        .setInvertRightBrakeDirection(true)
-        .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-        .setBrakingStopZone(Tuning.deadZone)
-        .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-        .setMaxVel(Tuning.drivetrainVelocity)
-        .createPidDrive()
-    );
+    // setDefaultCommand(new PidDriveFactory()
+    //     .setSubsystem(this)
+    //     .setLeft(left)
+    //     .setRight(right)
+    //     .setJoystick(OI.driver)
+    //     .setLeftAxis(1)
+    //     .setRightAxis(5)
+    //     .setForwardTrigger(3)
+    //     .setBackTrigger(2)
+    //     .setDeadzone(Tuning.deadZone)
+    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
+    //     .setInvertLeft(true)
+    //     .setInvertRight(true)
+    //     .setInvertLeftBrakeDirection(true
+    //     )
+    //     .setInvertRightBrakeDirection(true)
+    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
+    //     .setBrakingStopZone(Tuning.deadZone)
+    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
+    //     .setMaxVel(Tuning.drivetrainVelocity)
+    //     .createPidDrive()
+    // );
+    setDefaultCommand(new JoystickDrive());
   }
 
   public void setLeft(double value) {
