@@ -97,7 +97,7 @@ public class AutonomousProfiling extends Command {
   @Override
   protected void initialize() {
     // TODO Yes this is very safe honhonhon
-    Trajectory trajectory = null;
+    Trajectory trajectory;
     try {
       trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity,
               maxAcceleration, maxJerk),
