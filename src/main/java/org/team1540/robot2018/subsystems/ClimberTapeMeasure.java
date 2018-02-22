@@ -10,10 +10,14 @@ public class ClimberTapeMeasure extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new SimpleCommand("Stop tape measure", () -> set(0), this));
+    setDefaultCommand(new SimpleCommand("Stop tape measure", this::stop, this));
   }
 
   public void set(double throttle) {
     victor.set(throttle);
+  }
+
+  public void stop() {
+    victor.set(0);
   }
 }
