@@ -30,5 +30,4 @@ public class RobotMap {
   public static final int TILT_SERVO = 8;
 
   public static final int SERVO_RELAY = 3;
-
 }

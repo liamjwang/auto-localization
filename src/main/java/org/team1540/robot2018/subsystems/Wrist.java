@@ -45,7 +45,7 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, value);
   }
 
-  public void stop(){
+  public void stop() {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
@@ -57,7 +57,7 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.MotionMagic, position);
   }
 
-  public double getPosition(){
+  public double getPosition() {
     return wristMotor.getSelectedSensorPosition();
   }
 

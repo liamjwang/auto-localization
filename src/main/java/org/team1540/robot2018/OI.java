@@ -112,45 +112,51 @@ public class OI {
   };
   static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
 
-  public static double getDriverLeftX(){
+  public static double getDriverLeftX() {
     return Utilities.processDeadzone(driver.getRawAxis(0), Tuning.deadZone);
   }
-  public static double getCopilotLeftX(){
+
+  public static double getCopilotLeftX() {
     return Utilities.processDeadzone(copilot.getRawAxis(0), Tuning.deadZone);
   }
 
-  public static double getDriverRightX(){
+  public static double getDriverRightX() {
     return Utilities.processDeadzone(driver.getRawAxis(4), Tuning.deadZone);
   }
-  public static double getCopilotRightX(){
+
+  public static double getCopilotRightX() {
     return Utilities.processDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
   }
 
-  public static double getDriverLeftY(){
+  public static double getDriverLeftY() {
     return Utilities.processDeadzone(driver.getRawAxis(1), Tuning.deadZone);
   }
-  public static double getCopilotLeftY(){
+
+  public static double getCopilotLeftY() {
     return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
   }
 
-  public static double getDriverRightY(){
+  public static double getDriverRightY() {
     return Utilities.processDeadzone(driver.getRawAxis(5), Tuning.deadZone);
   }
-  public static double getCopilotRightY(){
+
+  public static double getCopilotRightY() {
     return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
   }
 
-  public static double getDriverLeftTrigger(){
+  public static double getDriverLeftTrigger() {
     return Utilities.processDeadzone(driver.getRawAxis(2), Tuning.deadZone);
   }
-  public static double getDriverRightTrigger(){
+
+  public static double getDriverRightTrigger() {
     return Utilities.processDeadzone(driver.getRawAxis(3), Tuning.deadZone);
   }
 
-  public static double getCopilotLeftTrigger(){
+  public static double getCopilotLeftTrigger() {
     return Utilities.processDeadzone(copilot.getRawAxis(2), Tuning.deadZone);
   }
-  public static double getCopilotRightTrigger(){
+
+  public static double getCopilotRightTrigger() {
     return Utilities.processDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
   }
 

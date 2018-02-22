@@ -6,7 +6,7 @@ import org.team1540.robot2018.Tuning;
 
 public class WinchOut extends Command {
 
-  public WinchOut(){
+  public WinchOut() {
     requires(Robot.winch);
   }
 

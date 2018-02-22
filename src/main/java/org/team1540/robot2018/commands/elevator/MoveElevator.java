@@ -5,8 +5,8 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
 /**
- * Move elevator command that ignores the elevator ({@link MoveElevatorToPosition} makes sure that the
- * elevator is clear)
+ * Move elevator command that ignores the elevator ({@link MoveElevatorToPosition} makes sure that
+ * the elevator is clear)
  */
 public class MoveElevator extends Command {
   private final double target;

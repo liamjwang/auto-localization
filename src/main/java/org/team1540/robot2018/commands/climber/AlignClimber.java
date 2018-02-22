@@ -14,15 +14,14 @@ public class AlignClimber extends Command {
   @Override
   protected void execute() {
 
-      double processedPan =
-          Utilities.constrain((OI.getCopilotRightX() / Tuning.turretDivisor) + Robot.turret.getPan(),
-              0.4, 0.55);
-      double processedTilt =
-          Utilities.constrain((OI.getCopilotRightY() / Tuning.turretDivisor) + Robot.turret.getTilt(),
-              0.15, 0.6);
+    double processedPan =
+        Utilities.constrain((OI.getCopilotRightX() / Tuning.turretDivisor) + Robot.turret.getPan(),
+            0.4, 0.55);
+    double processedTilt =
+        Utilities.constrain((OI.getCopilotRightY() / Tuning.turretDivisor) + Robot.turret.getTilt(),
+            0.15, 0.6);
 
-      Robot.turret.set(processedPan, processedTilt);
-
+    Robot.turret.set(processedPan, processedTilt);
   }
 
   @Override
