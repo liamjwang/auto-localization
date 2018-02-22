@@ -25,7 +25,7 @@ public class ClimberWinch extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new SimpleCommand("Stop winch", () -> set(0), this));
+    setDefaultCommand(new SimpleCommand("Stop winch", this::stop, this));
   }
 
   public void set(double throttle) {
@@ -33,5 +33,9 @@ public class ClimberWinch extends Subsystem {
     winchB.set(ControlMode.PercentOutput, throttle);
     winchC.set(ControlMode.PercentOutput, throttle);
     winchD.set(ControlMode.PercentOutput, throttle);
+  }
+
+  public void stop() {
+    set(0);
   }
 }
