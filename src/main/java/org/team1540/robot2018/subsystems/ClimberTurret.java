@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2018.RobotMap;
+import org.team1540.robot2018.Tuning;
 
 public class ClimberTurret extends Subsystem {
   private Servo pan = new Servo(RobotMap.panServo);
@@ -18,8 +19,8 @@ public class ClimberTurret extends Subsystem {
   }
 
   public void init() {
-    setPan(0.46);
-    setTilt(0.22);
+    setPan(Tuning.turretInitPan);
+    setTilt(Tuning.turretInitTilt);
   }
 
   public void set(double pan, double tilt) {

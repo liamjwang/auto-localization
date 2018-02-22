@@ -195,4 +195,7 @@ public class Tuning {
   @Tunable("Climber Turret Divisor")
   public static double turretDivisor = 260;
 
+  public static double turretInitPan = 0.46;
+
+  public static double turretInitTilt = 0.22;
 }
