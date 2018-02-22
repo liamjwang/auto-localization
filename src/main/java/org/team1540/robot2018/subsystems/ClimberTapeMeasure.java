@@ -6,7 +6,7 @@ import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.RobotMap;
 
 public class ClimberTapeMeasure extends Subsystem {
-  private ChickenVictor victor = new ChickenVictor(RobotMap.tapeMeasureMotor);
+  private ChickenVictor victor = new ChickenVictor(RobotMap.TAPE_MEASURE);
 
   @Override
   protected void initDefaultCommand() {

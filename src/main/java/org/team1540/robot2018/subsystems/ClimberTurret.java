@@ -8,10 +8,10 @@ import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 
 public class ClimberTurret extends Subsystem {
-  private Servo pan = new Servo(RobotMap.panServo);
-  private Servo tilt = new Servo(RobotMap.tiltServo);
+  private Servo pan = new Servo(RobotMap.PAN_SERVO);
+  private Servo tilt = new Servo(RobotMap.TILT_SERVO);
 
-  private Relay servoRelay = new Relay(RobotMap.servoRelay);
+  private Relay servoRelay = new Relay(RobotMap.SERVO_RELAY);
 
   @Override
   protected void initDefaultCommand() {

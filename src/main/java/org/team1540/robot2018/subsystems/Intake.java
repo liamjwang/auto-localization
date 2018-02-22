@@ -12,8 +12,8 @@ import org.team1540.robot2018.Tuning;
 public class Intake extends Subsystem {
   PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-  private ChickenVictor intake1 = new ChickenVictor(RobotMap.intake_1);
-  private ChickenVictor intake2 = new ChickenVictor(RobotMap.intake_2);
+  private ChickenVictor intake1 = new ChickenVictor(RobotMap.INTAKE_1);
+  private ChickenVictor intake2 = new ChickenVictor(RobotMap.INTAKE_2);
   private double priority = 10;
 
   public Intake() {

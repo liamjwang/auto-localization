@@ -12,8 +12,8 @@ import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.wrist.HoldWristPosition;
 
 public class Wrist extends Subsystem {
-  
-  private ChickenTalon wristMotor = new ChickenTalon(RobotMap.wristMotor);
+
+  private ChickenTalon wristMotor = new ChickenTalon(RobotMap.WRIST);
 
   public Wrist() {
     wristMotor.setInverted(false);

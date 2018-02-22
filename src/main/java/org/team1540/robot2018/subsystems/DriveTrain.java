@@ -10,13 +10,13 @@ import org.team1540.robot2018.commands.JoystickDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
-  private ChickenTalon left = new ChickenTalon(RobotMap.left);
-  private ChickenTalon left2 = new ChickenTalon(RobotMap.left2);
-  private ChickenTalon left3 = new ChickenTalon(RobotMap.left3);
+  private ChickenTalon left = new ChickenTalon(RobotMap.DRIVE_LEFT);
+  private ChickenTalon left2 = new ChickenTalon(RobotMap.DRIVE_LEFT_2);
+  private ChickenTalon left3 = new ChickenTalon(RobotMap.DRIVE_LEFT_3);
   private ChickenTalon[] lefts = new ChickenTalon[]{left, left2, left3};
-  private ChickenTalon right = new ChickenTalon(RobotMap.right);
-  private ChickenTalon right2 = new ChickenTalon(RobotMap.right2);
-  private ChickenTalon right3 = new ChickenTalon(RobotMap.right3);
+  private ChickenTalon right = new ChickenTalon(RobotMap.DRIVE_RIGHT);
+  private ChickenTalon right2 = new ChickenTalon(RobotMap.DRIVE_RIGHT_2);
+  private ChickenTalon right3 = new ChickenTalon(RobotMap.DRIVE_RIGHT_3);
   private ChickenTalon[] rights = new ChickenTalon[]{right, right2, right3};
   private ChickenTalon[] talons = new ChickenTalon[]{left, left2, left3, right, right2, right3};
   private ChickenTalon[] masters = new ChickenTalon[]{left, right};

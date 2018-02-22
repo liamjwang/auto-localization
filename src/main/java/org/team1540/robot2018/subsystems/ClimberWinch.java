@@ -11,10 +11,10 @@ import org.team1540.robot2018.RobotMap;
  * MADE_OF_ALUMINIUM -> IS_WINCH
  */
 public class ClimberWinch extends Subsystem {
-  private ChickenTalon winchA = new ChickenTalon(RobotMap.winchA);
-  private ChickenVictor winchB = new ChickenVictor(RobotMap.winchB);
-  private ChickenVictor winchC = new ChickenVictor(RobotMap.winchC);
-  private ChickenVictor winchD = new ChickenVictor(RobotMap.winchD);
+  private ChickenTalon winchA = new ChickenTalon(RobotMap.WINCH_A);
+  private ChickenVictor winchB = new ChickenVictor(RobotMap.WINCH_B);
+  private ChickenVictor winchC = new ChickenVictor(RobotMap.WINCH_C);
+  private ChickenVictor winchD = new ChickenVictor(RobotMap.WINCH_D);
 
   public ClimberWinch() {
     winchA.setInverted(false);
