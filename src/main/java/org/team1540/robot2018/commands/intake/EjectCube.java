@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class AutoEject extends TimedCommand {
+public class EjectCube extends TimedCommand {
 
-  public AutoEject(){
+  public EjectCube() {
     super(Tuning.ejectTime);
     requires(Robot.intake);
   }

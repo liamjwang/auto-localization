@@ -17,7 +17,7 @@ import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
-import org.team1540.robot2018.commands.intake.AutoEject;
+import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
     //
     Command intakeCommand = new IntakeSequence();
     OI.copilotLB.whenPressed(intakeCommand);
-    OI.copilotRB.whenPressed(new AutoEject());
+    OI.copilotRB.whenPressed(new EjectCube());
     OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
     OI.copilotBack.whileHeld(new WinchOut());
 
