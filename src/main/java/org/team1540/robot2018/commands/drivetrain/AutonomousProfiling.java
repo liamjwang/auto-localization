@@ -26,7 +26,8 @@ public class AutonomousProfiling extends Command {
 
   private SendableChooser<AutoType> autoTypeChooser = new SendableChooser<>();
   private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
-  // Default command does nothing; this shouldn't ever happen, since it will be set to the real thing during initialization
+  // Default command does nothing; this shouldn't ever happen, since it will be set to the real
+  // thing during initialization
   private Command runMotionProfiles = new Command() {
     @Override
     protected boolean isFinished() {
@@ -40,7 +41,8 @@ public class AutonomousProfiling extends Command {
   // Not a huge fan of having these all here
   private double wheelbaseWidth = 25.091;
   private double distanceBetweenWheels = 11.875;
-  private double turningRadius = Math.sqrt(Math.pow(wheelbaseWidth, 2) + Math.pow(distanceBetweenWheels, 2));
+  private double turningRadius = Math.sqrt(
+      Math.pow(wheelbaseWidth, 2) + Math.pow(distanceBetweenWheels, 2));
   private double lEncoderTicksPerUnit = 51;
   private double rEncoderTicksPerUnit = 51;
   private double secondsFromNeutralToFull = 0;
@@ -97,9 +99,10 @@ public class AutonomousProfiling extends Command {
     // TODO Yes this is very safe honhonhon
     Trajectory trajectory = null;
     try {
-       trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity, maxAcceleration, maxJerk),
+      trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity,
+              maxAcceleration, maxJerk),
           autoTypeChooser.getSelected(), startLocationChooser.getSelected());
-    // TODO exception handling
+      // TODO exception handling
     } catch (InvalidPathException e) {
       e.printStackTrace();
       return;
@@ -110,8 +113,14 @@ public class AutonomousProfiling extends Command {
 
     Robot.drivetrain.prepareForMotionProfiling();
 
-    MotionProfilingProperties leftProperties = new MotionProfilingProperties(lEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier.getLeftTrajectory());
-    MotionProfilingProperties rightProperties = new MotionProfilingProperties(rEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity, Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier.getRightTrajectory());
+    MotionProfilingProperties leftProperties = new MotionProfilingProperties
+        (lEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot
+            .drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier
+            .getLeftTrajectory());
+    MotionProfilingProperties rightProperties = new MotionProfilingProperties
+        (rEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity,
+            Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier
+            .getRightTrajectory());
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
   }
 
@@ -120,7 +129,8 @@ public class AutonomousProfiling extends Command {
     // Don't need anything AFAIK
   }
 
-  public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation startLocation) throws InvalidPathException {
+  public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation
+      startLocation) throws InvalidPathException {
     waypoints.add(startLocation.getLocation());
     switch (autoType) {
       case CROSS_LINE:
@@ -129,18 +139,22 @@ public class AutonomousProfiling extends Command {
             throw new InvalidPathException(
                 "Auto type " + autoType + " is not valid for starting position " + startLocation);
           default:
-            waypoints.add(makeTranslatedWaypoint(waypoints.get(0), FIELD_STARTING_LINE + BOT_EFFECTIVE_LENGTH, 0, 0));
+            waypoints.add(makeTranslatedWaypoint(waypoints.get(0),
+                FIELD_STARTING_LINE + BOT_EFFECTIVE_LENGTH, 0, 0));
             break;
         }
         break;
       case SWITCH_SAME_SIDE:
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT && startLocation == StartLocation.LEFT_EDGE) {
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT
+            && startLocation == StartLocation.LEFT_EDGE) {
           waypoints.add(EndLocation.LEFT_SWITCH_SIDE.getLocation());
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT && startLocation == StartLocation.RIGHT_EDGE) {
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT
+            && startLocation == StartLocation.RIGHT_EDGE) {
           waypoints.add(EndLocation.RIGHT_SWITCH_SIDE.getLocation());
         } else {
           // Just cross the line
-          waypoints.add(makeTranslatedWaypoint(waypoints.get(0), FIELD_STARTING_LINE + BOT_EFFECTIVE_LENGTH, 0, 0));
+          waypoints.add(makeTranslatedWaypoint(waypoints.get(0),
+              FIELD_STARTING_LINE + BOT_EFFECTIVE_LENGTH, 0, 0));
         }
         break;
       case SWITCH_ALL_SIDES:
@@ -179,9 +193,13 @@ public class AutonomousProfiling extends Command {
   }
 
   public enum StartLocation implements Location {
-    LEFT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH - FIELD_PORTAL_HEIGHT, 0)),
-    EXCHANGE_MIDDLE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH/2 + FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER - BOT_EFFECTIVE_WIDTH/2, 0)),
-    RIGHT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH/2, FIELD_PORTAL_HEIGHT, 0));
+    LEFT_EDGE(new Waypoint(
+        BOT_EFFECTIVE_LENGTH / 2, FIELD_EFFECTIVE_WIDTH - FIELD_PORTAL_HEIGHT, 0)),
+    EXCHANGE_MIDDLE(new Waypoint(
+        BOT_EFFECTIVE_LENGTH / 2,
+        FIELD_EFFECTIVE_WIDTH / 2 + FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER
+            - BOT_EFFECTIVE_WIDTH / 2, 0)),
+    RIGHT_EDGE(new Waypoint(BOT_EFFECTIVE_LENGTH / 2, FIELD_PORTAL_HEIGHT, 0));
 
     private final Waypoint location;
 
@@ -196,8 +214,11 @@ public class AutonomousProfiling extends Command {
   }
 
   public enum EndLocation implements Location {
-    LEFT_SWITCH_SIDE(new Waypoint(FIELD_SWITCH_TO_ALLIANCE_WALL - BOT_EFFECTIVE_LENGTH/2, FIELD_EFFECTIVE_WIDTH - FIELD_SWITCH_MIDDLE_TO_CENTER, 0)),
-    RIGHT_SWITCH_SIDE(new Waypoint(FIELD_SWITCH_TO_ALLIANCE_WALL - BOT_EFFECTIVE_LENGTH/2, FIELD_SWITCH_MIDDLE_TO_CENTER, 0));
+    LEFT_SWITCH_SIDE(new Waypoint(
+        FIELD_SWITCH_TO_ALLIANCE_WALL - BOT_EFFECTIVE_LENGTH / 2,
+        FIELD_EFFECTIVE_WIDTH - FIELD_SWITCH_MIDDLE_TO_CENTER, 0)),
+    RIGHT_SWITCH_SIDE(new Waypoint(FIELD_SWITCH_TO_ALLIANCE_WALL
+        - BOT_EFFECTIVE_LENGTH / 2, FIELD_SWITCH_MIDDLE_TO_CENTER, 0));
 
     private final Waypoint location;
 
@@ -221,5 +242,4 @@ public class AutonomousProfiling extends Command {
       super(message);
     }
   }
-
 }
