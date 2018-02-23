@@ -40,7 +40,7 @@ public class AutonomousProfiling extends Command {
 
   // Not a huge fan of having these all here
   private double wheelbaseWidth = 25.091;
-  private double distanceBetweenWheels = 11.875;
+  private double distanceBetweenWheels = 11.812;
   private double turningRadius = Math.sqrt(
       Math.pow(wheelbaseWidth, 2) + Math.pow(distanceBetweenWheels, 2));
   private double lEncoderTicksPerUnit = 51;
@@ -83,13 +83,13 @@ public class AutonomousProfiling extends Command {
     for (AutoType type : AutoType.values()) {
       autoTypeChooser.addObject(type.name(), type);
     }
-    autoTypeChooser.addDefault("DEFAULT: SWITCH_SAME_SIDE", AutoType.SWITCH_SAME_SIDE);
+    autoTypeChooser.addDefault("DEFAULT: CROSS_LINE", AutoType.CROSS_LINE);
     autoTypeChooser.setName("Auto Type");
     SmartDashboard.putData(autoTypeChooser);
     for (StartLocation type : StartLocation.values()) {
       startLocationChooser.addObject(type.name(), type);
     }
-    startLocationChooser.addDefault("DEFAULT: LEFT_EDGE", StartLocation.LEFT_EDGE);
+    startLocationChooser.addDefault("DEFAULT: RIGHT_EDGE", StartLocation.RIGHT_EDGE);
     startLocationChooser.setName("Start Location");
     SmartDashboard.putData(startLocationChooser);
   }
@@ -108,8 +108,7 @@ public class AutonomousProfiling extends Command {
       return;
     }
 
-    TankModifier modifier = new TankModifier(trajectory);
-    modifier.modify(turningRadius);
+    TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
 
     Robot.drivetrain.prepareForMotionProfiling();
 
@@ -148,8 +147,8 @@ public class AutonomousProfiling extends Command {
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT
             && startLocation == StartLocation.LEFT_EDGE) {
           waypoints.add(EndLocation.LEFT_SWITCH_SIDE.getLocation());
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT
-            && startLocation == StartLocation.RIGHT_EDGE) {
+        } else if (/*MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT
+            && */ startLocation == StartLocation.RIGHT_EDGE) {
           waypoints.add(EndLocation.RIGHT_SWITCH_SIDE.getLocation());
         } else {
           // Just cross the line
