@@ -1,5 +1,7 @@
 package org.team1540.robot2018.commands.drivetrain;
 
+import static org.team1540.robot2018.Tuning.timeStep;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,9 +18,11 @@ import java.util.List;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
+import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.base.motionprofiling.RunMotionProfiles;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class AutonomousProfiling extends Command {
 
@@ -28,7 +32,7 @@ public class AutonomousProfiling extends Command {
   private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
   // Default command does nothing; this shouldn't ever happen, since it will be set to the real
   // thing during initialization
-  private Command runMotionProfiles = new Command() {
+  private Command RunMotionProfilesDEBUG = new Command() {
     @Override
     protected boolean isFinished() {
       DriverStation.reportError("Motion profiling not initialized correctly!", false);
@@ -36,23 +40,7 @@ public class AutonomousProfiling extends Command {
     }
   };
 
-  // Units in inches and seconds
-
-  // Not a huge fan of having these all here
-  private double wheelbaseWidth = 25.091;
-  private double distanceBetweenWheels = 11.812;
-  private double turningRadius = Math.sqrt(
-      Math.pow(wheelbaseWidth, 2) + Math.pow(distanceBetweenWheels, 2));
-  private double lEncoderTicksPerUnit = 51;
-  private double rEncoderTicksPerUnit = 51;
-  private double secondsFromNeutralToFull = 0;
-
   private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
-  private int sampleRate = Config.SAMPLES_HIGH;
-  private double timeStep = 0.05;
-  private double maxVelocity = 80;
-  private double maxAcceleration = 80;
-  private double maxJerk = 2300;
 
   // X is the long side of the field, Y is the short side.
   // All measurements are relative to your alliance wall, since the field is fully symmetrical.
@@ -92,32 +80,42 @@ public class AutonomousProfiling extends Command {
     startLocationChooser.addDefault("DEFAULT: RIGHT_EDGE", StartLocation.RIGHT_EDGE);
     startLocationChooser.setName("Start Location");
     SmartDashboard.putData(startLocationChooser);
+    // AdjustableManager.getInstance().add(this);
   }
 
   @Override
   protected void initialize() {
+
+    double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
+        (Tuning.distanceBetweenWheels, 2));
+
     // TODO Yes this is very safe honhonhon
     Trajectory trajectory;
-    try {
-      trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity,
-              maxAcceleration, maxJerk),
-          autoTypeChooser.getSelected(), startLocationChooser.getSelected());
-      // TODO exception handling
-    } catch (InvalidPathException e) {
-      e.printStackTrace();
-      return;
-    }
+    // try {
+    //   trajectory = generateTrajectory(new Config(fitMethod, sampleRate, timeStep, maxVelocity,
+    //           maxAcceleration, maxJerk),
+    //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
+    //   // TODO exception handling
+    // } catch (InvalidPathException e) {
+    //   e.printStackTrace();
+    //   return;
+    // }
+    trajectory = generateTestTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep,
+        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk));
 
     TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
 
     Robot.drivetrain.prepareForMotionProfiling();
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties
-        (lEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getLeftVelocity, Robot
+        (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+            .drivetrain::getLeftVelocity,
+            Robot
             .drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier
             .getLeftTrajectory());
     MotionProfilingProperties rightProperties = new MotionProfilingProperties
-        (rEncoderTicksPerUnit, secondsFromNeutralToFull, Robot.drivetrain::getRightVelocity,
+        (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+            .drivetrain::getRightVelocity,
             Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier
             .getRightTrajectory());
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
@@ -126,6 +124,12 @@ public class AutonomousProfiling extends Command {
   @Override
   protected void execute() {
     // Don't need anything AFAIK
+  }
+
+  private Trajectory generateTestTrajectory(Trajectory.Config config) {
+    return Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint
+        (Tuning.distanceToTravel, 0,
+        0)}, config);
   }
 
   public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation

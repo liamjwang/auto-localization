@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.drivetrain.AutonomousProfiling;
 // import org.team1540.robot2018.commands.elevator.ManualElevatorDown;
@@ -31,6 +32,9 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
+    AdjustableManager.getInstance().add(drivetrain);
+    AdjustableManager.getInstance().add(autoCommand);
+    PowerManager.getInstance().setRunning(false);
 
 //    OI.auto_intake.whenPressed(new AutoIntake());
 //    OI.auto_eject.whenPressed(new AutoEject());
@@ -95,5 +99,11 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    Robot.drivetrain.prepareForMotionProfiling();
+    Robot.drivetrain.setLeftVelocity(RobotUtil.deadzone((OI.getDriverLeftY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) *
+        1000));
+    Robot.drivetrain.setRightVelocity(RobotUtil.deadzone((OI.getDriverRightY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) * 1000));
   }
 }

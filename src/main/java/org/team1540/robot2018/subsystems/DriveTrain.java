@@ -2,11 +2,10 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.base.ChickenSubsystem;
-import org.team1540.robot2018.commands.JoystickDrive;
+import org.team1540.robot2018.Tuning;
 
 public class DriveTrain extends ChickenSubsystem {
 
@@ -17,15 +16,6 @@ public class DriveTrain extends ChickenSubsystem {
   private ChickenTalon right = new ChickenTalon(RobotMap.right);
   private ChickenTalon right2 = new ChickenTalon(RobotMap.right2);
   private ChickenTalon right3 = new ChickenTalon(RobotMap.right3);
-
-
-  // public double getLeftVelocity() {}
-  // public double getRightVelocity() {}
-  // public void setLeftVelocity(double velocity) {}
-  // public void setLeftThrottle(double throttle){}
-  // public void setRightThrottle(double throttle){}
-  // public void setRightVelocity(double velocity){}
-
 
   public DriveTrain() {
     this.add(left, left2, left3, right, right2, right3);
@@ -86,21 +76,20 @@ public class DriveTrain extends ChickenSubsystem {
     left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    // driveRightTalon.setSensorPhase(false);
-    // driveLeftTalon.setSensorPhase(true);
+    left.setSensorPhase(false);
+    right.setSensorPhase(true);
 
     // This needs to be here, as PIDFiZone values are stored in memory
-    // TODO clean up tuning
     left.config_IntegralZone(left.getDefaultPidIdx(), 100);
     right.config_IntegralZone(right.getDefaultPidIdx(), 100);
-    left.config_kP(left.getDefaultPidIdx(), 2);
-    right.config_kP(right.getDefaultPidIdx(), 2);
-    left.config_kI(left.getDefaultPidIdx(), 0.001);
-    right.config_kI(right.getDefaultPidIdx(), 0.001);
-    left.config_kD(left.getDefaultPidIdx(), 4);
-    right.config_kD(right.getDefaultPidIdx(), 4);
-    left.config_kF(left.getDefaultPidIdx(), 1.2);
-    right.config_kF(right.getDefaultPidIdx(), 1.2);
+    left.config_kP(left.getDefaultPidIdx(), Tuning.driveTrainP);
+    right.config_kP(right.getDefaultPidIdx(), Tuning.driveTrainP);
+    left.config_kI(left.getDefaultPidIdx(), Tuning.driveTrainI);
+    right.config_kI(right.getDefaultPidIdx(), Tuning.driveTrainI);
+    left.config_kD(left.getDefaultPidIdx(), Tuning.driveTrainD);
+    right.config_kD(right.getDefaultPidIdx(), Tuning.driveTrainD);
+    left.config_kF(left.getDefaultPidIdx(), Tuning.driveTrainF);
+    right.config_kF(right.getDefaultPidIdx(), Tuning.driveTrainF);
     left.configClosedloopRamp(0);
     left2.configClosedloopRamp(0);
     left3.configClosedloopRamp(0);
@@ -112,8 +101,4 @@ public class DriveTrain extends ChickenSubsystem {
     right.setSelectedSensorPosition(0);
   }
 
-  @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new JoystickDrive());
-  }
 }
