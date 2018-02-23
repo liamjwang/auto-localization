@@ -133,27 +133,29 @@ public class Tuning {
   @Tunable("Max wrist deviation")
   public static double maxWristDeviation = 200;
 
-  // WINCH
-  @Tunable("Winch Out Speed")
-  public static double winchOutSpeed = 1; // 0.75
+  // TAPE + WINCH
+  @Tunable("Tape In Low Speed")
+  public static double tapeInLowSpeed = .5;
 
-  // TAPE
-  @Tunable("Tape In Speed")
-  public static double tapeInSpeed = .5;
+  @Tunable("Tape in High Speed")
+  public static double tapeInHighSpeed = 1;
 
   @Tunable("Tape Out Speed")
   public static double tapeOutSpeed = -.5;
 
-  @Tunable("Tape Measure Multiplier")
-  public static double tapeMeasureMultiplier = 1;
+  @Tunable("Winch In Low Speed")
+  public static double winchInLowSpeed = -0.4;
 
-  @Tunable("Winch Multiplier")
-  public static double winchMultiplier = 1;
+  @Tunable("Winch In High Speed")
+  public static double winchInHighSpeed = -1;
 
-  @Tunable("Climber In Low Speed")
-  public static double climberInLowSpeed = -0.4;
-  @Tunable("Climber In HIgh Speed")
-  public static double climberInHighSpeed = -1;
+  // TURRET
+  @Tunable("Climber Turret Divisor")
+  public static double turretDivisor = 260;
+
+  public static double turretInitPan = 0.46;
+
+  public static double turretInitTilt = 0.22;
 
   // DRIVETRAIN
   @Tunable("Drivetrain P")
@@ -183,11 +185,4 @@ public class Tuning {
 
   public static double drivetrainEncoderTPU;
 
-  // TURRET
-  @Tunable("Climber Turret Divisor")
-  public static double turretDivisor = 260;
-
-  public static double turretInitPan = 0.46;
-
-  public static double turretInitTilt = 0.22;
 }
