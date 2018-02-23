@@ -89,12 +89,8 @@ public class DriveTrain extends ChickenSubsystem {
     // TODO clean up tuning
     left.config_IntegralZone(left.getDefaultPidIdx(), 100);
     right.config_IntegralZone(right.getDefaultPidIdx(), 100);
-    // p: 2
-    // i: 0.001
-    // d: 4
-    // f: 1.2
     left.config_kP(left.getDefaultPidIdx(), 2);
-    right.config_kP(left.getDefaultPidIdx(), 2);;
+    right.config_kP(right.getDefaultPidIdx(), 2);
     left.config_kI(left.getDefaultPidIdx(), 0.001);
     right.config_kI(right.getDefaultPidIdx(), 0.001);
     left.config_kD(left.getDefaultPidIdx(), 4);
