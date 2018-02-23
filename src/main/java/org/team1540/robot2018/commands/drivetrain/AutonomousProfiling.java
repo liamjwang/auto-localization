@@ -130,6 +130,8 @@ public class AutonomousProfiling extends Command {
 
   public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation
       startLocation) throws InvalidPathException {
+    waypoints.clear();
+
     waypoints.add(startLocation.getLocation());
     switch (autoType) {
       case CROSS_LINE:
