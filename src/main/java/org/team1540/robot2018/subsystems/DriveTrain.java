@@ -1,6 +1,7 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
@@ -55,19 +56,19 @@ public class DriveTrain extends ChickenSubsystem {
   
   
   public double getLeftPosition() {
-    return left.getQuadraturePosition();
+    return left.getSelectedSensorPosition();
   }
 
   public double getRightPosition() {
-    return right.getQuadraturePosition();
+    return right.getSelectedSensorPosition();
   }
   
   public double getLeftVelocity() {
-    return left.getQuadratureVelocity();
+    return left.getSelectedSensorVelocity();
   }
 
   public double getRightVelocity() {
-    return right.getQuadratureVelocity();
+    return right.getSelectedSensorVelocity();
   }
 
   public void setLeftVelocity(double velocity) {
@@ -81,6 +82,9 @@ public class DriveTrain extends ChickenSubsystem {
   public void prepareForMotionProfiling() {
     left.setControlMode(ControlMode.Velocity);
     right.setControlMode(ControlMode.Velocity);
+
+    left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     // driveRightTalon.setSensorPhase(false);
     // driveLeftTalon.setSensorPhase(true);
