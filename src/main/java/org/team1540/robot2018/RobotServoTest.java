@@ -67,9 +67,9 @@ public class RobotServoTest extends IterativeRobot {
     if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
 
       double processedPan =
-          OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 30)) + pan.get());
+          OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 260)) + pan.get());
       double processedTilt =
-          OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 30)) + tilt.get());
+          OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 260)) + tilt.get());
 
       SmartDashboard.putNumber("Processed Pan", processedPan);
       SmartDashboard.putNumber("Processed Tilt", processedTilt);
