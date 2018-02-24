@@ -6,11 +6,12 @@ public class Tuning {
 
   // GENERAL
   @Tunable("-[General] Dead Zone")
-  public static double deadZone = 0.1;
+  public static double joystickDeadZone = 0.1;
 
   @Tunable("-[General] Manual Superstructure Control Deadzone") // Deadzone for wrist and lift
-  public static double manualControlDeadzone = 0.2;
+  public static double joystickWristLiftDeadzone = 0.2;
 
+  // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
@@ -53,10 +54,10 @@ public class Tuning {
   @Tunable("[Elevator] kD")
   public static double elevatorD = 10;
 
-  @Tunable("[Elevator] kF Upwards")
+  @Tunable("[Elevator] kF Going Up")
   public static double elevatorFGoingUp = 2.5575;
 
-  @Tunable("[Elevator] kF Downwards")
+  @Tunable("[Elevator] kF Going Up")
   public static double elevatorFGoingDown = 0.75;
 
   @Tunable("[Elevator] I-Zone")
@@ -141,35 +142,47 @@ public class Tuning {
   @Tunable("[Wrist] 45 Forward Position")
   public static double wrist45FwdPosition = 6200;
 
-  @Tunable("[Wrist] Max wrist deviation")
+  @Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
   // TAPE
   @Tunable("[Tape] In Low Velocity")
-  public static double tapeInLowSpeed = .5;
+  public static double tapeInLowVel = .5;
 
   @Tunable("[Tape] In High Velocity")
-  public static double tapeInHighSpeed = 1;
+  public static double tapeInHighVel = 1;
 
   @Tunable("[Tape] Out Velocity")
-  public static double tapeOutSpeed = -.5;
+  public static double tapeOutVel = -.5;
 
   // WINCH
   @Tunable("[Winch] In Low Velocity")
-  public static double winchInLowSpeed = -0.4;
+  public static double winchInLowVel = -0.4;
 
   @Tunable("[Winch] In High Velocity")
-  public static double winchInHighSpeed = -1;
+  public static double winchInHighVel = -1;
 
   // TURRET
-  @Tunable("[Turret] Turret Divisor")
-  public static double turretDivisor = 260;
+  @Tunable("[Turret] Joystick Speed Constant")
+  public static double turretJoystickConstant = 0.003846;
+
+  @Tunable("[Turret] Pan Min")
+  public static double turretPanMin = 0.4;
+
+  @Tunable("[Turret] Pan Max")
+  public static double turretPanMax = 0.55;
+
+  @Tunable("[Turret] Tilt Min")
+  public static double turretTiltMin = 0.15;
+
+  @Tunable("[Turret] Tilt Max")
+  public static double turretTiltMax = 0.6;
 
   @Tunable("[Turret] Initial Pan")
-  public static double turretInitPan = 0.46;
+  public static double turretDefaultPan = 0.46;
 
   @Tunable("[Turret] Initial Pan")
-  public static double turretInitTilt = 0.22;
+  public static double turretDefaultTilt = 0.22;
 
   // DRIVETRAIN
   @Tunable("[Drivetrain] kP")

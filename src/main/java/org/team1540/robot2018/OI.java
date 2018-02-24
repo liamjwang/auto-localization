@@ -81,7 +81,7 @@ public class OI {
   static Button elevatorJoystickActivation = new Button() {
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.manualControlDeadzone)
+      return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.joystickWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };
@@ -89,67 +89,67 @@ public class OI {
   static Button wristJoystickActivation = new Button() {
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.manualControlDeadzone)
+      return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.joystickWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };
 
-  static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.deadZone, 2);
+  static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.joystickDeadZone, 2);
 
   static Button copilotRightTriggerSmallPress = new Button() {
     @Override
     public boolean get() {
-      return getCopilotRightTrigger() > Tuning.deadZone && getCopilotRightTrigger() < 0.5;
+      return getCopilotRightTrigger() > Tuning.joystickDeadZone && getCopilotRightTrigger() < 0.5;
     }
   };
   static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
 
   public static double getDriverLeftX() {
-    return Utilities.processDeadzone(driver.getRawAxis(0), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(0), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotLeftX() {
-    return Utilities.processDeadzone(copilot.getRawAxis(0), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(0), Tuning.joystickDeadZone);
   }
 
   public static double getDriverRightX() {
-    return Utilities.processDeadzone(driver.getRawAxis(4), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(4), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotRightX() {
-    return Utilities.processDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(4), Tuning.joystickDeadZone);
   }
 
   public static double getDriverLeftY() {
-    return Utilities.processDeadzone(driver.getRawAxis(1), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(1), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotLeftY() {
-    return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.joystickDeadZone);
   }
 
   public static double getDriverRightY() {
-    return Utilities.processDeadzone(driver.getRawAxis(5), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(5), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotRightY() {
-    return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.joystickDeadZone);
   }
 
   public static double getDriverLeftTrigger() {
-    return Utilities.processDeadzone(driver.getRawAxis(2), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(2), Tuning.joystickDeadZone);
   }
 
   public static double getDriverRightTrigger() {
-    return Utilities.processDeadzone(driver.getRawAxis(3), Tuning.deadZone);
+    return Utilities.processDeadzone(driver.getRawAxis(3), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotLeftTrigger() {
-    return Utilities.processDeadzone(copilot.getRawAxis(2), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(2), Tuning.joystickDeadZone);
   }
 
   public static double getCopilotRightTrigger() {
-    return Utilities.processDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
+    return Utilities.processDeadzone(copilot.getRawAxis(3), Tuning.joystickDeadZone);
   }
 
   public static double isOutsideRange(double value) {

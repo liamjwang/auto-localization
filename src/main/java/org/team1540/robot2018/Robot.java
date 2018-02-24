@@ -45,8 +45,8 @@ public class Robot extends IterativeRobot {
 
     OI.copilotA.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
-    OI.copilotB.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutSpeed), tape));
-    OI.copilotY.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInLowSpeed), tape));
+    OI.copilotB.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutVel), tape));
+    OI.copilotY.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInLowVel), tape));
 
     OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
@@ -73,13 +73,13 @@ public class Robot extends IterativeRobot {
     });
 
     OI.copilotRightTriggerSmallPress.whileHeld(new SimpleCommand("Winch In Low", () -> {
-      tape.set(Tuning.tapeInLowSpeed);
-      winch.set(Tuning.winchInLowSpeed);
+      tape.set(Tuning.tapeInLowVel);
+      winch.set(Tuning.winchInLowVel);
     }, tape, winch));
 
     OI.copilotRightTriggerLargePress.whileHeld(new SimpleCommand("Winch In High", () -> {
-      tape.set(Tuning.tapeInHighSpeed);
-      winch.set(Tuning.winchInHighSpeed);
+      tape.set(Tuning.tapeInHighVel);
+      winch.set(Tuning.winchInHighVel);
     }, tape, winch));
 
     // configure SmartDashboard
