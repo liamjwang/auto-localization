@@ -184,7 +184,7 @@ public class Tuning {
 
   // DRIVETRAIN
   @Tunable("Drivetrain P")
-  public static double drivetrainP = 2;
+  public static double drivetrainP = 1.5;
 
   @Tunable("Drivetrain I")
   public static double drivetrainI = 0.001;
