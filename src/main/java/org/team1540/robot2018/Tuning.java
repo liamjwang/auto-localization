@@ -6,7 +6,7 @@ public class Tuning {
 
   // GENERAL
   @Tunable("-[General] Dead Zone")
-  public static double joystickDeadZone = 0.1;
+  public static double joystickDeadzone = 0.1;
 
   @Tunable("-[General] Manual Superstructure Control Deadzone") // Deadzone for wrist and lift
   public static double joystickWristLiftDeadzone = 0.2;
