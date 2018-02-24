@@ -24,15 +24,15 @@ public class RobotMotorTest extends IterativeRobot {
   private SendableChooser<Integer> motorChooserA;
   //  private SendableChooser<Integer> motorChooserB;
 
-  private boolean enableServo = false;
-  private boolean invertA = false;
-  private boolean invertB = false;
-
-  double servoDivisor = 30;
-
-  Servo pan = new Servo(0);
-  Servo tilt = new Servo(1);
-  Relay servoRelay = new Relay(3);
+  // private boolean enableServo = false;
+  // private boolean invertA = false;
+  // private boolean invertB = false;
+  //
+  // double servoDivisor = 30;
+  //
+  // Servo pan = new Servo(0);
+  // Servo tilt = new Servo(1);
+  // Relay servoRelay = new Relay(3);
 
   @Override
   public void robotInit() {
@@ -48,9 +48,9 @@ public class RobotMotorTest extends IterativeRobot {
     SmartDashboard.putData("Motor ChooserA", motorChooserA);
     //    SmartDashboard.putData("Motor ChooserB", motorChooserB);
     SmartDashboard.putData("PDP", new PowerDistributionPanel());
-    SmartDashboard.putBoolean("Enable Servo Control", enableServo);
-
-    SmartDashboard.putNumber("Servo Divisor", servoDivisor);
+    // SmartDashboard.putBoolean("Enable Servo Control", enableServo);
+    //
+    // SmartDashboard.putNumber("Servo Divisor", servoDivisor);
 
     motorsA[1] = new ChickenTalon(1);
     motorsA[2] = new ChickenTalon(2);
@@ -97,19 +97,19 @@ public class RobotMotorTest extends IterativeRobot {
     //    motorsB[0] = null;
   }
 
-  @Override
-  public void disabledInit() {
-    servoRelay.set(Value.kOff);
-  }
+  // @Override
+  // public void disabledInit() {
+  //   servoRelay.set(Value.kOff);
+  // }
 
   @Override
   public void autonomousInit() {
   }
 
-  @Override
-  public void teleopInit() {
-    servoRelay.set(Value.kOn);
-  }
+  // @Override
+  // public void teleopInit() {
+  //   servoRelay.set(Value.kOn);
+  // }
 
   @Override
   public void testInit() {

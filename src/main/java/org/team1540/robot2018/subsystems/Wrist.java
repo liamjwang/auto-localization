@@ -32,7 +32,7 @@ public class Wrist extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new HoldWristPosition());
+    // setDefaultCommand(new HoldWristPosition());
   }
 
   public void set(double value) {
