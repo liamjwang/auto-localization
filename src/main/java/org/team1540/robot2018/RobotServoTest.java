@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
@@ -14,19 +15,26 @@ public class RobotServoTest extends IterativeRobot {
 
   private Joystick driver = new Joystick(0);
 
-  @Tunable("enableServo")
+  @Tunable("[ServoTest] enableServo")
   public boolean enableServo = false;
-  @Tunable("invertServoA")
+  @Tunable("[ServoTest] invertServoA")
   public boolean invertA = false;
-  @Tunable("invertServoB")
+  @Tunable("[ServoTest] invertServoB")
   public boolean invertB = false;
 
-  // @Tunable("servoDivisor")
+  @Tunable("[ServoTest] panServoChannel")
+  public int panServoChannel = 0;
+  @Tunable("[ServoTest] tiltServoChannel")
+  public int tiltServoChannel = 1;
+  @Tunable("[ServoTest] servoRelayChannel")
+  public int servoRelayChannel = 3;
+
+  // @Tunable("[ServoTest] servoDivisor")
   // double servoDivisor = 30;
 
-  Servo pan = new Servo(0);
-  Servo tilt = new Servo(1);
-  Relay servoRelay = new Relay(3);
+  Servo pan = new Servo(panServoChannel);
+  Servo tilt = new Servo(tiltServoChannel);
+  Relay servoRelay = new Relay(servoRelayChannel);
 
   @Override
   public void robotInit() {
@@ -55,7 +63,7 @@ public class RobotServoTest extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    AdjustableManager.getInstance().update();
+    Scheduler.getInstance().run();
     if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
 
       double processedPan =
