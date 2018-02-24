@@ -76,6 +76,7 @@ public class DriveTrain extends ChickenSubsystem {
 
     for (ChickenTalon talon : talons) {
       talon.configClosedloopRamp(Tuning.drivetrainRampRate);
+      talon.configOpenloopRamp(Tuning.drivetrainRampRate);
     }
   }
 
