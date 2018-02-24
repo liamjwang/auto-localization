@@ -19,8 +19,8 @@ public class ClimberTurret extends Subsystem {
   }
 
   public void init() {
-    setPan(Tuning.turretInitPan);
-    setTilt(Tuning.turretInitTilt);
+    setPan(Tuning.turretDefaultPan);
+    setTilt(Tuning.turretDefaultTilt);
   }
 
   public void set(double pan, double tilt) {
