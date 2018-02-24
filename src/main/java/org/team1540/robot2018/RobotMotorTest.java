@@ -3,15 +3,12 @@ package org.team1540.robot2018;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.Utilities;
+import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.base.wrappers.ChickenVictor;
@@ -19,97 +16,86 @@ import org.team1540.base.wrappers.ChickenVictor;
 public class RobotMotorTest extends IterativeRobot {
 
   private Joystick driver = new Joystick(0);
-  private ChickenController[] motorsA = new ChickenController[17];
-  //  private ChickenController[] motorsB = new ChickenController[17];
-  private SendableChooser<Integer> motorChooserA;
-  //  private SendableChooser<Integer> motorChooserB;
+  private ChickenController[] motors = new ChickenController[]{
+      // Drive Left
+      new ChickenTalon(1),
+      new ChickenTalon(2),
+      new ChickenTalon(3),
 
-  // private boolean enableServo = false;
-  // private boolean invertA = false;
-  // private boolean invertB = false;
-  //
-  // double servoDivisor = 30;
-  //
-  // Servo pan = new Servo(0);
-  // Servo tilt = new Servo(1);
-  // Relay servoRelay = new Relay(3);
+      // Drive Right
+      new ChickenTalon(4),
+      new ChickenTalon(5),
+      new ChickenTalon(6),
+
+      // Wrist
+      new ChickenTalon(7),
+
+      // Climber Tape
+      new ChickenVictor(8),
+
+      // Climber Winch
+      new ChickenTalon(9),
+      new ChickenVictor(10),
+      new ChickenVictor(11),
+      new ChickenVictor(12),
+
+      // Lift
+      new ChickenTalon(13),
+      new ChickenTalon(14),
+
+      // Intake
+      new ChickenVictor(15),
+      new ChickenVictor(16),
+  };
+  private SendableChooser<Integer>[] motorChoosers;
+  private SendableChooser<Integer>[] joystickChoosers;
+
+  @Tunable("[MotorTest] numChoosers (Restart neccecary)")
+  public int numChoosers = 1;
 
   @Override
   public void robotInit() {
+    AdjustableManager.getInstance().add(this);
     LiveWindow.disableAllTelemetry();
-    motorChooserA = new SendableChooser<Integer>();
-    //    motorChooserB = new SendableChooser<Integer>();
-
-    for (int i = 1; i <= 16; i++) {
-      motorChooserA.addObject(Integer.toString(i), i);
-      //      motorChooserB.addObject(Integer.toString(i), i);
-    }
-
-    SmartDashboard.putData("Motor ChooserA", motorChooserA);
-    //    SmartDashboard.putData("Motor ChooserB", motorChooserB);
-    SmartDashboard.putData("PDP", new PowerDistributionPanel());
-    // SmartDashboard.putBoolean("Enable Servo Control", enableServo);
-    //
-    // SmartDashboard.putNumber("Servo Divisor", servoDivisor);
-
-    motorsA[1] = new ChickenTalon(1);
-    motorsA[2] = new ChickenTalon(2);
-    motorsA[3] = new ChickenTalon(3);
-    motorsA[4] = new ChickenTalon(4);
-    motorsA[5] = new ChickenTalon(5);
-    motorsA[6] = new ChickenTalon(6);
-    motorsA[7] = new ChickenTalon(7);
-    motorsA[8] = new ChickenVictor(8);
-
-    motorsA[9] = new ChickenTalon(9);
-
-    motorsA[10] = new ChickenVictor(10);
-    motorsA[11] = new ChickenVictor(11);
-    motorsA[12] = new ChickenVictor(12);
-
-    motorsA[13] = new ChickenTalon(13);
-    motorsA[14] = new ChickenTalon(14);
-    motorsA[15] = new ChickenVictor(15);
-    motorsA[16] = new ChickenVictor(16);
-
-    //    motorsA[0] = null;
-
-    //    motorsB[1] = new ChickenTalon(1);
-    //    motorsB[2] = new ChickenTalon(2);
-    //    motorsB[3] = new ChickenTalon(3);
-    //    motorsB[4] = new ChickenTalon(4);
-    //    motorsB[5] = new ChickenTalon(5);
-    //    motorsB[6] = new ChickenTalon(6);
-    //    motorsB[7] = new ChickenTalon(7);
-    //    motorsB[8] = new ChickenVictor(8);
-    //
-    //    motorsB[9] = new ChickenTalon(9);
-    //
-    //    motorsB[10] = new ChickenVictor(10);
-    //    motorsB[11] = new ChickenVictor(11);
-    //    motorsB[12] = new ChickenVictor(12);
-    //
-    //    motorsB[13] = new ChickenTalon(13);
-    //    motorsB[14] = new ChickenTalon(14);
-    //    motorsB[15] = new ChickenVictor(15);
-    //    motorsB[16] = new ChickenVictor(16);
-    //
-    //    motorsB[0] = null;
   }
 
-  // @Override
-  // public void disabledInit() {
-  //   servoRelay.set(Value.kOff);
-  // }
+  @Override
+  public void disabledInit() {
+  }
 
   @Override
   public void autonomousInit() {
   }
 
-  // @Override
-  // public void teleopInit() {
-  //   servoRelay.set(Value.kOn);
-  // }
+  @Override
+  public void teleopInit() {
+    motorChoosers = new SendableChooser[numChoosers];
+    joystickChoosers = new SendableChooser[numChoosers];
+
+    for (int motorIndex = 0; motorIndex < numChoosers; motorIndex++) {
+      motorChoosers[motorIndex] = new SendableChooser<>();
+
+      motorChoosers[motorIndex].addDefault("(None)", -1);
+      for (int cc = 0; cc < motors.length; cc++) {
+        motorChoosers[motorIndex].addObject("Motor " + Integer.toString(cc + 1) + " (Forwards)", cc);
+      }
+      for (int cc = motors.length; cc < motors.length * 2; cc++) {
+        motorChoosers[motorIndex].addObject(
+            "Motor " + Integer.toString(cc - motors.length + 1) + " (Reversed)", cc);
+      }
+      SmartDashboard.putData("[MotorTest] MotorChooser "+Integer.toString(motorIndex), motorChoosers[motorIndex]);
+
+      joystickChoosers[motorIndex] = new SendableChooser<>();
+      joystickChoosers[motorIndex].addDefault("LeftJoyY", 1);
+      joystickChoosers[motorIndex].addObject("LeftJoyX", 0);
+      joystickChoosers[motorIndex].addObject("RightJoyY", 5);
+      joystickChoosers[motorIndex].addObject("RightJoyX", 4);
+      joystickChoosers[motorIndex].addObject("RightTrig", 3);
+      joystickChoosers[motorIndex].addObject("LeftTrig", 2);
+
+      SmartDashboard.putData("[MotorTest] JoyChooser "+Integer.toString(motorIndex), joystickChoosers[motorIndex]);
+    }
+  }
 
   @Override
   public void testInit() {
@@ -117,42 +103,7 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    for (ChickenController motor : motorsA) {
-      if (motor != null) {
-        motor.setBrake(true);
-        motor.configPeakOutputForward(1);
-        motor.configPeakOutputReverse(-1);
-        motor.configClosedloopRamp(0);
-        motor.configOpenloopRamp(0);
-      }
-    }
-    SmartDashboard.putNumber("Driver Right Y", Utilities.processDeadzone(driver.getRawAxis(5), Tuning.deadZone));
-    SmartDashboard.putNumber("Driver Right X", Utilities.processDeadzone(driver.getRawAxis(4), Tuning.deadZone));
-    SmartDashboard.putNumber("Driver Left Y", Utilities.processDeadzone(driver.getRawAxis(1), Tuning.deadZone));
-    SmartDashboard.putNumber("Driver Left X", Utilities.processDeadzone(driver.getRawAxis(0), Tuning.deadZone));
-
     Scheduler.getInstance().run();
-    if (motorChooserA.getSelected() != null) {
-      motorsA[motorChooserA.getSelected()].set(ControlMode.PercentOutput, driver.getRawAxis(5));
-    }
-    //    if (motorChooserB.getSelected() != null) {
-    //      motorsB[motorChooserB.getSelected()].set(ControlMode.PercentOutput, -OI.getDriverRightY());
-    //    }
-
-    // if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
-    //
-    //   double processedPan =
-    //       OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 30)) + pan.get());
-    //   double processedTilt =
-    //       OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 30)) + tilt.get());
-    //
-    //   SmartDashboard.putNumber("Processed Pan", processedPan);
-    //   SmartDashboard.putNumber("Processed Tilt", processedTilt);
-    //
-    //   pan.set(processedPan);
-    //   tilt.set(processedTilt);
-
-    // }
   }
 
   @Override
@@ -165,5 +116,24 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    for (ChickenController motor : motors) {
+      if (motor != null) {
+        motor.setBrake(true);
+        motor.configPeakOutputForward(1);
+        motor.configPeakOutputReverse(-1);
+        motor.configClosedloopRamp(0);
+        motor.configOpenloopRamp(0);
+      }
+    }
+
+    for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
+      if (motorChoosers[chooserIndex].getSelected() != -1) {
+        motors[
+            motorChoosers[chooserIndex].getSelected() < motors.length ? motorChoosers[chooserIndex].getSelected() :
+                (motorChoosers[chooserIndex].getSelected()) % motors.length]
+            .set(ControlMode.PercentOutput,
+                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) * driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()));
+      }
+    }
   }
 }
