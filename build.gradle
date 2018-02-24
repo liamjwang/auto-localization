@@ -4,7 +4,7 @@ import jaci.openrio.gradle.frc.RoboRIO
 
 plugins {
     id "java"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.18"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
 }
 
 group 'org.team1540'
@@ -23,7 +23,8 @@ dependencies {
 }
 
 def TEAM = 1540
-def ROBOT_CLASS = "org.team1540.robot2018"
+def ROBOT_CLASS = "org.team1540.robot2018.Robot"
+//def ROBOT_CLASS = "org.team1540.robot2018.RobotMotorTest"
 
 deploy {
     targets {
