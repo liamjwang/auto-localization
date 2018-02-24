@@ -83,11 +83,11 @@ public class Robot extends IterativeRobot {
     }, tape, winch));
 
     // configure SmartDashboard
-    Command zeroWrist = new SimpleCommand("Zero Wrist", wrist::resetEncoder);
+    Command zeroWrist = new SimpleCommand("[Elevator] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroWrist);
 
-    Command zeroElevator = new SimpleCommand("Zero Elevator", elevator::resetEncoder);
+    Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
   }
