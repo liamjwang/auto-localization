@@ -99,6 +99,10 @@ public class DriveTrain extends ChickenSubsystem {
     left.set(ControlMode.Velocity, velocity);
   }
 
+  public void setRightVelocity(double velocity) {
+    right.set(ControlMode.Velocity, velocity);
+  }
+
   public void prepareForMotionProfiling() {
     left.setControlMode(ControlMode.Velocity);
     right.setControlMode(ControlMode.Velocity);
@@ -110,16 +114,16 @@ public class DriveTrain extends ChickenSubsystem {
     right.setSensorPhase(true);
 
     // This needs to be here, as PIDFiZone values are stored in memory
-    left.config_IntegralZone(left.getDefaultPidIdx(), 100);
-    right.config_IntegralZone(right.getDefaultPidIdx(), 100);
-    left.config_kP(left.getDefaultPidIdx(), Tuning.driveTrainP);
-    right.config_kP(right.getDefaultPidIdx(), Tuning.driveTrainP);
-    left.config_kI(left.getDefaultPidIdx(), Tuning.driveTrainI);
-    right.config_kI(right.getDefaultPidIdx(), Tuning.driveTrainI);
-    left.config_kD(left.getDefaultPidIdx(), Tuning.driveTrainD);
-    right.config_kD(right.getDefaultPidIdx(), Tuning.driveTrainD);
-    left.config_kF(left.getDefaultPidIdx(), Tuning.driveTrainF);
-    right.config_kF(right.getDefaultPidIdx(), Tuning.driveTrainF);
+    left.config_IntegralZone(left.getDefaultPidIdx(), Tuning.drivetrainIZone);
+    right.config_IntegralZone(right.getDefaultPidIdx(), Tuning.drivetrainIZone);
+    left.config_kP(left.getDefaultPidIdx(), Tuning.drivetrainP);
+    right.config_kP(right.getDefaultPidIdx(), Tuning.drivetrainP);
+    left.config_kI(left.getDefaultPidIdx(), Tuning.drivetrainI);
+    right.config_kI(right.getDefaultPidIdx(), Tuning.drivetrainI);
+    left.config_kD(left.getDefaultPidIdx(), Tuning.drivetrainD);
+    right.config_kD(right.getDefaultPidIdx(), Tuning.drivetrainD);
+    left.config_kF(left.getDefaultPidIdx(), Tuning.drivetrainF);
+    right.config_kF(right.getDefaultPidIdx(), Tuning.drivetrainF);
     left.configClosedloopRamp(0);
     left2.configClosedloopRamp(0);
     left3.configClosedloopRamp(0);
