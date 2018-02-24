@@ -2,33 +2,44 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import org.team1540.base.ChickenSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.wrist.HoldWristPosition;
 
-public class Wrist extends ChickenSubsystem {
-  
-  private ChickenTalon wristMotor = new ChickenTalon(RobotMap.wristMotor);
+public class Wrist extends Subsystem {
+
+  private ChickenTalon wristMotor = new ChickenTalon(RobotMap.WRIST);
 
   public Wrist() {
-    this.add(wristMotor);
-    this.setPriority(11);
     wristMotor.setInverted(false);
 
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  public double getTrajectoryPosition() {
+    return wristMotor.getActiveTrajectoryPosition();
+  }
+
+  public double getError() {
+    return wristMotor.getClosedLoopError();
+  }
+
+  public double getCurrent() {
+    return wristMotor.getOutputCurrent();
+  }
+
   @Override
   public void initDefaultCommand() {
-    //setDefaultCommand();
+    setDefaultCommand(new HoldWristPosition());
   }
 
   public void set(double value) {
-    wristMotor.set(value);
+    wristMotor.set(ControlMode.PercentOutput, value);
   }
 
-  public void stop(){
+  public void stop() {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
@@ -40,18 +51,12 @@ public class Wrist extends ChickenSubsystem {
     wristMotor.set(ControlMode.MotionMagic, position);
   }
 
-  public double setPosition(double position){
-    position = position < Tuning.wristUpLimit ? position : Tuning.wristUpLimit - Tuning.wristBounceBack;
-    position = position >= Tuning.wristDownLimit ? position : 0 + Tuning.wristBounceBack;
-    wristMotor.set(position);
-    return position;
-  }
-
-  public double getPosition(){
+  public double getPosition() {
     return wristMotor.getSelectedSensorPosition();
   }
 
-  public void updatePID() {
+  @Override
+  public void periodic() {
     wristMotor.config_kP(0, Tuning.wristP);
     wristMotor.config_kI(0, Tuning.wristI);
     wristMotor.config_kD(0, Tuning.wristD);
@@ -62,5 +67,7 @@ public class Wrist extends ChickenSubsystem {
 
     wristMotor.configMotionAcceleration(Tuning.wristMaxAccel);
     wristMotor.configMotionCruiseVelocity(Tuning.wristCruiseVelocity);
+    wristMotor.configPeakOutputForward(1);
+    wristMotor.configPeakOutputReverse(-1);
   }
 }

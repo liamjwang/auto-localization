@@ -2,55 +2,73 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
-import org.team1540.base.ChickenSubsystem;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.elevator.JoystickElevator;
+import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
-  private ChickenTalon elevator_1 = new ChickenTalon(RobotMap.elevator_1);
-  private ChickenTalon elevator_2 = new ChickenTalon(RobotMap.elevator_2);
+  private ChickenTalon talon1 = new ChickenTalon(RobotMap.ELEVATOR_1);
+  private ChickenTalon talon2 = new ChickenTalon(RobotMap.ELEVATOR_2);
 
   public Elevator() {
-    this.add(elevator_1, elevator_2);
+    this.add(talon1, talon2);
     this.setPriority(10);
-    elevator_1.setInverted(false);
-    elevator_2.setInverted(false);
 
-    elevator_1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder); // TODO: 2/9/18 Figure out which motor has the encoder
+    talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
-  public void set(double value){
-    elevator_1.set(ControlMode.PercentOutput, value);
-    elevator_2.set(ControlMode.PercentOutput, -value);
+  public int getError() {
+    return talon1.getClosedLoopError();
   }
 
-  public void stop(){
-    elevator_1.set(ControlMode.PercentOutput, 0);
-    elevator_2.set(ControlMode.PercentOutput, 0);
+  public double getPosition() {
+    return talon1.getSelectedSensorPosition();
   }
 
-  public void updatePID() {
-    elevator_1.config_kP(0, Tuning.elevatorP);
-    elevator_1.config_kI(0, Tuning.elevatorI);
-    elevator_1.config_kD(0, Tuning.elevatorD);
-  }
-
-  public double setPosition(double position){
-    position = position < Tuning.elevatorUpLimit ? position : Tuning.elevatorUpLimit - Tuning.elevatorBounceBack;
-    position = position >= Tuning.elevatorDownLimit ? position : 0 + Tuning.elevatorBounceBack;
-    set(position);
-    return position;
-  }
-
-  public double getPosition(){
-    return elevator_1.getSelectedSensorPosition();
+  public int getTrajPosition() {
+    return talon1.getActiveTrajectoryPosition();
   }
 
   @Override
-  public void initDefaultCommand(){
-//    setDefaultCommand(new JoystickElevator());
+  public void initDefaultCommand() {
+    setDefaultCommand(new HoldElevatorPosition());
+  }
+
+  public void setMotionMagicPosition(double position) {
+    talon1.set(ControlMode.MotionMagic, position);
+    talon2.set(ControlMode.Follower, talon1.getDeviceID());
+  }
+
+  public void set(double value) {
+    talon1.set(ControlMode.PercentOutput, value);
+    talon2.set(ControlMode.PercentOutput, value);
+  }
+
+  public void stop() {
+    talon1.set(ControlMode.PercentOutput, 0);
+    talon2.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void resetEncoder() {
+    talon1.setSelectedSensorPosition(0);
+  }
+
+  @Override
+  public void periodic() {
+    talon1.config_kP(0, Tuning.elevatorP);
+    talon1.config_kI(0, Tuning.elevatorI);
+    talon1.config_kD(0, Tuning.elevatorD);
+    talon1.config_kF(0, talon1.getSelectedSensorVelocity()
+        > 0 ? Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
+    talon1.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
+    talon1.configMotionAcceleration(Tuning.elevatorMaxAccel);
+    talon1.config_IntegralZone(0, Tuning.elevatorIZone);
+
+    talon1.setInverted(true);
+    talon2.setInverted(true);
+    talon1.setSensorPhase(Tuning.isPandora);
   }
 }

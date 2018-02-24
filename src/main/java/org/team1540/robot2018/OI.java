@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.triggers.AxisButton;
 import org.team1540.base.triggers.DPadButton;
 import org.team1540.base.triggers.DPadButton.DPadAxis;
 
@@ -36,85 +37,122 @@ import org.team1540.base.triggers.DPadButton.DPadAxis;
 
 public class OI {
 
-  public static Joystick driver = new Joystick(0);
-  public static Joystick copilot = new Joystick(1);
+  private static Joystick driver = new Joystick(0);
+  private static Joystick copilot = new Joystick(1);
 
   public static final int X = 3;
   public static final int Y = 4;
   public static final int A = 1;
   public static final int B = 2;
 
-  public static final int back = 7;
-  public static final int start = 8;
+  public static final int BACK = 7;
+  public static final int START = 8;
   public static final int LB = 5;
   public static final int RB = 6;
 
-  static Button auto_intake = new JoystickButton(copilot, LB);
-  static Button auto_eject = new JoystickButton(copilot, RB);
+  // auto intake
+  static Button copilotLB = new JoystickButton(copilot, LB);
+  // auto eject
+  static Button copilotRB = new JoystickButton(copilot, RB);
 
-  static Button manual_eject = new JoystickButton(copilot, X);
-  static Button manual_intake = new JoystickButton(copilot, A);
+  // wrist to forward 45 degrees
+  static Button copilotX = new JoystickButton(copilot, X);
+  // wrist to full down
+  static Button copilotA = new JoystickButton(copilot, A);
+  // wrist to backward 45 degrees
+  static Button copilotY = new JoystickButton(copilot, Y);
+  // wrist to full back
+  static Button copilotB = new JoystickButton(copilot, B);
 
-  static Button manual_elevator_up = new JoystickButton(copilot, Y);
-  static Button manual_elevator_down = new JoystickButton(copilot, B);
+  // to max height + wrist up
+  static Button copilotDPadUp = new DPadButton(copilot, 0, DPadAxis.UP);
+  // to lower scale height
+  static Button copilotDPadDown = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  // to max scale height (no wrist)
+  static Button copilotDPadLeft = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  // to switch height
+  static Button copilotDPadRight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
 
-//  static Button manual_winch_in = new DPadButton(copilot, 0, DPadAxis.DOWN);
-//  static Button manual_winch_out = new DPadButton(copilot, 0, DPadAxis.UP);
-  static Button manual_winch_in = new JoystickButton(copilot, LB);
-  static Button manual_winch_out = new JoystickButton(copilot, RB);
+  // manual tape out
+  static Button copilotBack = new JoystickButton(copilot, BACK);
+  // manual tape in
+  static Button copilotStart = new JoystickButton(copilot, START);
 
-  static Button manual_tape_in = new JoystickButton(copilot, back);
-  static Button manual_tape_out = new JoystickButton(copilot, start);
+  static Button elevatorJoystickActivation = new Button() {
+    @Override
+    public boolean get() {
+      return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.manualControlDeadzone)
+          != 0; // zero values mean it's within the deadzone
+    }
+  };
 
-  public static double getDriverLeftX(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(0), Tuning.deadZone);
-  }
-  public static double getCopilotLeftX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(0), Tuning.deadZone);
-  }
+  static Button wristJoystickActivation = new Button() {
+    @Override
+    public boolean get() {
+      return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.manualControlDeadzone)
+          != 0; // zero values mean it's within the deadzone
+    }
+  };
 
-  public static double getDriverRightX(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(4), Tuning.deadZone);
-  }
-  public static double getCopilotRightX(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
-  }
+  static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.deadZone, 2);
 
-  public static double getDriverLeftY(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(1), Tuning.deadZone);
-  }
-  public static double getCopilotLeftY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
-  }
+  static Button copilotRightTriggerSmallPress = new Button() {
+    @Override
+    public boolean get() {
+      return getCopilotRightTrigger() > Tuning.deadZone && getCopilotRightTrigger() < 0.5;
+    }
+  };
+  static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
 
-  public static double getDriverRightY(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(5), Tuning.deadZone);
-  }
-  public static double getCopilotRightY(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
-  }
-
-  public static double getDriverLeftTrigger(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(2), Tuning.deadZone);
-  }
-  public static double getDriverRightTrigger(){
-    return Utilities.processAxisDeadzone(driver.getRawAxis(3), Tuning.deadZone);
+  public static double getDriverLeftX() {
+    return Utilities.processDeadzone(driver.getRawAxis(0), Tuning.deadZone);
   }
 
-  public static double getCopilotLeftTrigger(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(2), Tuning.deadZone);
+  public static double getCopilotLeftX() {
+    return Utilities.processDeadzone(copilot.getRawAxis(0), Tuning.deadZone);
   }
-  public static double getCopilotRightTrigger(){
-    return Utilities.processAxisDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
+
+  public static double getDriverRightX() {
+    return Utilities.processDeadzone(driver.getRawAxis(4), Tuning.deadZone);
+  }
+
+  public static double getCopilotRightX() {
+    return Utilities.processDeadzone(copilot.getRawAxis(4), Tuning.deadZone);
+  }
+
+  public static double getDriverLeftY() {
+    return Utilities.processDeadzone(driver.getRawAxis(1), Tuning.deadZone);
+  }
+
+  public static double getCopilotLeftY() {
+    return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.deadZone);
+  }
+
+  public static double getDriverRightY() {
+    return Utilities.processDeadzone(driver.getRawAxis(5), Tuning.deadZone);
+  }
+
+  public static double getCopilotRightY() {
+    return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.deadZone);
+  }
+
+  public static double getDriverLeftTrigger() {
+    return Utilities.processDeadzone(driver.getRawAxis(2), Tuning.deadZone);
+  }
+
+  public static double getDriverRightTrigger() {
+    return Utilities.processDeadzone(driver.getRawAxis(3), Tuning.deadZone);
+  }
+
+  public static double getCopilotLeftTrigger() {
+    return Utilities.processDeadzone(copilot.getRawAxis(2), Tuning.deadZone);
+  }
+
+  public static double getCopilotRightTrigger() {
+    return Utilities.processDeadzone(copilot.getRawAxis(3), Tuning.deadZone);
   }
 
   public static double isOutsideRange(double value) {
-    if (value > 1) {
-      return 1;
-    } else if (value < 0) {
-      return 0;
-    } else {
-      return value;
-    }
+    return Utilities.constrain(value, 0, 1);
   }
 }

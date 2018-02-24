@@ -3,28 +3,16 @@ package org.team1540.robot2018.commands.elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
-import org.team1540.robot2018.Tuning;
 
 public class JoystickElevator extends Command {
-  private double position = Robot.elevator.getPosition();
 
   public JoystickElevator() {
     requires(Robot.elevator);
   }
 
   @Override
-  protected void initialize() {
-    Robot.elevator.updatePID(); // TODO: 2/13/18 Do I actually need this?
-    position = Robot.elevator.getPosition();
-  }
-
-  @Override
   protected void execute() {
-    position -= Tuning.elevatorMult * OI.getCopilotLeftY();
-    double actPos = Robot.elevator.setPosition(position);
-    if (actPos != position) {
-      position += (actPos > position ? 1 : -1) * Tuning.wristBounceBack;
-    }
+    Robot.elevator.set(-OI.getCopilotLeftY());
   }
 
   @Override

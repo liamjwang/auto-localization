@@ -1,22 +1,24 @@
 package org.team1540.robot2018.commands.intake;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class ManualIntake extends Command {
-  public ManualIntake() {
+public class EjectCube extends TimedCommand {
+
+  public EjectCube() {
+    super(Tuning.ejectTime);
     requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-      Robot.intake.set(Tuning.IntakeSpeedA, Tuning.IntakeSpeedB);
+    setTimeout(Tuning.ejectTime);
   }
 
   @Override
-  protected boolean isFinished() {
-    return false; //Return true to stop the command
+  protected void execute() {
+    Robot.intake.set(Tuning.ejectSpeedA, Tuning.ejectSpeedB);
   }
 
   @Override
