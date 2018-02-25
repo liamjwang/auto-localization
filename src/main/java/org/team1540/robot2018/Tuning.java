@@ -43,6 +43,9 @@ public class Tuning {
   @Tunable("[Intake] Eject Speed Motor B")
   public static double ejectSpeedB = -0.5;
 
+  @Tunable("[Intake] Arm Out Sped")
+  public static double intakeArmSpeed = 0.8;
+
 
   // ELEVATOR
   @Tunable("[Elevator] kP")
