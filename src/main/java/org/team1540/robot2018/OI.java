@@ -77,7 +77,7 @@ public class OI {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone), 2)
+      return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };
@@ -111,7 +111,7 @@ public class OI {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone), 2)
+      return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };

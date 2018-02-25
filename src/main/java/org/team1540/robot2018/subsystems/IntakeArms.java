@@ -7,8 +7,8 @@ import org.team1540.robot2018.RobotMap;
 
 public class IntakeArms extends Subsystem {
 
-  private ChickenTalon arm1 = new ChickenTalon(RobotMap.INTAKE_ARM_A);
-  private ChickenTalon arm2 = new ChickenTalon(RobotMap.INTAKE_ARM_B);
+  private ChickenTalon arm1 = new ChickenTalon(RobotMap.ARM_A);
+  private ChickenTalon arm2 = new ChickenTalon(RobotMap.ARM_B);
 
   public IntakeArms() {
     arm1.setInverted(true);
