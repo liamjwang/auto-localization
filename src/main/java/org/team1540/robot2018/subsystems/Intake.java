@@ -12,8 +12,8 @@ import org.team1540.robot2018.Tuning;
 public class Intake extends Subsystem {
   PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-  private ChickenVictor intakeMotorA = new ChickenVictor(RobotMap.INTAKE_1);
-  private ChickenVictor intakeMotorB = new ChickenVictor(RobotMap.INTAKE_2);
+  private ChickenVictor intakeMotorA = new ChickenVictor(RobotMap.INTAKE_A);
+  private ChickenVictor intakeMotorB = new ChickenVictor(RobotMap.INTAKE_B);
 
   public Intake() {
     intakeMotorA.setInverted(true);

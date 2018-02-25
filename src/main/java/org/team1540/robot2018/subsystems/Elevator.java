@@ -10,8 +10,8 @@ import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
-  private ChickenTalon elevatorMotorA = new ChickenTalon(RobotMap.ELEVATOR_1);
-  private ChickenTalon elevatorMotorB = new ChickenTalon(RobotMap.ELEVATOR_2);
+  private ChickenTalon elevatorMotorA = new ChickenTalon(RobotMap.ELEVATOR_A);
+  private ChickenTalon elevatorMotorB = new ChickenTalon(RobotMap.ELEVATOR_B);
 
   public Elevator() {
     add(elevatorMotorA, elevatorMotorB);

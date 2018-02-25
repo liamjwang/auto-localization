@@ -6,17 +6,17 @@ import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.JoystickDrive;
+import org.team1540.robot2018.commands.TankDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
-  private ChickenTalon left = new ChickenTalon(RobotMap.DRIVE_LEFT);
-  private ChickenTalon left2 = new ChickenTalon(RobotMap.DRIVE_LEFT_2);
-  private ChickenTalon left3 = new ChickenTalon(RobotMap.DRIVE_LEFT_3);
+  private ChickenTalon left = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
+  private ChickenTalon left2 = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
+  private ChickenTalon left3 = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
   private ChickenTalon[] lefts = new ChickenTalon[]{left, left2, left3};
-  private ChickenTalon right = new ChickenTalon(RobotMap.DRIVE_RIGHT);
-  private ChickenTalon right2 = new ChickenTalon(RobotMap.DRIVE_RIGHT_2);
-  private ChickenTalon right3 = new ChickenTalon(RobotMap.DRIVE_RIGHT_3);
+  private ChickenTalon right = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
+  private ChickenTalon right2 = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
+  private ChickenTalon right3 = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
   private ChickenTalon[] rights = new ChickenTalon[]{right, right2, right3};
   private ChickenTalon[] talons = new ChickenTalon[]{left, left2, left3, right, right2, right3};
   private ChickenTalon[] masters = new ChickenTalon[]{left, right};
@@ -53,7 +53,7 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new JoystickDrive());
+    setDefaultCommand(new TankDrive());
   }
 
   public void setLeft(double value) {
