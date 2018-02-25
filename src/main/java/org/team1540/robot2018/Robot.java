@@ -1,12 +1,15 @@
 package org.team1540.robot2018;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.climber.AlignClimber;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
@@ -32,9 +35,16 @@ public class Robot extends IterativeRobot {
   public static final ClimberTapeMeasure tape = new ClimberTapeMeasure();
   public static final ClimberWinch winch = new ClimberWinch();
 
+  private SendableChooser<String> side = new SendableChooser<>();
+
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
+    side.addDefault("Left", "L");
+    side.addObject("Right", "R");
+    side.addObject("None", "X");
+
+    SmartDashboard.putData("Robot Position for Auto", side);
 
     // configure controls
 
@@ -99,6 +109,9 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    if (side.getSelected().equals(DriverStation.getInstance().getGameSpecificMessage().substring(0, 1))) {
+      new StraightAuto().start();
+    }
   }
 
   @Override

@@ -11,8 +11,8 @@ public class DriveForward extends TimedCommand {
 
   @Override
   protected void initialize() {
-    Robot.drivetrain.setLeft(1);
-    Robot.drivetrain.setRight(1);
+    Robot.drivetrain.setLeft(0.5);
+    Robot.drivetrain.setRight(0.5);
   }
 
   @Override

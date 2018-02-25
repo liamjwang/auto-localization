@@ -7,7 +7,7 @@ import org.team1540.robot2018.commands.intake.EjectCube;
 
 public class StraightAuto extends CommandGroup {
   public StraightAuto() {
-    addSequential(new DriveForward(Tuning.driveForwardTime));
+    addParallel(new DriveForward(Tuning.driveForwardTime));
     addSequential(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     addSequential(new EjectCube());
   }

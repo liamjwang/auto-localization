@@ -5,7 +5,7 @@ import org.team1540.base.adjustables.Tunable;
 public class Tuning {
 
   // GENERAL
-  public static double driveForwardTime = 2.5;
+  public static double driveForwardTime = 1.4;
   @Tunable("-[General] Dead Zone")
   public static double joystickDeadzone = 0.1;
 
