@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
 
-    OI.copilotLB.whileHeld(new OpenArms());
+    OI.autoIntakeButton.whileHeld(new OpenArms());
 
     OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
