@@ -175,6 +175,7 @@ public class AutonomousProfiling extends Command {
             waypoints.add(new Waypoint(xSide, ySide, degrees));
             break;
         }
+        break;
       case SWITCH_TOP:
         break;
     }
