@@ -26,6 +26,9 @@ public class RobotMap {
   public static final int INTAKE_1 = 15;
   public static final int INTAKE_2 = 16;
 
+  public static final int INTAKE_ARM_1 = 17;
+  public static final int INTAKE_ARM_2 = 18;
+
   public static final int PAN_SERVO = 7;
   public static final int TILT_SERVO = 8;
 
