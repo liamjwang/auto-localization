@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.adjustables.Tunable;
 
@@ -65,14 +66,14 @@ public class RobotServoTest extends IterativeRobot {
   public void robotPeriodic() {
     Scheduler.getInstance().run();
     if (SmartDashboard.getBoolean("Enable Servo Control", false)) {
-
+      // TODO: rewrite the servo testing class to have the inputs be tunable
       double processedPan =
-          OI.isOutsideRange((OI.getDriverLeftX() / SmartDashboard.getNumber("Servo Divisor", 260)) + pan.get());
+          isOutsideRange((OI.getServoPanAxis() / SmartDashboard.getNumber("[ServoTest] Servo Divisor", 260)) + pan.get());
       double processedTilt =
-          OI.isOutsideRange((OI.getDriverLeftY() / SmartDashboard.getNumber("Servo Divisor", 260)) + tilt.get());
+          isOutsideRange((OI.getServoTiltAxis() / SmartDashboard.getNumber("[ServoTest] Servo Divisor", 260)) + tilt.get());
 
-      SmartDashboard.putNumber("Processed Pan", processedPan);
-      SmartDashboard.putNumber("Processed Tilt", processedTilt);
+      SmartDashboard.putNumber("[ServoTest] Processed Pan", processedPan);
+      SmartDashboard.putNumber("[ServoTest] Processed Tilt", processedTilt);
 
       pan.set(processedPan);
       tilt.set(processedTilt);
@@ -90,5 +91,9 @@ public class RobotServoTest extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+  }
+
+  public static double isOutsideRange(double value) {
+    return Utilities.constrain(value, 0, 1);
   }
 }
