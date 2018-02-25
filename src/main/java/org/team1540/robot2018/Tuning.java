@@ -14,7 +14,7 @@ public class Tuning {
 
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
-  public static boolean isPandora = false;
+  public static boolean isPandora = true;
 
   // INTAKE
   @Tunable("[Intake] Auto Intake Spike Current")
