@@ -12,13 +12,12 @@ import org.team1540.robot2018.Tuning;
 public class Intake extends Subsystem {
   PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-  private ChickenVictor intake1 = new ChickenVictor(RobotMap.INTAKE_1);
-  private ChickenVictor intake2 = new ChickenVictor(RobotMap.INTAKE_2);
-  private double priority = 10;
+  private ChickenVictor intakeMotorA = new ChickenVictor(RobotMap.INTAKE_1);
+  private ChickenVictor intakeMotorB = new ChickenVictor(RobotMap.INTAKE_2);
 
   public Intake() {
-    intake1.setInverted(true);
-    intake2.setInverted(true);
+    intakeMotorA.setInverted(true);
+    intakeMotorB.setInverted(true);
   }
 
   @Override
@@ -31,22 +30,28 @@ public class Intake extends Subsystem {
   }
 
   public double getCurrent() {
-    return (Tuning.isPandora ? pdp.getCurrent(5) : pdp.getCurrent(10) + pdp.getCurrent(11))
-        - Robot.wrist.getCurrent();
+    // TODO: better method of adjusting tuning between robots
+    if (Tuning.isPandora) {
+      return pdp.getCurrent(5)
+          - Robot.wrist.getCurrent();
+    } else {
+      return pdp.getCurrent(10) + pdp.getCurrent(11)
+          - Robot.wrist.getCurrent();
+    }
   }
 
   public void set(double value) {
-    intake1.set(ControlMode.PercentOutput, value);
-    intake2.set(ControlMode.PercentOutput, value);
+    intakeMotorA.set(ControlMode.PercentOutput, value);
+    intakeMotorB.set(ControlMode.PercentOutput, value);
   }
 
-  public void set(double aValue, double bValue) {
-    intake1.set(ControlMode.PercentOutput, aValue);
-    intake2.set(ControlMode.PercentOutput, bValue);
+  public void set(double valueA, double valueB) {
+    intakeMotorA.set(ControlMode.PercentOutput, valueA);
+    intakeMotorB.set(ControlMode.PercentOutput, valueB);
   }
 
   public void stop() {
-    intake1.set(ControlMode.PercentOutput, 0);
-    intake2.set(ControlMode.PercentOutput, 0);
+    intakeMotorA.set(ControlMode.PercentOutput, 0);
+    intakeMotorB.set(ControlMode.PercentOutput, 0);
   }
 }
