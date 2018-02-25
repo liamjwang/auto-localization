@@ -12,6 +12,7 @@ public class HoldWristPosition extends Command {
 
   public HoldWristPosition() {
     requires(Robot.wrist);
+    spikeTimer = new Timer();
   }
 
   @Override

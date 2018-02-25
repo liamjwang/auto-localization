@@ -4,20 +4,27 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
-import org.team1540.robot2018.commands.drivetrain.AutonomousProfiling;
+import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.auto.AutonomousProfiling;
+import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.subsystems.DriveTrain;
 
 public class RobotAutonomousTest extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
 
-  private Command autoCommand = new AutonomousProfiling();
+  private Command autoCommand = new StraightAuto();
 
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
     PowerManager.getInstance().setRunning(false);
+
+    Command zeroElevator = new SimpleCommand("Zero Elevator", Robot.elevator::resetEncoder);
+    zeroElevator.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroElevator);
   }
 
   @Override
@@ -31,6 +38,7 @@ public class RobotAutonomousTest extends IterativeRobot {
 
   @Override
   public void teleopInit() {
+    autoCommand.cancel();
   }
 
   @Override
@@ -54,11 +62,10 @@ public class RobotAutonomousTest extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    RobotAutonomousTest.drivetrain.prepareForMotionProfiling();
-    RobotAutonomousTest.drivetrain.setLeftVelocity(RobotUtil.deadzone((OI.getDriverLeftY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) *
-        1000));
-    RobotAutonomousTest.drivetrain.setRightVelocity(RobotUtil.deadzone((OI.getDriverRightY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) * 1000));
+    Robot.drivetrain.prepareForMotionProfiling();
+    Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
+    Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
   }
 }

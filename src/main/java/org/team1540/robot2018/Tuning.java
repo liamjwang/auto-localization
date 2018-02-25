@@ -1,5 +1,6 @@
 package org.team1540.robot2018;
 
+import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory.Config;
 import org.team1540.base.adjustables.Tunable;
 
@@ -11,7 +12,7 @@ public class Tuning {
   @Tunable("Manual Superstructure Control Deadzone")
   public static double manualControlDeadzone = 0.2;
   @Tunable("Is Pandora")
-  public static boolean isPandora = true;
+  public static boolean isPandora = false;
 
   // Units in inches and seconds
   @Tunable("mpMaxVelocity")
@@ -26,8 +27,12 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_HIGH;
   @Tunable("mpTimeStep")
   public static double timeStep = 0.05;
-  @Tunable("mpDistanceToTravel")
-  public static double distanceToTravel = 78.74;
+  @Tunable("mpDistanceToTravelX")
+  public static double distanceToTravelX = 132;
+  @Tunable("mpDistanceToTravelY")
+  public static double distanceToTravelY = 65;
+  @Tunable("mpDegreesToTurn")
+  public static double degreesToTurn = 0;
 
   @Tunable("lEncoderTicksPerUnit")
   public static double lEncoderTicksPerUnit = 8289/159;

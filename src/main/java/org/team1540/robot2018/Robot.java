@@ -5,11 +5,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.climber.AlignClimber;
-import org.team1540.robot2018.commands.drivetrain.AutonomousProfiling;
+import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -137,10 +138,9 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     Robot.drivetrain.prepareForMotionProfiling();
-    Robot.drivetrain.setLeftVelocity(RobotUtil.deadzone((OI.getDriverLeftY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) *
-        1000));
-    Robot.drivetrain.setRightVelocity(RobotUtil.deadzone((OI.getDriverRightY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()) * 1000));
+    Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
+    Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
   }
 }

@@ -53,7 +53,7 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new JoystickDrive());
+    // setDefaultCommand(new JoystickDrive());
   }
 
   public void setLeft(double value) {
