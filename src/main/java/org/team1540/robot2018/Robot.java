@@ -38,22 +38,21 @@ public class Robot extends IterativeRobot {
 
     // configure controls
 
-    Command intakeCommand = new IntakeSequence();
-    OI.copilotLB.whenPressed(intakeCommand);
-    OI.copilotRB.whenPressed(new EjectCube());
-    OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
+    OI.autoIntakeButton.whenPressed(new IntakeSequence());
+    OI.autoEjectButton.whenPressed(new EjectCube());
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
 
-    OI.copilotA.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
-    OI.copilotB.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutVel), tape));
-    OI.copilotY.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInLowVel), tape));
+    OI.tapeOutButton.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutVel), tape));
+    OI.tapeInSlowButton.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInLowVel), tape));
 
-    OI.copilotDPadRight.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
-    OI.copilotDPadLeft.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
-    OI.copilotDPadUp.whenPressed(new FrontScale());
-    OI.copilotDPadDown.whenPressed(new GroundPosition());
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
+    OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
-    OI.elevatorJoystickActivation.whileHeld(new JoystickElevator());
+    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
 
     /*
     The left trigger changes the mode of the right joystick. Normally (the left trigger is not
@@ -61,23 +60,25 @@ public class Robot extends IterativeRobot {
     trigger is pressed, the JoystickWrist command does not run, while the AlignClimber command does;
     therefore, the right stick controls the climber turret.
 
-    The wristJoystickActivation activates when the joystick is outside of its deadzone, and only
+    The enableWristOrTurretAxisControlButton activates when the joystick is outside of its deadzone, and only
     runs the joystick control commands when the joystick is in fact being moved. This allows other
     commands that require the wrist (or turret) to run when the joystick is not being moved.
     */
-    OI.wristJoystickActivation.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
+    // TODO: Climber turret control only activates when the Y axis is out of its deadzone, but the pan uses the X joystick axis
+    // TODO: This logic depends on a very specific mapping of joysticks, is there a better way of doing this?
+    OI.enableWristOrTurretAxisControlButton.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
       @Override
       protected boolean condition() {
-        return OI.copilotLeftTrigger.get();
+        return OI.changeWristToTurretButton.get();
       }
     });
 
-    OI.copilotRightTriggerSmallPress.whileHeld(new SimpleCommand("Winch In Low", () -> {
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> {
       tape.set(Tuning.tapeInLowVel);
       winch.set(Tuning.winchInLowVel);
     }, tape, winch));
 
-    OI.copilotRightTriggerLargePress.whileHeld(new SimpleCommand("Winch In High", () -> {
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> {
       tape.set(Tuning.tapeInHighVel);
       winch.set(Tuning.winchInHighVel);
     }, tape, winch));

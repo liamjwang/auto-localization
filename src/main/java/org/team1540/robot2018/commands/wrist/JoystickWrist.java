@@ -12,7 +12,7 @@ public class JoystickWrist extends Command {
 
   @Override
   protected void execute() {
-    Robot.wrist.set(OI.getCopilotRightY());
+    Robot.wrist.set(OI.getWristAxis());
   }
 
   @Override

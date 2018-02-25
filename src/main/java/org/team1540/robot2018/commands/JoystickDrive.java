@@ -11,9 +11,9 @@ public class JoystickDrive extends Command {
 
   @Override
   protected void execute() {
-    double triggerValue = OI.getDriverRightTrigger() - OI.getDriverLeftTrigger();
-    Robot.drivetrain.setLeft(-OI.getDriverLeftY() + triggerValue);
-    Robot.drivetrain.setRight(-OI.getDriverRightY() + triggerValue);
+    double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
+    Robot.drivetrain.setLeft(-OI.getTankdriveLeftAxis() + triggerValue);
+    Robot.drivetrain.setRight(-OI.getTankdriveRightAxis() + triggerValue);
   }
 
   @Override
