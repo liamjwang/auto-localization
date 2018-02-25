@@ -7,7 +7,7 @@ import org.team1540.robot2018.Tuning;
 
 public class HoldWristPosition extends Command {
   private double setpoint;
-  private Timer spikeTimer;
+  private Timer spikeTimer = new Timer();
   private boolean timerIsRunning;
 
   public HoldWristPosition() {
