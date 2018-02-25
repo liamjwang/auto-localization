@@ -40,119 +40,137 @@ public class OI {
   private static Joystick driver = new Joystick(0);
   private static Joystick copilot = new Joystick(1);
 
-  public static final int X = 3;
-  public static final int Y = 4;
+  // Buttons
   public static final int A = 1;
   public static final int B = 2;
+  public static final int X = 3;
+  public static final int Y = 4;
 
-  public static final int BACK = 7;
-  public static final int START = 8;
   public static final int LB = 5;
   public static final int RB = 6;
+  public static final int BACK = 7;
+  public static final int START = 8;
 
-  // auto intake
-  static Button copilotLB = new JoystickButton(copilot, LB);
-  // auto eject
-  static Button copilotRB = new JoystickButton(copilot, RB);
+  // Joysticks
+  public static final int LEFT_X = 0;
+  public static final int LEFT_Y = 1;
+  public static final int LEFT_TRIG = 2;
+  public static final int RIGHT_TRIG = 3;
+  public static final int RIGHT_X = 4;
+  public static final int RIGHT_Y = 5;
 
+  // TODO: Remove unused button
   // wrist to forward 45 degrees
-  static Button copilotX = new JoystickButton(copilot, X);
-  // wrist to full down
-  static Button copilotA = new JoystickButton(copilot, A);
-  // wrist to backward 45 degrees
-  static Button copilotY = new JoystickButton(copilot, Y);
-  // wrist to full back
-  static Button copilotB = new JoystickButton(copilot, B);
+  // static Button copilotX = new JoystickButton(copilot, X);
 
-  // to max height + wrist up
-  static Button copilotDPadUp = new DPadButton(copilot, 0, DPadAxis.UP);
-  // to lower scale height
-  static Button copilotDPadDown = new DPadButton(copilot, 0, DPadAxis.DOWN);
-  // to max scale height (no wrist)
-  static Button copilotDPadLeft = new DPadButton(copilot, 0, DPadAxis.LEFT);
-  // to switch height
-  static Button copilotDPadRight = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+  // ELEVATOR
+  public static double getElevatorAxis() {
+    return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisDeadzone);
+  }
 
-  // manual tape out
-  static Button copilotBack = new JoystickButton(copilot, BACK);
-  // manual tape in
-  static Button copilotStart = new JoystickButton(copilot, START);
-
-  static Button elevatorJoystickActivation = new Button() {
+  // TODO: Add a deadzone button to ROOSTER
+  // TODO: Add something (function/interface) for disabling a command when joystick is not being used
+  static Button enableElevatorAxisControlButton = new Button() {
+    // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.joystickWristLiftDeadzone)
+      return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };
 
-  static Button wristJoystickActivation = new Button() {
+  // Move elevator to ground position and run intake until cube is detected
+  static Button autoIntakeButton = new JoystickButton(copilot, LB);
+  // Eject the cube regardless of the position of the intake
+  static Button autoEjectButton = new JoystickButton(copilot, RB);
+
+  // Move elevator to exchange position
+  static Button elevatorExchangeButton = new JoystickButton(copilot, A);
+
+  // Move elevator to full height and TODO: raise wrist slightly
+  static Button elevatorFrontScaleButton = new DPadButton(copilot, 0, DPadAxis.UP);
+  // Move elevator to ground position and TODO: flip wrist out
+  static Button elevatorLowerButton = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  // Move elevator to full height
+  static Button elevatorRaiseButton = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  // Move elevator to switch height
+  static Button elevatorSwitchButton = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+
+  // WRIST
+  public static double getWristAxis() {
+    // Note: Same axis as servo tilt, see button that switches between modes
+    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
+  }
+
+  static Button changeWristToTurretButton = new AxisButton(copilot, Tuning.axisDeadzone, LEFT_TRIG);
+
+  static Button enableWristOrTurretAxisControlButton = new Button() {
+    // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.joystickWristLiftDeadzone)
+      return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone)
           != 0; // zero values mean it's within the deadzone
     }
   };
 
-  static Button copilotLeftTrigger = new AxisButton(copilot, Tuning.joystickDeadzone, 2);
+  // INTAKE
 
-  static Button copilotRightTriggerSmallPress = new Button() {
+  // Stop the intake
+  static Button stopIntakeButton = new JoystickButton(copilot, START);
+
+  // DRIVETRAIN
+  public static double getTankdriveLeftAxis() {
+    return Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.axisDeadzone);
+  }
+
+  public static double getTankdriveRightAxis() {
+    return Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
+  }
+
+  public static double getTankdriveBackwardsAxis() {
+    return Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone);
+  }
+
+  public static double getTankdriveForwardsAxis() {
+    return Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone);
+  }
+
+  // WINCH
+  public static double getWinchInAxis() {
+    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone);
+  }
+
+  // TODO: Add a joystick range funtion to ROOSTER
+  // TODO: Rewrite this logic into a single command
+  static Button winchInSlowButton = new Button() {
+    // Button is pressed when axis is between the deadzone and 0.5
     @Override
     public boolean get() {
-      return getCopilotRightTrigger() > Tuning.joystickDeadzone && getCopilotRightTrigger() < 0.5;
+      return getWinchInAxis() > Tuning.axisDeadzone && getWinchInAxis() < 0.5;
     }
   };
-  static Button copilotRightTriggerLargePress = new AxisButton(copilot, 0.5, 3);
+  static Button winchInFastButton = new Button() {
+    // Button is pressed when axis is greater or equal to 0.5
+    @Override
+    public boolean get() {
+      return getWinchInAxis() >= 0.5;
+    }
+  };
 
-  public static double getDriverLeftX() {
-    return Utilities.processDeadzone(driver.getRawAxis(0), Tuning.joystickDeadzone);
+  // SERVO TURRET
+  public static double getServoPanAxis() {
+    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone);
   }
 
-  public static double getCopilotLeftX() {
-    return Utilities.processDeadzone(copilot.getRawAxis(0), Tuning.joystickDeadzone);
+  public static double getServoTiltAxis() {
+    // Note: Same axis as servo tilt, see button that switches between modes
+    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
   }
 
-  public static double getDriverRightX() {
-    return Utilities.processDeadzone(driver.getRawAxis(4), Tuning.joystickDeadzone);
-  }
+  // TAPE MEASURE
 
-  public static double getCopilotRightX() {
-    return Utilities.processDeadzone(copilot.getRawAxis(4), Tuning.joystickDeadzone);
-  }
-
-  public static double getDriverLeftY() {
-    return Utilities.processDeadzone(driver.getRawAxis(1), Tuning.joystickDeadzone);
-  }
-
-  public static double getCopilotLeftY() {
-    return Utilities.processDeadzone(copilot.getRawAxis(1), Tuning.joystickDeadzone);
-  }
-
-  public static double getDriverRightY() {
-    return Utilities.processDeadzone(driver.getRawAxis(5), Tuning.joystickDeadzone);
-  }
-
-  public static double getCopilotRightY() {
-    return Utilities.processDeadzone(copilot.getRawAxis(5), Tuning.joystickDeadzone);
-  }
-
-  public static double getDriverLeftTrigger() {
-    return Utilities.processDeadzone(driver.getRawAxis(2), Tuning.joystickDeadzone);
-  }
-
-  public static double getDriverRightTrigger() {
-    return Utilities.processDeadzone(driver.getRawAxis(3), Tuning.joystickDeadzone);
-  }
-
-  public static double getCopilotLeftTrigger() {
-    return Utilities.processDeadzone(copilot.getRawAxis(2), Tuning.joystickDeadzone);
-  }
-
-  public static double getCopilotRightTrigger() {
-    return Utilities.processDeadzone(copilot.getRawAxis(3), Tuning.joystickDeadzone);
-  }
-
-  public static double isOutsideRange(double value) {
-    return Utilities.constrain(value, 0, 1);
-  }
+  // Retract the tape slowly
+  static Button tapeInSlowButton = new JoystickButton(copilot, Y);
+  // Extend the tape
+  static Button tapeOutButton = new JoystickButton(copilot, B);
 }
