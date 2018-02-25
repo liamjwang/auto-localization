@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
 
-public class JoystickDrive extends Command {
-  public JoystickDrive() {
+public class TankDrive extends Command {
+  public TankDrive() {
     requires(Robot.drivetrain);
   }
 
