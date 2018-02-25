@@ -5,6 +5,7 @@ import org.team1540.base.adjustables.Tunable;
 public class Tuning {
 
   // GENERAL
+  public static double driveForwardTime = 1.4;
   @Tunable("-[General] Dead Zone")
   public static double axisDeadzone = 0.1;
 
@@ -42,6 +43,9 @@ public class Tuning {
 
   @Tunable("[Intake] Eject Speed Motor B")
   public static double ejectSpeedB = -0.5;
+
+  @Tunable("[Intake] Arm Out Sped")
+  public static double intakeArmSpeed = 0.8;
 
 
   // ELEVATOR

@@ -23,8 +23,9 @@ dependencies {
 }
 
 def TEAM = 1540
-//def ROBOT_CLASS = "org.team1540.robot2018.Robot"
-def ROBOT_CLASS = "org.team1540.robot2018.RobotServoTest"
+
+def ROBOT_CLASS = "org.team1540.robot2018.Robot"
+//def ROBOT_CLASS = "org.team1540.robot2018.RobotServoTest"
 
 deploy {
     targets {

@@ -1,12 +1,15 @@
 package org.team1540.robot2018;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.climber.AlignClimber;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
@@ -14,6 +17,7 @@ import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.intake.OpenArms;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -21,26 +25,37 @@ import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
+import org.team1540.robot2018.subsystems.IntakeArms;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
+  public static final IntakeArms intakeArms = new IntakeArms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final ClimberTurret turret = new ClimberTurret();
   public static final ClimberTapeMeasure tape = new ClimberTapeMeasure();
   public static final ClimberWinch winch = new ClimberWinch();
 
+  private SendableChooser<String> side = new SendableChooser<>();
+
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
+    side.addDefault("Left", "L");
+    side.addObject("Right", "R");
+    side.addObject("None", "X");
+
+    SmartDashboard.putData("Robot Position for Auto", side);
 
     // configure controls
 
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
+
+    OI.copilotLB.whileHeld(new OpenArms());
 
     OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
@@ -100,6 +115,9 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    if (side.getSelected().equals(DriverStation.getInstance().getGameSpecificMessage().substring(0, 1))) {
+      new StraightAuto().start();
+    }
   }
 
   @Override
