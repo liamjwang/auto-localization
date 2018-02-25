@@ -5,6 +5,7 @@ import org.team1540.base.adjustables.Tunable;
 public class Tuning {
 
   // GENERAL
+  public static double driveForwardTime = 2.5;
   @Tunable("-[General] Dead Zone")
   public static double joystickDeadzone = 0.1;
 
@@ -13,7 +14,7 @@ public class Tuning {
 
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
-  public static boolean isPandora = true;
+  public static boolean isPandora = false;
 
   // INTAKE
   @Tunable("[Intake] Auto Intake Spike Current")
