@@ -6,10 +6,10 @@ public class Tuning {
 
   // GENERAL
   @Tunable("-[General] Dead Zone")
-  public static double joystickDeadzone = 0.1;
+  public static double axisDeadzone = 0.1;
 
   @Tunable("-[General] Manual Superstructure Control Deadzone") // Deadzone for wrist and lift
-  public static double joystickWristLiftDeadzone = 0.2;
+  public static double axisWristLiftDeadzone = 0.2;
 
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
