@@ -11,16 +11,16 @@ import org.team1540.robot2018.RobotMap;
  * MADE_OF_ALUMINIUM -> IS_WINCH
  */
 public class ClimberWinch extends Subsystem {
-  private ChickenTalon winchA = new ChickenTalon(RobotMap.WINCH_A);
-  private ChickenVictor winchB = new ChickenVictor(RobotMap.WINCH_B);
-  private ChickenVictor winchC = new ChickenVictor(RobotMap.WINCH_C);
-  private ChickenVictor winchD = new ChickenVictor(RobotMap.WINCH_D);
+  private ChickenTalon winchMotorA = new ChickenTalon(RobotMap.WINCH_A);
+  private ChickenVictor winchMotorB = new ChickenVictor(RobotMap.WINCH_B);
+  private ChickenVictor winchMotorC = new ChickenVictor(RobotMap.WINCH_C);
+  private ChickenVictor winchMotorD = new ChickenVictor(RobotMap.WINCH_D);
 
   public ClimberWinch() {
-    winchA.setInverted(false);
-    winchB.setInverted(false);
-    winchC.setInverted(true);
-    winchD.setInverted(true);
+    winchMotorA.setInverted(false);
+    winchMotorB.setInverted(false);
+    winchMotorC.setInverted(true);
+    winchMotorD.setInverted(true);
   }
 
   @Override
@@ -29,10 +29,10 @@ public class ClimberWinch extends Subsystem {
   }
 
   public void set(double throttle) {
-    winchA.set(ControlMode.PercentOutput, throttle);
-    winchB.set(ControlMode.PercentOutput, throttle);
-    winchC.set(ControlMode.PercentOutput, throttle);
-    winchD.set(ControlMode.PercentOutput, throttle);
+    winchMotorA.set(ControlMode.PercentOutput, throttle);
+    winchMotorB.set(ControlMode.PercentOutput, throttle);
+    winchMotorC.set(ControlMode.PercentOutput, throttle);
+    winchMotorD.set(ControlMode.PercentOutput, throttle);
   }
 
   public void stop() {

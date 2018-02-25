@@ -4,16 +4,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
 
-public class JoystickDrive extends Command {
-  public JoystickDrive() {
+public class TankDrive extends Command {
+  public TankDrive() {
     requires(Robot.drivetrain);
   }
 
   @Override
   protected void execute() {
-    double triggerValue = OI.getDriverRightTrigger() - OI.getDriverLeftTrigger();
-    Robot.drivetrain.setLeft(-OI.getDriverLeftY() + triggerValue);
-    Robot.drivetrain.setRight(-OI.getDriverRightY() + triggerValue);
+    double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
+    Robot.drivetrain.setLeft(-OI.getTankdriveLeftAxis() + triggerValue);
+    Robot.drivetrain.setRight(-OI.getTankdriveRightAxis() + triggerValue);
   }
 
   @Override

@@ -10,26 +10,26 @@ import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 
 public class Elevator extends ChickenSubsystem {
 
-  private ChickenTalon talon1 = new ChickenTalon(RobotMap.ELEVATOR_1);
-  private ChickenTalon talon2 = new ChickenTalon(RobotMap.ELEVATOR_2);
+  private ChickenTalon elevatorMotorA = new ChickenTalon(RobotMap.ELEVATOR_A);
+  private ChickenTalon elevatorMotorB = new ChickenTalon(RobotMap.ELEVATOR_B);
 
   public Elevator() {
-    this.add(talon1, talon2);
-    this.setPriority(10);
+    add(elevatorMotorA, elevatorMotorB);
+    setPriority(10);
 
-    talon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    elevatorMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
   public int getError() {
-    return talon1.getClosedLoopError();
+    return elevatorMotorA.getClosedLoopError();
   }
 
   public double getPosition() {
-    return talon1.getSelectedSensorPosition();
+    return elevatorMotorA.getSelectedSensorPosition();
   }
 
   public int getTrajPosition() {
-    return talon1.getActiveTrajectoryPosition();
+    return elevatorMotorA.getActiveTrajectoryPosition();
   }
 
   @Override
@@ -38,37 +38,42 @@ public class Elevator extends ChickenSubsystem {
   }
 
   public void setMotionMagicPosition(double position) {
-    talon1.set(ControlMode.MotionMagic, position);
-    talon2.set(ControlMode.Follower, talon1.getDeviceID());
+    elevatorMotorA.set(ControlMode.MotionMagic, position);
+    elevatorMotorB.set(ControlMode.Follower, elevatorMotorA.getDeviceID());
   }
 
   public void set(double value) {
-    talon1.set(ControlMode.PercentOutput, value);
-    talon2.set(ControlMode.PercentOutput, value);
+    elevatorMotorA.set(ControlMode.PercentOutput, value);
+    elevatorMotorB.set(ControlMode.PercentOutput, value);
   }
 
   public void stop() {
-    talon1.set(ControlMode.PercentOutput, 0);
-    talon2.set(ControlMode.PercentOutput, 0);
+    elevatorMotorA.set(ControlMode.PercentOutput, 0);
+    elevatorMotorB.set(ControlMode.PercentOutput, 0);
   }
 
   public void resetEncoder() {
-    talon1.setSelectedSensorPosition(0);
+    elevatorMotorA.setSelectedSensorPosition(0);
   }
 
   @Override
   public void periodic() {
-    talon1.config_kP(0, Tuning.elevatorP);
-    talon1.config_kI(0, Tuning.elevatorI);
-    talon1.config_kD(0, Tuning.elevatorD);
-    talon1.config_kF(0, talon1.getSelectedSensorVelocity()
-        > 0 ? Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
-    talon1.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
-    talon1.configMotionAcceleration(Tuning.elevatorMaxAccel);
-    talon1.config_IntegralZone(0, Tuning.elevatorIZone);
+    elevatorMotorA.config_kP(0, Tuning.elevatorP);
+    elevatorMotorA.config_kI(0, Tuning.elevatorI);
+    elevatorMotorA.config_kD(0, Tuning.elevatorD);
 
-    talon1.setInverted(true);
-    talon2.setInverted(true);
-    talon1.setSensorPhase(Tuning.isPandora);
+    //
+    elevatorMotorA.config_kF(0, elevatorMotorA.getSelectedSensorVelocity()>0 ?
+        Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
+    elevatorMotorA.config_IntegralZone(0, Tuning.elevatorIZone);
+
+    elevatorMotorA.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
+    elevatorMotorA.configMotionAcceleration(Tuning.elevatorMaxAccel);
+
+    elevatorMotorA.setInverted(true);
+    elevatorMotorB.setInverted(true);
+
+    // TODO: better method of adjusting tuning between robots
+    elevatorMotorA.setSensorPhase(Tuning.isPandora);
   }
 }
