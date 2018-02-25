@@ -8,7 +8,7 @@ import org.team1540.robot2018.commands.intake.AutoIntake;
  */
 public class IntakeSequence extends CommandGroup {
   public IntakeSequence() {
-    // addParallel(new GroundPosition());
+    addSequential(new GroundPosition());
     addSequential(new AutoIntake());
   }
 }
