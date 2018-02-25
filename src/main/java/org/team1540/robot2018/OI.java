@@ -68,7 +68,7 @@ public class OI {
 
   // ELEVATOR
   public static double getElevatorAxis() {
-    return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisDeadzone), 2);
   }
 
   // TODO: Add a deadzone button to ROOSTER
@@ -77,7 +77,7 @@ public class OI {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone)
+      return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone), 2)
           != 0; // zero values mean it's within the deadzone
     }
   };
@@ -102,7 +102,7 @@ public class OI {
   // WRIST
   public static double getWristAxis() {
     // Note: Same axis as servo tilt, see button that switches between modes
-    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
   static Button changeWristToTurretButton = new AxisButton(copilot, Tuning.axisDeadzone, LEFT_TRIG);
@@ -111,7 +111,7 @@ public class OI {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone)
+      return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone), 2)
           != 0; // zero values mean it's within the deadzone
     }
   };
@@ -123,24 +123,24 @@ public class OI {
 
   // DRIVETRAIN
   public static double getTankdriveLeftAxis() {
-    return Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.axisDeadzone), 2);
   }
 
   public static double getTankdriveRightAxis() {
-    return Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
   public static double getTankdriveBackwardsAxis() {
-    return Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone), 2);
   }
 
   public static double getTankdriveForwardsAxis() {
-    return Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
   // WINCH
   public static double getWinchInAxis() {
-    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
   // TODO: Add a joystick range funtion to ROOSTER
@@ -162,12 +162,12 @@ public class OI {
 
   // SERVO TURRET
   public static double getServoPanAxis() {
-    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone), 2);
   }
 
   public static double getServoTiltAxis() {
     // Note: Same axis as servo tilt, see button that switches between modes
-    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone);
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
   // TAPE MEASURE
