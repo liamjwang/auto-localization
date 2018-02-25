@@ -36,6 +36,9 @@ import org.team1540.base.triggers.DPadButton.DPadAxis;
 
 
 public class OI {
+  private static double scale(double input, double pow) {
+    return Math.copySign(Math.pow(Math.abs(input), pow), input);
+  }
 
   private static Joystick driver = new Joystick(0);
   private static Joystick copilot = new Joystick(1);
