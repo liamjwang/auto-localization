@@ -27,7 +27,7 @@ public class Intake extends Subsystem {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Intake Current", getCurrent());
+    SmartDashboard.putNumber("[Intake] getCurrent", getCurrent());
   }
 
   public double getCurrent() {
