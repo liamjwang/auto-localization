@@ -17,6 +17,7 @@ import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.intake.OpenArms;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
 import org.team1540.robot2018.subsystems.ClimberTurret;
@@ -24,11 +25,13 @@ import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
+import org.team1540.robot2018.subsystems.IntakeArms;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
+  public static final IntakeArms intakeArms = new IntakeArms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final ClimberTurret turret = new ClimberTurret();
@@ -52,6 +55,8 @@ public class Robot extends IterativeRobot {
     OI.copilotLB.whenPressed(intakeCommand);
     OI.copilotRB.whenPressed(new EjectCube());
     OI.copilotStart.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
+
+    OI.copilotLB.whileHeld(new OpenArms());
 
     OI.copilotA.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
