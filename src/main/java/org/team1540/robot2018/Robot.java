@@ -28,6 +28,16 @@ import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.IntakeArms;
 import org.team1540.robot2018.subsystems.Wrist;
 
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
@@ -106,6 +116,29 @@ public class Robot extends IterativeRobot {
     Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
+
+    new Thread(() -> {
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
+      camera.setResolution(640, 480);
+
+      CvSink cvSink = CameraServer.getInstance().getVideo();
+      CvSource outputStream = CameraServer.getInstance().putVideo("Camera "+Tuning.camID, 640, 480);
+
+      Mat source = new Mat();
+      Mat output = new Mat();
+
+      while(!Thread.interrupted()) {
+        cvSink.grabFrame(source);
+        //				Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+        Point pt1 = new Point(source.width()/2+Tuning.crosshairsSize, source.height()/2);
+        Point pt2 = new Point(source.width()/2-Tuning.crosshairsSize, source.height()/2);
+        Point pt3 = new Point(source.width()/2, source.height()/2+Tuning.crosshairsSize);
+        Point pt4 = new Point(source.width()/2, source.height()/2-Tuning.crosshairsSize);
+        Imgproc.line(source, pt1, pt2, new Scalar(0,255,0), Tuning.crosshairsThicccness);
+        Imgproc.line(source, pt3, pt4, new Scalar(0,255,0), Tuning.crosshairsThicccness);
+        outputStream.putFrame(source);
+      }
+    }).start();
   }
 
   @Override
