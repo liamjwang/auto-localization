@@ -152,44 +152,12 @@ public class Tuning {
   @Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
-  // TAPE
-  @Tunable("[Tape] In Low Velocity")
-  public static double tapeInLowVel = .5;
-
-  @Tunable("[Tape] In High Velocity")
-  public static double tapeInHighVel = 1;
-
-  @Tunable("[Tape] Out Velocity")
-  public static double tapeOutVel = -.5;
-
   // WINCH
   @Tunable("[Winch] In Low Velocity")
   public static double winchInLowVel = -0.4;
 
   @Tunable("[Winch] In High Velocity")
   public static double winchInHighVel = -1;
-
-  // TURRET
-  @Tunable("[Turret] Joystick Speed Constant")
-  public static double turretJoystickConstant = 0.003846;
-
-  @Tunable("[Turret] Pan Min")
-  public static double turretPanMin = 0.4;
-
-  @Tunable("[Turret] Pan Max")
-  public static double turretPanMax = 0.55;
-
-  @Tunable("[Turret] Tilt Min")
-  public static double turretTiltMin = 0.15;
-
-  @Tunable("[Turret] Tilt Max")
-  public static double turretTiltMax = 0.6;
-
-  @Tunable("[Turret] Initial Pan")
-  public static double turretDefaultPan = 0.46;
-
-  @Tunable("[Turret] Initial Pan")
-  public static double turretDefaultTilt = 0.22;
 
   // DRIVETRAIN
   @Tunable("[Drivetrain] kP")
