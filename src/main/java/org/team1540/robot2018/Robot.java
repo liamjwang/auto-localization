@@ -3,14 +3,12 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.auto.StraightAuto;
-import org.team1540.robot2018.commands.climber.AlignClimber;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -19,8 +17,6 @@ import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.intake.OpenArms;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
-import org.team1540.robot2018.subsystems.ClimberTapeMeasure;
-import org.team1540.robot2018.subsystems.ClimberTurret;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
@@ -44,8 +40,6 @@ public class Robot extends IterativeRobot {
   public static final IntakeArms intakeArms = new IntakeArms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
-  public static final ClimberTurret turret = new ClimberTurret();
-  public static final ClimberTapeMeasure tape = new ClimberTapeMeasure();
   public static final ClimberWinch winch = new ClimberWinch();
 
   private SendableChooser<String> side = new SendableChooser<>();
@@ -69,44 +63,21 @@ public class Robot extends IterativeRobot {
 
     OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
 
-    OI.tapeOutButton.whileHeld(new SimpleCommand("Tape out", () -> tape.set(Tuning.tapeOutVel), tape));
-    OI.tapeInSlowButton.whileHeld(new SimpleCommand("Tape in", () -> tape.set(Tuning.tapeInLowVel), tape));
-
     OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
-
-    /*
-    The left trigger changes the mode of the right joystick. Normally (the left trigger is not
-    pressed) the JoystickWrist command is run and the right stick controls the wrist. When the left
-    trigger is pressed, the JoystickWrist command does not run, while the AlignClimber command does;
-    therefore, the right stick controls the climber turret.
-
-    The enableWristOrTurretAxisControlButton activates when the joystick is outside of its deadzone, and only
-    runs the joystick control commands when the joystick is in fact being moved. This allows other
-    commands that require the wrist (or turret) to run when the joystick is not being moved.
-    */
-    // TODO: Climber turret control only activates when the Y axis is out of its deadzone, but the pan uses the X joystick axis
-    // TODO: This logic depends on a very specific mapping of joysticks, is there a better way of doing this?
-    OI.enableWristOrTurretAxisControlButton.whileHeld(new ConditionalCommand(new AlignClimber(), new JoystickWrist()) {
-      @Override
-      protected boolean condition() {
-        return OI.changeWristToTurretButton.get();
-      }
-    });
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> {
-      tape.set(Tuning.tapeInLowVel);
       winch.set(Tuning.winchInLowVel);
-    }, tape, winch));
+    }, winch));
 
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> {
-      tape.set(Tuning.tapeInHighVel);
       winch.set(Tuning.winchInHighVel);
-    }, tape, winch));
+    }, winch));
 
     // configure SmartDashboard
     Command zeroWrist = new SimpleCommand("[Elevator] Zero Wrist", wrist::resetEncoder);
@@ -143,7 +114,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
-    turret.disableServos();
   }
 
   @Override
@@ -155,8 +125,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
-    turret.enableServos();
-    turret.init();
   }
 
   @Override
