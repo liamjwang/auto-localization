@@ -160,20 +160,4 @@ public class OI {
     }
   };
 
-  // SERVO TURRET
-  public static double getServoPanAxis() {
-    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone), 2);
-  }
-
-  public static double getServoTiltAxis() {
-    // Note: Same axis as servo tilt, see button that switches between modes
-    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
-  }
-
-  // TAPE MEASURE
-
-  // Retract the tape slowly
-  static Button tapeInSlowButton = new JoystickButton(copilot, Y);
-  // Extend the tape
-  static Button tapeOutButton = new JoystickButton(copilot, B);
 }
