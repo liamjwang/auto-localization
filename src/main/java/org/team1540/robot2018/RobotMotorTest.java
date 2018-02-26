@@ -30,8 +30,7 @@ public class RobotMotorTest extends IterativeRobot {
       // Wrist
       new ChickenTalon(7),
 
-      // Climber Tape
-      new ChickenVictor(8),
+      // No 8 (previously climber tape measure)
 
       // Climber Winch
       new ChickenTalon(9),
@@ -46,6 +45,7 @@ public class RobotMotorTest extends IterativeRobot {
       // Intake
       new ChickenVictor(15),
       new ChickenVictor(16),
+
   };
   private SendableChooser<Integer>[] motorChoosers;
   private SendableChooser<Integer>[] joystickChoosers;
