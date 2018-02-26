@@ -105,9 +105,7 @@ public class OI {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
-  static Button changeWristToTurretButton = new AxisButton(copilot, Tuning.axisDeadzone, LEFT_TRIG);
-
-  static Button enableWristOrTurretAxisControlButton = new Button() {
+  static Button enableWristAxisControlButton = new Button() {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
     public boolean get() {

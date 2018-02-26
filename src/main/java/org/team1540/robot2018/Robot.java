@@ -1,11 +1,19 @@
 package org.team1540.robot2018;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.auto.StraightAuto;
@@ -16,6 +24,7 @@ import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.intake.OpenArms;
+import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
@@ -58,6 +67,7 @@ public class Robot extends IterativeRobot {
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> {
       winch.set(Tuning.winchInLowVel);
@@ -75,6 +85,7 @@ public class Robot extends IterativeRobot {
     Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
+
   }
 
   @Override
