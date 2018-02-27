@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.auto.DriveForward;
 import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
@@ -61,6 +62,7 @@ public class Robot extends IterativeRobot {
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
+
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> {
       winch.set(Tuning.winchInLowVel);
     }, winch));
@@ -86,8 +88,12 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    elevator.resetEncoder();
     if (side.getSelected().equals(DriverStation.getInstance().getGameSpecificMessage().substring(0, 1))) {
+      System.out.println("Starting cube auto");
       new StraightAuto().start();
+    } else {
+      new DriveForward(Tuning.driveForwardTime).start();
     }
   }
 
