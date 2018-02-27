@@ -8,14 +8,13 @@ import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling;
-import org.team1540.robot2018.commands.auto.StraightAuto;
+import org.team1540.robot2018.commands.auto.SwitchAuto;
 import org.team1540.robot2018.subsystems.DriveTrain;
 
 public class RobotAutonomousTest extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
 
-  private Command autoCommand = new StraightAuto();
+  private Command autoCommand = new SwitchAuto();
 
   @Override
   public void robotInit() {
