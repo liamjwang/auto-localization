@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
@@ -82,6 +83,7 @@ public class Robot extends IterativeRobot {
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
 
+    SmartDashboard.putData("[Drivetrain] ***** MANUAL DRIVE OVERRIDE *****", new TankDrive());
   }
 
   @Override
