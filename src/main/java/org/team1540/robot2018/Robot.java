@@ -66,13 +66,9 @@ public class Robot extends IterativeRobot {
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
 
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> {
-      winch.set(Tuning.winchInLowVel);
-    }, winch));
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
 
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> {
-      winch.set(Tuning.winchInHighVel);
-    }, winch));
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
 
     // configure SmartDashboard
     Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
