@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.commands.auto.DriveForward;
+import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
@@ -93,7 +93,7 @@ public class Robot extends IterativeRobot {
       System.out.println("Starting cube auto");
       new StraightAuto().start();
     } else {
-      new DriveForward(Tuning.driveForwardTime).start();
+      new DriveBackward(Tuning.driveForwardTime).start();
     }
   }
 

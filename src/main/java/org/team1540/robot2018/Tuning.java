@@ -17,7 +17,7 @@ public class Tuning {
 
   // AUTO
   @Tunable("-[Auto] Drive Forward Time")
-  public static double driveForwardTime = 1.4;
+  public static double driveForwardTime = 5;
 
   // INTAKE
   @Tunable("[Intake] Auto Intake Spike Current")
