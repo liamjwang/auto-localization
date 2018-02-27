@@ -175,22 +175,22 @@ public class Tuning {
   @Tunable("[Drivetrain] I-Zone")
   public static int drivetrainIZone = 100;
 
-  // @Tunable("[Drivetrain] Braking Percent")
-  // public static double drivetrainBrakingPercent = 0.2;
+  @Tunable("[Drivetrain] Braking Percent")
+  public static double drivetrainBrakingPercent = 0.2;
 
-  // @Tunable("[Drivetrain] Brake Override Thresh")
-  // public static double drivetrainBrakeOverrideThreshold = 0.9;
+  @Tunable("[Drivetrain] Brake Override Thresh")
+  public static double drivetrainBrakeOverrideThreshold = 0.9;
 
   @Tunable("[Drivetrain] Ramp Rate")
   public static double drivetrainRampRate = 0.1;
 
-  // @Tunable("[Drivetrain] Velocity")
-  // public static double drivetrainVelocity = 750;
+  @Tunable("[Drivetrain] Velocity")
+  public static double drivetrainVelocity = 750;
 
-  // @Tunable("[Drivetrain] JoystickPower")
-  // public static double drivetrainJoystickPower = 2;
+  @Tunable("[Drivetrain] JoystickPower")
+  public static double drivetrainJoystickPower = 2;
 
-  // @Tunable("[Drivetrain] EncoderTPU")
-  // public static double drivetrainEncoderTPU;
+  @Tunable("[Drivetrain] EncoderTPU")
+  public static double drivetrainEncoderTPU;
 
 }

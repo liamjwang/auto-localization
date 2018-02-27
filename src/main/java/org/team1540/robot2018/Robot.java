@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.adjustables.AdjustableManager;
+import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.StraightAuto;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
+    PowerManager.getInstance().interrupt();
     AdjustableManager.getInstance().add(new Tuning());
     side.addDefault("Left", "L");
     side.addObject("Right", "R");

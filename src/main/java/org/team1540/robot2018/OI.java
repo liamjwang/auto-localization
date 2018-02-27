@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
-import org.team1540.base.triggers.AxisButton;
 import org.team1540.base.triggers.DPadButton;
 import org.team1540.base.triggers.DPadButton.DPadAxis;
 
@@ -40,7 +39,7 @@ public class OI {
     return Math.copySign(Math.pow(Math.abs(input), pow), input);
   }
 
-  private static Joystick driver = new Joystick(0);
+  public static Joystick driver = new Joystick(0);
   private static Joystick copilot = new Joystick(1);
 
   // Buttons
