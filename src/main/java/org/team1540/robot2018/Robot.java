@@ -74,7 +74,7 @@ public class Robot extends IterativeRobot {
     }, winch));
 
     // configure SmartDashboard
-    Command zeroWrist = new SimpleCommand("[Elevator] Zero Wrist", wrist::resetEncoder);
+    Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroWrist);
 
