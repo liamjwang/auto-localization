@@ -19,6 +19,8 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
+    compile pathfinder()
+    compile openrio.powerup.matchData()
     compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
@@ -36,6 +38,7 @@ deploy {
     artifacts {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"
+//            debug = true
         }
     }
 }

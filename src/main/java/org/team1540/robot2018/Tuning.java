@@ -1,5 +1,7 @@
 package org.team1540.robot2018;
 
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory.Config;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -29,6 +31,34 @@ public class Tuning {
   @Tunable("-[Auto] Drive Forward Time")
   public static double driveForwardTime = 5;
 
+  // Units in inches and seconds
+  @Tunable("mpMaxVelocity")
+  public static double maxVelocity = 40;
+  @Tunable("mpMaxAcceleration")
+  public static double maxAcceleration = 40;
+  @Tunable("mpMaxJerk")
+  public static double maxJerk = 2300;
+  @Tunable("mpSecondsFromNeutralToFull")
+  public static double secondsFromNeutralToFull = 0;
+  @Tunable("mpSampleRate")
+  public static int sampleRate = Config.SAMPLES_HIGH;
+  @Tunable("mpTimeStep")
+  public static double timeStep = 0.05;
+  @Tunable("mpDistanceToTravelX")
+  public static double distanceToTravelX = 132;
+  @Tunable("mpDistanceToTravelY")
+  public static double distanceToTravelY = 65;
+  @Tunable("mpDegreesToTurn")
+  public static double degreesToTurn = 0;
+
+  @Tunable("lEncoderTicksPerUnit")
+  public static double lEncoderTicksPerUnit = 8289/159;
+  @Tunable("rEncoderTicksPerUnit")
+  public static double rEncoderTicksPerUnit = 8358/159;
+  @Tunable("wheelbaseWidth")
+  public static double wheelbaseWidth = 25.091;
+  @Tunable("distanceBetweenWheels")
+  public static double distanceBetweenWheels = 11.812;
   // INTAKE
   @Tunable("[Intake] Auto Intake Spike Current")
   public static double intakeSpikeCurrent = 30.0;

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
@@ -47,10 +48,15 @@ public class Robot extends IterativeRobot {
 
   private SendableChooser<String> side = new SendableChooser<>();
 
+  private Command autoCommand = new AutonomousProfiling();
+
   @Override
   public void robotInit() {
     PowerManager.getInstance().interrupt();
     AdjustableManager.getInstance().add(new Tuning());
+    AdjustableManager.getInstance().add(drivetrain);
+    AdjustableManager.getInstance().add(autoCommand);
+    PowerManager.getInstance().setRunning(false);
     side.addDefault("Left", "L");
     side.addObject("Right", "R");
     side.addObject("None", "X");
@@ -128,6 +134,7 @@ public class Robot extends IterativeRobot {
     } else {
       new DriveBackward(Tuning.driveForwardTime).start();
     }
+    // Scheduler.getInstance().add(autoCommand);
   }
 
   @Override
@@ -141,6 +148,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("lVelocity", Robot.drivetrain.getLeftVelocity());
+    SmartDashboard.putNumber("rVelocity", Robot.drivetrain.getRightVelocity());
   }
 
   @Override
@@ -153,5 +162,10 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    Robot.drivetrain.prepareForMotionProfiling();
+    Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
+    Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
+        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
   }
 }
