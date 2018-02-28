@@ -22,6 +22,10 @@ public class IntakeArms extends Subsystem {
     arm2.set(ControlMode.PercentOutput, value);
   }
 
+  public double getCurrent() {
+    return arm1.getOutputCurrent() + arm2.getOutputCurrent();
+  }
+
   @Override
   protected void initDefaultCommand() {
   }
