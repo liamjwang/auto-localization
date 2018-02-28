@@ -15,6 +15,16 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
+  // CAMERA
+  @Tunable("-[Camera] Crosshairs Size")
+  public static int crosshairsSize = 1000;
+
+  @Tunable("-[Camera] Crosshairs Thickness")
+  public static int crosshairsThicccness = 3;
+
+  @Tunable("-[Camera] Camera ID")
+  public static int camID = 0;
+
   // AUTO
   @Tunable("-[Auto] Drive Forward Time")
   public static double driveForwardTime = 5;
