@@ -30,7 +30,7 @@ public class DriveTrain extends ChickenSubsystem {
     left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    left.setSensorPhase(true);
+    left.setSensorPhase(Tuning.isPandora);
 
     for (ChickenTalon talon : lefts) {
       talon.setInverted(false);
