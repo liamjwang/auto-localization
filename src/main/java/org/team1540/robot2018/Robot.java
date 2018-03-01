@@ -140,15 +140,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    Scheduler.getInstance().run();
-
-    // for drive override
-    if (driveMode.getSelected()) {
-      // oh no encoders broke
-      emergencyDriveCommand.start();
-    } else {
-      emergencyDriveCommand.cancel();
-    }
   }
 
   @Override
@@ -161,5 +152,14 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    Scheduler.getInstance().run();
+
+    // for drive override
+    if (driveMode.getSelected()) {
+      // oh no encoders broke
+      emergencyDriveCommand.start();
+    } else {
+      emergencyDriveCommand.cancel();
+    }
   }
 }
