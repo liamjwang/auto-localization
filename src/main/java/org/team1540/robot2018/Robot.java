@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Waypoint;
@@ -56,9 +57,10 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
-    AdjustableManager.getInstance().add(new Tuning());
-    // AdjustableManager.getInstance().add(drivetrain);
+    LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().setRunning(false);
+
+    AdjustableManager.getInstance().add(new Tuning());
 
     autoPosition.addDefault("Middle", "Middle");
     autoPosition.addObject("Left", "Left");
