@@ -1,6 +1,5 @@
 package org.team1540.robot2018;
 
-import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory.Config;
 import org.team1540.base.adjustables.Tunable;
 
