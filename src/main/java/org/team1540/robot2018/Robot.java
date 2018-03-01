@@ -103,13 +103,12 @@ public class Robot extends IterativeRobot {
 
       while(!Thread.interrupted()) {
         cvSink.grabFrame(source);
-        //				Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-        Point pt1 = new Point(source.width()/2+Tuning.crosshairsSize, source.height()/2);
-        Point pt2 = new Point(source.width()/2-Tuning.crosshairsSize, source.height()/2);
-        Point pt3 = new Point(source.width()/2, source.height()/2+Tuning.crosshairsSize);
-        Point pt4 = new Point(source.width()/2, source.height()/2-Tuning.crosshairsSize);
-        Imgproc.line(source, pt1, pt2, new Scalar(0,255,0), Tuning.crosshairsThicccness);
-        Imgproc.line(source, pt3, pt4, new Scalar(0,255,0), Tuning.crosshairsThicccness);
+        // Point pt1 = new Point(source.width()/2+Tuning.crosshairsSize, source.height()/2);
+        // Point pt2 = new Point(source.width()/2-Tuning.crosshairsSize, source.height()/2);
+        // Point pt3 = new Point(source.width()/2, source.height()/2+Tuning.crosshairsSize);
+        // Point pt4 = new Point(source.width()/2, source.height()/2-Tuning.crosshairsSize);
+        // Imgproc.line(source, pt1, pt2, new Scalar(0,255,0), Tuning.crosshairsThicccness);
+        // Imgproc.line(source, pt3, pt4, new Scalar(0,255,0), Tuning.crosshairsThicccness);
         outputStream.putFrame(source);
       }
     }).start();
