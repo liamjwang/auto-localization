@@ -223,13 +223,12 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    //
-    // // for drive override
-    // if (driveMode.getSelected()) {
-    //   // oh no encoders broke
-    //   emergencyDriveCommand.start();
-    // } else {
-    //   emergencyDriveCommand.cancel();
-    // }
+    // for drive override
+    if (driveMode.getSelected()) {
+      // oh no encoders broke
+      emergencyDriveCommand.start();
+    } else {
+      emergencyDriveCommand.cancel();
+    }
   }
 }
