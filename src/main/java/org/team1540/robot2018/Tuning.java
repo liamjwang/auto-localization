@@ -170,6 +170,9 @@ public class Tuning {
   @Tunable("[Wrist] Peak Duration")
   public static int wristPeakDuration;
 
+  @Tunable("[Wrist] Stall Current")
+  public static double wristStallCurrent;
+
   @Tunable("[Wrist] Stop Tolerance")
   public static double wristTolerance = 50;
 

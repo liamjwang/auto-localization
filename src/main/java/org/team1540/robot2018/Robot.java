@@ -31,6 +31,7 @@ import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.intake.OpenArms;
+import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -151,6 +152,7 @@ public class Robot extends IterativeRobot {
                   new Waypoint(0, 0, 0),
                   new Waypoint(134, 0, 0), false))); // go straight
             }
+            addSequential(new CalibrateWrist());
           }
         };
         break;
@@ -172,6 +174,7 @@ public class Robot extends IterativeRobot {
               DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
               addSequential(new DriveBackward(Tuning.stupidDriveTime));
             }
+            addSequential(new CalibrateWrist());
           }
         };
         break;
@@ -185,12 +188,18 @@ public class Robot extends IterativeRobot {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               addSequential(new EjectCube());
             }
+            addSequential(new CalibrateWrist());
           }
         };
         break;
 
       case "Stupid":
-        autoCommand = new DriveBackward(Tuning.stupidDriveTime);
+        autoCommand = new CommandGroup() {
+          {
+            addSequential(new DriveBackward(Tuning.stupidDriveTime));
+            addSequential(new CalibrateWrist());
+          }
+        };
         break;
     }
 

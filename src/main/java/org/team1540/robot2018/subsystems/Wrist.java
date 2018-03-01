@@ -44,6 +44,10 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
+  public void setSensorPosition(int position) {
+    wristMotor.setSelectedSensorPosition(position);
+  }
+
   public void resetEncoder() {
     wristMotor.setSelectedSensorPosition(0);
   }
