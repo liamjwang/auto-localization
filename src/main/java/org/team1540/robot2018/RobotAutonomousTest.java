@@ -62,9 +62,9 @@ public class RobotAutonomousTest extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     Robot.drivetrain.prepareForMotionProfiling();
-    Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
-    Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
+    // Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
+    //     .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
+    // Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
+    //     .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
   }
 }

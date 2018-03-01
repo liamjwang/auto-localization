@@ -20,7 +20,6 @@ import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
 import org.team1540.base.motionprofiling.MotionProfilingProperties;
-import org.team1540.base.motionprofiling.RunMotionProfiles;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
@@ -92,19 +91,19 @@ public class AutonomousProfiling extends Command {
     double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
         (Tuning.distanceBetweenWheels, 2));
 
-    // TODO Yes this is very safe honhonhon
+    // // TODO Yes this is very safe honhonhon
     Trajectory trajectory;
-    try {
-      trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
-              Tuning.maxAcceleration, Tuning.maxJerk),
-          autoTypeChooser.getSelected(), startLocationChooser.getSelected());
-      // TODO exception handling
-    } catch (InvalidPathException e) {
-      e.printStackTrace();
-      return;
-    }
-    // trajectory = generateTestTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep,
-    //     Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk));
+    // try {
+    //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
+    //           Tuning.maxAcceleration, Tuning.maxJerk),
+    //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
+    //   // TODO exception handling
+    // } catch (InvalidPathException e) {
+    //   e.printStackTrace();
+    //   return;
+    // }
+    trajectory = generateTestTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep,
+        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk));
     timeToFinish = trajectory.segments.length * trajectory.segments[0].dt;
 
     TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
@@ -139,7 +138,7 @@ public class AutonomousProfiling extends Command {
   }
 
   public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation
-      startLocation) throws InvalidPathException {
+      startLocation) {
     waypoints.clear();
 
     double xStraight = 130;

@@ -11,6 +11,7 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
+import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.StraightAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
@@ -47,6 +48,7 @@ public class Robot extends IterativeRobot {
   public static final ClimberWinch winch = new ClimberWinch();
 
   private SendableChooser<String> side = new SendableChooser<>();
+  private SendableChooser<Integer> mpAuto = new SendableChooser<>();
 
   private Command autoCommand = new AutonomousProfiling();
 
@@ -54,7 +56,7 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     PowerManager.getInstance().interrupt();
     AdjustableManager.getInstance().add(new Tuning());
-    AdjustableManager.getInstance().add(drivetrain);
+    // AdjustableManager.getInstance().add(drivetrain);
     AdjustableManager.getInstance().add(autoCommand);
     PowerManager.getInstance().setRunning(false);
     side.addDefault("Left", "L");
@@ -127,14 +129,14 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
-    elevator.resetEncoder();
-    if (side.getSelected().equals(DriverStation.getInstance().getGameSpecificMessage().substring(0, 1))) {
-      System.out.println("Starting cube auto");
-      new StraightAuto().start();
-    } else {
-      new DriveBackward(Tuning.driveForwardTime).start();
-    }
-    // Scheduler.getInstance().add(autoCommand);
+    // elevator.resetEncoder();
+    // if (side.getSelected().equals(DriverStation.getInstance().getGameSpecificMessage().substring(0, 1))) {
+    //   System.out.println("Starting cube auto");
+    //   new StraightAuto().start();
+    // } else {
+    //   new DriveBackward(Tuning.driveForwardTime).start();
+    // }
+    Scheduler.getInstance().add(autoCommand);
   }
 
   @Override
@@ -148,8 +150,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("lVelocity", Robot.drivetrain.getLeftVelocity());
-    SmartDashboard.putNumber("rVelocity", Robot.drivetrain.getRightVelocity());
   }
 
   @Override
@@ -162,10 +162,5 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    Robot.drivetrain.prepareForMotionProfiling();
-    Robot.drivetrain.setLeftVelocity(Utilities.processDeadzone((OI.getDriverLeftY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
-    Robot.drivetrain.setRightVelocity(Utilities.processDeadzone((OI.getDriverRightY() + OI
-        .getDriverLeftTrigger() - OI.getDriverRightTrigger()), 0.1) * 1000);
   }
 }

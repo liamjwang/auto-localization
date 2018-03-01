@@ -9,6 +9,8 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.PIDTankDrive;
+import org.team1540.robot2018.commands.TankDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
@@ -55,28 +57,28 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new PidDriveFactory()
-        .setSubsystem(this)
-        .setLeft(left)
-        .setRight(right)
-        .setJoystick(OI.driver)
-        .setLeftAxis(1)
-        .setRightAxis(5)
-        .setForwardTrigger(3)
-        .setBackTrigger(2)
-        .setDeadzone(Tuning.axisDeadzone)
-        .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-        .setInvertLeft(true)
-        .setInvertRight(true)
-        .setInvertLeftBrakeDirection(false)
-        .setInvertRightBrakeDirection(false)
-        .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-        .setBrakingStopZone(Tuning.axisDeadzone)
-        .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-        .setMaxVel(Tuning.drivetrainVelocity)
-        .createPidDrive()
-    );
-    // setDefaultCommand(new TankDrive());
+    // setDefaultCommand(new PidDriveFactory()
+    //     .setSubsystem(this)
+    //     .setLeft(left)
+    //     .setRight(right)
+    //     .setJoystick(OI.driver)
+    //     .setLeftAxis(1)
+    //     .setRightAxis(5)
+    //     .setForwardTrigger(3)
+    //     .setBackTrigger(2)
+    //     .setDeadzone(Tuning.axisDeadzone)
+    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
+    //     .setInvertLeft(true)
+    //     .setInvertRight(true)
+    //     .setInvertLeftBrakeDirection(false)
+    //     .setInvertRightBrakeDirection(false)
+    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
+    //     .setBrakingStopZone(Tuning.axisDeadzone)
+    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
+    //     .setMaxVel(Tuning.drivetrainVelocity)
+    //     .createPidDrive()
+    // );
+    setDefaultCommand(new PIDTankDrive());
   }
 
   public void setLeft(double value) {

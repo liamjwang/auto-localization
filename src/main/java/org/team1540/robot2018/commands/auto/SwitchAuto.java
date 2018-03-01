@@ -7,8 +7,8 @@ import org.team1540.robot2018.commands.intake.EjectCube;
 
 public class SwitchAuto extends CommandGroup {
   public SwitchAuto() {
-    addSequential(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    // addSequential(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
     addSequential(new AutonomousProfiling());
-    addSequential(new EjectCube());
+    // addSequential(new EjectCube());
   }
 }
