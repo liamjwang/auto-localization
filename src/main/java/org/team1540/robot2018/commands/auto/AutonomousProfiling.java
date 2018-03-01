@@ -84,6 +84,7 @@ public class AutonomousProfiling extends Command {
   }
 
   public AutonomousProfiling(TrajectorySegment... segments) {
+    requires(Robot.drivetrain);
     this.segments = segments;
   }
 

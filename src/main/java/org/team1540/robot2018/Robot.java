@@ -52,6 +52,8 @@ public class Robot extends IterativeRobot {
   private SendableChooser<String> autoPosition = new SendableChooser<>();
   private SendableChooser<Boolean> driveMode = new SendableChooser<>();
 
+  private Command autoCommand;
+
   @Override
   public void robotInit() {
     AdjustableManager.getInstance().add(new Tuning());
@@ -62,6 +64,9 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Left", "Left");
     autoPosition.addObject("Right", "Right");
     autoPosition.addObject("Stupid", "Stupid");
+
+    SmartDashboard.putData("Auto mode", autoPosition);
+    SmartDashboard.putData("DT", drivetrain);
 
     driveMode.addDefault("PID Drive", false);
     driveMode.addObject("Manual Override", true);
@@ -130,7 +135,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     switch (autoPosition.getSelected()) {
       case "Left":
-        new CommandGroup() {
+        autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
@@ -143,11 +148,11 @@ public class Robot extends IterativeRobot {
                   new Waypoint(134, 0, 0), false))); // go straight
             }
           }
-        }.start();
+        };
         break;
 
       case "Middle":
-        new CommandGroup() {
+        autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
@@ -164,11 +169,11 @@ public class Robot extends IterativeRobot {
               addSequential(new DriveBackward(Tuning.stupidDriveTime));
             }
           }
-        }.start();
+        };
         break;
 
       case "Right":
-        new CommandGroup() {
+        autoCommand = new CommandGroup() {
           {
             addSequential(new AutonomousProfiling(new TrajectorySegment(
                 new Waypoint(0, 0, 0),
@@ -177,17 +182,22 @@ public class Robot extends IterativeRobot {
               addSequential(new EjectCube());
             }
           }
-        }.start();
+        };
         break;
 
       case "Stupid":
-        new DriveBackward(Tuning.stupidDriveTime).start();
+        autoCommand = new DriveBackward(Tuning.stupidDriveTime);
         break;
     }
+
+    autoCommand.start();
   }
 
   @Override
   public void teleopInit() {
+    if (autoCommand != null) {
+      autoCommand.cancel();
+    }
   }
 
   @Override
@@ -196,6 +206,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
+    Scheduler.getInstance().run();
   }
 
   @Override
@@ -208,14 +219,13 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
-
-    // for drive override
-    if (driveMode.getSelected()) {
-      // oh no encoders broke
-      emergencyDriveCommand.start();
-    } else {
-      emergencyDriveCommand.cancel();
-    }
+    //
+    // // for drive override
+    // if (driveMode.getSelected()) {
+    //   // oh no encoders broke
+    //   emergencyDriveCommand.start();
+    // } else {
+    //   emergencyDriveCommand.cancel();
+    // }
   }
 }
