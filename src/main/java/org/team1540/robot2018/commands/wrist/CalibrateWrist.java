@@ -9,6 +9,11 @@ import org.team1540.robot2018.Tuning;
  */
 public class CalibrateWrist extends Command {
 
+  public CalibrateWrist() {
+    super(Tuning.wristCalibrateTimeout);
+    requires(Robot.wrist);
+  }
+
   @Override
   protected void initialize() {
     System.out.println("Calibrating wrist...");
@@ -24,6 +29,6 @@ public class CalibrateWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Robot.wrist.getCurrent() > Tuning.wristStallCurrent;
+    return Robot.wrist.getCurrent() > Tuning.wristStallCurrent && isTimedOut();
   }
 }

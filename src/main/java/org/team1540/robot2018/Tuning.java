@@ -194,6 +194,9 @@ public class Tuning {
   @Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
+  @Tunable("[Wrist] Min calibration time")
+  public static double wristCalibrateTimeout = 1;
+
   // WINCH
   @Tunable("[Winch] In Low Velocity")
   public static double winchInLowVel = -0.4;
