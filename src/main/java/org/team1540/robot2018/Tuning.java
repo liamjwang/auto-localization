@@ -27,8 +27,8 @@ public class Tuning {
   public static int camID = 0;
 
   // AUTO
-  @Tunable("-[Auto] Drive Forward Time")
-  public static double driveForwardTime = 5;
+  @Tunable("-[Auto] Stupid Drive Time")
+  public static double stupidDriveTime = 5;
 
   // Units in inches and seconds
   @Tunable("mpMaxVelocity")

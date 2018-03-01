@@ -12,6 +12,7 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Config;
 import jaci.pathfinder.Trajectory.FitMethod;
+import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 import java.util.LinkedList;
@@ -27,11 +28,27 @@ public class AutonomousProfiling extends Command {
 
   // TODO Any changes based on the fact that the center of turning isn't in the center?
 
-  private Timer isFinishedRunningTimer = new Timer();
-  private double timeToFinish = 0;
+  private static final double BOT_BUMPER_WIDTH = 3.25;
+  private static final double BOT_LENGTH = 32.625;
+  private static final double BOT_EFFECTIVE_LENGTH = BOT_LENGTH + 2 * BOT_BUMPER_WIDTH;
+  private static final double BOT_SHORT_DISTANCE_TO_TURNING = 27.75;
+  private static final double BOT_WIDTH = 27.75;
+  private static final double BOT_EFFECTIVE_WIDTH = BOT_WIDTH + 2 * BOT_BUMPER_WIDTH;
 
+  // X is the long side of the field, Y is the short side.
+  // All measurements are relative to your alliance wall, since the field is fully symmetrical.
+  private static final double FIELD_EFFECTIVE_LENGTH = 647.125;
+  private static final double FIELD_EFFECTIVE_WIDTH = 324.5;
+  // TODO Better way of storing these measurements
+  private static final double FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER = 12;
+  private static final double FIELD_PORTAL_HEIGHT = 60;
+  private static final double FIELD_STARTING_LINE = 30;
+  private static final double FIELD_SWITCH_MIDDLE_TO_CENTER = 54.53;
+  private static final double FIELD_SWITCH_TO_ALLIANCE_WALL = 151;
+  private static final double FIELD_SWITCH_TO_SIDE_WALLS = 85.75;
   private SendableChooser<AutoType> autoTypeChooser = new SendableChooser<>();
-  private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
+  private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
+  private Timer isFinishedRunningTimer = new Timer();
   // Default command does nothing; this shouldn't ever happen, since it will be set to the real
   // thing during initialization
   private Command runMotionProfiles = new Command() {
@@ -41,28 +58,9 @@ public class AutonomousProfiling extends Command {
       return true;
     }
   };
-
-  private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
-
-  // X is the long side of the field, Y is the short side.
-  // All measurements are relative to your alliance wall, since the field is fully symmetrical.
-
-  private static final double BOT_LENGTH = 32.625;
-  private static final double BOT_WIDTH = 27.75;
-  private static final double BOT_SHORT_DISTANCE_TO_TURNING = 27.75;
-  private static final double BOT_BUMPER_WIDTH = 3.25;
-  private static final double BOT_EFFECTIVE_LENGTH = BOT_LENGTH + 2 * BOT_BUMPER_WIDTH;
-  private static final double BOT_EFFECTIVE_WIDTH = BOT_WIDTH + 2 * BOT_BUMPER_WIDTH;
-  private static final double FIELD_EFFECTIVE_LENGTH = 647.125;
-  private static final double FIELD_EFFECTIVE_WIDTH = 324.5;
-  // TODO Better way of storing these measurements
-  private static final double FIELD_EXCHANGE_NEAR_DISTANCE_FROM_CENTER = 12;
-  private static final double FIELD_PORTAL_HEIGHT = 60;
-  private static final double FIELD_STARTING_LINE = 30;
-  private static final double FIELD_SWITCH_TO_SIDE_WALLS = 85.75;
-  private static final double FIELD_SWITCH_TO_ALLIANCE_WALL = 151;
-  private static final double FIELD_SWITCH_MIDDLE_TO_CENTER = 54.53;
-
+  private TrajectorySegment[] segments;
+  private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
+  private double timeToFinish = 0;
   // TODO Store these profiles instead of generating on the fly
   private List<Waypoint> waypoints = new LinkedList<>();
 
@@ -85,56 +83,16 @@ public class AutonomousProfiling extends Command {
     // AdjustableManager.getInstance().add(this);
   }
 
-  @Override
-  protected void initialize() {
-
-    double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
-        (Tuning.distanceBetweenWheels, 2));
-
-    // // TODO Yes this is very safe honhonhon
-    Trajectory trajectory;
-    // try {
-    //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
-    //           Tuning.maxAcceleration, Tuning.maxJerk),
-    //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
-    //   // TODO exception handling
-    // } catch (InvalidPathException e) {
-    //   e.printStackTrace();
-    //   return;
-    // }
-    trajectory = generateTestTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep,
-        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk));
-    timeToFinish = trajectory.segments.length * trajectory.segments[0].dt;
-
-    TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
-
-    Robot.drivetrain.prepareForMotionProfiling();
-
-    MotionProfilingProperties leftProperties = new MotionProfilingProperties
-        (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
-            .drivetrain::getLeftVelocity,
-            Robot
-            .drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition, modifier
-            .getLeftTrajectory());
-    MotionProfilingProperties rightProperties = new MotionProfilingProperties
-        (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
-            .drivetrain::getRightVelocity,
-            Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition, modifier
-            .getRightTrajectory());
-    isFinishedRunningTimer.reset();
-    Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
-    isFinishedRunningTimer.start();
-  }
-
-  @Override
-  protected void execute() {
-    // Don't need anything AFAIK
+  public AutonomousProfiling(TrajectorySegment... segments) {
+    this.segments = segments;
   }
 
   private Trajectory generateTestTrajectory(Trajectory.Config config) {
-    return Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint
+    return Pathfinder.generate(new Waypoint[]{
+        new Waypoint(0, 0, 0), new Waypoint
         (Tuning.distanceToTravelX, Tuning.distanceToTravelY,
-        Pathfinder.d2r(Tuning.degreesToTurn))}, config);
+            Pathfinder.d2r(Tuning.degreesToTurn))
+    }, config);
   }
 
   public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation
@@ -222,7 +180,85 @@ public class AutonomousProfiling extends Command {
     }
     */
 
-    return Pathfinder.generate(waypoints.toArray(new Waypoint[waypoints.size()]), config);
+    return Pathfinder.generate(waypoints.toArray(new Waypoint[0]), config);
+  }
+
+  @Override
+  protected void initialize() {
+    Robot.drivetrain.zeroEncoders();
+    // FIXME YOU DO NOT PASS IN THE TURNING RADIUS YOU PASS IN THE WHEELBASE WIDTH
+    double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
+        (Tuning.distanceBetweenWheels, 2));
+
+    // // TODO Yes this is very safe honhonhon
+    Trajectory trajectory;
+    // try {
+    //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
+    //           Tuning.maxAcceleration, Tuning.maxJerk),
+    //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
+    //   // TODO exception handling
+    // } catch (InvalidPathException e) {
+    //   e.printStackTrace();
+    //   return;
+    // }
+
+
+    Config config = new Config(fitMethod, Tuning.sampleRate, timeStep,
+        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
+
+    List<Segment> leftSegments = new LinkedList<>();
+    List<Segment> rightSegments = new LinkedList<>();
+
+    timeToFinish = 0;
+    for (TrajectorySegment segment : segments) {
+      Trajectory traj = generateSimpleTrajectory(segment.start, segment.end, config);
+      timeToFinish += traj.segments.length * traj.segments[0].dt;
+
+      TankModifier modifier = new TankModifier(traj).modify(turningRadius);
+      Segment[] left = modifier.getLeftTrajectory().segments;
+      Segment[] right = modifier.getRightTrajectory().segments;
+
+      for (int i = 0; i < modifier.getLeftTrajectory().length(); i++) {
+        Segment leftSegment = (segment.flip ? right : left)[i];
+        Segment rightSegment = (segment.flip ? right : left)[i];
+        if (segment.flip) {
+          leftSegment.position *= -1;
+          rightSegment.position *= -1;
+          leftSegment.velocity *= -1;
+          rightSegment.velocity *= -1;
+        }
+        leftSegments.add(leftSegment);
+        rightSegments.add(rightSegment);
+      }
+    }
+
+
+    MotionProfilingProperties leftProperties = new MotionProfilingProperties
+        (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+            .drivetrain::getLeftVelocity,
+            Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition,
+            new Trajectory(leftSegments.toArray(new Segment[0])));
+    MotionProfilingProperties rightProperties = new MotionProfilingProperties
+        (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+            .drivetrain::getRightVelocity,
+            Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition,
+            new Trajectory(leftSegments.toArray(new Segment[0])));
+    isFinishedRunningTimer.reset();
+    Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
+    isFinishedRunningTimer.start();
+  }
+
+  @Override
+  protected void execute() {
+    // Don't need anything AFAIK
+  }
+
+  private Trajectory generateSimpleTrajectory(Waypoint start, Waypoint end, Config config) {
+    return Pathfinder.generate(new Waypoint[]{start, end}, config);
+  }
+
+  private Waypoint makeTranslatedWaypoint(Waypoint toTranslate, double x, double y, double angle) {
+    return new Waypoint(toTranslate.x + x, toTranslate.y + y, toTranslate.angle + angle);
   }
 
   @Override
@@ -231,10 +267,6 @@ public class AutonomousProfiling extends Command {
     // FIXME doesn't work so have to do dumb timer stuff
     // return runMotionProfiles.isCompleted();
     return isFinishedRunningTimer.get() > timeToFinish;
-  }
-
-  private Waypoint makeTranslatedWaypoint(Waypoint toTranslate, double x, double y, double angle) {
-    return new Waypoint(toTranslate.x + x, toTranslate.y + y, toTranslate.angle + angle);
   }
 
   public enum AutoType {
@@ -282,6 +314,18 @@ public class AutonomousProfiling extends Command {
     @Override
     public Waypoint getLocation() {
       return location;
+    }
+  }
+
+  public static class TrajectorySegment {
+    public Waypoint end;
+    public boolean flip;
+    public Waypoint start;
+
+    public TrajectorySegment(Waypoint start, Waypoint end, boolean flip) {
+      this.end = end;
+      this.flip = flip;
+      this.start = start;
     }
   }
 
