@@ -50,29 +50,39 @@ public class Robot extends IterativeRobot {
   private Command emergencyDriveCommand = new TankDrive();
 
 
-  private SendableChooser<String> autoPosition = new SendableChooser<>();
-  private SendableChooser<Boolean> driveMode = new SendableChooser<>();
+  private SendableChooser<String> autoPosition;
+  private SendableChooser<Boolean> driveMode;
 
   private Command autoCommand;
 
   @Override
   public void robotInit() {
+    // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().setRunning(false);
 
+    // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
-
+    autoPosition = new SendableChooser<>();
     autoPosition.addDefault("Middle", "Middle");
     autoPosition.addObject("Left", "Left");
     autoPosition.addObject("Right", "Right");
     autoPosition.addObject("Stupid", "Stupid");
 
     SmartDashboard.putData("Auto mode", autoPosition);
-    SmartDashboard.putData("DT", drivetrain);
 
+    driveMode = new SendableChooser<>();
     driveMode.addDefault("PID Drive", false);
     driveMode.addObject("Manual Override", true);
     SmartDashboard.putData("[Drivetrain] ***** DRIVE OVERRIDE *****", driveMode);
+
+    Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
+    zeroWrist.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroWrist);
+
+    Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
+    zeroElevator.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroElevator);
 
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
@@ -96,15 +106,7 @@ public class Robot extends IterativeRobot {
 
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
 
-    // configure SmartDashboard
-    Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
-    zeroWrist.setRunWhenDisabled(true);
-    SmartDashboard.putData(zeroWrist);
-
-    Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
-    zeroElevator.setRunWhenDisabled(true);
-    SmartDashboard.putData(zeroElevator);
-
+    // configure camera crosshairs
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
       camera.setResolution(640, 480);
