@@ -57,28 +57,27 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    // setDefaultCommand(new PidDriveFactory()
-    //     .setSubsystem(this)
-    //     .setLeft(left)
-    //     .setRight(right)
-    //     .setJoystick(OI.driver)
-    //     .setLeftAxis(1)
-    //     .setRightAxis(5)
-    //     .setForwardTrigger(3)
-    //     .setBackTrigger(2)
-    //     .setDeadzone(Tuning.axisDeadzone)
-    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-    //     .setInvertLeft(true)
-    //     .setInvertRight(true)
-    //     .setInvertLeftBrakeDirection(false)
-    //     .setInvertRightBrakeDirection(false)
-    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-    //     .setBrakingStopZone(Tuning.axisDeadzone)
-    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-    //     .setMaxVel(Tuning.drivetrainVelocity)
-    //     .createPidDrive()
-    // );
-    setDefaultCommand(new PIDTankDrive());
+    setDefaultCommand(new PidDriveFactory()
+        .setSubsystem(this)
+        .setLeft(left)
+        .setRight(right)
+        .setJoystick(OI.driver)
+        .setLeftAxis(1)
+        .setRightAxis(5)
+        .setForwardTrigger(3)
+        .setBackTrigger(2)
+        .setDeadzone(Tuning.axisDeadzone)
+        .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
+        .setInvertLeft(true)
+        .setInvertRight(true)
+        .setInvertLeftBrakeDirection(false)
+        .setInvertRightBrakeDirection(false)
+        .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
+        .setBrakingStopZone(Tuning.axisDeadzone)
+        .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
+        .setMaxVel(Tuning.drivetrainVelocity)
+        .createPidDrive()
+    );
   }
 
   public void setLeft(double value) {
