@@ -1,11 +1,19 @@
 package org.team1540.robot2018;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
@@ -27,16 +35,6 @@ import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.IntakeArms;
 import org.team1540.robot2018.subsystems.Wrist;
 
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
@@ -45,7 +43,10 @@ public class Robot extends IterativeRobot {
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
 
+  private Command emergencyDriveCommand = new TankDrive();
+
   private SendableChooser<String> side = new SendableChooser<>();
+  private SendableChooser<Boolean> driveMode = new SendableChooser<>();
 
   @Override
   public void robotInit() {
@@ -57,8 +58,11 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putData("Robot Position for Auto", side);
 
-    // configure controls
+    driveMode.addDefault("PID Drive", false);
+    driveMode.addObject("Manual Override", true);
+    SmartDashboard.putData("[Drivetrain] ***** DRIVE OVERRIDE *****", driveMode);
 
+    // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake));
@@ -88,8 +92,6 @@ public class Robot extends IterativeRobot {
     Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
-
-    SmartDashboard.putData("[Drivetrain] ***** MANUAL DRIVE OVERRIDE *****", new TankDrive());
 
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
@@ -141,6 +143,14 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+
+    // for drive override
+    if (driveMode.getSelected()) {
+      // oh no encoders broke
+      emergencyDriveCommand.start();
+    } else {
+      emergencyDriveCommand.cancel();
+    }
   }
 
   @Override
