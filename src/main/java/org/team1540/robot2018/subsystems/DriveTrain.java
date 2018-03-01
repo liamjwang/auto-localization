@@ -9,48 +9,46 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.PIDTankDrive;
-import org.team1540.robot2018.commands.TankDrive;
 
 public class DriveTrain extends ChickenSubsystem {
 
-  private ChickenTalon left = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
-  private ChickenTalon left2 = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
-  private ChickenTalon left3 = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
-  private ChickenTalon[] lefts = new ChickenTalon[]{left, left2, left3};
-  private ChickenTalon right = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
-  private ChickenTalon right2 = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
-  private ChickenTalon right3 = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
-  private ChickenTalon[] rights = new ChickenTalon[]{right, right2, right3};
-  private ChickenTalon[] talons = new ChickenTalon[]{left, left2, left3, right, right2, right3};
-  private ChickenTalon[] masters = new ChickenTalon[]{left, right};
+  private ChickenTalon driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
+  private ChickenTalon driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
+  private ChickenTalon driveLeftMotorC = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
+  private ChickenTalon[] driveLeftMotors = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
+  private ChickenTalon driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
+  private ChickenTalon driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
+  private ChickenTalon driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
+  private ChickenTalon[] driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
+  private ChickenTalon[] driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC, driveRightMotorA, driveRightMotorB, driveRightMotorC};
+  private ChickenTalon[] driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
 
   public DriveTrain() {
-    add(talons);
+    add(driveMotorAll);
     setPriority(10);
 
-    left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    driveLeftMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    driveRightMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    left.setSensorPhase(Tuning.isPandora);
+    driveLeftMotorA.setSensorPhase(Tuning.isPandora);
 
-    for (ChickenTalon talon : lefts) {
+    for (ChickenTalon talon : driveLeftMotors) {
       talon.setInverted(false);
     }
 
-    right.setSensorPhase(true);
+    driveRightMotorA.setSensorPhase(true);
 
-    for (ChickenTalon talon : rights) {
+    for (ChickenTalon talon : driveRightMotors) {
       talon.setInverted(true);
     }
 
-    left2.set(ControlMode.Follower, left.getDeviceID());
-    left3.set(ControlMode.Follower, left.getDeviceID());
+    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
 
-    right2.set(ControlMode.Follower, right.getDeviceID());
-    right3.set(ControlMode.Follower, right.getDeviceID());
+    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
 
-    for (ChickenTalon talon : talons) {
+    for (ChickenTalon talon : driveMotorAll) {
       talon.setBrake(true);
     }
   }
@@ -59,8 +57,8 @@ public class DriveTrain extends ChickenSubsystem {
   public void initDefaultCommand() {
     setDefaultCommand(new PidDriveFactory()
         .setSubsystem(this)
-        .setLeft(left)
-        .setRight(right)
+        .setLeft(driveLeftMotorA)
+        .setRight(driveRightMotorA)
         .setJoystick(OI.driver)
         .setLeftAxis(1)
         .setRightAxis(5)
@@ -81,16 +79,16 @@ public class DriveTrain extends ChickenSubsystem {
   }
 
   public void setLeft(double value) {
-    this.left.set(ControlMode.PercentOutput, value);
+    this.driveLeftMotorA.set(ControlMode.PercentOutput, value);
   }
 
   public void setRight(double value) {
-    this.right.set(ControlMode.PercentOutput, value);
+    this.driveRightMotorA.set(ControlMode.PercentOutput, value);
   }
 
   @Override
   public void periodic() {
-    for (ChickenTalon talon : masters) {
+    for (ChickenTalon talon : driveMotorMasters) {
       talon.config_kP(0, Tuning.drivetrainP);
       talon.config_kI(0, Tuning.drivetrainI);
       talon.config_kD(0, Tuning.drivetrainD);
@@ -98,66 +96,66 @@ public class DriveTrain extends ChickenSubsystem {
       talon.config_IntegralZone(0, Tuning.drivetrainIZone);
     }
 
-    for (ChickenTalon talon : talons) {
+    for (ChickenTalon talon : driveMotorAll) {
       talon.configClosedloopRamp(Tuning.drivetrainRampRate);
       talon.configOpenloopRamp(Tuning.drivetrainRampRate);
     }
   }
 
   public double getLeftPosition() {
-    return left.getSelectedSensorPosition();
+    return driveLeftMotorA.getSelectedSensorPosition();
   }
 
   public double getRightPosition() {
-    return right.getSelectedSensorPosition();
+    return driveRightMotorA.getSelectedSensorPosition();
   }
 
   public double getLeftVelocity() {
-    return left.getSelectedSensorVelocity();
+    return driveLeftMotorA.getSelectedSensorVelocity();
   }
 
   public double getRightVelocity() {
-    return right.getSelectedSensorVelocity();
+    return driveRightMotorA.getSelectedSensorVelocity();
   }
 
   public void setLeftVelocity(double velocity) {
-    left.set(ControlMode.Velocity, velocity);
+    driveLeftMotorA.set(ControlMode.Velocity, velocity);
   }
 
   public void setRightVelocity(double velocity) {
-    right.set(ControlMode.Velocity, velocity);
+    driveRightMotorA.set(ControlMode.Velocity, velocity);
   }
 
   public void prepareForMotionProfiling() {
-    left.setControlMode(ControlMode.Velocity);
-    right.setControlMode(ControlMode.Velocity);
+    driveLeftMotorA.setControlMode(ControlMode.Velocity);
+    driveRightMotorA.setControlMode(ControlMode.Velocity);
 
-    left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    driveLeftMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    driveRightMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    left.setSensorPhase(false);
-    right.setSensorPhase(true);
+    driveLeftMotorA.setSensorPhase(false);
+    driveRightMotorA.setSensorPhase(true);
 
     // This needs to be here, as PIDFiZone values are stored in memory
-    left.config_IntegralZone(left.getDefaultPidIdx(), Tuning.drivetrainIZone);
-    right.config_IntegralZone(right.getDefaultPidIdx(), Tuning.drivetrainIZone);
-    left.config_kP(left.getDefaultPidIdx(), Tuning.drivetrainP);
-    right.config_kP(right.getDefaultPidIdx(), Tuning.drivetrainP);
-    left.config_kI(left.getDefaultPidIdx(), Tuning.drivetrainI);
-    right.config_kI(right.getDefaultPidIdx(), Tuning.drivetrainI);
-    left.config_kD(left.getDefaultPidIdx(), Tuning.drivetrainD);
-    right.config_kD(right.getDefaultPidIdx(), Tuning.drivetrainD);
-    left.config_kF(left.getDefaultPidIdx(), Tuning.drivetrainF);
-    right.config_kF(right.getDefaultPidIdx(), Tuning.drivetrainF);
-    left.configClosedloopRamp(0);
-    left2.configClosedloopRamp(0);
-    left3.configClosedloopRamp(0);
-    right.configClosedloopRamp(0);
-    right2.configClosedloopRamp(0);
-    right3.configClosedloopRamp(0);
+    driveLeftMotorA.config_IntegralZone(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainIZone);
+    driveRightMotorA.config_IntegralZone(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainIZone);
+    driveLeftMotorA.config_kP(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainP);
+    driveRightMotorA.config_kP(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainP);
+    driveLeftMotorA.config_kI(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainI);
+    driveRightMotorA.config_kI(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainI);
+    driveLeftMotorA.config_kD(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainD);
+    driveRightMotorA.config_kD(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainD);
+    driveLeftMotorA.config_kF(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainF);
+    driveRightMotorA.config_kF(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainF);
+    driveLeftMotorA.configClosedloopRamp(0);
+    driveLeftMotorB.configClosedloopRamp(0);
+    driveLeftMotorC.configClosedloopRamp(0);
+    driveRightMotorA.configClosedloopRamp(0);
+    driveRightMotorB.configClosedloopRamp(0);
+    driveRightMotorC.configClosedloopRamp(0);
 
-    left.setSelectedSensorPosition(0);
-    right.setSelectedSensorPosition(0);
+    driveLeftMotorA.setSelectedSensorPosition(0);
+    driveRightMotorA.setSelectedSensorPosition(0);
   }
 
 }
