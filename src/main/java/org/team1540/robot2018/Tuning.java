@@ -63,7 +63,7 @@ public class Tuning {
   public static double intakeSpikeCurrent = 30.0;
 
   @Tunable("[Intake] Auto Intake Speed Motor A")
-  public static double intakeSpeedA = 1;
+  public static double intakeSpeedA = -1;
 
   @Tunable("[Intake] Auto Intake Speed Motor B")
   public static double intakeSpeedB = 0.4;
@@ -87,10 +87,10 @@ public class Tuning {
   public static double ejectSpeedB = 0.5;
 
   @Tunable("[Intake] Arm Out Speed")
-  public static double intakeArmSpeed = 0.8;
+  public static double intakeArmSpeed = 0.5;
 
   @Tunable("Intake Arm Hold Speed")
-  public static double intakeArmHoldSpeed = -0.25;
+  public static double intakeArmHoldSpeed = -0.1;
 
 
   // ELEVATOR
@@ -106,7 +106,7 @@ public class Tuning {
   @Tunable("[Elevator] kF Going Up")
   public static double elevatorFGoingUp = 2.5575;
 
-  @Tunable("[Elevator] kF Going Up")
+  @Tunable("[Elevator] kF Going Down")
   public static double elevatorFGoingDown = 0.75;
 
   @Tunable("[Elevator] I-Zone")
