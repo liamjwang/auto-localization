@@ -82,7 +82,7 @@ public class OI {
   };
 
   // Move elevator to ground position and run intake until cube is detected
-  static Button autoIntakeButton = new JoystickButton(copilot, LB);
+  public static Button autoIntakeButton = new JoystickButton(copilot, LB);
   // Eject the cube regardless of the position of the intake
   static Button autoEjectButton = new JoystickButton(copilot, RB);
 
