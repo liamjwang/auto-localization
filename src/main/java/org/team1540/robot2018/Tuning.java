@@ -14,7 +14,7 @@ public class Tuning {
 
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
-  public static boolean isPandora = true;
+  public static boolean isPandora = false;
 
   // CAMERA
   @Tunable("-[Camera] Crosshairs Size")
@@ -144,6 +144,9 @@ public class Tuning {
 
   @Tunable("[Elevator] Max Elevator Deviation")
   public static double maxElevatorDeviation = 200;
+
+  @Tunable("[Elevator] Down Multiplier")
+  public static double elevatorDownMult = 0.5;
 
   // WRIST
   @Tunable("[Wrist] kP")

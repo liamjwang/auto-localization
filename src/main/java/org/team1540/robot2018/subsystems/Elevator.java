@@ -32,6 +32,10 @@ public class Elevator extends ChickenSubsystem {
     return elevatorMotorA.getActiveTrajectoryPosition();
   }
 
+  public double getVelocity() {
+    return elevatorMotorA.getSelectedSensorVelocity();
+  }
+
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new HoldElevatorPosition());
