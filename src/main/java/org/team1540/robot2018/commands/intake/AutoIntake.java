@@ -32,7 +32,7 @@ public class AutoIntake extends Command {
     if (OI.autoIntakeButton.get()) {
       Robot.intakeArms.set(Tuning.intakeArmSpeed);
     } else {
-      Robot.intakeArms.set(0);
+      Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
     }
   }
 
