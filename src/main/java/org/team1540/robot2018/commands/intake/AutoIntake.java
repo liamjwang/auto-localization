@@ -40,7 +40,6 @@ public class AutoIntake extends Command {
   @Override
   protected void end() {
     // if (!isTimedOut()) {
-    System.out.println("----------------------askdjfjkaskdfjksdf");
     Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
       Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
     // } else {
@@ -53,8 +52,6 @@ public class AutoIntake extends Command {
   protected void interrupted() {
     // Robot.intake.stop();
     // Robot.intakeArms.set(0);
-    System.out.println("----------------------askdjfjkaskdfjksdf");
-
     Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
     Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
   }
