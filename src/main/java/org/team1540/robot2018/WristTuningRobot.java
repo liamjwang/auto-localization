@@ -110,6 +110,10 @@ public class WristTuningRobot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
+    if (chooser.getSelected() == TuningMode.CALIBRATE) {
+      calCmd = new CalibrateWrist();
+      calCmd.start();
+    }
   }
 
   @Override
@@ -134,12 +138,6 @@ public class WristTuningRobot extends IterativeRobot {
       case JOYSTICK:
         calCmd.cancel();
         motor1.set(ControlMode.PercentOutput, joystick.getRawAxis(1));
-        break;
-      case CALIBRATE:
-        if (calCmd == null || !calCmd.isRunning()) {
-          calCmd = new CalibrateWrist();
-          calCmd.start();
-        }
         break;
       case MOT_MAGIC:
         calCmd.cancel();
@@ -169,6 +167,7 @@ public class WristTuningRobot extends IterativeRobot {
       System.out.println(
           "Wrist calibrated. Position before calibration: " + motor1.getSelectedSensorPosition());
       motor1.setSelectedSensorPosition(0);
+      motor1.set(0);
     }
 
     @Override
