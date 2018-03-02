@@ -110,6 +110,6 @@ public class RunMotionProfiles extends Command {
 
   @Override
   protected void end() {
-    System.out.println("---------------------------------");
+    // System.out.println("---------------------------------");
   }
 }
