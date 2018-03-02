@@ -32,6 +32,7 @@ import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
+import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
@@ -95,6 +96,10 @@ public class Robot extends IterativeRobot {
     OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
+
+    OI.wristFwdButton.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
+    OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
+    OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
 
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());

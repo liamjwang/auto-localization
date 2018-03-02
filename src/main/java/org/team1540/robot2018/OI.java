@@ -87,7 +87,7 @@ public class OI {
   static Button autoEjectButton = new JoystickButton(copilot, RB);
 
   // Move elevator to exchange position
-  static Button elevatorExchangeButton = new JoystickButton(copilot, A);
+  static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
   // Move elevator to full height and TODO: raise wrist slightly
   static Button elevatorFrontScaleButton = new DPadButton(copilot, 0, DPadAxis.UP);
@@ -97,6 +97,10 @@ public class OI {
   static Button elevatorRaiseButton = new DPadButton(copilot, 0, DPadAxis.LEFT);
   // Move elevator to switch height
   static Button elevatorSwitchButton = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+
+  static Button wristBackButton = new JoystickButton(copilot, B);
+  static Button wristFwdButton = new JoystickButton(copilot, A);
+  static Button wrist45DegButton = new JoystickButton(copilot, X);
 
   // WRIST
   public static double getWristAxis() {
