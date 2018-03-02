@@ -158,6 +158,7 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Middle":
+        System.out.println("------------------Middle");
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
@@ -180,6 +181,7 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Right":
+        System.out.println("------------------Right");
         autoCommand = new CommandGroup() {
           {
             addSequential(new AutonomousProfiling(new TrajectorySegment(
@@ -194,6 +196,7 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Stupid":
+        System.out.println("------------------Stupid");
         autoCommand = new CommandGroup() {
           {
             addSequential(new DriveBackward(Tuning.stupidDriveTime));
