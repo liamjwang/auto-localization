@@ -81,10 +81,10 @@ public class Tuning {
   public static double ejectTime = 1.0;
 
   @Tunable("[Intake] Eject Speed Motor A")
-  public static double ejectSpeedA = 0.5;
+  public static double ejectSpeedA = 0.8;
 
   @Tunable("[Intake] Eject Speed Motor B")
-  public static double ejectSpeedB = 0.5;
+  public static double ejectSpeedB = 0.8;
 
   @Tunable("[Intake] Arm Out Speed")
   public static double intakeArmSpeed = 0.5;
