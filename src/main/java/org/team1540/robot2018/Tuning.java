@@ -66,7 +66,7 @@ public class Tuning {
   public static double intakeSpeedA = -1;
 
   @Tunable("[Intake] Auto Intake Speed Motor B")
-  public static double intakeSpeedB = 0.4;
+  public static double intakeSpeedB = -0.4;
 
   @Tunable("[Intake] Auto Intake Min Time")
   public static double intakeMinTime = 1;
