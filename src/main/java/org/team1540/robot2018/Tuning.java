@@ -104,19 +104,19 @@ public class Tuning {
   public static double elevatorD = 10;
 
   @Tunable("[Elevator] kF Going Up")
-  public static double elevatorFGoingUp = 2.5575;
+  public static double elevatorFGoingUp = 2.046;
 
   @Tunable("[Elevator] kF Going Down")
-  public static double elevatorFGoingDown = 0.75;
+  public static double elevatorFGoingDown = 0.8;
 
   @Tunable("[Elevator] I-Zone")
-  public static int elevatorIZone = 100;
+  public static int elevatorIZone = 150;
 
   @Tunable("[Elevator] Error Tolerance")
   public static double elevatorTolerance = 50;
 
   @Tunable("[Elevator] Motion Max Acceleration")
-  public static int elevatorMaxAccel = 300;
+  public static int elevatorMaxAccel = 750;
 
   @Tunable("[Elevator] Motion Cruise Velocity")
   public static int elevatorCruiseVel = 400;

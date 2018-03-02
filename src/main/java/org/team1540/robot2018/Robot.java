@@ -171,14 +171,14 @@ public class Robot extends IterativeRobot {
               System.out.println("------------------Going for the LEFT");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
-                  new Waypoint(112, -98, 0), false)));
+                  new Waypoint(112, -103, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("------------------Going for the RIGHT");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
-                  new Waypoint(106, 82, 0), false)));
+                  new Waypoint(106, 85, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
