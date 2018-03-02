@@ -171,13 +171,13 @@ public class Tuning {
   public static int wristMaxAccel = 1000;
 
   @Tunable("[Wrist] Peak Current Limit")
-  public static int wristCurrentLimit;
+  public static int wristCurrentLimit = 30;
 
   @Tunable("[Wrist] Peak Duration")
-  public static int wristPeakDuration;
+  public static int wristPeakDuration = 1;
 
   @Tunable("[Wrist] Stall Current")
-  public static double wristStallCurrent;
+  public static double wristStallCurrent = 30;
 
   @Tunable("[Wrist] Stop Tolerance")
   public static double wristTolerance = 50;

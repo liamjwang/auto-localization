@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     // disable unused things
     LiveWindow.disableAllTelemetry();
-    PowerManager.getInstance().setRunning(false);
+    PowerManager.getInstance().interrupt();
 
     // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
@@ -137,9 +137,11 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     switch (autoPosition.getSelected()) {
       case "Left":
+        System.out.println("------------------Left");
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+              System.out.println("------------------Going for the switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(120, 50, 0), false)));
@@ -159,11 +161,13 @@ public class Robot extends IterativeRobot {
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+              System.out.println("------------------Going for the LEFT");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(112, -98, 0), false)));
               addSequential(new EjectCube());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              System.out.println("------------------Going for the RIGHT");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(106, 82, 0), false)));
@@ -185,6 +189,7 @@ public class Robot extends IterativeRobot {
                 new Waypoint(0, 0, 0),
                 new Waypoint(134, 0, 0), false)));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              System.out.println("------------------Going for the RIGHT");
               addSequential(new EjectCube());
             }
             addSequential(new CalibrateWrist());
