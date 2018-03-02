@@ -51,6 +51,19 @@ public class DriveTrain extends ChickenSubsystem {
     for (ChickenTalon talon : driveMotorAll) {
       talon.setBrake(true);
     }
+
+    for (ChickenTalon talon : driveMotorMasters) {
+      talon.config_kP(0, Tuning.drivetrainP);
+      talon.config_kI(0, Tuning.drivetrainI);
+      talon.config_kD(0, Tuning.drivetrainD);
+      talon.config_kF(0, Tuning.drivetrainF);
+      talon.config_IntegralZone(0, Tuning.drivetrainIZone);
+    }
+
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.configClosedloopRamp(Tuning.drivetrainRampRate);
+      talon.configOpenloopRamp(Tuning.drivetrainRampRate);
+    }
   }
 
   @Override
@@ -88,18 +101,7 @@ public class DriveTrain extends ChickenSubsystem {
 
   @Override
   public void periodic() {
-    for (ChickenTalon talon : driveMotorMasters) {
-      talon.config_kP(0, Tuning.drivetrainP);
-      talon.config_kI(0, Tuning.drivetrainI);
-      talon.config_kD(0, Tuning.drivetrainD);
-      talon.config_kF(0, Tuning.drivetrainF);
-      talon.config_IntegralZone(0, Tuning.drivetrainIZone);
-    }
 
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.configClosedloopRamp(Tuning.drivetrainRampRate);
-      talon.configOpenloopRamp(Tuning.drivetrainRampRate);
-    }
   }
 
   public double getLeftPosition() {

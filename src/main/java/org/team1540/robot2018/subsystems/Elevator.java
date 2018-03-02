@@ -17,6 +17,23 @@ public class Elevator extends ChickenSubsystem {
     add(elevatorMotorA, elevatorMotorB);
     setPriority(10);
 
+    elevatorMotorA.config_kP(0, Tuning.elevatorP);
+    elevatorMotorA.config_kI(0, Tuning.elevatorI);
+    elevatorMotorA.config_kD(0, Tuning.elevatorD);
+
+    //
+
+    elevatorMotorA.config_IntegralZone(0, Tuning.elevatorIZone);
+
+    elevatorMotorA.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
+    elevatorMotorA.configMotionAcceleration(Tuning.elevatorMaxAccel);
+
+    elevatorMotorA.setInverted(true);
+    elevatorMotorB.setInverted(true);
+
+    // TODO: better method of adjusting tuning between robots
+    elevatorMotorA.setSensorPhase(Tuning.isPandora);
+
     elevatorMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
@@ -62,22 +79,7 @@ public class Elevator extends ChickenSubsystem {
 
   @Override
   public void periodic() {
-    elevatorMotorA.config_kP(0, Tuning.elevatorP);
-    elevatorMotorA.config_kI(0, Tuning.elevatorI);
-    elevatorMotorA.config_kD(0, Tuning.elevatorD);
-
-    //
     elevatorMotorA.config_kF(0, elevatorMotorA.getSelectedSensorVelocity()>0 ?
         Tuning.elevatorFGoingUp : Tuning.elevatorFGoingDown);
-    elevatorMotorA.config_IntegralZone(0, Tuning.elevatorIZone);
-
-    elevatorMotorA.configMotionCruiseVelocity(Tuning.elevatorCruiseVel);
-    elevatorMotorA.configMotionAcceleration(Tuning.elevatorMaxAccel);
-
-    elevatorMotorA.setInverted(true);
-    elevatorMotorB.setInverted(true);
-
-    // TODO: better method of adjusting tuning between robots
-    elevatorMotorA.setSensorPhase(Tuning.isPandora);
   }
 }
