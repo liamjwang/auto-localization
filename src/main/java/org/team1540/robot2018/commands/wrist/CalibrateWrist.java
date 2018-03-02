@@ -25,6 +25,12 @@ public class CalibrateWrist extends Command {
     System.out.println(
         "Wrist calibrated. Position before calibration: " + Robot.wrist.getPosition());
     Robot.wrist.setSensorPosition((int) Tuning.wristOutPosition);
+    Robot.wrist.stop();
+  }
+
+  @Override
+  protected void interrupted() {
+    Robot.wrist.stop();
   }
 
   @Override
