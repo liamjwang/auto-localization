@@ -63,7 +63,7 @@ public class Tuning {
   public static double intakeSpikeCurrent = 30.0;
 
   @Tunable("[Intake] Auto Intake Speed Motor A")
-  public static double intakeSpeedA = -1;
+  public static double intakeSpeedA = 1;
 
   @Tunable("[Intake] Auto Intake Speed Motor B")
   public static double intakeSpeedB = 0.4;
@@ -84,7 +84,7 @@ public class Tuning {
   public static double ejectSpeedA = 0.5;
 
   @Tunable("[Intake] Eject Speed Motor B")
-  public static double ejectSpeedB = -0.5;
+  public static double ejectSpeedB = 0.5;
 
   @Tunable("[Intake] Arm Out Speed")
   public static double intakeArmSpeed = 0.8;
