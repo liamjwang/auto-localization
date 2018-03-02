@@ -29,6 +29,7 @@ import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
+import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
@@ -112,11 +113,11 @@ public class Robot extends IterativeRobot {
     // configure camera crosshairs
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
-      camera.setResolution(640, 480);
+      camera.setResolution(320, 240);
 
       CvSink cvSink = CameraServer.getInstance().getVideo();
       CvSource outputStream = CameraServer.getInstance().putVideo(
-          "Camera " + Tuning.camID, 640, 480);
+          "Camera " + Tuning.camID, 320, 240);
 
       Mat source = new Mat();
       Mat output = new Mat();
@@ -150,7 +151,7 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(120, 50, 0), false)));
-              addSequential(new EjectCube());
+              addSequential(new EjectAuto());
             } else {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
@@ -170,13 +171,13 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(112, -98, 0), false)));
-              addSequential(new EjectCube());
+              addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("------------------Going for the RIGHT");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(106, 82, 0), false)));
-              addSequential(new EjectCube());
+              addSequential(new EjectAuto());
             } else {
               DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
               addSequential(new DriveBackward(Tuning.stupidDriveTime));
@@ -195,7 +196,7 @@ public class Robot extends IterativeRobot {
                 new Waypoint(134, 0, 0), false)));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("------------------Going for the RIGHT");
-              addSequential(new EjectCube());
+              addSequential(new EjectAuto());
             }
             addSequential(new CalibrateWrist());
           }

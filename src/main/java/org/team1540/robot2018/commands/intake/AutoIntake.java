@@ -22,9 +22,10 @@ public class AutoIntake extends Command {
 
   @Override
   protected boolean isFinished() {
-    return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
-        && this.timeSinceInitialized() > Tuning.intakeMinTime)
-        || isTimedOut();
+    // return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
+    //     && this.timeSinceInitialized() > Tuning.intakeMinTime)
+    //     || isTimedOut();
+    return false;
   }
 
   @Override
@@ -38,18 +39,23 @@ public class AutoIntake extends Command {
 
   @Override
   protected void end() {
-    if (!isTimedOut()) {
-      Robot.intake.set(-Tuning.intakeHoldSpeed, Tuning.intakeHoldSpeed);
+    // if (!isTimedOut()) {
+    System.out.println("----------------------askdjfjkaskdfjksdf");
+    Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
       Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
-    } else {
-      Robot.intake.stop();
-      Robot.intakeArms.set(0);
-    }
+    // } else {
+    //   Robot.intake.stop();
+    //   Robot.intakeArms.set(0);
+    // }
   }
 
   @Override
   protected void interrupted() {
-    Robot.intake.stop();
-    Robot.intakeArms.set(0);
+    // Robot.intake.stop();
+    // Robot.intakeArms.set(0);
+    System.out.println("----------------------askdjfjkaskdfjksdf");
+
+    Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
+    Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
   }
 }

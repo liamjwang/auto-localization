@@ -64,28 +64,30 @@ public class AutonomousProfiling extends Command {
   // TODO Store these profiles instead of generating on the fly
   private List<Waypoint> waypoints = new LinkedList<>();
 
-  public AutonomousProfiling() {
-    // TODO Can this be done at declaration?
-    // TODO Is adding stuff to SmartDashboard in a decentralized manner okay?
-    // FIXME null pointers for days
-    for (AutoType type : AutoType.values()) {
-      autoTypeChooser.addObject(type.name(), type);
-    }
-    autoTypeChooser.addDefault("DEFAULT: SWITCH_ALL_SIDES", AutoType.SWITCH_ALL_SIDES);
-    autoTypeChooser.setName("Auto Type");
-    SmartDashboard.putData(autoTypeChooser);
-    for (StartLocation type : StartLocation.values()) {
-      startLocationChooser.addObject(type.name(), type);
-    }
-    startLocationChooser.addDefault("DEFAULT: RIGHT_EDGE", StartLocation.RIGHT_EDGE);
-    startLocationChooser.setName("Start Location");
-    SmartDashboard.putData(startLocationChooser);
-    // AdjustableManager.getInstance().add(this);
-  }
+  // public AutonomousProfiling() {
+  //   // TODO Can this be done at declaration?
+  //   // TODO Is adding stuff to SmartDashboard in a decentralized manner okay?
+  //   // FIXME null pointers for days
+  //   for (AutoType type : AutoType.values()) {
+  //     autoTypeChooser.addObject(type.name(), type);
+  //   }
+  //   autoTypeChooser.addDefault("DEFAULT: SWITCH_ALL_SIDES", AutoType.SWITCH_ALL_SIDES);
+  //   autoTypeChooser.setName("Auto Type");
+  //   SmartDashboard.putData(autoTypeChooser);
+  //   for (StartLocation type : StartLocation.values()) {
+  //     startLocationChooser.addObject(type.name(), type);
+  //   }
+  //   startLocationChooser.addDefault("DEFAULT: RIGHT_EDGE", StartLocation.RIGHT_EDGE);
+  //   startLocationChooser.setName("Start Location");
+  //   SmartDashboard.putData(startLocationChooser);
+  //   // AdjustableManager.getInstance().add(this);
+  // }
 
   public AutonomousProfiling(TrajectorySegment... segments) {
     requires(Robot.drivetrain);
     this.segments = segments;
+    System.out.println(segments[0].start.y + " ---------------- " + segments[0].end.y);
+
   }
 
   private Trajectory generateTestTrajectory(Trajectory.Config config) {
@@ -192,7 +194,7 @@ public class AutonomousProfiling extends Command {
         (Tuning.distanceBetweenWheels, 2));
 
     // // TODO Yes this is very safe honhonhon
-    Trajectory trajectory;
+    // Trajectory trajectory;
     // try {
     //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
     //           Tuning.maxAcceleration, Tuning.maxJerk),
@@ -208,42 +210,45 @@ public class AutonomousProfiling extends Command {
         Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
 
     List<Segment> leftSegments = new LinkedList<>();
-    List<Segment> rightSegments = new LinkedList<>();
+    Trajectory trajectory = generateSimpleTrajectory(segments[0].start, segments[0].end, config);
+    TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
+    Segment[] left = modifier.getLeftTrajectory().segments;
+    Segment[] right = modifier.getRightTrajectory().segments;
 
-    timeToFinish = 0;
-    for (TrajectorySegment segment : segments) {
-      Trajectory traj = generateSimpleTrajectory(segment.start, segment.end, config);
-      timeToFinish += traj.segments.length * traj.segments[0].dt;
-
-      TankModifier modifier = new TankModifier(traj).modify(turningRadius);
-      Segment[] left = modifier.getLeftTrajectory().segments;
-      Segment[] right = modifier.getRightTrajectory().segments;
-
-      for (int i = 0; i < modifier.getLeftTrajectory().length(); i++) {
-        Segment leftSegment = (segment.flip ? right : left)[i];
-        Segment rightSegment = (segment.flip ? right : left)[i];
-        if (segment.flip) {
-          leftSegment.position *= -1;
-          rightSegment.position *= -1;
-          leftSegment.velocity *= -1;
-          rightSegment.velocity *= -1;
-        }
-        leftSegments.add(leftSegment);
-        rightSegments.add(rightSegment);
-      }
-    }
+    timeToFinish = left.length * left[0].dt;
+    // for (TrajectorySegment segment : segments) {
+    //   Trajectory traj = generateSimpleTrajectory(segment.start, segment.end, config);
+    //   timeToFinish += traj.segments.length * traj.segments[0].dt;
+    //
+    //   TankModifier modifier = new TankModifier(traj).modify(turningRadius);
+    //   Segment[] left = modifier.getLeftTrajectory().segments;
+    //   Segment[] right = modifier.getRightTrajectory().segments;
+    //
+    //   for (int i = 0; i < modifier.getLeftTrajectory().length(); i++) {
+    //     Segment leftSegment = (segment.flip ? right : left)[i];
+    //     Segment rightSegment = (segment.flip ? right : left)[i];
+    //     if (segment.flip) {
+    //       leftSegment.position *= -1;
+    //       rightSegment.position *= -1;
+    //       leftSegment.velocity *= -1;
+    //       rightSegment.velocity *= -1;
+    //     }
+    //     leftSegments.add(leftSegment);
+    //     rightSegments.add(rightSegment);
+    //   }
+    // }
 
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties
         (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
             .drivetrain::getLeftVelocity,
             Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition,
-            new Trajectory(leftSegments.toArray(new Segment[0])));
+            modifier.getLeftTrajectory());
     MotionProfilingProperties rightProperties = new MotionProfilingProperties
         (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
             .drivetrain::getRightVelocity,
             Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition,
-            new Trajectory(leftSegments.toArray(new Segment[0])));
+            modifier.getRightTrajectory());
     isFinishedRunningTimer.reset();
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
     isFinishedRunningTimer.start();

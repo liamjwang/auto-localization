@@ -90,7 +90,7 @@ public class Tuning {
   public static double intakeArmSpeed = 0.5;
 
   @Tunable("Intake Arm Hold Speed")
-  public static double intakeArmHoldSpeed = -0.1;
+  public static double intakeArmHoldSpeed = -0.05;
 
 
   // ELEVATOR

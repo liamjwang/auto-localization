@@ -50,7 +50,8 @@ public class Intake extends Subsystem {
   }
 
   public void stop() {
-    intakeMotorA.set(ControlMode.PercentOutput, 0);
-    intakeMotorB.set(ControlMode.PercentOutput, 0);
+    // TODO: Dont do this
+    intakeMotorA.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed); ///////////////////////////////////
+    intakeMotorB.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed);
   }
 }
