@@ -119,7 +119,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
     chooser.addObject("PID Move to Position", TuningMode.PID_MTP);
     chooser.addObject("Motion Profiling", TuningMode.MOT_MAGIC);
 
-    SmartDashboard.putData(chooser);
+    SmartDashboard.putData("Chooser", chooser);
     SmartDashboard.putData("Zero Position", new SimpleCommand("Zero position", () -> motor1.setSelectedSensorPosition(0)));
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
   }
