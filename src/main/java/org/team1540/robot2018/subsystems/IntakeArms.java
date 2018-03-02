@@ -11,8 +11,8 @@ public class IntakeArms extends Subsystem {
   private ChickenTalon arm2 = new ChickenTalon(RobotMap.ARM_B);
 
   public IntakeArms() {
-    arm1.setInverted(true);
-    arm2.setInverted(false);
+    arm1.setInverted(false);
+    arm2.setInverted(true);
     arm1.setBrake(false);
     arm2.setBrake(false);
   }
