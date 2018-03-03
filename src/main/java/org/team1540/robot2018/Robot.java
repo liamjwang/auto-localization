@@ -141,6 +141,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    elevator.resetEncoder();
     switch (autoPosition.getSelected()) {
       case "Left":
         System.out.println("Left Auto Selected");
