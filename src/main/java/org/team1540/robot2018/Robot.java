@@ -26,6 +26,7 @@ import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegmen
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.groups.ClimbSequence;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
@@ -109,6 +110,8 @@ public class Robot extends IterativeRobot {
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
 
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
+
+    // OI.climbSequenceButton.whenPressed(new ClimbSequence());
 
     // configure camera crosshairs
     new Thread(() -> {

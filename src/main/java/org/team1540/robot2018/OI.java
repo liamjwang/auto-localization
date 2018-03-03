@@ -161,4 +161,12 @@ public class OI {
     }
   };
 
+  static Button climbSequenceButton = new Button() {
+
+    @Override
+    public boolean get() {
+      return copilot.getRawAxis(OI.LEFT_TRIG) > 0.8;
+    }
+  };
+
 }

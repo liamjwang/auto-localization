@@ -16,6 +16,9 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
+  @Tunable("[General] Climbing Drive Forward Secs")
+  public static double climbingDriveFwdSecs = 0.2; // TODO: fix it
+
   // CAMERA
   @Tunable("-[Camera] Crosshairs Size")
   public static int crosshairsSize = 1000;
@@ -141,6 +144,9 @@ public class Tuning {
 
   @Tunable("[Elevator] Obstacle Upper Position")
   public static double elevatorObstacleUpperPosition = 3750;
+
+  @Tunable("[Elevator] Rung Position")
+  public static double elevatorRungPosition; //TODO
 
   @Tunable("[Elevator] Max Elevator Deviation")
   public static double maxElevatorDeviation = 200;
