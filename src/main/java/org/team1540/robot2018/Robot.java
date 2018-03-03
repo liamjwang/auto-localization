@@ -143,17 +143,18 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     switch (autoPosition.getSelected()) {
       case "Left":
-        System.out.println("------------------Left");
+        System.out.println("Left Auto Selected");
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("------------------Going for the switch");
+              System.out.println("Going for Left Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(120, 50, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
+              System.out.println("Just Crossing the Line");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(134, 0, 0), false))); // go straight
@@ -164,18 +165,18 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Middle":
-        System.out.println("------------------Middle");
+        System.out.println("Middle Auto Selected");
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("------------------Going for the LEFT");
+              System.out.println("Going for Left Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(112, -103, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("------------------Going for the RIGHT");
+              System.out.println("Going for Right Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(106, 85, 0), false)));
@@ -191,14 +192,14 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Right":
-        System.out.println("------------------Right");
+        System.out.println("Right Auto Selected");
         autoCommand = new CommandGroup() {
           {
             addSequential(new AutonomousProfiling(new TrajectorySegment(
                 new Waypoint(0, 0, 0),
                 new Waypoint(134, 0, 0), false)));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("------------------Going for the RIGHT");
+              System.out.println("Going for Right Switch");
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             }
@@ -208,7 +209,7 @@ public class Robot extends IterativeRobot {
         break;
 
       case "Stupid":
-        System.out.println("------------------Stupid");
+        System.out.println("Stupid Auto Selected");
         autoCommand = new CommandGroup() {
           {
             addSequential(new DriveBackward(Tuning.stupidDriveTime));
