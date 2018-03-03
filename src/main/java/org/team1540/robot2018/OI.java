@@ -102,6 +102,8 @@ public class OI {
   static Button wristFwdButton = new JoystickButton(copilot, A);
   static Button wrist45DegButton = new JoystickButton(copilot, X);
 
+  static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
+
   // WRIST
   public static double getWristAxis() {
     // Note: Same axis as servo tilt, see button that switches between modes

@@ -24,11 +24,13 @@ import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveBackward;
+import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.ClimbSequence;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
+import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectCube;
@@ -105,6 +107,8 @@ public class Robot extends IterativeRobot {
 
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
+
+    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
 
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
