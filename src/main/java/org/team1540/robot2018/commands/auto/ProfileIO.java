@@ -79,6 +79,8 @@ public class ProfileIO {
   static double degrees = Pathfinder.d2r(-15);
   static Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
+  // To execute this locally, you'll need to set up Pathfinder using a local version of the lib
+  // instead of the Gradle version for reasons. Have fun!
   public static void main(String[] args) {
     writeAllTrajectories();
   }
@@ -90,11 +92,15 @@ public class ProfileIO {
   }
 
   public static void writeProfileToCSV(MotionProfilingTypes toWrite) {
-    TankModifier modifier = new TankModifier(Pathfinder.generate(toWrite.waypoints, new Config(fitMethod, Tuning.sampleRate, timeStep,
-        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk))).modify(Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
-        (Tuning.distanceBetweenWheels, 2)));
-    Pathfinder.writeToCSV(new File(Tuning.motionProfileOutPath + toWrite.name() + "_left.csv"), modifier.getLeftTrajectory());
-    Pathfinder.writeToCSV(new File(Tuning.motionProfileOutPath + toWrite.name() + "_right.csv"), modifier.getRightTrajectory());
+    TankModifier modifier = new TankModifier(Pathfinder.generate(toWrite.waypoints, new Config
+        (fitMethod, Tuning.sampleRate, timeStep,
+        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk))).modify(Math.sqrt(
+        Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
+            (Tuning.distanceBetweenWheels, 2)));
+    Pathfinder.writeToCSV(new File(
+        Tuning.motionProfileOutPath + toWrite.name() + "_left.csv"), modifier.getLeftTrajectory());
+    Pathfinder.writeToCSV(new File(Tuning.motionProfileOutPath + toWrite.name()
+        + "_right.csv"), modifier.getRightTrajectory());
   }
 
   public static Trajectory[] loadProfileFromCSV(MotionProfilingTypes type) {
@@ -108,8 +114,10 @@ public class ProfileIO {
   public enum MotionProfilingTypes {
 
     CROSS_LINE(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(130, 0, 0)}),
-    CENTER_TO_SWITCH_LEFT(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(xSide, -ySide, -degrees)}),
-    CENTER_TO_SWITCH_RIGHT(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(xSide, ySide, degrees)});
+    CENTER_TO_SWITCH_LEFT(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(xSide, -ySide,
+        -degrees)}),
+    CENTER_TO_SWITCH_RIGHT(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(xSide, ySide,
+        degrees)});
 
     public final Waypoint[] waypoints;
 
