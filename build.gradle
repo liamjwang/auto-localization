@@ -15,17 +15,24 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+wpi {
+    ctreVersion = "5.2.2.0"
+    wpilibVersion = "2018.3.3"
+}
+
 dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
+    compile pathfinder()
+    compile openrio.powerup.matchData()
     compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
 def TEAM = 1540
 
+//def ROBOT_CLASS = "org.team1540.robot2018.WristTuningRobot"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
-//def ROBOT_CLASS = "org.team1540.robot2018.RobotMotorTest"
 
 deploy {
     targets {
@@ -36,6 +43,7 @@ deploy {
     artifacts {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"
+//            debug = true
         }
     }
 }

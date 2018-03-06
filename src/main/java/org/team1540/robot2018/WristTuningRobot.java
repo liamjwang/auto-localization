@@ -4,24 +4,20 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
-import org.team1540.base.adjustables.Telemetry;
 import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 
-public class ElevatorTuningRobot extends IterativeRobot {
-  @Tunable("Ramp")
-  public double clr = 0;
-  @Tunable("Peak out fwd")
-  public double pof = 1;
-  @Tunable("Peak out reverse")
-  public double por = -1;
+public class WristTuningRobot extends IterativeRobot {
+  @Tunable("Calibration timeout")
+  public double wristCalTimeout = 1;
+  @Tunable("Stall current")
+  public double stallCurrent = 30;
 
   @Tunable("I Zone")
   public int iZone = 0;
@@ -34,26 +30,17 @@ public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("D")
   public double d;
   @Tunable("F")
-  public double fUpper;
-  @Tunable("F Down")
-  public double fDown;
-  @Tunable("PID Mode")
-  public boolean usingPid;
+  public double f;
   @Tunable("PID Target")
   public double setpoint;
 
-  @Tunable("Invert Motor 1")
+  @Tunable("Invert Motor")
   public boolean invert1 = false;
-  @Tunable("Invert Motor 2")
-  public boolean invert2 = false;
-  private ChickenTalon motor1 = new ChickenTalon(14);
-  private ChickenController motor2 = new ChickenTalon(13);
+
+  private ChickenTalon motor1 = new ChickenTalon(7);
 
   @Tunable("Invert Sensor")
   public boolean invertSensor;
-
-  @Tunable("Joystick Multiplier")
-  public double joystickMultiplier = 0;
 
   @Tunable("Motion Magic Max Acceleration")
   public int motionMaxAccel = 0;
@@ -62,6 +49,8 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   private Joystick joystick = new Joystick(0);
 
+  private Command calCmd = new CalibrateWrist();
+
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
@@ -69,58 +58,43 @@ public class ElevatorTuningRobot extends IterativeRobot {
     motor1.setBrake(true);
     motor1.setInverted(invert1);
     motor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    motor1.configClosedloopRamp(clr);
-    motor1.configPeakOutputForward(pof);
-    motor1.configPeakOutputReverse(por);
     motor1.config_kP(0, p);
     motor1.config_kI(0, i);
     motor1.config_kD(0, d);
-    motor1.config_kF(0, motor1.getSelectedSensorVelocity() > 0 ? fDown : fUpper);
+    motor1.config_kF(0, f);
     motor1.setSensorPhase(invertSensor);
     motor1.configMotionAcceleration(motionMaxAccel);
     motor1.configMotionCruiseVelocity(motionMaxVel);
 
     motor1.config_IntegralZone(0, iZone);
 
-    motor1.configClosedloopRamp(clr);
+    motor1.configClosedloopRamp(0);
     motor1.configPeakOutputForward(1);
     motor1.configPeakOutputReverse(-1);
 
-    motor2.set(ControlMode.Follower, motor1.getDeviceID());
-    motor2.setInverted(invert2);
     SmartDashboard.putNumber("Throttle", motor1.getMotorOutputPercent());
     SmartDashboard.putNumber("Current", motor1.getOutputCurrent());
-    SmartDashboard.putNumber("Current 2", motor2.getOutputCurrent());
     SmartDashboard.putNumber("Position", motor1.getSelectedSensorPosition());
     SmartDashboard.putNumber("Velocity", motor1.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Trajectory Position", motor1.getActiveTrajectoryPosition());
     SmartDashboard.putNumber("Trajectory Velocity", motor1.getActiveTrajectoryVelocity());
     SmartDashboard.putNumber("Error", motor1.getClosedLoopError());
-
-    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("Camera", 0);
-    // camera.setResolution(640, 480);
-    // MjpegServer mjpegServer = new MjpegServer("Camera Server", 1182);
-    // mjpegServer.setSource(camera);
   }
-
-  @Telemetry("Joystick Position")
-  public double joystickPosition = 0;
 
   @Override
   public void robotInit() {
-    // zeroing command
     AdjustableManager.getInstance().add(this);
-    joystickPosition = motor1.getSelectedSensorPosition();
-
 
     chooser.addDefault("Joystick", TuningMode.JOYSTICK);
-    chooser.addObject("PID With Setpoint", TuningMode.PID);
-    chooser.addObject("PID With Joystick", TuningMode.PID_JOYSTICK);
-    chooser.addObject("PID Move to Position", TuningMode.PID_MTP);
+    chooser.addObject("Calibration", TuningMode.CALIBRATE);
     chooser.addObject("Motion Profiling", TuningMode.MOT_MAGIC);
 
-    SmartDashboard.putData("Chooser", chooser);
-    SmartDashboard.putData("Zero Position", new SimpleCommand("Zero position", () -> motor1.setSelectedSensorPosition(0)));
+    SmartDashboard.putData("Mode", chooser);
+
+    // zeroing command
+    SimpleCommand zeroCommand = new SimpleCommand("Zero position", () -> motor1.setSelectedSensorPosition(0));
+    zeroCommand.setRunWhenDisabled(true);
+    SmartDashboard.putData("Zero Position", zeroCommand);
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
   }
 
@@ -136,7 +110,10 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
-    joystickPosition = motor1.getSelectedSensorPosition();
+    if (chooser.getSelected() == TuningMode.CALIBRATE) {
+      calCmd = new CalibrateWrist();
+      calCmd.start();
+    }
   }
 
   @Override
@@ -144,7 +121,7 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   }
 
-  private enum TuningMode {JOYSTICK, PID, PID_JOYSTICK, PID_MTP, MOT_MAGIC}
+  private enum TuningMode {JOYSTICK, CALIBRATE, MOT_MAGIC}
 
   @Override
   public void disabledPeriodic() {
@@ -159,28 +136,11 @@ public class ElevatorTuningRobot extends IterativeRobot {
   public void teleopPeriodic() {
     switch (chooser.getSelected()) {
       case JOYSTICK:
+        calCmd.cancel();
         motor1.set(ControlMode.PercentOutput, joystick.getRawAxis(1));
-        joystickPosition = motor1.getSelectedSensorPosition();
-        break;
-      case PID:
-        motor1.set(ControlMode.Position, setpoint);
-        joystickPosition = motor1.getSelectedSensorPosition();
-        break;
-      case PID_JOYSTICK:
-        joystickPosition +=
-            Utilities.processDeadzone(joystick.getRawAxis(1), 0.1) * joystickMultiplier;
-        motor1.set(ControlMode.Position, joystickPosition);
-        break;
-      case PID_MTP:
-        if (Math.abs(setpoint - joystickPosition) > Math.abs(setpoint - joystickMultiplier)) {
-          joystickPosition -= Math.copySign(joystickMultiplier,
-              motor1.getSelectedSensorPosition() - setpoint);
-        } else {
-          joystickPosition = setpoint;
-        }
-        motor1.set(ControlMode.Position, joystickPosition);
         break;
       case MOT_MAGIC:
+        calCmd.cancel();
         motor1.set(ControlMode.MotionMagic, setpoint);
     }
   }
@@ -188,5 +148,31 @@ public class ElevatorTuningRobot extends IterativeRobot {
   @Override
   public void testPeriodic() {
 
+  }
+
+  public class CalibrateWrist extends Command {
+
+    public CalibrateWrist() {
+      super(wristCalTimeout);
+    }
+
+    @Override
+    protected void initialize() {
+      System.out.println("Calibrating wrist...");
+      motor1.set(ControlMode.PercentOutput, 1);
+    }
+
+    @Override
+    protected void end() {
+      System.out.println(
+          "Wrist calibrated. Position before calibration: " + motor1.getSelectedSensorPosition());
+      motor1.setSelectedSensorPosition(0);
+      motor1.set(0);
+    }
+
+    @Override
+    protected boolean isFinished() {
+      return motor1.getOutputCurrent() > stallCurrent && isTimedOut();
+    }
   }
 }

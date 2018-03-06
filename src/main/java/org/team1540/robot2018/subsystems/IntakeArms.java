@@ -11,8 +11,8 @@ public class IntakeArms extends Subsystem {
   private ChickenTalon arm2 = new ChickenTalon(RobotMap.ARM_B);
 
   public IntakeArms() {
-    arm1.setInverted(true);
-    arm2.setInverted(false);
+    arm1.setInverted(false);
+    arm2.setInverted(true);
     arm1.setBrake(false);
     arm2.setBrake(false);
   }
@@ -20,6 +20,10 @@ public class IntakeArms extends Subsystem {
   public void set(double value) {
     arm1.set(ControlMode.PercentOutput, value);
     arm2.set(ControlMode.PercentOutput, value);
+  }
+
+  public double getCurrent() {
+    return arm1.getOutputCurrent() + arm2.getOutputCurrent();
   }
 
   @Override

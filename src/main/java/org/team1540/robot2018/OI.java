@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
-import org.team1540.base.triggers.AxisButton;
 import org.team1540.base.triggers.DPadButton;
 import org.team1540.base.triggers.DPadButton.DPadAxis;
 
@@ -40,7 +39,7 @@ public class OI {
     return Math.copySign(Math.pow(Math.abs(input), pow), input);
   }
 
-  private static Joystick driver = new Joystick(0);
+  public static Joystick driver = new Joystick(0);
   private static Joystick copilot = new Joystick(1);
 
   // Buttons
@@ -83,12 +82,12 @@ public class OI {
   };
 
   // Move elevator to ground position and run intake until cube is detected
-  static Button autoIntakeButton = new JoystickButton(copilot, LB);
+  public static Button autoIntakeButton = new JoystickButton(copilot, LB);
   // Eject the cube regardless of the position of the intake
   static Button autoEjectButton = new JoystickButton(copilot, RB);
 
   // Move elevator to exchange position
-  static Button elevatorExchangeButton = new JoystickButton(copilot, A);
+  static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
   // Move elevator to full height and TODO: raise wrist slightly
   static Button elevatorFrontScaleButton = new DPadButton(copilot, 0, DPadAxis.UP);
@@ -98,6 +97,12 @@ public class OI {
   static Button elevatorRaiseButton = new DPadButton(copilot, 0, DPadAxis.LEFT);
   // Move elevator to switch height
   static Button elevatorSwitchButton = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+
+  static Button wristBackButton = new JoystickButton(copilot, B);
+  static Button wristFwdButton = new JoystickButton(copilot, A);
+  static Button wrist45DegButton = new JoystickButton(copilot, X);
+
+  static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
 
   // WRIST
   public static double getWristAxis() {
@@ -155,6 +160,14 @@ public class OI {
     @Override
     public boolean get() {
       return getWinchInAxis() >= 0.5;
+    }
+  };
+
+  static Button climbSequenceButton = new Button() {
+
+    @Override
+    public boolean get() {
+      return copilot.getRawAxis(OI.LEFT_TRIG) > 0.8;
     }
   };
 
