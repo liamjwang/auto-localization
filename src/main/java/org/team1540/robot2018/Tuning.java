@@ -251,9 +251,9 @@ public class Tuning {
   public static double drivetrainEncoderTPU;
 
   @Tunable("Motion Profiling In Path")
-  public static String motionProfileInPath = "";
+  public static String motionProfileInPath = "/home/lvuser/profiles/";
 
   @Tunable("Motion Profiling Out Path")
-  public static String motionProfileOutPath = "";
+  public static String motionProfileOutPath = "profiles/";
 
 }
