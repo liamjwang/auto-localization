@@ -1,0 +1,1 @@
+Store CSV files from Pathfinder.writeToCSV() here as "<name of profile>_left.csv" and "<name of profile>_right.csv", and store binary files from Pathfinder.writeToFile() here as "<name of profile>_left.profile" and "<name of profile>_right.profile". They will be automatically copied to the /home/lvuser/profiles directory on code deployment.

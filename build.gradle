@@ -45,6 +45,11 @@ deploy {
             targets << "roborio"
 //            debug = true
         }
+        fileCollectionArtifact('motionProfiles') {
+            targets << 'roborio'
+            files = fileTree(dir: 'profiles')
+            directory = "/home/lvuser/profiles"
+        }
     }
 }
 
