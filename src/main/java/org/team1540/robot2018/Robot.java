@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,16 +20,15 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.auto.RunProfile;
+import org.team1540.robot2018.commands.auto.sequences.NoCubeProfileAuto;
+import org.team1540.robot2018.commands.auto.sequences.SingleCubeAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
-import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectCube;
-import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -54,7 +52,7 @@ public class Robot extends IterativeRobot {
   private SendableChooser<AutoPosition> autoPosition;
   private SendableChooser<Boolean> driveMode;
 
-  private Command autoCommand;
+  private AutoSequence autoCommand;
 
   @Override
   public void robotInit() {
@@ -162,24 +160,24 @@ public class Robot extends IterativeRobot {
         System.out.println("Left Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
           System.out.println("Going for Left Switch");
-          autoCommand = AutoPath.LEFT_TO_LEFT_SWICH.commands;
+          autoCommand = AutoSequence.LEFT_TO_LEFT_SWICH;
         } else {
           System.out.println("Just Crossing the Line");
-          autoCommand = AutoPath.CROSS_LINE.commands;
+          autoCommand = AutoSequence.CROSS_LINE;
         }
         break;
       case MIDDLE:
         System.out.println("Middle Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
           System.out.println("Going for Left Switch");
-          autoCommand = AutoPath.MIDDLE_TO_LEFT_SWITCH.commands;
+          autoCommand = AutoSequence.MIDDLE_TO_LEFT_SWITCH;
         } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for Right Switch");
-          autoCommand = AutoPath.MIDDLE_TO_RIGHT_SWITCH.commands;
+          autoCommand = AutoSequence.MIDDLE_TO_RIGHT_SWITCH;
         } else {
           DriverStation.reportError("Match data could not get owned switch side, reverting to "
               + "base auto", false);
-          autoCommand = AutoPath.STUPID.commands;
+          autoCommand = AutoSequence.STUPID;
         }
         break;
 
@@ -187,25 +185,26 @@ public class Robot extends IterativeRobot {
         System.out.println("Right Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for Right Switch");
-          autoCommand = AutoPath.RIGHT_TO_RIGHT_SWITCH.commands;
+          autoCommand = AutoSequence.RIGHT_TO_RIGHT_SWITCH;
         } else {
-          System.out.println("Doing nothing");
+          System.out.println("Just Crossing the Line");
+          autoCommand = AutoSequence.CROSS_LINE;
         }
         break;
 
       case STUPID:
         System.out.println("Stupid Auto Selected");
-        autoCommand = AutoPath.STUPID.commands;
+        autoCommand = AutoSequence.STUPID;
         break;
     }
 
-    autoCommand.start();
+    autoCommand.command.start();
   }
 
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
-      autoCommand.cancel();
+      autoCommand.command.cancel();
     }
   }
 
@@ -241,37 +240,19 @@ public class Robot extends IterativeRobot {
     CROSS_LINE, LEFT, MIDDLE, RIGHT, STUPID
   }
 
-  public enum AutoPath {
+  public enum AutoSequence {
 
-    CROSS_LINE(new RunProfile("go_straight", false)),
-    LEFT_TO_LEFT_SWICH(new RunProfile("left_to_left_switch", false)),
-    MIDDLE_TO_LEFT_SWITCH(new RunProfile("middle_to_left_switch", false)),
-    MIDDLE_TO_RIGHT_SWITCH(new RunProfile("middle_to_right_switch", false)),
-    RIGHT_TO_RIGHT_SWITCH(new RunProfile("right_to_right_switch", false)),
+    CROSS_LINE(new NoCubeProfileAuto("go_straight")),
+    LEFT_TO_LEFT_SWICH(new SingleCubeAuto("left_to_left_switch")),
+    MIDDLE_TO_LEFT_SWITCH(new SingleCubeAuto("middle_to_left_switch")),
+    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeAuto("middle_to_right_switch")),
+    RIGHT_TO_RIGHT_SWITCH(new SingleCubeAuto("right_to_right_switch")),
     STUPID(new DriveBackward(Tuning.stupidDriveTime));
 
-    public final CommandGroup commands;
+    public final Command command;
 
-    AutoPath(RunProfile path) {
-      this.commands = new CommandGroup() {
-        {
-          addSequential(path);
-          addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-          addSequential(new EjectAuto());
-          addSequential(new CalibrateWrist());
-        }
-      };
-    }
-
-    AutoPath(Command... sequentialDrivingCommands) {
-      this.commands = new CommandGroup() {
-        {
-          for (Command command : sequentialDrivingCommands) {
-            addSequential(command);
-          }
-          addSequential(new CalibrateWrist());
-        }
-      };
+    AutoSequence(Command autoCommand) {
+      this.command = autoCommand;
     }
   }
 }
