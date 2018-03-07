@@ -2,6 +2,7 @@ package org.team1540.robot2018;
 
 import jaci.pathfinder.Trajectory.Config;
 import org.team1540.base.adjustables.Tunable;
+import org.team1540.robot2018.Robot.AutoPosition;
 
 public class Tuning {
 
@@ -255,5 +256,7 @@ public class Tuning {
 
   @Tunable("Motion Profiling Out Path")
   public static String motionProfileOutPath = "profiles/";
+
+  public static AutoPosition defaultAutoPosition = AutoPosition.MIDDLE;
 
 }
