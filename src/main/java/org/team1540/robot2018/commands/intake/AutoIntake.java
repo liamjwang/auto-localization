@@ -22,10 +22,10 @@ public class AutoIntake extends Command {
 
   @Override
   protected boolean isFinished() {
-    // return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
-    //     && this.timeSinceInitialized() > Tuning.intakeMinTime)
-    //     || isTimedOut();
-    return false;
+    return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
+        && this.timeSinceInitialized() > Tuning.intakeMinTime)
+        || isTimedOut();
+    // return false;
   }
 
   @Override

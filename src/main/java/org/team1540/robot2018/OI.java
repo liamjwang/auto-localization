@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import javax.rmi.CORBA.Util;
 import org.team1540.base.Utilities;
 import org.team1540.base.triggers.DPadButton;
 import org.team1540.base.triggers.DPadButton.DPadAxis;
@@ -64,6 +65,11 @@ public class OI {
   // TODO: Remove unused button
   // wrist to forward 45 degrees
   // static Button copilotX = new JoystickButton(copilot, X);
+
+  // INTAKE
+  public static double getEjectAxis() {
+    return 1 - Utilities.processDeadzone(copilot.getRawAxis(OI.LEFT_TRIG), Tuning.axisDeadzone);
+  }
 
   // ELEVATOR
   public static double getElevatorAxis() {
