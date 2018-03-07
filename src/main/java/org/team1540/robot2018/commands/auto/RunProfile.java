@@ -1,6 +1,6 @@
 package org.team1540.robot2018.commands.auto;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import java.io.File;
@@ -16,12 +16,12 @@ import org.team1540.robot2018.Tuning;
  * NAME_right.csv. If set to load binary files, the command will search for two profiles (stored by
  * {@link Pathfinder#writeToFile(File, Trajectory)} named NAME_left.profile and NAME_right.profile.
  */
-public class RunProfile extends TimedCommand {
+public class RunProfile extends Command {
 
   private final RunMotionProfiles profileCommand;
 
   public RunProfile(String name, boolean loadBinary) {
-    super("Run profile " + name, 0); // timeout will be set later
+    super("Run profile " + name);
     // load the left and right profiles
     Trajectory left, right;
     if (loadBinary) {
@@ -31,12 +31,6 @@ public class RunProfile extends TimedCommand {
       left = Pathfinder.readFromCSV(new File("/home/lvuser/profiles/" + name + "_left.csv"));
       right = Pathfinder.readFromCSV(new File("/home/lvuser/profiles/" + name + "_right.csv"));
     }
-
-    // figure out how long execution will take and set the timeout
-    // don't anticipate left and right to take different amounts of points but better safe than
-    // sorry
-    setTimeout(Double.max(left.length() * left.segments[0].dt, right.length() * right
-        .segments[0].dt));
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties(
         Tuning.lEncoderTicksPerUnit,
@@ -64,7 +58,7 @@ public class RunProfile extends TimedCommand {
 
   @Override
   protected boolean isFinished() {
-    return profileCommand.isCompleted();
+    return profileCommand.isFinished();
   }
 
   @Override
