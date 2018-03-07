@@ -180,7 +180,6 @@ public class Robot extends IterativeRobot {
           autoCommand = AutoSequence.STUPID;
         }
         break;
-
       case RIGHT:
         System.out.println("Right Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
