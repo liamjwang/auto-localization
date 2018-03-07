@@ -31,6 +31,9 @@ public class Elevator extends ChickenSubsystem {
     elevatorMotorA.setInverted(true);
     elevatorMotorB.setInverted(true);
 
+    elevatorMotorA.setBrake(true);
+    elevatorMotorA.setBrake(true);
+
     // TODO: better method of adjusting tuning between robots
     elevatorMotorA.setSensorPhase(Tuning.isPandora);
 
