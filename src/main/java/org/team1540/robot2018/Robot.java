@@ -92,11 +92,14 @@ public class Robot extends IterativeRobot {
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
     OI.autoEjectButton.whenPressed(new EjectCube());
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake, intakeArms));
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
+        intakeArms));
 
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorExchangePosition));
 
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorFrontSwitchPosition));
     OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
@@ -111,9 +114,11 @@ public class Robot extends IterativeRobot {
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
 
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
 
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
 
     // OI.climbSequenceButton.whenPressed(new ClimbSequence());
 
@@ -172,7 +177,8 @@ public class Robot extends IterativeRobot {
           System.out.println("Going for Right Switch");
           autoCommand = AutoPath.MIDDLE_TO_RIGHT_SWITCH.commands;
         } else {
-          DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
+          DriverStation.reportError("Match data could not get owned switch side, reverting to "
+              + "base auto", false);
           autoCommand = AutoPath.STUPID.commands;
         }
         break;
@@ -258,15 +264,14 @@ public class Robot extends IterativeRobot {
     }
 
     AutoPath(Command... sequentialDrivingCommands) {
-     this.commands = new CommandGroup() {
-       {
-         for (Command command : sequentialDrivingCommands) {
-           addSequential(command);
-         }
-         addSequential(new CalibrateWrist());
-       }
-     };
+      this.commands = new CommandGroup() {
+        {
+          for (Command command : sequentialDrivingCommands) {
+            addSequential(command);
+          }
+          addSequential(new CalibrateWrist());
+        }
+      };
     }
   }
-
 }
