@@ -157,22 +157,22 @@ public class Robot extends IterativeRobot {
 
     switch (autoPosition.getSelected()) {
       case LEFT:
-        System.out.println("Left Auto Selected");
+        System.out.println("Left Auto selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
           System.out.println("Going for Left Switch");
           autoCommand = AutoSequence.LEFT_TO_LEFT_SWICH;
         } else {
-          System.out.println("Just Crossing the Line");
+          System.out.println("Just crossing the line");
           autoCommand = AutoSequence.CROSS_LINE;
         }
         break;
       case MIDDLE:
-        System.out.println("Middle Auto Selected");
+        System.out.println("Middle Auto selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
+          System.out.println("Going for left switch");
           autoCommand = AutoSequence.MIDDLE_TO_LEFT_SWITCH;
         } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
+          System.out.println("Going for right switch");
           autoCommand = AutoSequence.MIDDLE_TO_RIGHT_SWITCH;
         } else {
           DriverStation.reportError("Match data could not get owned switch side, reverting to "
@@ -181,18 +181,18 @@ public class Robot extends IterativeRobot {
         }
         break;
       case RIGHT:
-        System.out.println("Right Auto Selected");
+        System.out.println("Right Auto selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
+          System.out.println("Going for right switch");
           autoCommand = AutoSequence.RIGHT_TO_RIGHT_SWITCH;
         } else {
-          System.out.println("Just Crossing the Line");
+          System.out.println("Just crossing the line");
           autoCommand = AutoSequence.CROSS_LINE;
         }
         break;
 
       case STUPID:
-        System.out.println("Stupid Auto Selected");
+        System.out.println("Stupid Auto selected");
         autoCommand = AutoSequence.STUPID;
         break;
     }
