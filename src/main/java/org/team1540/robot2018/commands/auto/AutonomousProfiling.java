@@ -23,6 +23,7 @@ import openrio.powerup.MatchData.OwnedSide;
 import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
+import org.team1540.base.motionprofiling.RunMotionProfiles;
 
 public class AutonomousProfiling extends Command {
 
@@ -86,8 +87,6 @@ public class AutonomousProfiling extends Command {
   public AutonomousProfiling(TrajectorySegment... segments) {
     requires(Robot.drivetrain);
     this.segments = segments;
-    System.out.println(segments[0].start.y + " ---------------- " + segments[0].end.y);
-
   }
 
   private Trajectory generateTestTrajectory(Trajectory.Config config) {
@@ -193,62 +192,45 @@ public class AutonomousProfiling extends Command {
     double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
         (Tuning.distanceBetweenWheels, 2));
 
-    // // TODO Yes this is very safe honhonhon
-    // Trajectory trajectory;
-    // try {
-    //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep, Tuning.maxVelocity,
-    //           Tuning.maxAcceleration, Tuning.maxJerk),
-    //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
-    //   // TODO exception handling
-    // } catch (InvalidPathException e) {
-    //   e.printStackTrace();
-    //   return;
-    // }
-
-
     Config config = new Config(fitMethod, Tuning.sampleRate, timeStep,
         Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
 
     List<Segment> leftSegments = new LinkedList<>();
-    Trajectory trajectory = generateSimpleTrajectory(segments[0].start, segments[0].end, config);
-    TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
-    Segment[] left = modifier.getLeftTrajectory().segments;
-    Segment[] right = modifier.getRightTrajectory().segments;
+    List<Segment> rightSegments = new LinkedList<>();
 
-    timeToFinish = left.length * left[0].dt;
-    // for (TrajectorySegment segment : segments) {
-    //   Trajectory traj = generateSimpleTrajectory(segment.start, segment.end, config);
-    //   timeToFinish += traj.segments.length * traj.segments[0].dt;
-    //
-    //   TankModifier modifier = new TankModifier(traj).modify(turningRadius);
-    //   Segment[] left = modifier.getLeftTrajectory().segments;
-    //   Segment[] right = modifier.getRightTrajectory().segments;
-    //
-    //   for (int i = 0; i < modifier.getLeftTrajectory().length(); i++) {
-    //     Segment leftSegment = (segment.flip ? right : left)[i];
-    //     Segment rightSegment = (segment.flip ? right : left)[i];
-    //     if (segment.flip) {
-    //       leftSegment.position *= -1;
-    //       rightSegment.position *= -1;
-    //       leftSegment.velocity *= -1;
-    //       rightSegment.velocity *= -1;
-    //     }
-    //     leftSegments.add(leftSegment);
-    //     rightSegments.add(rightSegment);
-    //   }
-    // }
+    timeToFinish = 0;
+    for (TrajectorySegment segment : segments) {
+      Trajectory traj = generateTrajectory(config, segment.waypoints);
+      timeToFinish += traj.segments.length * traj.segments[0].dt;
 
+      TankModifier modifier = new TankModifier(traj).modify(turningRadius);
+      Segment[] left = modifier.getLeftTrajectory().segments;
+      Segment[] right = modifier.getRightTrajectory().segments;
+
+      for (int i = 0; i < modifier.getLeftTrajectory().length(); i++) {
+        Segment leftSegment = (segment.flip ? right : left)[i];
+        Segment rightSegment = (segment.flip ? left : right)[i];
+        if (segment.flip) {
+          leftSegment.position *= -1;
+          rightSegment.position *= -1;
+          leftSegment.velocity *= -1;
+          rightSegment.velocity *= -1;
+        }
+        leftSegments.add(leftSegment);
+        rightSegments.add(rightSegment);
+      }
+    }
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties
         (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
             .drivetrain::getLeftVelocity,
             Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition,
-            modifier.getLeftTrajectory());
+            new Trajectory(leftSegments.toArray(new Segment[0])));
     MotionProfilingProperties rightProperties = new MotionProfilingProperties
         (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
             .drivetrain::getRightVelocity,
             Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition,
-            modifier.getRightTrajectory());
+            new Trajectory(rightSegments.toArray(new Segment[0])));
     isFinishedRunningTimer.reset();
     Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
     isFinishedRunningTimer.start();
@@ -261,6 +243,10 @@ public class AutonomousProfiling extends Command {
 
   private Trajectory generateSimpleTrajectory(Waypoint start, Waypoint end, Config config) {
     return Pathfinder.generate(new Waypoint[]{start, end}, config);
+  }
+
+  private Trajectory generateTrajectory(Config config, Waypoint... waypoints) {
+    return Pathfinder.generate(waypoints, config);
   }
 
   private Waypoint makeTranslatedWaypoint(Waypoint toTranslate, double x, double y, double angle) {
@@ -324,14 +310,12 @@ public class AutonomousProfiling extends Command {
   }
 
   public static class TrajectorySegment {
-    public Waypoint end;
+    public Waypoint[] waypoints;
     public boolean flip;
-    public Waypoint start;
 
-    public TrajectorySegment(Waypoint start, Waypoint end, boolean flip) {
-      this.end = end;
+    public TrajectorySegment(boolean flip, Waypoint... waypoints) {
+      this.waypoints = waypoints;
       this.flip = flip;
-      this.start = start;
     }
   }
 

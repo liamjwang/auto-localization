@@ -116,6 +116,7 @@ public class Robot extends IterativeRobot {
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
 
     // OI.climbSequenceButton.whenPressed(new ClimbSequence());
+    OI.climbSequenceButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorRungPosition));
 
     // configure camera crosshairs
     new Thread(() -> {
@@ -156,16 +157,17 @@ public class Robot extends IterativeRobot {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
+              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
                   new Waypoint(0, 0, 0),
-                  new Waypoint(120, 50, 0), false)));
+                  new Waypoint(120, 50, 0)
+              )));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
               System.out.println("Just Crossing the Line");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
+              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
                   new Waypoint(0, 0, 0),
-                  new Waypoint(134, 0, 0), false))); // go straight
+                  new Waypoint(134, 0, 0)))); // go straight
             }
             addSequential(new CalibrateWrist());
           }
@@ -178,23 +180,25 @@ public class Robot extends IterativeRobot {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
+              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
                   new Waypoint(0, 0, 0),
-                  new Waypoint(112, -103, 0), false)));
+                  new Waypoint(112, -103, 0)
+              )
+              ));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
+              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
                   new Waypoint(0, 0, 0),
-                  new Waypoint(106, 85, 0), false)));
+                  new Waypoint(106, 85, 0))));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
               DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
               addSequential(new DriveBackward(Tuning.stupidDriveTime));
             }
-            addSequential(new CalibrateWrist());
+            // addSequential(new CalibrateWrist());
           }
         };
         break;
@@ -203,9 +207,9 @@ public class Robot extends IterativeRobot {
         System.out.println("Right Auto Selected");
         autoCommand = new CommandGroup() {
           {
-            addSequential(new AutonomousProfiling(new TrajectorySegment(
+            addSequential(new AutonomousProfiling(new TrajectorySegment(true,
                 new Waypoint(0, 0, 0),
-                new Waypoint(134, 0, 0), false)));
+                new Waypoint(134, 0, 0))));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
