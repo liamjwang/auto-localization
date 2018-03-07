@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Waypoint;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
@@ -21,20 +19,16 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
+import org.team1540.robot2018.commands.auto.sequences.NoCubeProfileAuto;
+import org.team1540.robot2018.commands.auto.sequences.SingleCubeAuto;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
-import org.team1540.robot2018.commands.groups.ClimbSequence;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
-import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectCube;
-import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -55,10 +49,10 @@ public class Robot extends IterativeRobot {
   private Command emergencyDriveCommand = new TankDrive();
 
 
-  private SendableChooser<String> autoPosition;
+  private SendableChooser<AutoPosition> autoPosition;
   private SendableChooser<Boolean> driveMode;
 
-  private Command autoCommand;
+  private AutoSequence autoCommand;
 
   @Override
   public void robotInit() {
@@ -69,10 +63,14 @@ public class Robot extends IterativeRobot {
     // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    autoPosition.addDefault("Middle", "Middle");
-    autoPosition.addObject("Left", "Left");
-    autoPosition.addObject("Right", "Right");
-    autoPosition.addObject("Stupid", "Stupid");
+    for (AutoPosition type : AutoPosition.values()) {
+      // Safety just cuz I'm not 100% sure on how the default bit works
+      if (type == Tuning.defaultAutoPosition) {
+        autoPosition.addDefault(type.name(), type);
+      } else {
+        autoPosition.addObject(type.name(), type);
+      }
+    }
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -92,11 +90,14 @@ public class Robot extends IterativeRobot {
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
     OI.autoEjectButton.whenPressed(new EjectCube());
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake, intakeArms));
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
+        intakeArms));
 
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorExchangePosition));
 
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorFrontSwitchPosition));
     OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
@@ -111,9 +112,11 @@ public class Robot extends IterativeRobot {
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
 
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
 
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
 
     // OI.climbSequenceButton.whenPressed(new ClimbSequence());
     OI.climbSequenceButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorRungPosition));
@@ -150,94 +153,58 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     elevator.resetEncoder();
+
+    // Straight equality should be fine since only one of these is running at a time
+
     switch (autoPosition.getSelected()) {
-      case "Left":
-        System.out.println("Left Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(120, 50, 0)
-              )));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
-            } else {
-              System.out.println("Just Crossing the Line");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(134, 0, 0)))); // go straight
-            }
-            addSequential(new CalibrateWrist());
-          }
-        };
+      case LEFT:
+        System.out.println("Left Auto selected");
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Switch");
+          autoCommand = AutoSequence.LEFT_TO_LEFT_SWICH;
+        } else {
+          System.out.println("Just crossing the line");
+          autoCommand = AutoSequence.CROSS_LINE;
+        }
+        break;
+      case MIDDLE:
+        System.out.println("Middle Auto selected");
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for left switch");
+          autoCommand = AutoSequence.MIDDLE_TO_LEFT_SWITCH;
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          System.out.println("Going for right switch");
+          autoCommand = AutoSequence.MIDDLE_TO_RIGHT_SWITCH;
+        } else {
+          DriverStation.reportError("Match data could not get owned switch side, reverting to "
+              + "base auto", false);
+          autoCommand = AutoSequence.STUPID;
+        }
+        break;
+      case RIGHT:
+        System.out.println("Right Auto selected");
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          System.out.println("Going for right switch");
+          autoCommand = AutoSequence.RIGHT_TO_RIGHT_SWITCH;
+        } else {
+          System.out.println("Just crossing the line");
+          autoCommand = AutoSequence.CROSS_LINE;
+        }
         break;
 
-      case "Middle":
-        System.out.println("Middle Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(112, -103, 0)
-              )
-              ));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
-            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("Going for Right Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(true,
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(106, 85, 0))));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
-            } else {
-              DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
-              addSequential(new DriveBackward(Tuning.stupidDriveTime));
-            }
-            // addSequential(new CalibrateWrist());
-          }
-        };
-        break;
-
-      case "Right":
-        System.out.println("Right Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            addSequential(new AutonomousProfiling(new TrajectorySegment(true,
-                new Waypoint(0, 0, 0),
-                new Waypoint(134, 0, 0))));
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("Going for Right Switch");
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
-            }
-            addSequential(new CalibrateWrist());
-          }
-        };
-        break;
-
-      case "Stupid":
-        System.out.println("Stupid Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            addSequential(new DriveBackward(Tuning.stupidDriveTime));
-            addSequential(new CalibrateWrist());
-          }
-        };
+      case STUPID:
+        System.out.println("Stupid Auto selected");
+        autoCommand = AutoSequence.STUPID;
         break;
     }
 
-    autoCommand.start();
+    autoCommand.command.start();
   }
 
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
-      autoCommand.cancel();
+      autoCommand.command.cancel();
     }
   }
 
@@ -266,6 +233,26 @@ public class Robot extends IterativeRobot {
       emergencyDriveCommand.start();
     } else {
       emergencyDriveCommand.cancel();
+    }
+  }
+
+  public enum AutoPosition {
+    CROSS_LINE, LEFT, MIDDLE, RIGHT, STUPID
+  }
+
+  public enum AutoSequence {
+
+    CROSS_LINE(new NoCubeProfileAuto("go_straight")),
+    LEFT_TO_LEFT_SWICH(new SingleCubeAuto("left_to_left_switch")),
+    MIDDLE_TO_LEFT_SWITCH(new SingleCubeAuto("middle_to_left_switch")),
+    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeAuto("middle_to_right_switch")),
+    RIGHT_TO_RIGHT_SWITCH(new SingleCubeAuto("right_to_right_switch")),
+    STUPID(new DriveBackward(Tuning.stupidDriveTime));
+
+    public final Command command;
+
+    AutoSequence(Command autoCommand) {
+      this.command = autoCommand;
     }
   }
 }

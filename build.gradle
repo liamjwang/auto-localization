@@ -35,6 +35,11 @@ def TEAM = 1540
 //def ROBOT_CLASS = "org.team1540.robot2018.WristTuningRobot"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
+task generateProfiles(type:Exec) {
+    workingDir 'profiles'
+    commandLine 'python3', 'generate.py'
+}
+
 deploy {
     targets {
         target("roborio", RoboRIO) {
@@ -45,6 +50,12 @@ deploy {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"
 //            debug = true
+        }
+        fileCollectionArtifact('motionProfiles') {
+            dependsOn("generateProfiles")
+            targets << 'roborio'
+            files = fileTree(dir: 'profiles', include: "**/*.csv")
+            directory = "/home/lvuser/profiles"
         }
     }
 }
