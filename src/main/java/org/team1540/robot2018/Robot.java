@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Waypoint;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
@@ -21,13 +20,10 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
+import org.team1540.robot2018.commands.auto.RunProfile;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
-import org.team1540.robot2018.commands.groups.ClimbSequence;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
@@ -156,16 +152,12 @@ public class Robot extends IterativeRobot {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(120, 50, 0), false)));
+              addSequential(new RunProfile("left_to_left_switch", false));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
               System.out.println("Just Crossing the Line");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(134, 0, 0), false))); // go straight
+              addSequential(new RunProfile("go_straight", false)); // go straight
             }
             addSequential(new CalibrateWrist());
           }
@@ -178,16 +170,12 @@ public class Robot extends IterativeRobot {
           {
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
               System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(112, -103, 0), false)));
+              addSequential(new RunProfile("middle_to_left_switch", false));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(106, 85, 0), false)));
+              addSequential(new RunProfile("middle_to_right_switch", false));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
@@ -203,9 +191,7 @@ public class Robot extends IterativeRobot {
         System.out.println("Right Auto Selected");
         autoCommand = new CommandGroup() {
           {
-            addSequential(new AutonomousProfiling(new TrajectorySegment(
-                new Waypoint(0, 0, 0),
-                new Waypoint(134, 0, 0), false)));
+            addSequential(new RunProfile("go_straight", false));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
