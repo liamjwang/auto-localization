@@ -55,9 +55,9 @@ public class Tuning {
   public static double degreesToTurn = 0;
 
   @Tunable("lEncoderTicksPerUnit")
-  public static double lEncoderTicksPerUnit = 8289/159;
+  public static double lEncoderTicksPerUnit = 52;
   @Tunable("rEncoderTicksPerUnit")
-  public static double rEncoderTicksPerUnit = 8358/159;
+  public static double rEncoderTicksPerUnit = 52;
   @Tunable("wheelbaseWidth")
   public static double wheelbaseWidth = 25.091;
   @Tunable("distanceBetweenWheels")
