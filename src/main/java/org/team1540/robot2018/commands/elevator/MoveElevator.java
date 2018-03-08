@@ -1,5 +1,6 @@
 package org.team1540.robot2018.commands.elevator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
@@ -9,7 +10,8 @@ import org.team1540.robot2018.Tuning;
  * the elevator is clear)
  */
 public class MoveElevator extends Command {
-  private final double target;
+  private double target;
+  private Timer currentTimer = new Timer();
 
   public MoveElevator(double target) {
     this.target = target;
@@ -17,7 +19,25 @@ public class MoveElevator extends Command {
   }
 
   @Override
+  protected void initialize() {
+    currentTimer.stop();
+    currentTimer.reset();
+  }
+
+  @Override
   protected void execute() {
+    if (Robot.elevator.getCurrent() > Tuning.elevatorCurrentThreshold) {
+      if (currentTimer.get() <= 0) {
+        currentTimer.start();
+      }
+      if (currentTimer.hasPeriodPassed(Tuning.elevatorSpikeTime)) {
+        target = Robot.elevator.getPosition();
+      }
+    } else {
+      currentTimer.stop();
+      currentTimer.reset();
+    }
+
     Robot.elevator.setMotionMagicPosition(target);
   }
 

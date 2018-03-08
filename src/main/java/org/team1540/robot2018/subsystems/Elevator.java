@@ -40,6 +40,10 @@ public class Elevator extends ChickenSubsystem {
     elevatorMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  public double getCurrent() {
+    return elevatorMotorA.getOutputCurrent() + elevatorMotorB.getOutputCurrent();
+  }
+
   public int getError() {
     return elevatorMotorA.getClosedLoopError();
   }

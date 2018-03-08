@@ -155,6 +155,12 @@ public class Tuning {
   @Tunable("[Elevator] Down Multiplier")
   public static double elevatorDownMult = 0.5;
 
+  @Tunable("[Elevator] Max Spike Time")
+  public static double elevatorSpikeTime;
+
+  @Tunable("[Elevator] Max Spike Current")
+  public static double elevatorCurrentThreshold;
+
   // WRIST
   @Tunable("[Wrist] kP")
   public static double wristP = 10.0;
