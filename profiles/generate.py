@@ -18,17 +18,16 @@ def flush_out(string):
 
 
 def join(name, tojoin):
-  file = open(name, 'a', newline='')
-  file_to_join = open(tojoin, 'r', newline='')
+  with open(name, 'a', newline='') as file, open(tojoin, 'r',
+                                                 newline='') as file_to_join:
+    r = csv.reader(file_to_join)
+    w = csv.writer(file)
 
-  r = csv.reader(file_to_join)
-  w = csv.writer(file)
+    # dump headers
+    next(r)
 
-  # dump headers
-  next(r)
-
-  for row in r:
-    w.writerow(row)
+    for row in r:
+      w.writerow(row)
 
 
 # invert things
