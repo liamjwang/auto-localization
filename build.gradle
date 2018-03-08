@@ -51,8 +51,12 @@ deploy {
             targets << "roborio"
 //            debug = true
         }
+        commandArtifact("removeProfiles") {
+            command = "rm -rf /home/lvuser/profiles"
+        }
         fileCollectionArtifact('motionProfiles') {
             dependsOn("generateProfiles")
+            after("removeProfiles")
             targets << 'roborio'
             files = fileTree(dir: 'profiles', include: "**/*.csv")
             directory = "/home/lvuser/profiles"
