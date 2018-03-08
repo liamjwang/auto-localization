@@ -246,7 +246,7 @@ public class Robot extends IterativeRobot {
     LEFT_TO_LEFT_SWICH(new SingleCubeAuto("left_to_left_switch")),
     MIDDLE_TO_LEFT_SWITCH(new SingleCubeAuto("middle_to_left_switch")),
     MIDDLE_TO_RIGHT_SWITCH(new SingleCubeAuto("middle_to_right_switch")),
-    RIGHT_TO_RIGHT_SWITCH(new SingleCubeAuto("right_to_right_switch")),
+    RIGHT_TO_RIGHT_SWITCH(new SingleCubeAuto("go_straight")),
     STUPID(new DriveBackward(Tuning.stupidDriveTime));
 
     public final Command command;
