@@ -18,8 +18,8 @@ def flush_out(string):
 
 
 def join(name, tojoin):
-  file = open(name, 'a')
-  file_to_join = open(tojoin, 'r')
+  file = open(name, 'a', newline='')
+  file_to_join = open(tojoin, 'r', newline='')
 
   r = csv.reader(file_to_join)
   w = csv.writer(file)
@@ -33,9 +33,10 @@ def join(name, tojoin):
 
 # invert things
 def invert(filename):
-  with tempfile.NamedTemporaryFile(dir=".", delete=False,
-                                   mode="w") as tmp, open(filename, 'r',
-                                                          newline='') as f:
+  with \
+      tempfile.NamedTemporaryFile(dir=".", delete=False, mode="w",
+                                  newline='') as tmp, \
+      open(filename, 'r', newline='') as f:
     r = csv.reader(f)
     w = csv.writer(tmp)
     header = next(r)
@@ -63,24 +64,26 @@ for (name, profile) in profiles.items():
       profile['points'][i + 1]['angle']), shell=True)
 
   flush_out("Joining segments")
-  with open(name + "_left.csv", 'w') as left, open(name + "_right.csv",
-                                                   'w') as right:
-    left.write('dt,x,y,position,velocity,acceleration,jerk,heading\n')
-    right.write('dt,x,y,position,velocity,acceleration,jerk,heading\n')
+  with open(name + "_left.csv", 'w', newline='') as left, \
+      open(name + "_right.csv", 'w', newline='') as right:
+    left.write(
+      'dt,x,y,position,velocity,acceleration,jerk,heading' + os.linesep)
+    right.write(
+      'dt,x,y,position,velocity,acceleration,jerk,heading' + os.linesep)
 
   for i in range(len(profile['points']) - 1):
     join(name + '_left.csv', name + str(i) + '_left.csv')
     join(name + '_right.csv', name + str(i) + '_right.csv')
 
   for i in range(len(profile['points']) - 1):
-    call('rm ' + name + str(i) + "_left.csv", shell=True)
-    call('rm ' + name + str(i) + "_right.csv", shell=True)
+    os.remove(name + str(i) + "_left.csv")
+    os.remove(name + str(i) + "_right.csv")
 
   flush_out("Running post-processing")
   # swap left and right
-  call('mv ' + name + '_left.csv ' + name + '.csv', shell=True)
-  call('mv ' + name + '_right.csv ' + name + '_left.csv', shell=True)
-  call('mv ' + name + '.csv ' + name + '_right.csv', shell=True)
+  os.rename(name + '_left.csv', name + '.csv')
+  os.rename(name + '_right.csv', name + '_left.csv')
+  os.rename(name + '.csv', name + '_right.csv')
 
   if profile['flip']:
     invert(name + "_left.csv")
