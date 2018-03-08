@@ -1,6 +1,7 @@
 import jaci.openrio.gradle.GradleRIOPlugin
 import jaci.openrio.gradle.frc.FRCJavaArtifact
 import jaci.openrio.gradle.frc.RoboRIO
+import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id "java"
@@ -37,7 +38,11 @@ def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
 task generateProfiles(type:Exec) {
     workingDir 'profiles'
-    commandLine 'python3', 'generate.py'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'py', '-3', 'generate.py'
+    } else {
+        commandLine 'python3', 'generate.py'
+    }
 }
 
 deploy {
