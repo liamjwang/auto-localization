@@ -1,7 +1,6 @@
 import jaci.openrio.gradle.GradleRIOPlugin
 import jaci.openrio.gradle.frc.FRCJavaArtifact
 import jaci.openrio.gradle.frc.RoboRIO
-import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id "java"
@@ -32,15 +31,6 @@ def TEAM = 1540
 //def ROBOT_CLASS = "org.team1540.robot2018.ElevatorTuningRobot"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
-task generateProfiles(type:Exec) {
-    workingDir 'profiles'
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        commandLine 'py', '-3', 'generate.py'
-    } else {
-        commandLine 'python3', 'generate.py'
-    }
-}
-
 deploy {
     targets {
         target("roborio", RoboRIO) {
@@ -56,10 +46,8 @@ deploy {
             command = "rm -rf /home/lvuser/profiles"
         }
         fileCollectionArtifact('motionProfiles') {
-            dependsOn("generateProfiles")
-            after("removeProfiles")
             targets << 'roborio'
-            files = fileTree(dir: 'profiles', include: "**/*.csv")
+            files = fileTree(dir: 'profiles')
             directory = "/home/lvuser/profiles"
         }
     }
