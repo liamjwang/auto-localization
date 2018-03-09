@@ -38,6 +38,8 @@ public class Elevator extends ChickenSubsystem {
     elevatorMotorA.setSensorPhase(Tuning.isPandora);
 
     elevatorMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    elevatorMotorA.configAllowableClosedloopError(0, 5);
+    elevatorMotorB.configAllowableClosedloopError(0, 5);
   }
 
   public double getCurrent() {
