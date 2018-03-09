@@ -186,7 +186,7 @@ public class Tuning {
   public static int wristCurrentLimit = 30;
 
   @Tunable("[Wrist] Peak Duration")
-  public static int wristPeakDuration = 1;
+  public static int wristPeakDuration = 0;
 
   @Tunable("[Wrist] Stall Current")
   public static double wristStallCurrent = 30;
