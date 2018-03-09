@@ -185,7 +185,7 @@ public class Robot extends IterativeRobot {
               System.out.println("Going for Left Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
-                  new Waypoint(112, -103, 0), false)));
+                  new Waypoint(102, -123, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
