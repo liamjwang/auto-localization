@@ -29,6 +29,7 @@ import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -89,6 +90,8 @@ public class Robot extends IterativeRobot {
 
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
+    OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
+        (Tuning.intakeArmSpeed), intakeArms));
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
         intakeArms));
@@ -102,7 +105,7 @@ public class Robot extends IterativeRobot {
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
-    OI.wristFwdButton.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
+    OI.wristFwdButton.whenPressed(new CalibrateWrist());
     OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
 
