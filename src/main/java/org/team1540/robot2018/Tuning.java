@@ -256,10 +256,4 @@ public class Tuning {
   @Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU;
 
-  @Tunable("Motion Profiling In Path")
-  public static String motionProfileInPath = "";
-
-  @Tunable("Motion Profiling Out Path")
-  public static String motionProfileOutPath = "";
-
 }
