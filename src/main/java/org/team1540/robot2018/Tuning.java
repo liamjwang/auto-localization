@@ -31,7 +31,7 @@ public class Tuning {
 
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
-  public static double stupidDriveTime = 5;
+  public static double stupidDriveTime = 2.5;
 
   // Units in inches and seconds
   @Tunable("mpMaxVelocity")
