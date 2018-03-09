@@ -94,7 +94,7 @@ public class Tuning {
   public static double intakeArmSpeed = 0.5;
 
   @Tunable("Intake Arm Hold Speed")
-  public static double intakeArmHoldSpeed = -0.05;
+  public static double intakeArmHoldSpeed = -0.2;
 
 
   // ELEVATOR
@@ -111,7 +111,7 @@ public class Tuning {
   public static double elevatorFGoingUp = 2.046;
 
   @Tunable("[Elevator] kF Going Down")
-  public static double elevatorFGoingDown = 0.8;
+  public static double elevatorFGoingDown = 1.2;
 
   @Tunable("[Elevator] I-Zone")
   public static int elevatorIZone = 150;
@@ -123,7 +123,7 @@ public class Tuning {
   public static int elevatorMaxAccel = 750;
 
   @Tunable("[Elevator] Motion Cruise Velocity")
-  public static int elevatorCruiseVel = 400;
+  public static int elevatorCruiseVel = 475;
 
   @Tunable("[Elevator] Ground Position")
   public static double elevatorGroundPosition = 5;
@@ -156,10 +156,10 @@ public class Tuning {
   public static double elevatorDownMult = 0.5;
 
   @Tunable("[Elevator] Max Spike Time")
-  public static double elevatorSpikeTime;
+  public static double elevatorSpikeTime = 0;
 
   @Tunable("[Elevator] Max Spike Current")
-  public static double elevatorCurrentThreshold;
+  public static double elevatorCurrentThreshold = 60;
 
   // WRIST
   @Tunable("[Wrist] kP")
