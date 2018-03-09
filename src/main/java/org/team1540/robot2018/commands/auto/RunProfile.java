@@ -63,6 +63,11 @@ public class RunProfile extends TimedCommand {
   }
 
   @Override
+  protected boolean isFinished() {
+    return profileCommand.isCompleted();
+  }
+
+  @Override
   protected void end() {
     profileCommand.cancel();
   }
