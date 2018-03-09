@@ -12,6 +12,6 @@ public class IntakeSequence extends CommandGroup {
   public IntakeSequence() {
     // addSequential(new GroundPosition());
     addSequential(new AutoIntake());
-    addSequential(new MoveWristToPosition(Tuning.wrist45FwdPosition));
+    // addSequential(new MoveWristToPosition(Tuning.wrist45FwdPosition));
   }
 }
