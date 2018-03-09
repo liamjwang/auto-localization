@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
 
     OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
         .elevatorFrontSwitchPosition));
-    OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
