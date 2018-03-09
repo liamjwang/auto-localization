@@ -18,7 +18,7 @@ public class ExecuteProfile extends Command {
 
   private final RunMotionProfiles profileCommand;
 
-  public ExecuteProfile(String name, boolean loadBinary) {
+  public ExecuteProfile(String name, double timeout, boolean loadBinary) {
     super("Run profile " + name); // timeout will be set later
 
     requires(Robot.drivetrain);
