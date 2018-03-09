@@ -93,7 +93,7 @@ public class Tuning {
   public static double intakeArmSpeed = 0.5;
 
   @Tunable("Intake Arm Hold Speed")
-  public static double intakeArmHoldSpeed = -0.2;
+  public static double intakeArmHoldSpeed = -0.1;
 
 
   // ELEVATOR
@@ -186,7 +186,7 @@ public class Tuning {
   public static int wristCurrentLimit = 30;
 
   @Tunable("[Wrist] Peak Duration")
-  public static int wristPeakDuration = 1;
+  public static int wristPeakDuration = 0;
 
   @Tunable("[Wrist] Stall Current")
   public static double wristStallCurrent = 30;
