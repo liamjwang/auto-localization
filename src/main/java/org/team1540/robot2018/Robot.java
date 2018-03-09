@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,14 +21,14 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.auto.sequences.NoCubeProfileAuto;
-import org.team1540.robot2018.commands.auto.sequences.SingleCubeAuto;
+import org.team1540.robot2018.commands.auto.RunProfile;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
+import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
@@ -53,7 +54,7 @@ public class Robot extends IterativeRobot {
   private SendableChooser<AutoPosition> autoPosition;
   private SendableChooser<Boolean> driveMode;
 
-  private AutoSequence autoCommand;
+  private Command autoCommand;
 
   @Override
   public void robotInit() {
@@ -90,8 +91,6 @@ public class Robot extends IterativeRobot {
 
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
-    OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-        (Tuning.intakeArmSpeed), intakeArms));
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
         intakeArms));
@@ -105,7 +104,7 @@ public class Robot extends IterativeRobot {
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
+    OI.wristFwdButton.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
     OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
 
@@ -122,7 +121,6 @@ public class Robot extends IterativeRobot {
         .winchInHighVel), winch));
 
     // OI.climbSequenceButton.whenPressed(new ClimbSequence());
-    OI.climbSequenceButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorRungPosition));
 
     // configure camera crosshairs
     new Thread(() -> {
@@ -164,24 +162,24 @@ public class Robot extends IterativeRobot {
         System.out.println("Left Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
           System.out.println("Going for Left Switch");
-          autoCommand = AutoSequence.LEFT_TO_LEFT_SWICH;
+          autoCommand = AutoPath.LEFT_TO_LEFT_SWICH.commands;
         } else {
           System.out.println("Just Crossing the Line");
-          autoCommand = AutoSequence.CROSS_LINE;
+          autoCommand = AutoPath.CROSS_LINE.commands;
         }
         break;
       case MIDDLE:
         System.out.println("Middle Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
           System.out.println("Going for Left Switch");
-          autoCommand = AutoSequence.MIDDLE_TO_LEFT_SWITCH;
+          autoCommand = AutoPath.MIDDLE_TO_LEFT_SWITCH.commands;
         } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for Right Switch");
-          autoCommand = AutoSequence.MIDDLE_TO_RIGHT_SWITCH;
+          autoCommand = AutoPath.MIDDLE_TO_RIGHT_SWITCH.commands;
         } else {
           DriverStation.reportError("Match data could not get owned switch side, reverting to "
               + "base auto", false);
-          autoCommand = AutoSequence.STUPID;
+          autoCommand = AutoPath.STUPID.commands;
         }
         break;
 
@@ -189,26 +187,25 @@ public class Robot extends IterativeRobot {
         System.out.println("Right Auto Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for Right Switch");
-          autoCommand = AutoSequence.RIGHT_TO_RIGHT_SWITCH;
+          autoCommand = AutoPath.RIGHT_TO_RIGHT_SWITCH.commands;
         } else {
-          System.out.println("Just Crossing the Line");
-          autoCommand = AutoSequence.CROSS_LINE;
+          System.out.println("Doing nothing");
         }
         break;
 
       case STUPID:
         System.out.println("Stupid Auto Selected");
-        autoCommand = AutoSequence.STUPID;
+        autoCommand = AutoPath.STUPID.commands;
         break;
     }
 
-    autoCommand.command.start();
+    autoCommand.start();
   }
 
   @Override
   public void teleopInit() {
     if (autoCommand != null) {
-      autoCommand.command.cancel();
+      autoCommand.cancel();
     }
   }
 
@@ -244,19 +241,37 @@ public class Robot extends IterativeRobot {
     CROSS_LINE, LEFT, MIDDLE, RIGHT, STUPID
   }
 
-  public enum AutoSequence {
+  public enum AutoPath {
 
-    CROSS_LINE(new NoCubeProfileAuto("go_straight")),
-    LEFT_TO_LEFT_SWICH(new SingleCubeAuto("left_to_left_switch")),
-    MIDDLE_TO_LEFT_SWITCH(new SingleCubeAuto("middle_to_left_switch")),
-    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeAuto("middle_to_right_switch")),
-    RIGHT_TO_RIGHT_SWITCH(new SingleCubeAuto("go_straight")),
+    CROSS_LINE(new RunProfile("go_straight", false)),
+    LEFT_TO_LEFT_SWICH(new RunProfile("left_to_left_switch", false)),
+    MIDDLE_TO_LEFT_SWITCH(new RunProfile("middle_to_left_switch", false)),
+    MIDDLE_TO_RIGHT_SWITCH(new RunProfile("middle_to_right_switch", false)),
+    RIGHT_TO_RIGHT_SWITCH(new RunProfile("right_to_right_switch", false)),
     STUPID(new DriveBackward(Tuning.stupidDriveTime));
 
-    public final Command command;
+    public final CommandGroup commands;
 
-    AutoSequence(Command autoCommand) {
-      this.command = autoCommand;
+    AutoPath(RunProfile path) {
+      this.commands = new CommandGroup() {
+        {
+          addSequential(path);
+          addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+          addSequential(new EjectAuto());
+          addSequential(new CalibrateWrist());
+        }
+      };
+    }
+
+    AutoPath(Command... sequentialDrivingCommands) {
+      this.commands = new CommandGroup() {
+        {
+          for (Command command : sequentialDrivingCommands) {
+            addSequential(command);
+          }
+          addSequential(new CalibrateWrist());
+        }
+      };
     }
   }
 }
