@@ -3,10 +3,11 @@ package org.team1540.robot2018;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import javax.rmi.CORBA.Util;
 import org.team1540.base.Utilities;
-import org.team1540.base.triggers.DPadButton;
-import org.team1540.base.triggers.DPadButton.DPadAxis;
+import org.team1540.robot2018.triggers.StrictDPadButton;
+import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
+
+// import org.team1540.base.triggers.StrictDPadButton;
 
 /*
  * Button Mapping
@@ -96,13 +97,13 @@ public class OI {
   static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
   // Move elevator to full height and TODO: raise wrist slightly
-  static Button elevatorFrontScaleButton = new DPadButton(copilot, 0, DPadAxis.UP);
-  // Move elevator to ground position and TODO: flip wrist out
-  static Button elevatorLowerButton = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  static Button elevatorFrontScaleButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
+  // Move elevator to ground position and flip wrist out
+  static Button elevatorLowerButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
   // Move elevator to full height
-  static Button elevatorRaiseButton = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  static Button elevatorRaiseButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
   // Move elevator to switch height
-  static Button elevatorSwitchButton = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+  static Button elevatorSwitchButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
   static Button wristBackButton = new JoystickButton(copilot, B);
   static Button wristFwdButton = new JoystickButton(copilot, A);
