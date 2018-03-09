@@ -113,7 +113,6 @@ public class OI {
 
   // WRIST
   public static double getWristAxis() {
-    // Note: Same axis as servo tilt, see button that switches between modes
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
