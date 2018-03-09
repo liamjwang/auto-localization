@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Waypoint;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
@@ -20,8 +21,9 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
+import org.team1540.robot2018.commands.auto.AutonomousProfiling;
+import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.auto.RunProfile;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.FrontScale;
@@ -51,7 +53,7 @@ public class Robot extends IterativeRobot {
   private Command emergencyDriveCommand = new TankDrive();
 
 
-  private SendableChooser<AutoPosition> autoPosition;
+  private SendableChooser<String> autoPosition;
   private SendableChooser<Boolean> driveMode;
 
   private Command autoCommand;
@@ -65,14 +67,10 @@ public class Robot extends IterativeRobot {
     // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    for (AutoPosition type : AutoPosition.values()) {
-      // Safety just cuz I'm not 100% sure on how the default bit works
-      if (type == Tuning.defaultAutoPosition) {
-        autoPosition.addDefault(type.name(), type);
-      } else {
-        autoPosition.addObject(type.name(), type);
-      }
-    }
+    autoPosition.addDefault("Middle", "Middle");
+    autoPosition.addObject("Left", "Left");
+    autoPosition.addObject("Right", "Right");
+    autoPosition.addObject("Stupid", "Stupid");
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -154,48 +152,82 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     elevator.resetEncoder();
-
-    // Straight equality should be fine since only one of these is running at a time
-
     switch (autoPosition.getSelected()) {
-      case LEFT:
+      case "Left":
         System.out.println("Left Auto Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
-          autoCommand = AutoPath.LEFT_TO_LEFT_SWICH.commands;
-        } else {
-          System.out.println("Just Crossing the Line");
-          autoCommand = AutoPath.CROSS_LINE.commands;
-        }
+        autoCommand = new CommandGroup() {
+          {
+            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+              System.out.println("Going for Left Switch");
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(120, 50, 0), false)));
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            } else {
+              System.out.println("Just Crossing the Line");
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(134, 0, 0), false))); // go straight
+            }
+            addSequential(new CalibrateWrist());
+          }
+        };
         break;
-      case MIDDLE:
+
+      case "Middle":
         System.out.println("Middle Auto Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
-          autoCommand = AutoPath.MIDDLE_TO_LEFT_SWITCH.commands;
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
-          autoCommand = AutoPath.MIDDLE_TO_RIGHT_SWITCH.commands;
-        } else {
-          DriverStation.reportError("Match data could not get owned switch side, reverting to "
-              + "base auto", false);
-          autoCommand = AutoPath.STUPID.commands;
-        }
+        autoCommand = new CommandGroup() {
+          {
+            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+              System.out.println("Going for Left Switch");
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(112, -103, 0), false)));
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              System.out.println("Going for Right Switch");
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(106, 85, 0), false)));
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            } else {
+              DriverStation.reportError("Match data could not get owned switch side, reverting to"
+                  + " base auto", false);
+              addSequential(new DriveBackward(Tuning.stupidDriveTime));
+            }
+            addSequential(new CalibrateWrist());
+          }
+        };
         break;
 
-      case RIGHT:
+      case "Right":
         System.out.println("Right Auto Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
-          autoCommand = AutoPath.RIGHT_TO_RIGHT_SWITCH.commands;
-        } else {
-          System.out.println("Doing nothing");
-        }
+        autoCommand = new CommandGroup() {
+          {
+            addSequential(new AutonomousProfiling(new TrajectorySegment(
+                new Waypoint(0, 0, 0),
+                new Waypoint(134, 0, 0), false)));
+            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              System.out.println("Going for Right Switch");
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            }
+            addSequential(new CalibrateWrist());
+          }
+        };
         break;
 
-      case STUPID:
+      case "Stupid":
         System.out.println("Stupid Auto Selected");
-        autoCommand = AutoPath.STUPID.commands;
+        autoCommand = new CommandGroup() {
+          {
+            addSequential(new DriveBackward(Tuning.stupidDriveTime));
+            addSequential(new CalibrateWrist());
+          }
+        };
         break;
     }
 
@@ -234,44 +266,6 @@ public class Robot extends IterativeRobot {
       emergencyDriveCommand.start();
     } else {
       emergencyDriveCommand.cancel();
-    }
-  }
-
-  public enum AutoPosition {
-    CROSS_LINE, LEFT, MIDDLE, RIGHT, STUPID
-  }
-
-  public enum AutoPath {
-
-    CROSS_LINE(new RunProfile("go_straight", false)),
-    LEFT_TO_LEFT_SWICH(new RunProfile("left_to_left_switch", false)),
-    MIDDLE_TO_LEFT_SWITCH(new RunProfile("middle_to_left_switch", false)),
-    MIDDLE_TO_RIGHT_SWITCH(new RunProfile("middle_to_right_switch", false)),
-    RIGHT_TO_RIGHT_SWITCH(new RunProfile("right_to_right_switch", false)),
-    STUPID(new DriveBackward(Tuning.stupidDriveTime));
-
-    public final CommandGroup commands;
-
-    AutoPath(RunProfile path) {
-      this.commands = new CommandGroup() {
-        {
-          addSequential(path);
-          addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-          addSequential(new EjectAuto());
-          addSequential(new CalibrateWrist());
-        }
-      };
-    }
-
-    AutoPath(Command... sequentialDrivingCommands) {
-      this.commands = new CommandGroup() {
-        {
-          for (Command command : sequentialDrivingCommands) {
-            addSequential(command);
-          }
-          addSequential(new CalibrateWrist());
-        }
-      };
     }
   }
 }
