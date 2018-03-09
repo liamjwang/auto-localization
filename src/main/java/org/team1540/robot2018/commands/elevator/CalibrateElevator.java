@@ -11,11 +11,14 @@ public class CalibrateElevator extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Calibrating Elevator...");
     Robot.elevator.set(-1); // TODO is this too fast?
   }
 
   @Override
   protected void end() {
+    System.out.println(
+        "Elevator calibrated. Position before calibration: " + Robot.elevator.getPosition());
     Robot.elevator.set(0);
     Robot.elevator.resetEncoder();
   }
