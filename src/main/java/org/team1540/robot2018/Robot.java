@@ -24,14 +24,20 @@ import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
+import org.team1540.robot2018.commands.auto.AutonomousProfilingFast;
+import org.team1540.robot2018.commands.auto.AutonomousProfilingFast.TrajectorySegmentFast;
 import org.team1540.robot2018.commands.auto.DriveBackward;
+import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
+import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectAuto;
+import org.team1540.robot2018.commands.intake.EjectAutoSlow;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
@@ -68,9 +74,10 @@ public class Robot extends IterativeRobot {
     // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    autoPosition.addDefault("Middle", "Middle");
+    autoPosition.addObject("Middle", "Middle");
     autoPosition.addObject("Left", "Left");
     autoPosition.addObject("Right", "Right");
+    autoPosition.addDefault("Right Hook", "Right Hook");
     autoPosition.addObject("Stupid", "Stupid");
 
     SmartDashboard.putData("Auto mode", autoPosition);
@@ -221,6 +228,39 @@ public class Robot extends IterativeRobot {
               addSequential(new EjectAuto());
             }
             addSequential(new CalibrateWrist());
+          }
+        };
+        break;
+
+      case "Right Hook":
+        System.out.println("Right Hook Selected");
+        autoCommand = new CommandGroup() {
+          {
+            if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+              addSequential(new AutonomousProfilingFast(new TrajectorySegmentFast(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(284, 0, 0), false)));
+              System.out.println("Going for Right Scale");
+              addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
+              addSequential(new TurnLeftBackwardScale(0.8));
+              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorScalePosition));
+              addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
+              addSequential(new EjectAutoSlow());
+            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(114, 0, 0), false)));
+              System.out.println("Going for Right Switch");
+              addSequential(new TurnLeftBackwardSwitch(1.6));
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            } else {
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(114, 0, 0), false)));
+            }
+            addSequential(new CalibrateWrist());
+            addSequential(new GroundPosition());
           }
         };
         break;
