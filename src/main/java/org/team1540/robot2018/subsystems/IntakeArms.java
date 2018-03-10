@@ -9,30 +9,38 @@ import org.team1540.robot2018.Tuning;
 
 public class IntakeArms extends Subsystem {
 
-  private ChickenTalon arm1 = new ChickenTalon(RobotMap.ARM_A);
-  private ChickenTalon arm2 = new ChickenTalon(RobotMap.ARM_B);
+  private ChickenTalon armMotorLeft = new ChickenTalon(RobotMap.ARM_LEFT);
+  private ChickenTalon armMotorRight = new ChickenTalon(RobotMap.ARM_RIGHT);
 
   public IntakeArms() {
-    arm1.setInverted(false);
-    arm2.setInverted(true);
-    arm1.setBrake(false);
-    arm2.setBrake(false);
+    armMotorLeft.setInverted(false);
+    armMotorRight.setInverted(true);
+    armMotorLeft.setBrake(false);
+    armMotorRight.setBrake(false);
   }
 
   public void set(double value) {
-    arm1.set(ControlMode.PercentOutput, value);
-    arm2.set(ControlMode.PercentOutput, value);
+    armMotorLeft.set(ControlMode.PercentOutput, value);
+    armMotorRight.set(ControlMode.PercentOutput, value);
+  }
+
+  public void setLeft(double value) {
+    armMotorLeft.set(ControlMode.PercentOutput, value);
+  }
+
+  public void setRight(double value) {
+    armMotorRight.set(ControlMode.PercentOutput, value);
   }
 
   public double getCurrent() {
-    return arm1.getOutputCurrent() + arm2.getOutputCurrent();
+    return armMotorLeft.getOutputCurrent() + armMotorRight.getOutputCurrent();
   }
 
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new SimpleCommand("Arm Hold", () -> {
-      arm1.set(Tuning.intakeArmHoldSpeed);
-      arm2.set(Tuning.intakeArmHoldSpeed);
+      armMotorLeft.set(Tuning.intakeArmHoldSpeed);
+      armMotorRight.set(Tuning.intakeArmHoldSpeed);
     }, this));
   }
 
