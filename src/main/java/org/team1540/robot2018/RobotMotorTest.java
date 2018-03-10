@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.wrappers.ChickenController;
@@ -95,6 +96,16 @@ public class RobotMotorTest extends IterativeRobot {
 
       SmartDashboard.putData("[MotorTest] JoyChooser "+Integer.toString(motorIndex), joystickChoosers[motorIndex]);
     }
+
+    for (ChickenController motor : motors) {
+      if (motor != null) {
+        motor.setBrake(true);
+        motor.configPeakOutputForward(1);
+        motor.configPeakOutputReverse(-1);
+        motor.configClosedloopRamp(0);
+        motor.configOpenloopRamp(0);
+      }
+    }
   }
 
   @Override
@@ -116,23 +127,16 @@ public class RobotMotorTest extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    for (ChickenController motor : motors) {
-      if (motor != null) {
-        motor.setBrake(true);
-        motor.configPeakOutputForward(1);
-        motor.configPeakOutputReverse(-1);
-        motor.configClosedloopRamp(0);
-        motor.configOpenloopRamp(0);
-      }
-    }
-
     for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
       if (motorChoosers[chooserIndex].getSelected() != -1) {
-        motors[
-            motorChoosers[chooserIndex].getSelected() < motors.length ? motorChoosers[chooserIndex].getSelected() :
+        motors[motorChoosers[chooserIndex].getSelected() < motors.length ?
+            motorChoosers[chooserIndex].getSelected() :
                 (motorChoosers[chooserIndex].getSelected()) % motors.length]
             .set(ControlMode.PercentOutput,
-                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) * driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()));
+                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) *
+                    Utilities.processDeadzone(
+                        driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
+                        ), 0.1));
       }
     }
   }
