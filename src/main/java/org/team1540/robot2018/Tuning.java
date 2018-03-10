@@ -88,7 +88,7 @@ public class Tuning {
   public static int elevatorIZone = 150;
 
   @Tunable("[Elevator] Error Tolerance")
-  public static double elevatorTolerance = 50;
+  public static double elevatorTolerance = 100;
 
   @Tunable("[Elevator] Motion Max Acceleration")
   public static int elevatorMaxAccel = 750;
@@ -231,6 +231,8 @@ public class Tuning {
   // Units in inches and seconds
   @Tunable("[MotionP] MaxVelocity")
   public static double maxVelocity = 40;
+  @Tunable("[MotionP] MaxVelocityFast")
+  public static double maxVelocityFast = 80;
   @Tunable("[MotionP] MaxAcceleration")
   public static double maxAcceleration = 40;
   @Tunable("[MotionP] MaxJerk")
@@ -238,7 +240,7 @@ public class Tuning {
   @Tunable("[MotionP] SecondsFromNeutralToFull")
   public static double secondsFromNeutralToFull = 0;
   @Tunable("[MotionP] SampleRate")
-  public static int sampleRate = Config.SAMPLES_HIGH;
+  public static int sampleRate = Config.SAMPLES_FAST;
   @Tunable("[MotionP] TimeStep")
   public static double timeStep = 0.05;
   @Tunable("[MotionP] DistanceToTravelX")
