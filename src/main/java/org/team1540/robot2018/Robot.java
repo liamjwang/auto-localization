@@ -90,9 +90,9 @@ public class Robot extends IterativeRobot {
 
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
-    OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-        (Tuning.intakeArmSpeed), intakeArms));
-    // OI.autoIntakeButton.whileHeld(new JoystickArms());
+    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
+    //     (Tuning.intakeArmSpeed), intakeArms));
+    OI.autoIntakeButton.whileHeld(new JoystickArms());
 
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
