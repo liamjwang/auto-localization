@@ -116,6 +116,14 @@ public class OI {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
   }
 
+  public static double getArmLeftAxis() {
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getArmRightAxis() {
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone), 2);
+  }
+
   static Button enableWristAxisControlButton = new Button() {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
