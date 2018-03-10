@@ -21,6 +21,7 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
+import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveBackward;
@@ -91,6 +92,8 @@ public class Robot extends IterativeRobot {
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
     OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
         (Tuning.intakeArmSpeed), intakeArms));
+    // OI.autoIntakeButton.whileHeld(new JoystickArms());
+
     OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
         intakeArms));
@@ -250,6 +253,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("[Elevator] Position", elevator.getPosition());
   }
 
   @Override
