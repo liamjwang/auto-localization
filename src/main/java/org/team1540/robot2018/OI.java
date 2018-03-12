@@ -1,9 +1,25 @@
 package org.team1540.robot2018;
 
+import static org.team1540.robot2018.Robot.intake;
+import static org.team1540.robot2018.Robot.intakeArms;
+import static org.team1540.robot2018.Robot.winch;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.arms.JoystickArms;
+import org.team1540.robot2018.commands.elevator.JoystickElevator;
+import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.groups.FrontScale;
+import org.team1540.robot2018.commands.groups.GroundPosition;
+import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
+import org.team1540.robot2018.commands.groups.IntakeSequence;
+import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.wrist.CalibrateWrist;
+import org.team1540.robot2018.commands.wrist.JoystickWrist;
+import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.triggers.StrictDPadButton;
 import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
@@ -60,6 +76,43 @@ public class OI {
   public static final int RIGHT_TRIG = 3;
   public static final int RIGHT_X = 4;
   public static final int RIGHT_Y = 5;
+
+  public OI() {
+    // configure controls
+    OI.autoIntakeButton.whenPressed(new IntakeSequence());
+    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
+    //     (Tuning.intakeArmSpeed), intakeArms));
+    OI.autoIntakeButton.whileHeld(new JoystickArms());
+
+    OI.autoEjectButton.whenPressed(new EjectCube());
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
+        intakeArms));
+
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorExchangePosition));
+
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorFrontSwitchPosition));
+    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
+    OI.elevatorLowerButton.whenPressed(new GroundPosition());
+
+    OI.wristFwdButton.whenPressed(new CalibrateWrist());
+    OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
+    OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
+
+    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
+
+    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+
+
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
+
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
+  }
 
   // TODO: Remove unused button
   // wrist to forward 45 degrees

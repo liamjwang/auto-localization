@@ -21,7 +21,6 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
-import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.AutonomousProfilingFast;
@@ -29,18 +28,11 @@ import org.team1540.robot2018.commands.auto.AutonomousProfilingFast.TrajectorySe
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
 import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
-import org.team1540.robot2018.commands.elevator.JoystickElevator;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
-import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
-import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectAutoSlow;
-import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
-import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -57,8 +49,9 @@ public class Robot extends IterativeRobot {
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
 
-  private Command emergencyDriveCommand = new TankDrive();
+  public static OI oi;
 
+  private Command emergencyDriveCommand = new TankDrive();
 
   private SendableChooser<String> autoPosition;
   private SendableChooser<Boolean> driveMode;
@@ -67,6 +60,8 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
+    oi = new OI();
+
     // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
@@ -94,41 +89,6 @@ public class Robot extends IterativeRobot {
     Command zeroElevator = new SimpleCommand("[Elevator] Zero Elevator", elevator::resetEncoder);
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
-
-    // configure controls
-    OI.autoIntakeButton.whenPressed(new IntakeSequence());
-    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-    //     (Tuning.intakeArmSpeed), intakeArms));
-    OI.autoIntakeButton.whileHeld(new JoystickArms());
-
-    OI.autoEjectButton.whenPressed(new EjectCube());
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
-        intakeArms));
-
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
-        .elevatorExchangePosition));
-
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
-        .elevatorFrontSwitchPosition));
-    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
-    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
-    OI.elevatorLowerButton.whenPressed(new GroundPosition());
-
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
-    OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
-
-    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
-    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
-
-    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
-        .winchInLowVel), winch));
-
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
-        .winchInHighVel), winch));
 
     // configure camera crosshairs
     new Thread(() -> {
