@@ -13,6 +13,7 @@ public class JoystickArms extends Command {
 
   @Override
   protected void execute() {
+    // TODO: Invert motors instead of negating set values
     Robot.intakeArms.set(-OI.getArmLeftAxis() * Tuning.intakeArmJoystickConstant,
         OI.getArmRightAxis() * Tuning.intakeArmJoystickConstant);
   }
