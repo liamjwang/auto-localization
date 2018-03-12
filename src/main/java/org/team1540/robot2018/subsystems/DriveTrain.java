@@ -91,17 +91,28 @@ public class DriveTrain extends ChickenSubsystem {
     );
   }
 
-  public void setLeft(double value) {
+  public void setLeft(ControlMode mode, double value) {
+    this.driveLeftMotorA.set(mode, value);
+  }
+
+  public void setRight(ControlMode mode, double value) {
+    this.driveRightMotorA.set(mode, value);
+  }
+
+  public void setLeftPercent(double value) {
     this.driveLeftMotorA.set(ControlMode.PercentOutput, value);
   }
 
-  public void setRight(double value) {
+  public void setRightPercent(double value) {
     this.driveRightMotorA.set(ControlMode.PercentOutput, value);
   }
 
-  @Override
-  public void periodic() {
+  public void setLeftVelocity(double velocity) {
+    driveLeftMotorA.set(ControlMode.Velocity, velocity);
+  }
 
+  public void setRightVelocity(double velocity) {
+    driveRightMotorA.set(ControlMode.Velocity, velocity);
   }
 
   public double getLeftPosition() {
@@ -120,44 +131,8 @@ public class DriveTrain extends ChickenSubsystem {
     return driveRightMotorA.getSelectedSensorVelocity();
   }
 
-  public void setLeftVelocity(double velocity) {
-    driveLeftMotorA.set(ControlMode.Velocity, velocity);
-  }
-
-  public void setRightVelocity(double velocity) {
-    driveRightMotorA.set(ControlMode.Velocity, velocity);
-  }
-
-  public void prepareForMotionProfiling() {
-    driveLeftMotorA.setControlMode(ControlMode.Velocity);
-    driveRightMotorA.setControlMode(ControlMode.Velocity);
-
-    driveLeftMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    driveRightMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-
-    driveLeftMotorA.setSensorPhase(false);
-    driveRightMotorA.setSensorPhase(true);
-
-    // This needs to be here, as PIDFiZone values are stored in memory
-    driveLeftMotorA.config_IntegralZone(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainIZone);
-    driveRightMotorA.config_IntegralZone(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainIZone);
-    driveLeftMotorA.config_kP(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainP);
-    driveRightMotorA.config_kP(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainP);
-    driveLeftMotorA.config_kI(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainI);
-    driveRightMotorA.config_kI(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainI);
-    driveLeftMotorA.config_kD(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainD);
-    driveRightMotorA.config_kD(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainD);
-    driveLeftMotorA.config_kF(driveLeftMotorA.getDefaultPidIdx(), Tuning.drivetrainF);
-    driveRightMotorA.config_kF(driveRightMotorA.getDefaultPidIdx(), Tuning.drivetrainF);
-    driveLeftMotorA.configClosedloopRamp(0);
-    driveLeftMotorB.configClosedloopRamp(0);
-    driveLeftMotorC.configClosedloopRamp(0);
-    driveRightMotorA.configClosedloopRamp(0);
-    driveRightMotorB.configClosedloopRamp(0);
-    driveRightMotorC.configClosedloopRamp(0);
-
-    driveLeftMotorA.setSelectedSensorPosition(0);
-    driveRightMotorA.setSelectedSensorPosition(0);
+  @Override
+  public void periodic() {
   }
 
   public void zeroEncoders() {

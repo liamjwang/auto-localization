@@ -5,9 +5,11 @@ import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class EjectCube extends TimedCommand {
+public class JoystickEject extends TimedCommand {
 
-  public EjectCube() {
+  private double speed;
+
+  public JoystickEject() {
     super(Tuning.ejectTime);
     requires(Robot.intake);
   }
@@ -15,15 +17,16 @@ public class EjectCube extends TimedCommand {
   @Override
   protected void initialize() {
     setTimeout(Tuning.ejectTime);
-    Robot.intake.set(Tuning.ejectSpeedA * OI.getEjectAxis(), Tuning.ejectSpeedB * OI.getEjectAxis());
+    speed = OI.getEjectAxis();
   }
 
   @Override
   protected void execute() {
+    Robot.intake.set(Tuning.ejectSpeedA * speed, Tuning.ejectSpeedB * speed);
   }
 
   @Override
   protected void end() {
-    Robot.intake.stop();
+    Robot.intake.holdCube();
   }
 }

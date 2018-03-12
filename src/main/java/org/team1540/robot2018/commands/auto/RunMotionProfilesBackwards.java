@@ -11,7 +11,8 @@ import org.team1540.base.motionprofiling.MotionProfilingProperties;
 /**
  * Executes a set of motion profiles (with respective properties.)
  */
-public class RunMotionProfiles extends Command {
+// TODO: Add option to flip and reverse profiles and remove this class
+public class RunMotionProfilesBackwards extends Command {
 
   private int slotId = 0;
   private Set<MotionProfilingProperties> motionProfiles;
@@ -19,11 +20,11 @@ public class RunMotionProfiles extends Command {
   private double lastTime;
   private boolean isFinished = false;
 
-  public RunMotionProfiles(MotionProfilingProperties... properties) {
+  public RunMotionProfilesBackwards(MotionProfilingProperties... properties) {
     realConstructor(new HashSet<>(Arrays.asList(properties)));
   }
 
-  public RunMotionProfiles(Set<MotionProfilingProperties> motionProfiles) {
+  public RunMotionProfilesBackwards(Set<MotionProfilingProperties> motionProfiles) {
     realConstructor(motionProfiles);
   }
 

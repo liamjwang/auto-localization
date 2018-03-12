@@ -4,10 +4,13 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class EjectAuto extends TimedCommand {
+public class Eject extends TimedCommand {
 
-  public EjectAuto() {
+  private double speed;
+
+  public Eject(double speed) {
     super(Tuning.ejectTime);
+    this.speed = speed;
     requires(Robot.intake);
   }
 
@@ -18,11 +21,11 @@ public class EjectAuto extends TimedCommand {
 
   @Override
   protected void execute() {
-    Robot.intake.set(1, 1);
+    Robot.intake.set(speed);
   }
 
   @Override
   protected void end() {
-    Robot.intake.stop();
+    Robot.intake.holdCube();
   }
 }

@@ -1,6 +1,7 @@
 package org.team1540.robot2018;
 
 import jaci.pathfinder.Trajectory.Config;
+import jaci.pathfinder.Trajectory.FitMethod;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -15,9 +16,6 @@ public class Tuning {
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
-
-  // @Tunable("-[General] Climbing Drive Forward Secs")
-  // public static double climbingDriveFwdSecs = 0.2; // TODO: fix it
 
   // CAMERA
   @Tunable("-[Camera] Crosshairs Size")
@@ -50,7 +48,7 @@ public class Tuning {
   public static double intakeMaxTime = 10;
 
   @Tunable("[Intake] Intake Hold Speed")
-  public static double intakeHoldSpeed = 0.1;
+  public static double intakeHoldSpeed = -0.1;
 
   @Tunable("[Intake] Eject Seconds")
   public static double ejectTime = 1.0;
@@ -67,6 +65,8 @@ public class Tuning {
   @Tunable("[Intake] Arm Hold Speed")
   public static double intakeArmHoldSpeed = -0.1;
 
+  @Tunable("[Intake] Arm Joystick Constant")
+  public static double intakeArmJoystickConstant = 0.5;
 
   // ELEVATOR
   @Tunable("[Elevator] kP")
@@ -102,23 +102,23 @@ public class Tuning {
   @Tunable("[Elevator] Exchange Position")
   public static double elevatorExchangePosition = 500;
 
-  @Tunable("[Elevator] Front Switch Position")
+  @Tunable("[Elevator] Switch Front Position")
   public static double elevatorFrontSwitchPosition = 2900;
 
-  @Tunable("[Elevator] Scale Lower Position")
-  public static double elevatorScalePosition = 7400;
-
-  @Tunable("[Elevator] Low Scale Position")
+  @Tunable("[Elevator] Scale Low Position")
   public static double elevatorLowScalePosition = 6200;
+
+  @Tunable("[Elevator] Max Position")
+  public static double elevatorMaxPosition = 7400;
+
+  @Tunable("[Elevator] Rung Position")
+  public static double elevatorRungPosition; //TODO
 
   @Tunable("[Elevator] Obstacle Position")
   public static double elevatorObstaclePosition = 1300;
 
   @Tunable("[Elevator] Obstacle Upper Position")
   public static double elevatorObstacleUpperPosition = 3750;
-
-  @Tunable("[Elevator] Rung Position")
-  public static double elevatorRungPosition; //TODO
 
   @Tunable("[Elevator] Max Elevator Deviation")
   public static double maxElevatorDeviation = 200;
@@ -243,12 +243,8 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_FAST;
   @Tunable("[MotionP] TimeStep")
   public static double timeStep = 0.05;
-  @Tunable("[MotionP] DistanceToTravelX")
-  public static double distanceToTravelX = 132;
-  @Tunable("[MotionP] DistanceToTravelY")
-  public static double distanceToTravelY = 65;
-  @Tunable("[MotionP] DegreesToTurn")
-  public static double degreesToTurn = 0;
+  @Tunable("[MotionP] FitMethod")
+  public static FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
   @Tunable("[MotionP] LeftEncoderTicksPerUnit")
   public static double lEncoderTicksPerUnit = 52;
@@ -258,5 +254,4 @@ public class Tuning {
   public static double wheelbaseWidth = 25.091;
   @Tunable("[MotionP] distanceBetweenWheels")
   public static double distanceBetweenWheels = 11.812;
-
 }

@@ -6,7 +6,7 @@ import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
+import org.team1540.robot2018.commands.elevator.HoldElevator;
 
 public class Elevator extends ChickenSubsystem {
 
@@ -64,7 +64,7 @@ public class Elevator extends ChickenSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new HoldElevatorPosition());
+    setDefaultCommand(new HoldElevator());
   }
 
   public void setMotionMagicPosition(double position) {
@@ -78,8 +78,7 @@ public class Elevator extends ChickenSubsystem {
   }
 
   public void stop() {
-    elevatorMotorA.set(ControlMode.PercentOutput, 0);
-    elevatorMotorB.set(ControlMode.PercentOutput, 0);
+    set(0);
   }
 
   public void resetEncoder() {

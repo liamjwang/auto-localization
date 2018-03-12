@@ -3,17 +3,19 @@ package org.team1540.robot2018.commands.arms;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class JoystickArms extends Command {
 
   public JoystickArms() {
-    requires(Robot.intakeArms);
+    requires(Robot.arms);
   }
 
   @Override
   protected void execute() {
-    Robot.intakeArms.setLeft(-OI.getArmLeftAxis() * 0.4);
-    Robot.intakeArms.setRight(OI.getArmRightAxis() * 0.4);
+    // TODO: Invert motors instead of negating set values
+    Robot.arms.set(-OI.getArmLeftAxis() * Tuning.intakeArmJoystickConstant,
+        OI.getArmRightAxis() * Tuning.intakeArmJoystickConstant);
   }
 
   @Override

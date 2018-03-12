@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class MoveWristToPosition extends Command {
+public class MoveWrist extends Command {
   private long spikeDuration;
   private long lastExecTime;
   private double target;
 
-  public MoveWristToPosition(double target) {
+  public MoveWrist(double target) {
     super("Move wrist to " + target);
     this.target = target;
     requires(Robot.wrist);
