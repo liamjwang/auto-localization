@@ -1,6 +1,7 @@
 package org.team1540.robot2018;
 
 import jaci.pathfinder.Trajectory.Config;
+import jaci.pathfinder.Trajectory.FitMethod;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -242,6 +243,8 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_FAST;
   @Tunable("[MotionP] TimeStep")
   public static double timeStep = 0.05;
+  @Tunable("[MotionP] FitMethod")
+  public static FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
   @Tunable("[MotionP] LeftEncoderTicksPerUnit")
   public static double lEncoderTicksPerUnit = 52;
@@ -251,5 +254,4 @@ public class Tuning {
   public static double wheelbaseWidth = 25.091;
   @Tunable("[MotionP] distanceBetweenWheels")
   public static double distanceBetweenWheels = 11.812;
-
 }

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Config;
-import jaci.pathfinder.Trajectory.FitMethod;
 import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
@@ -17,8 +16,6 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
 public class AutonomousProfiling extends Command {
-
-  private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
   private double maxVelocity = Tuning.maxVelocity;
   private double maxAcceleration = Tuning.maxAcceleration;
@@ -56,7 +53,7 @@ public class AutonomousProfiling extends Command {
     double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
         (Tuning.distanceBetweenWheels, 2));
 
-    Config config = new Config(fitMethod, Tuning.sampleRate, timeStep,
+    Config config = new Config(Tuning.fitMethod, Tuning.sampleRate, timeStep,
         Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
 
     Trajectory trajectory = generateSimpleTrajectory(segments[0].start, segments[0].end, config);
