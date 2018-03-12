@@ -243,12 +243,6 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_FAST;
   @Tunable("[MotionP] TimeStep")
   public static double timeStep = 0.05;
-  @Tunable("[MotionP] DistanceToTravelX")
-  public static double distanceToTravelX = 132;
-  @Tunable("[MotionP] DistanceToTravelY")
-  public static double distanceToTravelY = 65;
-  @Tunable("[MotionP] DegreesToTurn")
-  public static double degreesToTurn = 0;
 
   @Tunable("[MotionP] LeftEncoderTicksPerUnit")
   public static double lEncoderTicksPerUnit = 52;

@@ -23,8 +23,6 @@ import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
-import org.team1540.robot2018.commands.auto.AutonomousProfilingFast;
-import org.team1540.robot2018.commands.auto.AutonomousProfilingFast.TrajectorySegmentFast;
 import org.team1540.robot2018.commands.auto.DriveBackward;
 import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
 import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
@@ -121,6 +119,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    // TODO: Move auto logic into command
     elevator.resetEncoder();
     switch (autoPosition.getSelected()) {
       case "Left":
@@ -195,7 +194,7 @@ public class Robot extends IterativeRobot {
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-              addSequential(new AutonomousProfilingFast(new TrajectorySegmentFast(
+              addSequential(new AutonomousProfiling(80, new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(284, 0, 0), false)));
               System.out.println("Going for Right Scale");
