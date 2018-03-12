@@ -4,7 +4,7 @@ import jaci.openrio.gradle.frc.RoboRIO
 
 plugins {
     id "java"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
 }
 
 group 'org.team1540'
@@ -13,11 +13,6 @@ sourceCompatibility = 1.8
 
 repositories {
     maven { url "https://jitpack.io" }
-}
-
-wpi {
-    ctreVersion = "5.2.2.0"
-    wpilibVersion = "2018.3.3"
 }
 
 dependencies {
@@ -32,6 +27,7 @@ dependencies {
 def TEAM = 1540
 
 //def ROBOT_CLASS = "org.team1540.robot2018.WristTuningRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.RobotMotorTest"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
 deploy {

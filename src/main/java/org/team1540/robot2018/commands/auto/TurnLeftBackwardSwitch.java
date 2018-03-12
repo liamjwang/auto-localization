@@ -1,0 +1,23 @@
+package org.team1540.robot2018.commands.auto;
+
+import edu.wpi.first.wpilibj.command.TimedCommand;
+import org.team1540.robot2018.Robot;
+
+public class TurnLeftBackwardSwitch extends TimedCommand {
+  public TurnLeftBackwardSwitch(double time) {
+    super(time);
+    requires(Robot.drivetrain);
+  }
+
+  @Override
+  protected void initialize() {
+    Robot.drivetrain.setLeft(-0.6);
+    Robot.drivetrain.setRight(0.1);
+  }
+
+  @Override
+  protected void end() {
+    Robot.drivetrain.setLeft(0);
+    Robot.drivetrain.setRight(0);
+  }
+}

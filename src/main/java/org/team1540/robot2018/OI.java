@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
-import org.team1540.base.triggers.DPadButton;
-import org.team1540.base.triggers.DPadButton.DPadAxis;
+import org.team1540.robot2018.triggers.StrictDPadButton;
+import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
 /*
  * Button Mapping
@@ -65,6 +65,11 @@ public class OI {
   // wrist to forward 45 degrees
   // static Button copilotX = new JoystickButton(copilot, X);
 
+  // INTAKE
+  public static double getEjectAxis() {
+    return 1 - Utilities.processDeadzone(copilot.getRawAxis(OI.LEFT_TRIG), Tuning.axisDeadzone);
+  }
+
   // ELEVATOR
   public static double getElevatorAxis() {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisDeadzone), 2);
@@ -90,13 +95,13 @@ public class OI {
   static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
   // Move elevator to full height and TODO: raise wrist slightly
-  static Button elevatorFrontScaleButton = new DPadButton(copilot, 0, DPadAxis.UP);
-  // Move elevator to ground position and TODO: flip wrist out
-  static Button elevatorLowerButton = new DPadButton(copilot, 0, DPadAxis.DOWN);
+  static Button elevatorFrontScaleButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
+  // Move elevator to ground position and flip wrist out
+  static Button elevatorLowerButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
   // Move elevator to full height
-  static Button elevatorRaiseButton = new DPadButton(copilot, 0, DPadAxis.LEFT);
+  static Button elevatorRaiseButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
   // Move elevator to switch height
-  static Button elevatorSwitchButton = new DPadButton(copilot, 0, DPadAxis.RIGHT);
+  static Button elevatorSwitchButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
   static Button wristBackButton = new JoystickButton(copilot, B);
   static Button wristFwdButton = new JoystickButton(copilot, A);
@@ -106,8 +111,15 @@ public class OI {
 
   // WRIST
   public static double getWristAxis() {
-    // Note: Same axis as servo tilt, see button that switches between modes
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getArmLeftAxis() {
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getArmRightAxis() {
+    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone), 2);
   }
 
   static Button enableWristAxisControlButton = new Button() {

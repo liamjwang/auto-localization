@@ -24,7 +24,7 @@ import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class AutonomousProfiling extends Command {
+public class AutonomousProfilingFast extends Command {
 
   // TODO Any changes based on the fact that the center of turning isn't in the center?
 
@@ -47,7 +47,7 @@ public class AutonomousProfiling extends Command {
   private static final double FIELD_SWITCH_TO_ALLIANCE_WALL = 151;
   private static final double FIELD_SWITCH_TO_SIDE_WALLS = 85.75;
   private SendableChooser<AutoType> autoTypeChooser = new SendableChooser<>();
-  private Trajectory.FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
+  private FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
   private Timer isFinishedRunningTimer = new Timer();
   // Default command does nothing; this shouldn't ever happen, since it will be set to the real
   // thing during initialization
@@ -58,7 +58,7 @@ public class AutonomousProfiling extends Command {
       return true;
     }
   };
-  private TrajectorySegment[] segments;
+  private TrajectorySegmentFast[] segments;
   private SendableChooser<StartLocation> startLocationChooser = new SendableChooser<>();
   private double timeToFinish = 0;
   // TODO Store these profiles instead of generating on the fly
@@ -83,13 +83,13 @@ public class AutonomousProfiling extends Command {
   //   // AdjustableManager.getInstance().add(this);
   // }
 
-  public AutonomousProfiling(TrajectorySegment... segments) {
+  public AutonomousProfilingFast(TrajectorySegmentFast... segments) {
     requires(Robot.drivetrain);
     this.segments = segments;
     System.out.println(segments[0].start.y + " ---------------- " + segments[0].end.y);
   }
 
-  private Trajectory generateTestTrajectory(Trajectory.Config config) {
+  private Trajectory generateTestTrajectory(Config config) {
     return Pathfinder.generate(new Waypoint[]{
         new Waypoint(0, 0, 0), new Waypoint
         (Tuning.distanceToTravelX, Tuning.distanceToTravelY,
@@ -97,7 +97,7 @@ public class AutonomousProfiling extends Command {
     }, config);
   }
 
-  public Trajectory generateTrajectory(Trajectory.Config config, AutoType autoType, StartLocation
+  public Trajectory generateTrajectory(Config config, AutoType autoType, StartLocation
       startLocation) {
     waypoints.clear();
 
@@ -196,7 +196,7 @@ public class AutonomousProfiling extends Command {
     // Trajectory trajectory;
     // try {
     //   trajectory = generateTrajectory(new Config(fitMethod, Tuning.sampleRate, timeStep,
-    // Tuning.maxVelocity,
+    // Tuning.maxVelocityFast,
     //           Tuning.maxAcceleration, Tuning.maxJerk),
     //       autoTypeChooser.getSelected(), startLocationChooser.getSelected());
     //   // TODO exception handling
@@ -207,7 +207,7 @@ public class AutonomousProfiling extends Command {
 
 
     Config config = new Config(fitMethod, Tuning.sampleRate, timeStep,
-        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
+        Tuning.maxVelocityFast, Tuning.maxAcceleration, Tuning.maxJerk);
 
     List<Segment> leftSegments = new LinkedList<>();
     Trajectory trajectory = generateSimpleTrajectory(segments[0].start, segments[0].end, config);
@@ -216,7 +216,7 @@ public class AutonomousProfiling extends Command {
     Segment[] right = modifier.getRightTrajectory().segments;
 
     timeToFinish = left.length * left[0].dt;
-    // for (TrajectorySegment segment : segments) {
+    // for (TrajectorySegmentFast segment : segments) {
     //   Trajectory traj = generateSimpleTrajectory(segment.start, segment.end, config);
     //   timeToFinish += traj.segments.length * traj.segments[0].dt;
     //
@@ -323,12 +323,12 @@ public class AutonomousProfiling extends Command {
     }
   }
 
-  public static class TrajectorySegment {
+  public static class TrajectorySegmentFast {
     public Waypoint end;
     public boolean flip;
     public Waypoint start;
 
-    public TrajectorySegment(Waypoint start, Waypoint end, boolean flip) {
+    public TrajectorySegmentFast(Waypoint start, Waypoint end, boolean flip) {
       this.end = end;
       this.flip = flip;
       this.start = start;

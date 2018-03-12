@@ -1,14 +1,16 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.wrappers.ChickenVictor;
+import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 
 public class Intake extends Subsystem {
-  // PowerDistributionPanel pdp = new PowerDistributionPanel();
+  PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private ChickenVictor intakeMotorA = new ChickenVictor(RobotMap.INTAKE_A);
   private ChickenVictor intakeMotorB = new ChickenVictor(RobotMap.INTAKE_B);
@@ -29,13 +31,12 @@ public class Intake extends Subsystem {
 
   public double getCurrent() {
     // TODO: better method of adjusting tuning between robots
-    // if (Tuning.isPandora) {
-    //   return pdp.getCurrent(5) - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
-    // } else {
-    //   return pdp.getCurrent(10) + pdp.getCurrent(11)
-    //       - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
-    // }
-    return 0;
+    if (Tuning.isPandora) {
+      return pdp.getCurrent(5) - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
+    } else {
+      return pdp.getCurrent(10) + pdp.getCurrent(11)
+          - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
+    }
   }
 
   public void set(double value) {

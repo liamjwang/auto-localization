@@ -21,18 +21,23 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
+import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
+import org.team1540.robot2018.commands.auto.AutonomousProfilingFast;
+import org.team1540.robot2018.commands.auto.AutonomousProfilingFast.TrajectorySegmentFast;
 import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.elevator.HoldElevatorPosition;
+import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
+import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
-import org.team1540.robot2018.commands.groups.ClimbSequence;
+import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.EjectAuto;
+import org.team1540.robot2018.commands.intake.EjectAutoSlow;
 import org.team1540.robot2018.commands.intake.EjectCube;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
@@ -69,9 +74,10 @@ public class Robot extends IterativeRobot {
     // configure SmartDashboard
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    autoPosition.addDefault("Middle", "Middle");
+    autoPosition.addObject("Middle", "Middle");
     autoPosition.addObject("Left", "Left");
     autoPosition.addObject("Right", "Right");
+    autoPosition.addDefault("Right Hook", "Right Hook");
     autoPosition.addObject("Stupid", "Stupid");
 
     SmartDashboard.putData("Auto mode", autoPosition);
@@ -91,17 +97,24 @@ public class Robot extends IterativeRobot {
 
     // configure controls
     OI.autoIntakeButton.whenPressed(new IntakeSequence());
+    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
+    //     (Tuning.intakeArmSpeed), intakeArms));
+    OI.autoIntakeButton.whileHeld(new JoystickArms());
+
     OI.autoEjectButton.whenPressed(new EjectCube());
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake, intakeArms));
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
+        intakeArms));
 
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorExchangePosition));
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorExchangePosition));
 
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorFrontSwitchPosition));
-    OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
+        .elevatorFrontSwitchPosition));
+    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
 
-    OI.wristFwdButton.whenPressed(new MoveWristToPosition(Tuning.wristOutPosition));
+    OI.wristFwdButton.whenPressed(new CalibrateWrist());
     OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
 
@@ -111,9 +124,11 @@ public class Robot extends IterativeRobot {
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
 
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning.winchInLowVel), winch));
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
 
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning.winchInHighVel), winch));
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
 
     // OI.climbSequenceButton.whenPressed(new ClimbSequence());
 
@@ -180,7 +195,7 @@ public class Robot extends IterativeRobot {
               System.out.println("Going for Left Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
-                  new Waypoint(112, -103, 0), false)));
+                  new Waypoint(102, -123, 0), false)));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
@@ -191,7 +206,8 @@ public class Robot extends IterativeRobot {
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
-              DriverStation.reportError("Match data could not get owned switch side, reverting to base auto", false);
+              DriverStation.reportError("Match data could not get owned switch side, reverting to"
+                  + " base auto", false);
               addSequential(new DriveBackward(Tuning.stupidDriveTime));
             }
             addSequential(new CalibrateWrist());
@@ -212,6 +228,39 @@ public class Robot extends IterativeRobot {
               addSequential(new EjectAuto());
             }
             addSequential(new CalibrateWrist());
+          }
+        };
+        break;
+
+      case "Right Hook":
+        System.out.println("Right Hook Selected");
+        autoCommand = new CommandGroup() {
+          {
+            if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+              addSequential(new AutonomousProfilingFast(new TrajectorySegmentFast(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(284, 0, 0), false)));
+              System.out.println("Going for Right Scale");
+              addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
+              addSequential(new TurnLeftBackwardScale(0.8));
+              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorScalePosition));
+              addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
+              addSequential(new EjectAutoSlow());
+            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(114, 0, 0), false)));
+              System.out.println("Going for Right Switch");
+              addSequential(new TurnLeftBackwardSwitch(1.6));
+              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new EjectAuto());
+            } else {
+              addSequential(new AutonomousProfiling(new TrajectorySegment(
+                  new Waypoint(0, 0, 0),
+                  new Waypoint(114, 0, 0), false)));
+            }
+            addSequential(new CalibrateWrist());
+            addSequential(new GroundPosition());
           }
         };
         break;
@@ -244,6 +293,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("[Elevator] Position", elevator.getPosition());
   }
 
   @Override

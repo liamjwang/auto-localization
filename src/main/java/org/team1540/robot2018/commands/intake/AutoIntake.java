@@ -11,7 +11,6 @@ public class AutoIntake extends Command {
   public AutoIntake() {
     super(Tuning.intakeMaxTime);
     requires(Robot.intake);
-    requires(Robot.intakeArms);
   }
 
   @Override
@@ -22,26 +21,16 @@ public class AutoIntake extends Command {
 
   @Override
   protected boolean isFinished() {
-    // return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
-    //     && this.timeSinceInitialized() > Tuning.intakeMinTime)
-    //     || isTimedOut();
-    return false;
-  }
-
-  @Override
-  protected void execute() {
-    if (OI.autoIntakeButton.get()) {
-      Robot.intakeArms.set(Tuning.intakeArmSpeed);
-    } else {
-      Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
-    }
+    return ((Robot.intake.getCurrent() >= Tuning.intakeSpikeCurrent)
+        && this.timeSinceInitialized() > Tuning.intakeMinTime)
+        || isTimedOut();
+    // return false;
   }
 
   @Override
   protected void end() {
     // if (!isTimedOut()) {
     Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
-      Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
     // } else {
     //   Robot.intake.stop();
     //   Robot.intakeArms.set(0);
@@ -53,6 +42,5 @@ public class AutoIntake extends Command {
     // Robot.intake.stop();
     // Robot.intakeArms.set(0);
     Robot.intake.set(-Tuning.intakeHoldSpeed, -Tuning.intakeHoldSpeed);
-    Robot.intakeArms.set(Tuning.intakeArmHoldSpeed);
   }
 }

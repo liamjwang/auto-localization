@@ -31,10 +31,19 @@ public class Elevator extends ChickenSubsystem {
     elevatorMotorA.setInverted(true);
     elevatorMotorB.setInverted(true);
 
+    elevatorMotorA.setBrake(true);
+    elevatorMotorA.setBrake(true);
+
     // TODO: better method of adjusting tuning between robots
     elevatorMotorA.setSensorPhase(Tuning.isPandora);
 
     elevatorMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    elevatorMotorA.configAllowableClosedloopError(0, 5);
+    elevatorMotorB.configAllowableClosedloopError(0, 5);
+  }
+
+  public double getCurrent() {
+    return elevatorMotorA.getOutputCurrent() + elevatorMotorB.getOutputCurrent();
   }
 
   public int getError() {
