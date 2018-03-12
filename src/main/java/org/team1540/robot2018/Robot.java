@@ -159,7 +159,7 @@ public class Robot extends IterativeRobot {
       case "Right Hook":
         System.out.println("Right Hook Selected");
         if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Going for scale")
+          System.out.println("Going for scale");
           autoCommand = new RightScaleAuto();
         } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for switch");
