@@ -28,8 +28,7 @@ public class RunProfile extends Command {
     // figure out how long execution will take and set the timeout
     // don't anticipate left and right to take different amounts of points but better safe than sorry
     setTimeout(
-        Double.max(left.length() * left.segments[0].dt, right.length() * right.segments[0].dt)
-            / 1000);
+        Double.max(left.length() * left.segments[0].dt, right.length() * right.segments[0].dt));
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties(
         Robot.drivetrain::getLeftVelocity,
