@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Waypoint;
+import java.io.File;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
@@ -56,6 +57,7 @@ public class Robot extends IterativeRobot {
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
+  public static CSVProfileManager profiles;
 
   private Command emergencyDriveCommand = new TankDrive();
 
@@ -155,6 +157,12 @@ public class Robot extends IterativeRobot {
         outputStream.putFrame(source);
       }
     }).start();
+
+
+    // initialize profiles
+    // unlike other static fields, initialized here because there's a high likelihood of it throwing
+    // an exception and exceptions thrown during static initialization are not fun.
+    profiles = new CSVProfileManager(new File("/home/lvuser/profiles"));
   }
 
   @Override
