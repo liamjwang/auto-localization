@@ -66,6 +66,7 @@ public class AutonomousProfiling extends Command {
 
     timeToFinish = left.length * left[0].dt;
 
+    // TODO: Add option to flip and reverse profiles
     MotionProfilingProperties leftProperties = new MotionProfilingProperties
         (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
             .drivetrain::getLeftVelocity,

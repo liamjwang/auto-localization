@@ -11,6 +11,7 @@ import org.team1540.base.motionprofiling.MotionProfilingProperties;
 /**
  * Executes a set of motion profiles (with respective properties.)
  */
+// TODO: Add option to flip and reverse profiles and remove this class
 public class RunMotionProfilesBackwards extends Command {
 
   private int slotId = 0;

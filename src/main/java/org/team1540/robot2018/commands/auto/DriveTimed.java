@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Robot;
 
-// TODO: Move this to ROOSTER
+// TODO: Move DriveTimed command to ROOSTER
 public class DriveTimed extends TimedCommand {
   private ControlMode mode;
   private double leftValue;

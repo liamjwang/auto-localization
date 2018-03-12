@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
 
-    // configure SmartDashboard
+    // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
     autoPosition.addObject("Middle", "Middle");
@@ -79,6 +79,7 @@ public class Robot extends IterativeRobot {
     driveMode.addObject("Manual Override", true);
     SmartDashboard.putData("[Drivetrain] ***** DRIVE OVERRIDE *****", driveMode);
 
+    // TODO: Move SmartDashboard commands to separate class
     Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroWrist);
@@ -250,6 +251,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+    // TODO: Move SmartDashboard puts to separate class
     SmartDashboard.putNumber("[Elevator] Position", elevator.getPosition());
   }
 
@@ -263,6 +265,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    // TODO: Add a command chooser to ROOSTER
     // for drive override
     if (driveMode.getSelected()) {
       // oh no encoders broke
