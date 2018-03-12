@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class HoldElevatorPosition extends Command {
+public class HoldElevator extends Command {
   private double setpoint;
 
-  public HoldElevatorPosition() {
+  public HoldElevator() {
     requires(Robot.elevator);
   }
 

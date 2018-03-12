@@ -25,11 +25,11 @@ import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveTimed;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.Eject;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
-import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
+import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -130,7 +130,7 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(120, 50, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
               addSequential(new Eject(1));
             } else {
               System.out.println("Just Crossing the Line");
@@ -152,14 +152,14 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(102, -123, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
               addSequential(new Eject(1));
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(106, 85, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
               addSequential(new Eject(1));
             } else {
               DriverStation.reportError(
@@ -181,7 +181,7 @@ public class Robot extends IterativeRobot {
                 new Waypoint(134, 0, 0), false)));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
               addSequential(new Eject(1));
             }
             addSequential(new CalibrateWrist());
@@ -198,10 +198,10 @@ public class Robot extends IterativeRobot {
                   new Waypoint(0, 0, 0),
                   new Waypoint(284, 0, 0), false)));
               System.out.println("Going for Right Scale");
-              addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
+              addParallel(new MoveWrist(Tuning.wristTransitPosition));
               addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -0.6 * 750, 0.2 * 750));
-              addSequential(new MoveElevatorToPosition(false, Tuning.elevatorMaxPosition));
-              addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
+              addSequential(new MoveElevatorSafe(false, Tuning.elevatorMaxPosition));
+              addSequential(new MoveWrist(Tuning.wristBackPosition));
               addSequential(new Eject(0.6));
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
@@ -209,7 +209,7 @@ public class Robot extends IterativeRobot {
                   new Waypoint(114, 0, 0), false)));
               System.out.println("Going for Right Switch");
               addSequential(new DriveTimed(ControlMode.PercentOutput, 1.6, -0.6, 0.1));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
               addSequential(new Eject(1));
             } else {
               addSequential(new AutonomousProfiling(new TrajectorySegment(

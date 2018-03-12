@@ -11,7 +11,7 @@ import org.team1540.base.Utilities;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
+import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
@@ -19,7 +19,7 @@ import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.JoystickEject;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
-import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
+import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.triggers.StrictDPadButton;
 import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
@@ -93,17 +93,17 @@ public class OI {
     // ELEVATOR
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
 
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(true, Tuning
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorSafe(true, Tuning
         .elevatorExchangePosition));
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(true, Tuning
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorSafe(true, Tuning
         .elevatorFrontSwitchPosition));
 
     // WRIST
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
     OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
-    OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
+    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
+    OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 
     // ELEVATOR AND WRIST
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
