@@ -6,6 +6,7 @@ import org.team1540.base.motionprofiling.MotionProfilingProperties;
 import org.team1540.base.motionprofiling.RunMotionProfiles;
 import org.team1540.robot2018.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class RunProfile extends Command {
   private RunMotionProfiles profileCommand;
@@ -31,12 +32,16 @@ public class RunProfile extends Command {
         Double.max(left.length() * left.segments[0].dt, right.length() * right.segments[0].dt));
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties(
+        Tuning.lEncoderTicksPerUnit,
+        0,
         Robot.drivetrain::getLeftVelocity,
         Robot.drivetrain::setLeftVelocity,
         Robot.drivetrain::getLeftPosition,
         left);
 
     MotionProfilingProperties rightProperties = new MotionProfilingProperties(
+        Tuning.rEncoderTicksPerUnit,
+        0,
         Robot.drivetrain::getRightVelocity,
         Robot.drivetrain::setRightVelocity,
         Robot.drivetrain::getRightPosition,
