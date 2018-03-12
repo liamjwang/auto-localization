@@ -130,8 +130,6 @@ public class Robot extends IterativeRobot {
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
         .winchInHighVel), winch));
 
-    // OI.climbSequenceButton.whenPressed(new ClimbSequence());
-
     // configure camera crosshairs
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
