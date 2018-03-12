@@ -199,7 +199,7 @@ public class Robot extends IterativeRobot {
                   new Waypoint(284, 0, 0), false)));
               System.out.println("Going for Right Scale");
               addParallel(new MoveWrist(Tuning.wristTransitPosition));
-              addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -0.6 * 750, 0.2 * 750));
+              addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -450, 150));
               addSequential(new MoveElevatorSafe(false, Tuning.elevatorMaxPosition));
               addSequential(new MoveWrist(Tuning.wristBackPosition));
               addSequential(new Eject(0.6));
