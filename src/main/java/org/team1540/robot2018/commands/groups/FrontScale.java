@@ -8,6 +8,6 @@ import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 public class FrontScale extends CommandGroup {
   public FrontScale() {
     addSequential(new MoveWristToPosition(Tuning.wrist45FwdPosition));
-    addSequential(new MoveElevator(Tuning.elevatorMaxPosition));
+    addSequential(new MoveElevator(true, Tuning.elevatorMaxPosition));
   }
 }

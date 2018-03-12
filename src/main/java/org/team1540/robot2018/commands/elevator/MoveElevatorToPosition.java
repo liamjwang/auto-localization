@@ -8,7 +8,7 @@ import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
 
 public class MoveElevatorToPosition extends CommandGroup {
 
-  public MoveElevatorToPosition(double target) {
+  public MoveElevatorToPosition(boolean limitCurrent, double target) {
     addSequential(new ConditionalCommand(new MoveWristToPosition(Tuning.wristTransitPosition)) {
       @Override
       protected boolean condition() {
@@ -21,6 +21,6 @@ public class MoveElevatorToPosition extends CommandGroup {
             && Robot.wrist.getPosition() < Tuning.wristTransitPosition;
       }
     });
-    addSequential(new MoveElevator(target));
+    addSequential(new MoveElevator(limitCurrent, target));
   }
 }

@@ -6,6 +6,6 @@ import org.team1540.robot2018.commands.elevator.MoveElevator;
 
 public class BackSwitch extends CommandGroup {
   public BackSwitch() {
-    addSequential(new MoveElevator(Tuning.elevatorGroundPosition));
+    addSequential(new MoveElevator(true, Tuning.elevatorGroundPosition));
   }
 }

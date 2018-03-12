@@ -10,10 +10,12 @@ import org.team1540.robot2018.Tuning;
  * the elevator is clear)
  */
 public class MoveElevator extends Command {
+  private boolean limitCurrent;
   private double target;
   private Timer currentTimer = new Timer();
 
-  public MoveElevator(double target) {
+  public MoveElevator(boolean limitCurrent, double target) {
+    this.limitCurrent = limitCurrent;
     this.target = target;
     requires(Robot.elevator);
   }
@@ -26,16 +28,18 @@ public class MoveElevator extends Command {
 
   @Override
   protected void execute() {
-    if (Robot.elevator.getCurrent() > Tuning.elevatorCurrentThreshold) {
-      if (currentTimer.get() <= 0) {
-        currentTimer.start();
+    if (limitCurrent) {
+      if (Robot.elevator.getCurrent() > Tuning.elevatorCurrentThreshold) {
+        if (currentTimer.get() <= 0) {
+          currentTimer.start();
+        }
+        if (currentTimer.hasPeriodPassed(Tuning.elevatorSpikeTime)) {
+          target = Robot.elevator.getPosition();
+        }
+      } else {
+        currentTimer.stop();
+        currentTimer.reset();
       }
-      if (currentTimer.hasPeriodPassed(Tuning.elevatorSpikeTime)) {
-        target = Robot.elevator.getPosition();
-      }
-    } else {
-      currentTimer.stop();
-      currentTimer.reset();
     }
 
     Robot.elevator.setMotionMagicPosition(target);

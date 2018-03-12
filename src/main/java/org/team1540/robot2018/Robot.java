@@ -25,17 +25,17 @@ import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveTimed;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
+import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.EjectAuto;
 import org.team1540.robot2018.commands.intake.EjectAutoSlow;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
+import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
-import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
@@ -201,7 +201,7 @@ public class Robot extends IterativeRobot {
               System.out.println("Going for Right Scale");
               addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
               addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -0.6 * 750, 0.2 * 750));
-              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorMaxPosition));
+              addSequential(new MoveElevatorToPosition(false, Tuning.elevatorMaxPosition));
               addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
               addSequential(new EjectAutoSlow());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {

@@ -93,9 +93,9 @@ public class OI {
     // ELEVATOR
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
 
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(true, Tuning
         .elevatorExchangePosition));
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(true, Tuning
         .elevatorFrontSwitchPosition));
 
     // WRIST

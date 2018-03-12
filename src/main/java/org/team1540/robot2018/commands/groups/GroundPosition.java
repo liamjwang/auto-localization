@@ -12,7 +12,7 @@ import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 public class GroundPosition extends CommandGroup {
   public GroundPosition() {
     addSequential(new CalibrateWrist());
-    addSequential(new ConditionalCommand(new MoveElevator(Tuning.elevatorGroundPosition)) {
+    addSequential(new ConditionalCommand(new MoveElevator(true, Tuning.elevatorGroundPosition)) {
       @Override
       protected boolean condition() {
         return Robot.elevator.getPosition() > Tuning.elevatorGroundPosition;

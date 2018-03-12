@@ -6,6 +6,6 @@ import org.team1540.robot2018.commands.elevator.MoveElevator;
 
 public class FrontSwitch extends CommandGroup {
   public FrontSwitch() {
-    addSequential(new MoveElevator(Tuning.elevatorFrontSwitchPosition));
+    addSequential(new MoveElevator(true, Tuning.elevatorFrontSwitchPosition));
   }
 }

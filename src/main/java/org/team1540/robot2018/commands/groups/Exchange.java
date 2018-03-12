@@ -6,6 +6,6 @@ import org.team1540.robot2018.commands.elevator.MoveElevator;
 
 public class Exchange extends CommandGroup {
   public Exchange() {
-    addSequential(new MoveElevator(Tuning.elevatorExchangePosition));
+    addSequential(new MoveElevator(true, Tuning.elevatorExchangePosition));
   }
 }
