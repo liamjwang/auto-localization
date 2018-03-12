@@ -3,6 +3,7 @@ package org.team1540.robot2018.commands.auto;
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Trajectory;
 import org.team1540.base.motionprofiling.MotionProfilingProperties;
+import org.team1540.base.motionprofiling.RunMotionProfiles;
 import org.team1540.robot2018.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.Robot;
 
