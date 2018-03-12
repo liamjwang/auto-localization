@@ -16,7 +16,7 @@ import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
-import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.intake.JoystickEject;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
@@ -80,7 +80,7 @@ public class OI {
   public OI() {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
-    OI.ejectButton.whenPressed(new EjectCube());
+    OI.ejectButton.whenPressed(new JoystickEject());
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         arms));
