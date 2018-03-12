@@ -58,5 +58,33 @@
       }
     ],
     "flip": true
+  },
+  "right_scale_approach": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 284,
+        "y": 0,
+        "angle": 0
+      }
+    ]
+  },
+  "right_hook_approach": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 114,
+        "y": 0,
+        "angle": 0
+      }
+    ]
   }
 }

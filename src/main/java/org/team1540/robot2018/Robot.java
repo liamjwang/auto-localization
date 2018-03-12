@@ -8,12 +8,10 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Waypoint;
 import java.io.File;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
@@ -23,16 +21,11 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling;
-import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveTimed;
+import org.team1540.robot2018.commands.auto.sequences.RightHookAuto;
+import org.team1540.robot2018.commands.auto.sequences.RightScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
-import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
-import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.intake.Eject;
-import org.team1540.robot2018.commands.wrist.CalibrateWrist;
-import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -165,35 +158,16 @@ public class Robot extends IterativeRobot {
 
       case "Right Hook":
         System.out.println("Right Hook Selected");
-        autoCommand = new CommandGroup() {
-          {
-            if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-              addSequential(new AutonomousProfiling(80, new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(284, 0, 0), false)));
-              System.out.println("Going for Right Scale");
-              addParallel(new MoveWrist(Tuning.wristTransitPosition));
-              addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -450, 150));
-              addSequential(new MoveElevatorSafe(false, Tuning.elevatorMaxPosition));
-              addSequential(new MoveWrist(Tuning.wristBackPosition));
-              addSequential(new Eject(0.6));
-            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(114, 0, 0), false)));
-              System.out.println("Going for Right Switch");
-              addSequential(new DriveTimed(ControlMode.PercentOutput, 1.6, -0.6, 0.1));
-              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
-              addSequential(new Eject(1));
-            } else {
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(114, 0, 0), false)));
-            }
-            addSequential(new CalibrateWrist());
-            addSequential(new GroundPosition());
-          }
-        };
+        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+          System.out.println("Going for scale")
+          autoCommand = new RightScaleAuto();
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          System.out.println("Going for switch");
+          autoCommand = new RightHookAuto();
+        } else {
+          System.out.println("Crossing the line");
+          autoCommand = new SimpleProfileAuto("right_hook_approach");
+        }
         break;
 
       case "Stupid":
