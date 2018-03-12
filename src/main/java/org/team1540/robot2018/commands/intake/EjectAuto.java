@@ -23,6 +23,6 @@ public class EjectAuto extends TimedCommand {
 
   @Override
   protected void end() {
-    Robot.intake.stop();
+    Robot.intake.holdCube();
   }
 }

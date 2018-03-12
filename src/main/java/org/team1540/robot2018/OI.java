@@ -82,7 +82,7 @@ public class OI {
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
     OI.ejectButton.whenPressed(new EjectCube());
 
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         intakeArms));
 
     // ARMS

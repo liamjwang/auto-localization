@@ -47,7 +47,7 @@ public class Tuning {
   public static double intakeMaxTime = 10;
 
   @Tunable("[Intake] Intake Hold Speed")
-  public static double intakeHoldSpeed = 0.1;
+  public static double intakeHoldSpeed = -0.1;
 
   @Tunable("[Intake] Eject Seconds")
   public static double ejectTime = 1.0;

@@ -20,16 +20,12 @@ public class IntakeArms extends Subsystem {
   }
 
   public void set(double value) {
-    armMotorLeft.set(ControlMode.PercentOutput, value);
-    armMotorRight.set(ControlMode.PercentOutput, value);
+    set(value, value);
   }
 
-  public void setLeft(double value) {
-    armMotorLeft.set(ControlMode.PercentOutput, value);
-  }
-
-  public void setRight(double value) {
-    armMotorRight.set(ControlMode.PercentOutput, value);
+  public void set(double leftValue, double rightValue) {
+    armMotorLeft.set(ControlMode.PercentOutput, leftValue);
+    armMotorRight.set(ControlMode.PercentOutput, rightValue);
   }
 
   public double getCurrent() {

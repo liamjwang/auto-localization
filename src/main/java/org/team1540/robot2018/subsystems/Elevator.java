@@ -78,8 +78,7 @@ public class Elevator extends ChickenSubsystem {
   }
 
   public void stop() {
-    elevatorMotorA.set(ControlMode.PercentOutput, 0);
-    elevatorMotorB.set(ControlMode.PercentOutput, 0);
+    set(0);
   }
 
   public void resetEncoder() {

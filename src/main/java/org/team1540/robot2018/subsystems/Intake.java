@@ -40,8 +40,7 @@ public class Intake extends Subsystem {
   }
 
   public void set(double value) {
-    intakeMotorA.set(ControlMode.PercentOutput, value);
-    intakeMotorB.set(ControlMode.PercentOutput, value);
+    set(value, value);
   }
 
   public void set(double valueA, double valueB) {
@@ -49,9 +48,7 @@ public class Intake extends Subsystem {
     intakeMotorB.set(ControlMode.PercentOutput, valueB);
   }
 
-  public void stop() {
-    // TODO: Dont do this
-    intakeMotorA.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed); ///////////////////////////////////
-    intakeMotorB.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed);
+  public void holdCube() {
+    set(Tuning.intakeHoldSpeed);
   }
 }

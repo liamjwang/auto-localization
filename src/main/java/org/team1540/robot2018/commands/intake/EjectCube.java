@@ -24,6 +24,6 @@ public class EjectCube extends TimedCommand {
 
   @Override
   protected void end() {
-    Robot.intake.stop();
+    Robot.intake.holdCube();
   }
 }

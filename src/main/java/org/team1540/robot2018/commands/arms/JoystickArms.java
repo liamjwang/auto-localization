@@ -12,8 +12,7 @@ public class JoystickArms extends Command {
 
   @Override
   protected void execute() {
-    Robot.intakeArms.setLeft(-OI.getArmLeftAxis() * 0.4);
-    Robot.intakeArms.setRight(OI.getArmRightAxis() * 0.4);
+    Robot.intakeArms.set(-OI.getArmLeftAxis() * 0.4, OI.getArmRightAxis() * 0.4);
   }
 
   @Override
