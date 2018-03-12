@@ -13,8 +13,10 @@ public class PIDTankDrive extends Command {
   @Override
   protected void execute() {
     double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
-    Robot.drivetrain.setLeftVelocity((-OI.getTankdriveLeftAxis() + triggerValue)* Tuning.drivetrainVelocity);
-    Robot.drivetrain.setRightVelocity((-OI.getTankdriveRightAxis() + triggerValue)*Tuning.drivetrainVelocity);
+    Robot.drivetrain.setLeftVelocity(
+        (-OI.getTankdriveLeftAxis() + triggerValue) * Tuning.drivetrainVelocity);
+    Robot.drivetrain.setRightVelocity(
+        (-OI.getTankdriveRightAxis() + triggerValue) * Tuning.drivetrainVelocity);
   }
 
   @Override
