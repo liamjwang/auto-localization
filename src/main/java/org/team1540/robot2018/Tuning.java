@@ -64,6 +64,8 @@ public class Tuning {
   @Tunable("[Intake] Arm Hold Speed")
   public static double intakeArmHoldSpeed = -0.1;
 
+  @Tunable("[Intake] Arm Joystick Constant")
+  public static double intakeArmJoystickConstant = 0.5;
 
   // ELEVATOR
   @Tunable("[Elevator] kP")

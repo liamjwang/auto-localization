@@ -3,6 +3,7 @@ package org.team1540.robot2018.commands.arms;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;
 import org.team1540.robot2018.Robot;
+import org.team1540.robot2018.Tuning;
 
 public class JoystickArms extends Command {
 
@@ -12,7 +13,8 @@ public class JoystickArms extends Command {
 
   @Override
   protected void execute() {
-    Robot.intakeArms.set(-OI.getArmLeftAxis() * 0.4, OI.getArmRightAxis() * 0.4);
+    Robot.intakeArms.set(-OI.getArmLeftAxis() * Tuning.intakeArmJoystickConstant,
+        OI.getArmRightAxis() * Tuning.intakeArmJoystickConstant);
   }
 
   @Override
