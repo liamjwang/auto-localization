@@ -250,8 +250,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    // TODO: Move SmartDashboard puts to separate class
-    SmartDashboard.putNumber("[Elevator] Position", elevator.getPosition());
   }
 
   @Override
