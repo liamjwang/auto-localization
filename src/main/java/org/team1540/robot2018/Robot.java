@@ -1,5 +1,6 @@
 package org.team1540.robot2018;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -23,9 +24,7 @@ import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
-import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
-import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
+import org.team1540.robot2018.commands.auto.DriveTimed;
 import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.EjectAuto;
@@ -163,9 +162,10 @@ public class Robot extends IterativeRobot {
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
-              DriverStation.reportError("Match data could not get owned switch side, reverting to"
-                  + " base auto", false);
-              addSequential(new DriveBackward(Tuning.stupidDriveTime));
+              DriverStation.reportError(
+                  "Match data could not get owned switch side, reverting to base auto",
+                  false);
+              addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
             }
             addSequential(new CalibrateWrist());
           }
@@ -199,7 +199,7 @@ public class Robot extends IterativeRobot {
                   new Waypoint(284, 0, 0), false)));
               System.out.println("Going for Right Scale");
               addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
-              addSequential(new TurnLeftBackwardScale(0.8));
+              addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -0.6 * 750, 0.2 * 750));
               addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorScalePosition));
               addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
               addSequential(new EjectAutoSlow());
@@ -208,7 +208,7 @@ public class Robot extends IterativeRobot {
                   new Waypoint(0, 0, 0),
                   new Waypoint(114, 0, 0), false)));
               System.out.println("Going for Right Switch");
-              addSequential(new TurnLeftBackwardSwitch(1.6));
+              addSequential(new DriveTimed(ControlMode.PercentOutput, 1.6, -0.6, 0.1));
               addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
               addSequential(new EjectAuto());
             } else {
@@ -226,7 +226,7 @@ public class Robot extends IterativeRobot {
         System.out.println("Stupid Auto Selected");
         autoCommand = new CommandGroup() {
           {
-            addSequential(new DriveBackward(Tuning.stupidDriveTime));
+            addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
             addSequential(new CalibrateWrist());
           }
         };
