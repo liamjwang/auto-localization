@@ -61,6 +61,7 @@ public class CSVProfileManager {
     profiles = new HashMap<>(profileNames.size());
 
     for (String name : profileNames) {
+      System.out.println("Loading profile " + name);
       File leftFile = Arrays.stream(leftFiles)
           .filter(file -> file.getName().equals(name + "_left.csv"))
           .findFirst()
