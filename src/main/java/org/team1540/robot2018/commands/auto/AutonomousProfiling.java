@@ -77,7 +77,7 @@ public class AutonomousProfiling extends Command {
             Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition,
             modifier.getRightTrajectory());
     isFinishedRunningTimer.reset();
-    Scheduler.getInstance().add(new RunMotionProfiles(leftProperties, rightProperties));
+    Scheduler.getInstance().add(new RunMotionProfilesBackwards(leftProperties, rightProperties));
     isFinishedRunningTimer.start();
   }
 
