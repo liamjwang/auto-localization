@@ -7,8 +7,6 @@ import org.team1540.base.Utilities;
 import org.team1540.robot2018.triggers.StrictDPadButton;
 import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
-// import org.team1540.base.triggers.StrictDPadButton;
-
 /*
  * Button Mapping
  * X: 3
