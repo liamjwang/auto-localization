@@ -35,13 +35,13 @@ import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
-import org.team1540.robot2018.subsystems.IntakeArms;
+import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
-  public static final IntakeArms intakeArms = new IntakeArms();
+  public static final Arms arms = new Arms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
 
-    // configure camera crosshairs
+    // TODO: Move camera crosshairs into separate (command?)
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
       camera.setResolution(320, 240);

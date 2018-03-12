@@ -1,7 +1,7 @@
 package org.team1540.robot2018;
 
 import static org.team1540.robot2018.Robot.intake;
-import static org.team1540.robot2018.Robot.intakeArms;
+import static org.team1540.robot2018.Robot.arms;
 import static org.team1540.robot2018.Robot.winch;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -83,12 +83,12 @@ public class OI {
     OI.ejectButton.whenPressed(new EjectCube());
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
-        intakeArms));
+        arms));
 
     // ARMS
     OI.intakeSequenceButton.whileHeld(new JoystickArms());
-    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-    //     (Tuning.intakeArmSpeed), intakeArms));
+    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> arms.set
+    //     (Tuning.intakeArmSpeed), arms));
 
     // ELEVATOR
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());

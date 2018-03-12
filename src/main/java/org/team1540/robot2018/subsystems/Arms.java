@@ -7,12 +7,12 @@ import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 
-public class IntakeArms extends Subsystem {
+public class Arms extends Subsystem {
 
   private ChickenTalon armMotorLeft = new ChickenTalon(RobotMap.ARM_LEFT);
   private ChickenTalon armMotorRight = new ChickenTalon(RobotMap.ARM_RIGHT);
 
-  public IntakeArms() {
+  public Arms() {
     armMotorLeft.setInverted(false);
     armMotorRight.setInverted(true);
     armMotorLeft.setBrake(false);
