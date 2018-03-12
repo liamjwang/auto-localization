@@ -200,7 +200,7 @@ public class Robot extends IterativeRobot {
               System.out.println("Going for Right Scale");
               addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
               addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -0.6 * 750, 0.2 * 750));
-              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorScalePosition));
+              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorMaxPosition));
               addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
               addSequential(new EjectAutoSlow());
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {

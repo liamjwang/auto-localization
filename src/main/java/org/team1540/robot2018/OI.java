@@ -78,45 +78,46 @@ public class OI {
   public static final int RIGHT_Y = 5;
 
   public OI() {
-    // configure controls
-    OI.autoIntakeButton.whenPressed(new IntakeSequence());
-    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-    //     (Tuning.intakeArmSpeed), intakeArms));
-    OI.autoIntakeButton.whileHeld(new JoystickArms());
+    // INTAKE
+    OI.intakeSequenceButton.whenPressed(new IntakeSequence());
+    OI.ejectButton.whenPressed(new EjectCube());
 
-    OI.autoEjectButton.whenPressed(new EjectCube());
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
         intakeArms));
 
+    // ARMS
+    OI.intakeSequenceButton.whileHeld(new JoystickArms());
+    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
+    //     (Tuning.intakeArmSpeed), intakeArms));
+
+    // ELEVATOR
+    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
+
     OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
         .elevatorExchangePosition));
-
     OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
         .elevatorFrontSwitchPosition));
-    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
-    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
-    OI.elevatorLowerButton.whenPressed(new GroundPosition());
+
+    // WRIST
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
     OI.wristFwdButton.whenPressed(new CalibrateWrist());
     OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
     OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
 
-    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
-    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
+    // ELEVATOR AND WRIST
+    OI.elevatorLowerButton.whenPressed(new GroundPosition());
+    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
-
+    // WINCH
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
         .winchInLowVel), winch));
 
     OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
         .winchInHighVel), winch));
   }
-
-  // TODO: Remove unused button
-  // wrist to forward 45 degrees
-  // static Button copilotX = new JoystickButton(copilot, X);
 
   // INTAKE
   public static double getEjectAxis() {
@@ -129,7 +130,6 @@ public class OI {
   }
 
   // TODO: Add a deadzone button to ROOSTER
-  // TODO: Add something (function/interface) for disabling a command when joystick is not being used
   static Button enableElevatorAxisControlButton = new Button() {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
@@ -140,9 +140,9 @@ public class OI {
   };
 
   // Move elevator to ground position and run intake until cube is detected
-  public static Button autoIntakeButton = new JoystickButton(copilot, LB);
+  public static Button intakeSequenceButton = new JoystickButton(copilot, LB);
   // Eject the cube regardless of the position of the intake
-  static Button autoEjectButton = new JoystickButton(copilot, RB);
+  static Button ejectButton = new JoystickButton(copilot, RB);
 
   // Move elevator to exchange position
   static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
@@ -151,8 +151,6 @@ public class OI {
   static Button elevatorFrontScaleButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
   // Move elevator to ground position and flip wrist out
   static Button elevatorLowerButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
-  // Move elevator to full height
-  static Button elevatorRaiseButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
   // Move elevator to switch height
   static Button elevatorSwitchButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
