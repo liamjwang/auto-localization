@@ -1,7 +1,7 @@
 package org.team1540.robot2018;
 
-import static org.team1540.robot2018.Robot.intake;
 import static org.team1540.robot2018.Robot.arms;
+import static org.team1540.robot2018.Robot.intake;
 import static org.team1540.robot2018.Robot.winch;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -76,48 +76,6 @@ public class OI {
   public static final int RIGHT_TRIG = 3;
   public static final int RIGHT_X = 4;
   public static final int RIGHT_Y = 5;
-
-  static {
-    // INTAKE
-    OI.intakeSequenceButton.whenPressed(new IntakeSequence());
-    OI.ejectButton.whenPressed(new JoystickEject());
-
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
-        arms));
-
-    // ARMS
-    OI.intakeSequenceButton.whileHeld(new JoystickArms());
-    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> arms.set
-    //     (Tuning.intakeArmSpeed), arms));
-
-    // ELEVATOR
-    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
-
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorSafe(true, Tuning
-        .elevatorExchangePosition));
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorSafe(true, Tuning
-        .elevatorFrontSwitchPosition));
-
-    // WRIST
-    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
-
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
-    OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
-
-    // ELEVATOR AND WRIST
-    OI.elevatorLowerButton.whenPressed(new GroundPosition());
-    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
-
-    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-    // WINCH
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
-        .winchInLowVel), winch));
-
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
-        .winchInHighVel), winch));
-  }
 
   // INTAKE
   public static double getEjectAxis() {
@@ -219,4 +177,45 @@ public class OI {
     }
   };
 
+  static {
+    // INTAKE
+    OI.intakeSequenceButton.whenPressed(new IntakeSequence());
+    OI.ejectButton.whenPressed(new JoystickEject());
+
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
+        arms));
+
+    // ARMS
+    OI.intakeSequenceButton.whileHeld(new JoystickArms());
+    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> arms.set
+    //     (Tuning.intakeArmSpeed), arms));
+
+    // ELEVATOR
+    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
+
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorSafe(true, Tuning
+        .elevatorExchangePosition));
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorSafe(true, Tuning
+        .elevatorFrontSwitchPosition));
+
+    // WRIST
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
+
+    OI.wristFwdButton.whenPressed(new CalibrateWrist());
+    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
+    OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
+
+    // ELEVATOR AND WRIST
+    OI.elevatorLowerButton.whenPressed(new GroundPosition());
+    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
+
+    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+
+    // WINCH
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
+
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
+  }
 }
