@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.wrist.HoldWristPosition;
-import org.team1540.robot2018.commands.wrist.JoystickWrist;
+import org.team1540.robot2018.commands.wrist.HoldWrist;
 
 public class Wrist extends Subsystem {
 
@@ -45,8 +44,7 @@ public class Wrist extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new HoldWristPosition());
-    // setDefaultCommand(new JoystickWrist());
+    setDefaultCommand(new HoldWrist());
   }
 
   public void set(double value) {
@@ -75,6 +73,5 @@ public class Wrist extends Subsystem {
 
   @Override
   public void periodic() {
-
   }
 }

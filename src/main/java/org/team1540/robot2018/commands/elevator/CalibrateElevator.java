@@ -12,7 +12,7 @@ public class CalibrateElevator extends Command {
   @Override
   protected void initialize() {
     System.out.println("Calibrating Elevator...");
-    Robot.elevator.set(-1); // TODO is this too fast?
+    Robot.elevator.set(-1);
   }
 
   @Override

@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
-public class HoldWristPosition extends Command {
+public class HoldWrist extends Command {
   private double setpoint;
-  private Timer spikeTimer = new Timer();
+  private Timer spikeTimer;
   private boolean timerIsRunning;
 
-  public HoldWristPosition() {
+  public HoldWrist() {
     requires(Robot.wrist);
     spikeTimer = new Timer();
   }

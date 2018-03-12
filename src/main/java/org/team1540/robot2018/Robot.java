@@ -1,5 +1,6 @@
 package org.team1540.robot2018;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -21,44 +22,30 @@ import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
-import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
-import org.team1540.robot2018.commands.auto.AutonomousProfilingFast;
-import org.team1540.robot2018.commands.auto.AutonomousProfilingFast.TrajectorySegmentFast;
-import org.team1540.robot2018.commands.auto.DriveBackward;
-import org.team1540.robot2018.commands.auto.TurnLeftBackwardScale;
-import org.team1540.robot2018.commands.auto.TurnLeftBackwardSwitch;
-import org.team1540.robot2018.commands.elevator.JoystickElevator;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPosition;
-import org.team1540.robot2018.commands.elevator.MoveElevatorToPositionNoCurrent;
-import org.team1540.robot2018.commands.groups.FrontScale;
+import org.team1540.robot2018.commands.auto.DriveTimed;
+import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
-import org.team1540.robot2018.commands.groups.IntakeSequence;
-import org.team1540.robot2018.commands.intake.EjectAuto;
-import org.team1540.robot2018.commands.intake.EjectAutoSlow;
-import org.team1540.robot2018.commands.intake.EjectCube;
+import org.team1540.robot2018.commands.intake.Eject;
 import org.team1540.robot2018.commands.wrist.CalibrateWrist;
-import org.team1540.robot2018.commands.wrist.JoystickWrist;
-import org.team1540.robot2018.commands.wrist.MoveWristToPosition;
+import org.team1540.robot2018.commands.wrist.MoveWrist;
+import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
-import org.team1540.robot2018.subsystems.IntakeArms;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
-  public static final IntakeArms intakeArms = new IntakeArms();
+  public static final Arms arms = new Arms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
 
   private Command emergencyDriveCommand = new TankDrive();
-
 
   private SendableChooser<String> autoPosition;
   private SendableChooser<Boolean> driveMode;
@@ -71,7 +58,7 @@ public class Robot extends IterativeRobot {
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
 
-    // configure SmartDashboard
+    // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
     autoPosition.addObject("Middle", "Middle");
@@ -87,6 +74,7 @@ public class Robot extends IterativeRobot {
     driveMode.addObject("Manual Override", true);
     SmartDashboard.putData("[Drivetrain] ***** DRIVE OVERRIDE *****", driveMode);
 
+    // TODO: Move SmartDashboard commands to separate class
     Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroWrist);
@@ -95,44 +83,7 @@ public class Robot extends IterativeRobot {
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
 
-    // configure controls
-    OI.autoIntakeButton.whenPressed(new IntakeSequence());
-    // OI.autoIntakeButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> intakeArms.set
-    //     (Tuning.intakeArmSpeed), intakeArms));
-    OI.autoIntakeButton.whileHeld(new JoystickArms());
-
-    OI.autoEjectButton.whenPressed(new EjectCube());
-    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::stop, intake,
-        intakeArms));
-
-    OI.elevatorExchangeButton.whenPressed(new MoveElevatorToPosition(Tuning
-        .elevatorExchangePosition));
-
-    OI.elevatorSwitchButton.whenPressed(new MoveElevatorToPosition(Tuning
-        .elevatorFrontSwitchPosition));
-    // OI.elevatorRaiseButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorScalePosition));
-    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
-    OI.elevatorLowerButton.whenPressed(new GroundPosition());
-
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWristToPosition(Tuning.wrist45FwdPosition));
-    OI.wristBackButton.whenPressed(new MoveWristToPosition(Tuning.wristBackPosition));
-
-    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
-    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
-
-    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
-        .winchInLowVel), winch));
-
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
-        .winchInHighVel), winch));
-
-    // OI.climbSequenceButton.whenPressed(new ClimbSequence());
-
-    // configure camera crosshairs
+    // TODO: Move camera crosshairs into separate (command?)
     new Thread(() -> {
       UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
       camera.setResolution(320, 240);
@@ -163,6 +114,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void autonomousInit() {
+    // TODO: Move auto logic into command
     elevator.resetEncoder();
     switch (autoPosition.getSelected()) {
       case "Left":
@@ -174,8 +126,8 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(120, 50, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
+              addSequential(new Eject(1));
             } else {
               System.out.println("Just Crossing the Line");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
@@ -196,19 +148,20 @@ public class Robot extends IterativeRobot {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(102, -123, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
+              addSequential(new Eject(1));
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(106, 85, 0), false)));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
+              addSequential(new Eject(1));
             } else {
-              DriverStation.reportError("Match data could not get owned switch side, reverting to"
-                  + " base auto", false);
-              addSequential(new DriveBackward(Tuning.stupidDriveTime));
+              DriverStation.reportError(
+                  "Match data could not get owned switch side, reverting to base auto",
+                  false);
+              addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
             }
             addSequential(new CalibrateWrist());
           }
@@ -224,8 +177,8 @@ public class Robot extends IterativeRobot {
                 new Waypoint(134, 0, 0), false)));
             if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               System.out.println("Going for Right Switch");
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
+              addSequential(new Eject(1));
             }
             addSequential(new CalibrateWrist());
           }
@@ -237,23 +190,23 @@ public class Robot extends IterativeRobot {
         autoCommand = new CommandGroup() {
           {
             if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-              addSequential(new AutonomousProfilingFast(new TrajectorySegmentFast(
+              addSequential(new AutonomousProfiling(80, new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(284, 0, 0), false)));
               System.out.println("Going for Right Scale");
-              addParallel(new MoveWristToPosition(Tuning.wristTransitPosition));
-              addSequential(new TurnLeftBackwardScale(0.8));
-              addSequential(new MoveElevatorToPositionNoCurrent(Tuning.elevatorScalePosition));
-              addSequential(new MoveWristToPosition(Tuning.wristBackPosition));
-              addSequential(new EjectAutoSlow());
+              addParallel(new MoveWrist(Tuning.wristTransitPosition));
+              addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -450, 150));
+              addSequential(new MoveElevatorSafe(false, Tuning.elevatorMaxPosition));
+              addSequential(new MoveWrist(Tuning.wristBackPosition));
+              addSequential(new Eject(0.6));
             } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
                   new Waypoint(114, 0, 0), false)));
               System.out.println("Going for Right Switch");
-              addSequential(new TurnLeftBackwardSwitch(1.6));
-              addSequential(new MoveWristToPosition(Tuning.wrist45BackPosition));
-              addSequential(new EjectAuto());
+              addSequential(new DriveTimed(ControlMode.PercentOutput, 1.6, -0.6, 0.1));
+              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
+              addSequential(new Eject(1));
             } else {
               addSequential(new AutonomousProfiling(new TrajectorySegment(
                   new Waypoint(0, 0, 0),
@@ -269,7 +222,7 @@ public class Robot extends IterativeRobot {
         System.out.println("Stupid Auto Selected");
         autoCommand = new CommandGroup() {
           {
-            addSequential(new DriveBackward(Tuning.stupidDriveTime));
+            addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
             addSequential(new CalibrateWrist());
           }
         };
@@ -293,7 +246,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("[Elevator] Position", elevator.getPosition());
   }
 
   @Override
@@ -306,6 +258,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
+    // TODO: Add a command chooser to ROOSTER
     // for drive override
     if (driveMode.getSelected()) {
       // oh no encoders broke

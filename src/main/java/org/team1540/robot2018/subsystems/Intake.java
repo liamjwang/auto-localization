@@ -32,16 +32,15 @@ public class Intake extends Subsystem {
   public double getCurrent() {
     // TODO: better method of adjusting tuning between robots
     if (Tuning.isPandora) {
-      return pdp.getCurrent(5) - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
+      return pdp.getCurrent(5) - Robot.wrist.getCurrent() - Robot.arms.getCurrent();
     } else {
       return pdp.getCurrent(10) + pdp.getCurrent(11)
-          - Robot.wrist.getCurrent() - Robot.intakeArms.getCurrent();
+          - Robot.wrist.getCurrent() - Robot.arms.getCurrent();
     }
   }
 
   public void set(double value) {
-    intakeMotorA.set(ControlMode.PercentOutput, value);
-    intakeMotorB.set(ControlMode.PercentOutput, value);
+    set(value, value);
   }
 
   public void set(double valueA, double valueB) {
@@ -49,9 +48,7 @@ public class Intake extends Subsystem {
     intakeMotorB.set(ControlMode.PercentOutput, valueB);
   }
 
-  public void stop() {
-    // TODO: Dont do this
-    intakeMotorA.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed); ///////////////////////////////////
-    intakeMotorB.set(ControlMode.PercentOutput, -Tuning.intakeHoldSpeed);
+  public void holdCube() {
+    set(Tuning.intakeHoldSpeed);
   }
 }

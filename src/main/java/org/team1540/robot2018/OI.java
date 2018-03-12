@@ -1,9 +1,25 @@
 package org.team1540.robot2018;
 
+import static org.team1540.robot2018.Robot.intake;
+import static org.team1540.robot2018.Robot.arms;
+import static org.team1540.robot2018.Robot.winch;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.arms.JoystickArms;
+import org.team1540.robot2018.commands.elevator.JoystickElevator;
+import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
+import org.team1540.robot2018.commands.groups.FrontScale;
+import org.team1540.robot2018.commands.groups.GroundPosition;
+import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
+import org.team1540.robot2018.commands.groups.IntakeSequence;
+import org.team1540.robot2018.commands.intake.JoystickEject;
+import org.team1540.robot2018.commands.wrist.CalibrateWrist;
+import org.team1540.robot2018.commands.wrist.JoystickWrist;
+import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.triggers.StrictDPadButton;
 import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
@@ -61,9 +77,47 @@ public class OI {
   public static final int RIGHT_X = 4;
   public static final int RIGHT_Y = 5;
 
-  // TODO: Remove unused button
-  // wrist to forward 45 degrees
-  // static Button copilotX = new JoystickButton(copilot, X);
+  static {
+    // INTAKE
+    OI.intakeSequenceButton.whenPressed(new IntakeSequence());
+    OI.ejectButton.whenPressed(new JoystickEject());
+
+    OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
+        arms));
+
+    // ARMS
+    OI.intakeSequenceButton.whileHeld(new JoystickArms());
+    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> arms.set
+    //     (Tuning.intakeArmSpeed), arms));
+
+    // ELEVATOR
+    OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
+
+    OI.elevatorExchangeButton.whenPressed(new MoveElevatorSafe(true, Tuning
+        .elevatorExchangePosition));
+    OI.elevatorSwitchButton.whenPressed(new MoveElevatorSafe(true, Tuning
+        .elevatorFrontSwitchPosition));
+
+    // WRIST
+    OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
+
+    OI.wristFwdButton.whenPressed(new CalibrateWrist());
+    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
+    OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
+
+    // ELEVATOR AND WRIST
+    OI.elevatorLowerButton.whenPressed(new GroundPosition());
+    OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
+
+    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+
+    // WINCH
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
+
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
+  }
 
   // INTAKE
   public static double getEjectAxis() {
@@ -76,7 +130,6 @@ public class OI {
   }
 
   // TODO: Add a deadzone button to ROOSTER
-  // TODO: Add something (function/interface) for disabling a command when joystick is not being used
   static Button enableElevatorAxisControlButton = new Button() {
     // Button is pressed when the specified axis is not within the deadzone
     @Override
@@ -86,21 +139,13 @@ public class OI {
     }
   };
 
-  // Move elevator to ground position and run intake until cube is detected
-  public static Button autoIntakeButton = new JoystickButton(copilot, LB);
-  // Eject the cube regardless of the position of the intake
-  static Button autoEjectButton = new JoystickButton(copilot, RB);
+  public static Button intakeSequenceButton = new JoystickButton(copilot, LB);
+  static Button ejectButton = new JoystickButton(copilot, RB);
 
-  // Move elevator to exchange position
   static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
-  // Move elevator to full height and TODO: raise wrist slightly
   static Button elevatorFrontScaleButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
-  // Move elevator to ground position and flip wrist out
   static Button elevatorLowerButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
-  // Move elevator to full height
-  static Button elevatorRaiseButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
-  // Move elevator to switch height
   static Button elevatorSwitchButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
   static Button wristBackButton = new JoystickButton(copilot, B);
@@ -133,7 +178,6 @@ public class OI {
 
   // INTAKE
 
-  // Stop the intake
   static Button stopIntakeButton = new JoystickButton(copilot, START);
 
   // DRIVETRAIN
@@ -158,7 +202,7 @@ public class OI {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
-  // TODO: Add a joystick range funtion to ROOSTER
+  // TODO: Add a joystick range button to ROOSTER
   // TODO: Rewrite this logic into a single command
   static Button winchInSlowButton = new Button() {
     // Button is pressed when axis is between the deadzone and 0.5
@@ -172,14 +216,6 @@ public class OI {
     @Override
     public boolean get() {
       return getWinchInAxis() >= 0.5;
-    }
-  };
-
-  static Button climbSequenceButton = new Button() {
-
-    @Override
-    public boolean get() {
-      return copilot.getRawAxis(OI.LEFT_TRIG) > 0.8;
     }
   };
 
