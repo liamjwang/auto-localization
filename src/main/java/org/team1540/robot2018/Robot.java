@@ -26,6 +26,8 @@ import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling;
 import org.team1540.robot2018.commands.auto.AutonomousProfiling.TrajectorySegment;
 import org.team1540.robot2018.commands.auto.DriveTimed;
+import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
+import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
 import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.Eject;
@@ -127,70 +129,38 @@ public class Robot extends IterativeRobot {
     switch (autoPosition.getSelected()) {
       case "Left":
         System.out.println("Left Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(120, 50, 0), false)));
-              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
-              addSequential(new Eject(1));
-            } else {
-              System.out.println("Just Crossing the Line");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(134, 0, 0), false))); // go straight
-            }
-            addSequential(new CalibrateWrist());
-          }
-        };
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Switch");
+          autoCommand = new SingleCubeSwitchAuto("left_to_left_switch");
+        } else {
+          System.out.println("Just Crossing the Line");
+          autoCommand = new SimpleProfileAuto("go_straight");
+        }
         break;
 
       case "Middle":
         System.out.println("Middle Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-              System.out.println("Going for Left Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(102, -123, 0), false)));
-              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
-              addSequential(new Eject(1));
-            } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("Going for Right Switch");
-              addSequential(new AutonomousProfiling(new TrajectorySegment(
-                  new Waypoint(0, 0, 0),
-                  new Waypoint(106, 85, 0), false)));
-              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
-              addSequential(new Eject(1));
-            } else {
-              DriverStation.reportError(
-                  "Match data could not get owned switch side, reverting to base auto",
-                  false);
-              addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
-            }
-            addSequential(new CalibrateWrist());
-          }
-        };
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Switch");
+          autoCommand = new SingleCubeSwitchAuto("middle_to_left_switch");
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          System.out.println("Going for Right Switch");
+          autoCommand = new SingleCubeSwitchAuto("middle_to_right_switch");
+        } else {
+          DriverStation.reportError(
+              "Match data could not get owned switch side, reverting to base auto",
+              false);
+          autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4);
+        }
         break;
 
       case "Right":
         System.out.println("Right Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            addSequential(new AutonomousProfiling(new TrajectorySegment(
-                new Waypoint(0, 0, 0),
-                new Waypoint(134, 0, 0), false)));
-            if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-              System.out.println("Going for Right Switch");
-              addSequential(new MoveWrist(Tuning.wrist45BackPosition));
-              addSequential(new Eject(1));
-            }
-            addSequential(new CalibrateWrist());
-          }
-        };
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          autoCommand = new SingleCubeSwitchAuto("go_straight");
+        } else {
+          autoCommand = new SimpleProfileAuto("go_straight");
+        }
         break;
 
       case "Right Hook":
@@ -228,12 +198,7 @@ public class Robot extends IterativeRobot {
 
       case "Stupid":
         System.out.println("Stupid Auto Selected");
-        autoCommand = new CommandGroup() {
-          {
-            addSequential(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4));
-            addSequential(new CalibrateWrist());
-          }
-        };
+        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, 0.4);
         break;
     }
 
