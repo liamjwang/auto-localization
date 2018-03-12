@@ -77,7 +77,7 @@ public class OI {
   public static final int RIGHT_X = 4;
   public static final int RIGHT_Y = 5;
 
-  public OI() {
+  static {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
     OI.ejectButton.whenPressed(new JoystickEject());

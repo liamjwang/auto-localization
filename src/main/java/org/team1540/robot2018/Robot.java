@@ -45,8 +45,6 @@ public class Robot extends IterativeRobot {
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
 
-  public static OI oi;
-
   private Command emergencyDriveCommand = new TankDrive();
 
   private SendableChooser<String> autoPosition;
@@ -56,8 +54,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
-    oi = new OI();
-
     // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
