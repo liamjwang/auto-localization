@@ -16,7 +16,7 @@ import java.util.Set;
  * start of autonomous.
  */
 public class CSVProfileManager {
-  public Map<String, DriveProfile> trajectories;
+  public Map<String, DriveProfile> profiles;
 
   /**
    * Create a new {@code CSVProfileManager} that pulls profiles from the given directory.
@@ -58,7 +58,7 @@ public class CSVProfileManager {
     // initialize the map once we know the number of profiles so it doesn't expand.
     // Why? p e r f o r m a n c e
 
-    trajectories = new HashMap<>(profileNames.size());
+    profiles = new HashMap<>(profileNames.size());
 
     for (String name : profileNames) {
       File leftFile = Arrays.stream(leftFiles)
@@ -75,12 +75,12 @@ public class CSVProfileManager {
       Trajectory left = Pathfinder.readFromCSV(leftFile);
       Trajectory right = Pathfinder.readFromCSV(rightFile);
 
-      trajectories.put(name, new DriveProfile(left, right));
+      profiles.put(name, new DriveProfile(left, right));
     }
   }
 
-  public DriveProfile getTrajectory(String name) {
-    return trajectories.get(name);
+  public DriveProfile getProfile(String name) {
+    return profiles.get(name);
   }
 
   /**
