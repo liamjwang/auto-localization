@@ -139,19 +139,13 @@ public class OI {
     }
   };
 
-  // Move elevator to ground position and run intake until cube is detected
   public static Button intakeSequenceButton = new JoystickButton(copilot, LB);
-  // Eject the cube regardless of the position of the intake
   static Button ejectButton = new JoystickButton(copilot, RB);
 
-  // Move elevator to exchange position
   static Button elevatorExchangeButton = new JoystickButton(copilot, Y);
 
-  // Move elevator to full height and TODO: raise wrist slightly
   static Button elevatorFrontScaleButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
-  // Move elevator to ground position and flip wrist out
   static Button elevatorLowerButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
-  // Move elevator to switch height
   static Button elevatorSwitchButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
   static Button wristBackButton = new JoystickButton(copilot, B);
@@ -184,7 +178,6 @@ public class OI {
 
   // INTAKE
 
-  // Stop the intake
   static Button stopIntakeButton = new JoystickButton(copilot, START);
 
   // DRIVETRAIN
@@ -209,7 +202,7 @@ public class OI {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
-  // TODO: Add a joystick range funtion to ROOSTER
+  // TODO: Add a joystick range button to ROOSTER
   // TODO: Rewrite this logic into a single command
   static Button winchInSlowButton = new Button() {
     // Button is pressed when axis is between the deadzone and 0.5
