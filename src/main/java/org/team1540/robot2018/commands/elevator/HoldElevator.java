@@ -24,7 +24,7 @@ public class HoldElevator extends Command {
     If the robot is a certain distance away from its original setpoint it just accepts the new
     status quo.
     */
-    if (Math.abs(Robot.elevator.getPosition() - setpoint) > Tuning.maxElevatorDeviation) {
+    if (Math.abs(Robot.elevator.getPosition() - setpoint) > Tuning.elevatorMaxDeviation) {
       setpoint = Robot.elevator.getPosition();
     }
     Robot.elevator.setMotionMagicPosition(setpoint);

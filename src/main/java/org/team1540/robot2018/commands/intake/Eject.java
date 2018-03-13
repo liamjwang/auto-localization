@@ -9,14 +9,14 @@ public class Eject extends TimedCommand {
   private double speed;
 
   public Eject(double speed) {
-    super(Tuning.ejectTime);
+    super(Tuning.intakeEjectTime);
     this.speed = speed;
     requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-    setTimeout(Tuning.ejectTime);
+    setTimeout(Tuning.intakeEjectTime);
   }
 
   @Override

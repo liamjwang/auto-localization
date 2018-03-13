@@ -15,9 +15,9 @@ public class PIDTankDrive extends Command {
     // TODO: Invert motors instead of negating set values
     double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
     Robot.drivetrain.setLeftVelocity(
-        (-OI.getTankdriveLeftAxis() + triggerValue) * Tuning.drivetrainVelocity);
+        (-OI.getTankdriveLeftAxis() + triggerValue) * Tuning.drivetrainMaxVelocity);
     Robot.drivetrain.setRightVelocity(
-        (-OI.getTankdriveRightAxis() + triggerValue) * Tuning.drivetrainVelocity);
+        (-OI.getTankdriveRightAxis() + triggerValue) * Tuning.drivetrainMaxVelocity);
   }
 
   @Override

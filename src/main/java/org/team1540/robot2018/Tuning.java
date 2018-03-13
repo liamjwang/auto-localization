@@ -37,15 +37,14 @@ public class Tuning {
 
   public static double intakeHoldSpeed = -0.1;
 
-  public static double ejectTime = 1.0;
+  public static double intakeEjectTime = 1.0;
 
-  public static double ejectSpeedA = 0.8;
+  public static double intakeEjectSpeed = 0.8;
 
-  public static double ejectSpeedB = 0.8;
+  // ARMS
+  public static double armHoldSpeed = -0.1;
 
-  public static double intakeArmHoldSpeed = -0.1;
-
-  public static double intakeArmJoystickConstant = 0.5;
+  public static double armJoystickConstant = 0.5;
 
   // ELEVATOR
   public static double elevatorP = 2;
@@ -80,7 +79,7 @@ public class Tuning {
 
   public static double elevatorObstacleUpperPosition = 3750;
 
-  public static double maxElevatorDeviation = 200;
+  public static double elevatorMaxDeviation = 200;
 
   public static double elevatorDownMult = 0.5;
 
@@ -140,35 +139,32 @@ public class Tuning {
 
   public static double drivetrainRampRate = 0.1;
 
-  public static double drivetrainVelocity = 750;
+  public static double drivetrainMaxVelocity = 750;
 
   public static double drivetrainJoystickPower = 2;
 
   public static double drivetrainEncoderTPU;
 
-  // Units in inches and seconds
+  public static double profileMaxVel = 40;
 
-  public static double maxVelocity = 40;
+  public static double profileMaxAccel = 40;
 
-  public static double maxVelocityFast = 80;
+  public static double profileMaxJerk = 2300;
 
-  public static double maxAcceleration = 40;
+  public static double profileSecondsFromNeutralToFull = 0;
 
-  public static double maxJerk = 2300;
+  public static int profileSampleRate = Config.SAMPLES_FAST;
 
-  public static double secondsFromNeutralToFull = 0;
+  public static double profileTimeStep = 0.05;
 
-  public static int sampleRate = Config.SAMPLES_FAST;
+  public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
 
-  public static double timeStep = 0.05;
+  public static double profileLeftTPU = 52;
 
-  public static FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
+  public static double profileRightTPU = 52;
 
-  public static double lEncoderTicksPerUnit = 52;
+  public static double profileBaseWidth = 25.091;
 
-  public static double rEncoderTicksPerUnit = 52;
-
-  public static double wheelbaseWidth = 25.091;
-
-  public static double distanceBetweenWheels = 11.812;
+  // TODO: Rename profileWheelDistance to be more specific
+  public static double profileWheelDistance = 11.812;
 }

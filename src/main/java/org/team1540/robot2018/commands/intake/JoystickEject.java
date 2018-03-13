@@ -7,22 +7,22 @@ import org.team1540.robot2018.Tuning;
 
 public class JoystickEject extends TimedCommand {
 
-  private double speed;
+  private double ejectAxis;
 
   public JoystickEject() {
-    super(Tuning.ejectTime);
+    super(Tuning.intakeEjectTime);
     requires(Robot.intake);
   }
 
   @Override
   protected void initialize() {
-    setTimeout(Tuning.ejectTime);
-    speed = OI.getEjectAxis();
+    setTimeout(Tuning.intakeEjectTime);
+    ejectAxis = OI.getEjectAxis();
   }
 
   @Override
   protected void execute() {
-    Robot.intake.set(Tuning.ejectSpeedA * speed, Tuning.ejectSpeedB * speed);
+    Robot.intake.set(Tuning.ejectSpeedA * ejectAxis);
   }
 
   @Override
