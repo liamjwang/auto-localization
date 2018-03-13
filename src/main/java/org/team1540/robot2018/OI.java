@@ -2,7 +2,6 @@ package org.team1540.robot2018;
 
 import static org.team1540.robot2018.Robot.arms;
 import static org.team1540.robot2018.Robot.intake;
-import static org.team1540.robot2018.Robot.winch;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -210,12 +209,5 @@ public class OI {
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-    // WINCH
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
-        .winchInLowVel), winch));
-
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
-        .winchInHighVel), winch));
   }
 }
