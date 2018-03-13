@@ -22,7 +22,7 @@ public class JoystickEject extends TimedCommand {
 
   @Override
   protected void execute() {
-    Robot.intake.set(Tuning.ejectSpeedA * ejectAxis);
+    Robot.intake.set(Tuning.intakeEjectSpeed * ejectAxis);
   }
 
   @Override
