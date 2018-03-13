@@ -125,6 +125,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     // TODO: Move auto logic into command
     elevator.resetEncoder();
+    wrist.setSensorPosition(0);
     switch (autoPosition.getSelected()) {
       case "Left":
         System.out.println("Left Auto Selected");
