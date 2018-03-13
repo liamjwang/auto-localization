@@ -161,6 +161,7 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_FAST;
 
   public static double timeStep = 0.05;
+
   public static FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
   public static double lEncoderTicksPerUnit = 52;
