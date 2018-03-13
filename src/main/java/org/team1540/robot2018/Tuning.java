@@ -18,13 +18,6 @@ public class Tuning {
   public static boolean isPandora = true;
 
   // CAMERA
-  @Tunable("-[Camera] Crosshairs Size")
-  public static int crosshairsSize = 1000;
-
-  @Tunable("-[Camera] Crosshairs Thickness")
-  public static int crosshairsThicccness = 3;
-
-  @Tunable("-[Camera] Camera ID")
   public static int camID = 0;
 
   // AUTO
@@ -59,9 +52,6 @@ public class Tuning {
   @Tunable("[Intake] Eject Speed Motor B")
   public static double ejectSpeedB = 0.8;
 
-  @Tunable("[Intake] Arm Out Speed")
-  public static double intakeArmSpeed = 0.5;
-
   @Tunable("[Intake] Arm Hold Speed")
   public static double intakeArmHoldSpeed = -0.1;
 
@@ -69,13 +59,10 @@ public class Tuning {
   public static double intakeArmJoystickConstant = 0.5;
 
   // ELEVATOR
-  @Tunable("[Elevator] kP")
   public static double elevatorP = 2;
 
-  @Tunable("[Elevator] kI")
   public static double elevatorI = 0.0025;
 
-  @Tunable("[Elevator] kD")
   public static double elevatorD = 10;
 
   @Tunable("[Elevator] kF Going Up")
@@ -84,34 +71,25 @@ public class Tuning {
   @Tunable("[Elevator] kF Going Down")
   public static double elevatorFGoingDown = 1.2;
 
-  @Tunable("[Elevator] I-Zone")
   public static int elevatorIZone = 150;
 
   @Tunable("[Elevator] Error Tolerance")
   public static double elevatorTolerance = 100;
 
-  @Tunable("[Elevator] Motion Max Acceleration")
   public static int elevatorMaxAccel = 750;
 
-  @Tunable("[Elevator] Motion Cruise Velocity")
   public static int elevatorCruiseVel = 475;
 
-  @Tunable("[Elevator] Ground Position")
   public static double elevatorGroundPosition = 5;
 
-  @Tunable("[Elevator] Exchange Position")
   public static double elevatorExchangePosition = 500;
 
-  @Tunable("[Elevator] Switch Front Position")
   public static double elevatorFrontSwitchPosition = 2900;
 
-  @Tunable("[Elevator] Scale Low Position")
   public static double elevatorLowScalePosition = 6200;
 
-  @Tunable("[Elevator] Max Position")
   public static double elevatorMaxPosition = 7400;
 
-  @Tunable("[Elevator] Rung Position")
   public static double elevatorRungPosition; //TODO
 
   @Tunable("[Elevator] Obstacle Position")
@@ -133,25 +111,18 @@ public class Tuning {
   public static double elevatorCurrentThreshold = 60;
 
   // WRIST
-  @Tunable("[Wrist] kP")
   public static double wristP = 10.0;
 
-  @Tunable("[Wrist] kI")
   public static double wristI = 0;
 
-  @Tunable("[Wrist] kD")
   public static double wristD = 0;
 
-  @Tunable("[Wrist] kF")
   public static double wristF = 1.364;
 
-  @Tunable("[Wrist] I-Zone")
   public static int wristIzone = 0;
 
-  @Tunable("[Wrist] Motion Cruise Velocity")
   public static int wristCruiseVelocity = 600;
 
-  @Tunable("[Wrist] Motion Max Acceleration")
   public static int wristMaxAccel = 1000;
 
   @Tunable("[Wrist] Peak Current Limit")
@@ -166,66 +137,40 @@ public class Tuning {
   @Tunable("[Wrist] Stop Tolerance")
   public static double wristTolerance = 50;
 
-  @Tunable("[Wrist] Out Position")
   public static double wristOutPosition = 8250;
 
-  @Tunable("[Wrist] Back Position")
   public static double wristBackPosition = 0;
 
-  @Tunable("[Wrist] Transit Position")
   public static double wristTransitPosition = 3900;
 
-  @Tunable("[Wrist] 45 Back Position")
   public static double wrist45BackPosition = 1500;
 
-  @Tunable("[Wrist] 45 Forward Position")
   public static double wrist45FwdPosition = 6200;
 
   @Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
-  @Tunable("[Wrist] Min calibration time")
-  public static double wristCalibrateTimeout = 1;
-
-  // WINCH
-  @Tunable("[Winch] In Low Velocity")
-  public static double winchInLowVel = -0.4;
-
-  @Tunable("[Winch] In High Velocity")
-  public static double winchInHighVel = -1;
-
   // DRIVETRAIN
-  @Tunable("[Drivetrain] kP")
   public static double drivetrainP = 2;
 
-  @Tunable("[Drivetrain] kI")
   public static double drivetrainI = 0.001;
 
-  @Tunable("[Drivetrain] kD")
   public static double drivetrainD = 4;
 
-  @Tunable("[Drivetrain] kF")
   public static double drivetrainF = 1.2;
 
-  @Tunable("[Drivetrain] I-Zone")
   public static int drivetrainIZone = 100;
 
-  @Tunable("[Drivetrain] Braking Percent")
   public static double drivetrainBrakingPercent = 0.2;
 
-  @Tunable("[Drivetrain] Brake Override Thresh")
   public static double drivetrainBrakeOverrideThreshold = 0.9;
 
-  @Tunable("[Drivetrain] Ramp Rate")
   public static double drivetrainRampRate = 0.1;
 
-  @Tunable("[Drivetrain] Velocity")
   public static double drivetrainVelocity = 750;
 
-  @Tunable("[Drivetrain] JoystickPower")
   public static double drivetrainJoystickPower = 2;
 
-  @Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU;
 
   // Units in inches and seconds
@@ -243,7 +188,6 @@ public class Tuning {
   public static int sampleRate = Config.SAMPLES_FAST;
   @Tunable("[MotionP] TimeStep")
   public static double timeStep = 0.05;
-  @Tunable("[MotionP] FitMethod")
   public static FitMethod fitMethod = FitMethod.HERMITE_CUBIC;
 
   @Tunable("[MotionP] LeftEncoderTicksPerUnit")
