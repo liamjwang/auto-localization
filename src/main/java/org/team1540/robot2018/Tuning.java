@@ -7,10 +7,9 @@ import org.team1540.base.adjustables.Tunable;
 public class Tuning {
 
   // GENERAL
-  @Tunable("-[General] Dead Zone")
   public static double axisDeadzone = 0.1;
 
-  @Tunable("-[General] Manual Superstructure Control Deadzone") // Deadzone for wrist and lift
+  // Deadzone for wrist and lift
   public static double axisWristLiftDeadzone = 0.2;
 
   // TODO: Better method of switching tuning values globally between robots
