@@ -1,11 +1,13 @@
 package org.team1540.robot2018;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -41,6 +43,7 @@ public class Robot extends IterativeRobot {
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
   public static CSVProfileManager profiles;
+  public static AHRS gyro = new AHRS(Port.kMXP);
 
   private Command emergencyDriveCommand = new TankDrive();
 

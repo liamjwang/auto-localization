@@ -254,4 +254,12 @@ public class Tuning {
   public static double wheelbaseWidth = 25.091;
   @Tunable("[MotionP] distanceBetweenWheels")
   public static double distanceBetweenWheels = 11.812;
+  @Tunable("[MotionP] Profile Heading P")
+  public static double profileHeadingP = 0;
+  @Tunable("[MotionP] Profile Acceleration P")
+  public static double profileAccelP = 0;
+  @Tunable("[MotionP] Profile Position P")
+  public static double profilePositionP = 0;
+  @Tunable("[MotionP] Profile Loop Frequency")
+  public static double profileLoopFrequency;
 }
