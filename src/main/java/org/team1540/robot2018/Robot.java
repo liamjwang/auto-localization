@@ -22,12 +22,14 @@ import org.opencv.core.Mat;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
 import org.team1540.robot2018.commands.auto.sequences.RightHookAuto;
 import org.team1540.robot2018.commands.auto.sequences.RightScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
+import org.team1540.robot2018.motion.FollowProfile;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
@@ -66,6 +68,7 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Right", "Right");
     autoPosition.addDefault("Right Hook", "Right Hook");
     autoPosition.addObject("Stupid", "Stupid");
+    autoPosition.addObject("Advanced Follower Test", "Advanced Follower Test");
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -177,6 +180,11 @@ public class Robot extends IterativeRobot {
         System.out.println("Stupid Auto Selected");
         autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, 0.4);
         break;
+
+      case "Advanced Follower Test":
+        System.out.println("Testing Advanced Auto");
+        DriveProfile profile = profiles.getProfile("go_straight");
+        autoCommand = new FollowProfile(profile.getLeft(), profile.getRight());
     }
 
     autoCommand.start();
