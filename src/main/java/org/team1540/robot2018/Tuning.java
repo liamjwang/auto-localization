@@ -76,8 +76,6 @@ public class Tuning {
 
   public static double elevatorMaxPosition = 7400;
 
-  public static double elevatorRungPosition; //TODO
-
   public static double elevatorObstaclePosition = 1300;
 
   public static double elevatorObstacleUpperPosition = 3750;
