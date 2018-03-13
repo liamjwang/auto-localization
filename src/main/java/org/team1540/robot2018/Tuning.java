@@ -150,13 +150,6 @@ public class Tuning {
   @Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
-  // WINCH
-  @Tunable("[Winch] In Low Velocity")
-  public static double winchInLowVel = -0.4;
-
-  @Tunable("[Winch] In High Velocity")
-  public static double winchInHighVel = -1;
-
   // DRIVETRAIN
   public static double drivetrainP = 2;
 
