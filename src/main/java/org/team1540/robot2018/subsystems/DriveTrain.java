@@ -86,7 +86,7 @@ public class DriveTrain extends ChickenSubsystem {
         .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
         .setBrakingStopZone(Tuning.axisDeadzone)
         .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-        .setMaxVel(Tuning.drivetrainVelocity)
+        .setMaxVel(Tuning.drivetrainMaxVelocity)
         .createPidDrive()
     );
   }
