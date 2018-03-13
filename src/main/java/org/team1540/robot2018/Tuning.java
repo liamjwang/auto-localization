@@ -226,7 +226,7 @@ public class Tuning {
   public static double drivetrainJoystickPower = 2;
 
   @Tunable("[Drivetrain] EncoderTPU")
-  public static double drivetrainEncoderTPU;
+  public static double drivetrainEncoderTPU = 52;
 
   // Units in inches and seconds
   @Tunable("[MotionP] MaxVelocity")
