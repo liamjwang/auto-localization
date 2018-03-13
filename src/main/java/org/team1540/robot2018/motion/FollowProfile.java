@@ -110,6 +110,8 @@ public class FollowProfile extends Command {
 
   @Override
   protected void initialize() {
+    timer.reset();
+    timer.start();
     loop.startPeriodic(Tuning.profileLoopFrequency);
     finished = false;
   }
