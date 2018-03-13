@@ -66,6 +66,42 @@ public class FollowProfile extends Command {
     return trajectory.segments[index];
   }
 
+  private Segment getInterpolatedSegment(Trajectory trajectory, double currentTime) {
+    // Start from the current time and find the closest point.
+    int startIndex = (int) Math.floor(currentTime / trajectory.segments[0].dt);
+    int endIndex = (int) Math.ceil(currentTime / trajectory.segments[0].dt);
+
+    int length = trajectory.segments.length;
+    if (endIndex >= length - 1) {
+      startIndex = length - 1;
+      endIndex = length - 1;
+      finished = true;
+    }
+
+    double timeSinceLower = currentTime % trajectory.segments[0].dt;
+    Segment lower = trajectory.segments[startIndex];
+    Segment upper = trajectory.segments[endIndex];
+
+    //noinspection SuspiciousNameCombination
+    return new Segment(
+        0, // unused by users of this method
+        interpolate(timeSinceLower, 0, lower.x, upper.dt, upper.x),
+        interpolate(timeSinceLower, 0, lower.y, upper.dt, upper.y),
+        interpolate(timeSinceLower, 0, lower.position, upper.dt, upper.position),
+        interpolate(timeSinceLower, 0, lower.velocity, upper.dt, upper.velocity),
+        interpolate(timeSinceLower, 0, lower.acceleration, upper.dt, upper.acceleration),
+        interpolate(timeSinceLower, 0, lower.jerk, upper.dt, upper.jerk),
+        interpolate(timeSinceLower, 0, lower.heading, upper.dt, upper.heading));
+  }
+
+  /**
+   * Interpolates between two points using linear interpolation.
+   */
+  private double interpolate(double x, double lowX, double lowY, double highX,
+      double highY) {
+    return (x - lowX) * (highY - lowY) / (highX - lowX) + lowY;
+  }
+
   private static double getVelocityModification(double trajAccelSetpoint, double positionError, double headingError) {
     return Tuning.profileHeadingP * headingError +
         Tuning.profileAccelP * trajAccelSetpoint +
