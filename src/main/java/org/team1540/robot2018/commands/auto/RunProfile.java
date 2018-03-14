@@ -32,7 +32,7 @@ public class RunProfile extends Command {
         Double.max(left.length() * left.segments[0].dt, right.length() * right.segments[0].dt));
 
     MotionProfilingProperties leftProperties = new MotionProfilingProperties(
-        Tuning.lEncoderTicksPerUnit,
+        Tuning.profileLeftTPU,
         0,
         Robot.drivetrain::getLeftVelocity,
         Robot.drivetrain::setLeftVelocity,
@@ -40,7 +40,7 @@ public class RunProfile extends Command {
         left);
 
     MotionProfilingProperties rightProperties = new MotionProfilingProperties(
-        Tuning.rEncoderTicksPerUnit,
+        Tuning.profileRightTPU,
         0,
         Robot.drivetrain::getRightVelocity,
         Robot.drivetrain::setRightVelocity,

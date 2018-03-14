@@ -1,6 +1,6 @@
 package org.team1540.robot2018.commands.auto;
 
-import static org.team1540.robot2018.Tuning.timeStep;
+import static org.team1540.robot2018.Tuning.profileTimeStep;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -17,10 +17,10 @@ import org.team1540.robot2018.Tuning;
 
 public class AutonomousProfiling extends Command {
 
-  private double maxVelocity = Tuning.maxVelocity;
-  private double maxAcceleration = Tuning.maxAcceleration;
-  private double maxJerk = Tuning.maxJerk;
-  private double secondsFromNeutralToFull = Tuning.secondsFromNeutralToFull;
+  private double maxVelocity = Tuning.profileMaxVel;
+  private double maxAcceleration = Tuning.profileMaxAccel;
+  private double maxJerk = Tuning.profileMaxJerk;
+  private double secondsFromNeutralToFull = Tuning.profileSecondsFromNeutralToFull;
   private TrajectorySegment[] segments;
 
   private Timer isFinishedRunningTimer = new Timer();
@@ -50,11 +50,11 @@ public class AutonomousProfiling extends Command {
   @Override
   protected void initialize() {
     Robot.drivetrain.zeroEncoders();
-    double turningRadius = Math.sqrt(Math.pow(Tuning.wheelbaseWidth, 2) + Math.pow
-        (Tuning.distanceBetweenWheels, 2));
+    double turningRadius = Math.sqrt(Math.pow(Tuning.profileBaseWidth, 2) + Math.pow
+        (Tuning.profileWheelDistance, 2));
 
-    Config config = new Config(Tuning.fitMethod, Tuning.sampleRate, timeStep,
-        Tuning.maxVelocity, Tuning.maxAcceleration, Tuning.maxJerk);
+    Config config = new Config(Tuning.profileFitMethod, Tuning.profileSampleRate, profileTimeStep,
+        Tuning.profileMaxVel, Tuning.profileMaxAccel, Tuning.profileMaxJerk);
 
     Trajectory trajectory = generateSimpleTrajectory(segments[0].start, segments[0].end, config);
     TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
@@ -65,12 +65,12 @@ public class AutonomousProfiling extends Command {
 
     // TODO: Add option to flip and reverse profiles
     MotionProfilingProperties leftProperties = new MotionProfilingProperties
-        (Tuning.lEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+        (Tuning.profileLeftTPU, Tuning.profileSecondsFromNeutralToFull, Robot
             .drivetrain::getLeftVelocity,
             Robot.drivetrain::setLeftVelocity, Robot.drivetrain::getLeftPosition,
             modifier.getLeftTrajectory());
     MotionProfilingProperties rightProperties = new MotionProfilingProperties
-        (Tuning.rEncoderTicksPerUnit, Tuning.secondsFromNeutralToFull, Robot
+        (Tuning.profileRightTPU, Tuning.profileSecondsFromNeutralToFull, Robot
             .drivetrain::getRightVelocity,
             Robot.drivetrain::setRightVelocity, Robot.drivetrain::getRightPosition,
             modifier.getRightTrajectory());

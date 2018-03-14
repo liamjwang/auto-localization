@@ -35,8 +35,8 @@ public class Arms extends Subsystem {
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new SimpleCommand("Arm Hold", () -> {
-      armMotorLeft.set(Tuning.intakeArmHoldSpeed);
-      armMotorRight.set(Tuning.intakeArmHoldSpeed);
+      armMotorLeft.set(Tuning.armHoldSpeed);
+      armMotorRight.set(Tuning.armHoldSpeed);
     }, this));
   }
 
