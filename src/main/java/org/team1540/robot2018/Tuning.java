@@ -248,5 +248,5 @@ public class Tuning {
   public static double profilePositionP = 0;
 
   @Tunable("[MotionP] Profile Loop Frequency")
-  public static double profileLoopFrequency;
+  public static double profileLoopFrequency = 0.01;
 }
