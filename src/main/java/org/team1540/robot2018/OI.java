@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.triggers.SimpleButton;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
@@ -87,14 +88,10 @@ public class OI {
   }
 
   // TODO: Add a deadzone button to ROOSTER
-  static Button enableElevatorAxisControlButton = new Button() {
-    // Button is pressed when the specified axis is not within the deadzone
-    @Override
-    public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone)
-          != 0; // zero values mean it's within the deadzone
-    }
-  };
+  // Button is pressed when the specified axis is not within the deadzone
+  // zero values mean it's within the deadzone
+  static Button enableElevatorAxisControlButton = new SimpleButton(() ->
+      Utilities.processDeadzone(copilot.getRawAxis(LEFT_Y), Tuning.axisWristLiftDeadzone) != 0);
 
   public static Button intakeSequenceButton = new JoystickButton(copilot, LB);
   static Button ejectButton = new JoystickButton(copilot, RB);
@@ -124,14 +121,9 @@ public class OI {
     return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_X), Tuning.axisDeadzone), 2);
   }
 
-  static Button enableWristAxisControlButton = new Button() {
-    // Button is pressed when the specified axis is not within the deadzone
-    @Override
-    public boolean get() {
-      return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone)
-          != 0; // zero values mean it's within the deadzone
-    }
-  };
+  // zero values mean it's within the deadzone
+  static Button enableWristAxisControlButton = new SimpleButton(() ->
+      Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), Tuning.axisWristLiftDeadzone) != 0);
 
   // INTAKE
 
@@ -161,20 +153,9 @@ public class OI {
 
   // TODO: Add a joystick range button to ROOSTER
   // TODO: Rewrite this logic into a single command
-  static Button winchInSlowButton = new Button() {
-    // Button is pressed when axis is between the deadzone and 0.5
-    @Override
-    public boolean get() {
-      return getWinchInAxis() > Tuning.axisDeadzone && getWinchInAxis() < 0.5;
-    }
-  };
-  static Button winchInFastButton = new Button() {
-    // Button is pressed when axis is greater or equal to 0.5
-    @Override
-    public boolean get() {
-      return getWinchInAxis() >= 0.5;
-    }
-  };
+  static Button winchInSlowButton = new SimpleButton(() -> getWinchInAxis() > Tuning.axisDeadzone
+      && getWinchInAxis() < 0.5);
+  static Button winchInFastButton = new SimpleButton(() -> getWinchInAxis() >= 0.5);
 
   static {
     // INTAKE
