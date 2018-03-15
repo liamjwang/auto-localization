@@ -27,7 +27,7 @@ public class FollowProfile extends Command {
     Segment leftSegment = getCurrentSegment(left, timer.get());
     Segment rightSegment = getCurrentSegment(right, timer.get());
 
-    double leftVelocity = (leftSegment.velocity / Tuning.drivetrainEncoderTPU) * 0.1;
+    double leftVelocity = (leftSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
 
     // heading is negated for the left side only so that negative heading errors (i.e. too far right)
     // result in the left side slowing but the right side speeding up
@@ -36,7 +36,7 @@ public class FollowProfile extends Command {
         (leftSegment.position * Tuning.drivetrainEncoderTPU) - Robot.drivetrain.getLeftPosition(),
         -(leftSegment.heading - Math.toRadians(Robot.gyro.getAngle())));
 
-    double rightVelocity = (rightSegment.velocity / Tuning.drivetrainEncoderTPU) * 0.1;
+    double rightVelocity = (rightSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
 
     double rightVelocitySetpoint = rightVelocity + getVelocityModification(
         (rightSegment.acceleration * Tuning.drivetrainEncoderTPU) * 0.1,
