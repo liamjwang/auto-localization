@@ -63,6 +63,7 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Right", "Right");
     autoPosition.addDefault("Right Hook", "Right Hook");
     autoPosition.addObject("Stupid", "Stupid");
+    autoPosition.addObject("Do Nothing", "Do Nothing");
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -119,6 +120,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     // TODO: Move auto logic into command
     elevator.resetEncoder();
+    autoCommand = null;
     switch (autoPosition.getSelected()) {
       case "Left":
         System.out.println("Left Auto Selected");
@@ -176,7 +178,9 @@ public class Robot extends IterativeRobot {
         break;
     }
 
-    autoCommand.start();
+    if (autoCommand != null) {
+      autoCommand.start();
+    }
   }
 
   @Override
