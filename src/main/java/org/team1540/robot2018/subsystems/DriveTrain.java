@@ -137,6 +137,6 @@ public class DriveTrain extends ChickenSubsystem {
 
   public void zeroEncoders() {
     driveLeftMotorA.setSelectedSensorPosition(0);
-    driveLeftMotorB.setSelectedSensorPosition(0);
+    driveRightMotorA.setSelectedSensorPosition(0);
   }
 }
