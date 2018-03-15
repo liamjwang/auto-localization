@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
@@ -78,6 +79,8 @@ public class SpinnyTestRobot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
+    Scheduler.getInstance().run();
+
     double leftDistance = driveLeftMotorA.getSelectedSensorPosition();
     double rightDistance = -driveRightMotorA.getSelectedSensorPosition();
 

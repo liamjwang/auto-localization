@@ -204,13 +204,13 @@ public class Tuning {
   //@Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU = 52;
 
-  //@Tunable("[MotionP] MaxVelocity")
+  @Tunable("[MotionP] MaxVelocity")
   public static double profileMaxVel = 40;
 
-  //@Tunable("[MotionP] MaxAcceleration")
+  @Tunable("[MotionP] MaxAcceleration")
   public static double profileMaxAccel = 40;
 
-  //@Tunable("[MotionP] MaxJerk")
+  @Tunable("[MotionP] MaxJerk")
   public static double profileMaxJerk = 2300;
 
   //@Tunable("[MotionP] SecondsFromNeutralToFull")
@@ -232,7 +232,7 @@ public class Tuning {
   public static double profileRightTPU = 52;
 
   // @Tunable("[MotionP] WheelbaseWidth")
-  public static double profileBaseWidth = 25.091;
+  public static double profileBaseWidth = 28.132472;
 
   // TODO: Rename profileWheelDistance to be more specific
   //@Tunable("[MotionP] distanceBetweenWheels")
@@ -249,4 +249,7 @@ public class Tuning {
 
   @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.01;
+
+  @Tunable("[MotionP] Profile Test Distance")
+  public static double profileTestDistance = 134;
 }

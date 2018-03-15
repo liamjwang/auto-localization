@@ -1,5 +1,7 @@
 package org.team1540.robot2018;
 
+import static org.team1540.robot2018.Tuning.profileTimeStep;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.cscore.CvSink;
@@ -14,6 +16,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Trajectory.Config;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 import java.io.File;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
@@ -22,7 +29,6 @@ import org.opencv.core.Mat;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
 import org.team1540.robot2018.commands.auto.sequences.RightHookAuto;
@@ -184,8 +190,18 @@ public class Robot extends IterativeRobot {
 
       case "Advanced Follower Test":
         System.out.println("Testing Advanced Auto");
-        DriveProfile profile = profiles.getProfile("go_straight");
-        autoCommand = new FollowProfile(profile.getLeft(), profile.getRight());
+        // DriveProfile profile = profiles.getProfile("go_straight");
+        double turningRadius = Math.sqrt(Math.pow(Tuning.profileBaseWidth, 2) + Math.pow
+            (Tuning.profileWheelDistance, 2));
+        Config config = new Config(Tuning.profileFitMethod, Tuning.profileSampleRate, profileTimeStep,
+            Tuning.profileMaxVel, Tuning.profileMaxAccel, Tuning.profileMaxJerk);
+        Trajectory trajectory = Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(Tuning.profileTestDistance, 0, 0)}, config);
+        TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
+        Trajectory left = modifier.getLeftTrajectory();
+        Trajectory right = modifier.getRightTrajectory();
+
+        Robot.drivetrain.zeroEncoders();
+        autoCommand = new FollowProfile(left, right);
     }
 
     autoCommand.start();
@@ -204,6 +220,12 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Elevator postion", elevator.getPosition());
+    double leftDistance = drivetrain.getLeftPosition();
+    double rightDistance = -drivetrain.getRightPosition();
+
+    SmartDashboard.putNumber("Left Distance", leftDistance);
+    SmartDashboard.putNumber("Right Distance", rightDistance);
     Scheduler.getInstance().run();
   }
 
