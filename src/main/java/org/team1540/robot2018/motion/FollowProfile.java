@@ -1,5 +1,7 @@
 package org.team1540.robot2018.motion;
 
+import static java.lang.Math.abs;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,19 +31,26 @@ public class FollowProfile extends Command {
 
     double leftVelocity = (leftSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
 
+    double robotAngle = Math.toRadians(Robot.gyro.getYaw());
+    if (robotAngle < 0) {
+      robotAngle += 2 * Math.PI;
+    }
+
     // heading is negated for the left side only so that negative heading errors (i.e. too far right)
     // result in the left side slowing but the right side speeding up
     double leftVelocitySetpoint = leftVelocity + getVelocityModification(
         (leftSegment.acceleration * Tuning.drivetrainEncoderTPU) * 0.1,
         (leftSegment.position * Tuning.drivetrainEncoderTPU) - Robot.drivetrain.getLeftPosition(),
-        -(leftSegment.heading - Math.toRadians(Robot.gyro.getAngle())));
+        -Math.min(abs(leftSegment.heading - robotAngle),
+            (2 * Math.PI) - abs(robotAngle - leftSegment.heading)));
 
     double rightVelocity = (rightSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
 
     double rightVelocitySetpoint = rightVelocity + getVelocityModification(
         (rightSegment.acceleration * Tuning.drivetrainEncoderTPU) * 0.1,
         (rightSegment.position * Tuning.drivetrainEncoderTPU) - Robot.drivetrain.getRightPosition(),
-        (rightSegment.heading - Math.toRadians(Robot.gyro.getAngle())));
+        Math.min(abs(rightSegment.heading - robotAngle),
+            (2 * Math.PI) - abs(robotAngle - rightSegment.heading)));
 
     Robot.drivetrain.setLeftVelocity(leftVelocitySetpoint);
     Robot.drivetrain.setRightVelocity(rightVelocitySetpoint);
