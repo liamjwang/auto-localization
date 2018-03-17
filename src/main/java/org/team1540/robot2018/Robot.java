@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
   public static final Wrist wrist = new Wrist();
   public static final ClimberWinch winch = new ClimberWinch();
   public static CSVProfileManager profiles;
-  public static AHRS gyro = new AHRS(Port.kMXP);
+  public static AHRS navx = new AHRS(Port.kMXP);
 
   private Command emergencyDriveCommand = new TankDrive();
 
@@ -126,6 +126,9 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
+    if (autoCommand != null) {
+      autoCommand.cancel();
+    }
   }
 
   @Override
@@ -197,7 +200,7 @@ public class Robot extends IterativeRobot {
             (Tuning.profileWheelDistance, 2));
         Config config = new Config(Tuning.profileFitMethod, Tuning.profileSampleRate, profileTimeStep,
             Tuning.profileMaxVel, Tuning.profileMaxAccel, Tuning.profileMaxJerk);
-        Trajectory trajectory = Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(Tuning.profileTestDistance, 0, 0)}, config);
+        Trajectory trajectory = Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(Tuning.profileTestX, Tuning.profileTestY, Tuning.profileTestAngle)}, config);
         TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
         Trajectory left = modifier.getLeftTrajectory();
         Trajectory right = modifier.getRightTrajectory();
@@ -230,6 +233,9 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putNumber("Left Distance", leftDistance);
     SmartDashboard.putNumber("Right Distance", rightDistance);
+
+    SmartDashboard.putNumber("Gyro Angle", Robot.navx.getAngle());
+    SmartDashboard.putData(Scheduler.getInstance());
     Scheduler.getInstance().run();
   }
 
