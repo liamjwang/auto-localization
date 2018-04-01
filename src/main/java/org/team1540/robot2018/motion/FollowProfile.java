@@ -5,6 +5,7 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.StrictMath.min;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -44,24 +45,12 @@ public class FollowProfile extends Command {
 
     double headingError = abs(regularError) < abs(differentError) ? regularError : differentError;
 
+
     // heading is negated for the left side only so that negative heading errors (i.e. too far right)
     // result in the left side slowing but the right side speeding up
-    double leftVelocitySetpoint = leftVelocity + getVelocityModification(
-        (leftSegment.acceleration * Tuning.drivetrainEncoderTPU) * 0.1,
-        leftVelocity - Robot.drivetrain.getLeftVelocity(),
-        (leftSegment.position * Tuning.drivetrainEncoderTPU) - Robot.drivetrain.getLeftPosition(),
-        headingError);
+    Robot.drivetrain.setLeft(ControlMode.Position, leftSegment.position, getBump(leftSegment.acceleration, leftSegment.velocity, -headingError));
+    Robot.drivetrain.setRight(ControlMode.Position, rightSegment.position, getBump(rightSegment.acceleration, rightSegment.velocity, headingError));
 
-    double rightVelocity = (rightSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
-
-    double rightVelocitySetpoint = rightVelocity + getVelocityModification(
-        (rightSegment.acceleration * Tuning.drivetrainEncoderTPU) * 0.1,
-        rightVelocity - Robot.drivetrain.getLeftVelocity(),
-        (rightSegment.position * Tuning.drivetrainEncoderTPU) - Robot.drivetrain.getRightPosition(),
-        -headingError);
-
-    Robot.drivetrain.setLeftVelocity(leftVelocitySetpoint);
-    Robot.drivetrain.setRightVelocity(rightVelocitySetpoint);
     System.out.println("Gyro Angle " + robotHeading);
     System.out.println("Intended Heading " + desiredHeading);
 
@@ -124,11 +113,10 @@ public class FollowProfile extends Command {
     return (x - lowX) * (highY - lowY) / (highX - lowX) + lowY;
   }
 
-  private static double getVelocityModification(double trajAccelSetpoint, double velocityError, double positionError, double headingError) {
+  private static double getBump(double accel, double velocity, double headingError) {
     return Tuning.profileHeadingP * headingError +
-        Tuning.profileAccelP * trajAccelSetpoint +
-        Tuning.profileVelocityP * velocityError +
-        Tuning.profilePositionP * positionError;
+        Tuning.profileAccelF * accel +
+        Tuning.profileVelocityF * velocity;
   }
 
   @Override
@@ -138,11 +126,13 @@ public class FollowProfile extends Command {
     timer.start();
     loop.startPeriodic(Tuning.profileLoopFrequency);
     finished = false;
+    Robot.drivetrain.configTalonsForPosition();
   }
 
   @Override
   protected void end() {
     loop.stop();
     System.out.println("Profile Done!");
+    Robot.drivetrain.configTalonsForVelocity();
   }
 }

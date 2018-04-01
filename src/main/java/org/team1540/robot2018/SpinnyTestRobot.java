@@ -55,11 +55,11 @@ public class SpinnyTestRobot extends IterativeRobot {
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
-      talon.config_kP(0, Tuning.drivetrainP);
-      talon.config_kI(0, Tuning.drivetrainI);
-      talon.config_kD(0, Tuning.drivetrainD);
-      talon.config_kF(0, Tuning.drivetrainF);
-      talon.config_IntegralZone(0, Tuning.drivetrainIZone);
+      talon.config_kP(0, Tuning.drivetrainVelocityP);
+      talon.config_kI(0, Tuning.drivetrainVelocityI);
+      talon.config_kD(0, Tuning.drivetrainVelocityD);
+      talon.config_kF(0, Tuning.drivetrainVelocityF);
+      talon.config_IntegralZone(0, Tuning.drivetrainVelocityIZone);
     }
 
     for (ChickenTalon talon : driveMotorAll) {

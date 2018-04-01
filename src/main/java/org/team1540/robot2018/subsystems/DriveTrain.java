@@ -1,6 +1,7 @@
 package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import org.team1540.base.ChickenSubsystem;
 import org.team1540.base.drive.PidDriveFactory;
@@ -52,13 +53,7 @@ public class DriveTrain extends ChickenSubsystem {
       talon.setBrake(true);
     }
 
-    for (ChickenTalon talon : driveMotorMasters) {
-      talon.config_kP(0, Tuning.drivetrainP);
-      talon.config_kI(0, Tuning.drivetrainI);
-      talon.config_kD(0, Tuning.drivetrainD);
-      talon.config_kF(0, Tuning.drivetrainF);
-      talon.config_IntegralZone(0, Tuning.drivetrainIZone);
-    }
+    configTalonsForVelocity();
 
     for (ChickenTalon talon : driveMotorAll) {
       talon.configClosedloopRamp(Tuning.drivetrainRampRate);
@@ -95,8 +90,16 @@ public class DriveTrain extends ChickenSubsystem {
     this.driveLeftMotorA.set(mode, value);
   }
 
+  public void setLeft(ControlMode mode, double value, double bump) {
+    this.driveLeftMotorA.set(mode, value, DemandType.ArbitraryFeedForward, bump);
+  }
+
   public void setRight(ControlMode mode, double value) {
     this.driveRightMotorA.set(mode, value);
+  }
+
+  public void setRight(ControlMode mode, double value, double bump) {
+    this.driveRightMotorA.set(mode, value, DemandType.ArbitraryFeedForward, bump);
   }
 
   public void setLeftPercent(double value) {
@@ -113,6 +116,26 @@ public class DriveTrain extends ChickenSubsystem {
 
   public void setRightVelocity(double velocity) {
     driveRightMotorA.set(ControlMode.Velocity, velocity);
+  }
+
+  public void configTalonsForPosition() {
+    for (ChickenTalon talon : driveMotorMasters) {
+      talon.config_kP(0, Tuning.drivetrainPositionP);
+      talon.config_kI(0, 0);
+      talon.config_kD(0, Tuning.drivetrainPositionD);
+      talon.config_kF(0, 0);
+      talon.config_IntegralZone(0, 0);
+    }
+  }
+
+  public void configTalonsForVelocity() {
+    for (ChickenTalon talon : driveMotorMasters) {
+      talon.config_kP(0, Tuning.drivetrainVelocityP);
+      talon.config_kI(0, Tuning.drivetrainVelocityI);
+      talon.config_kD(0, Tuning.drivetrainVelocityD);
+      talon.config_kF(0, Tuning.drivetrainVelocityF);
+      talon.config_IntegralZone(0, Tuning.drivetrainVelocityIZone);
+    }
   }
 
   public double getLeftPosition() {

@@ -172,19 +172,26 @@ public class Tuning {
 
   // DRIVETRAIN
   //@Tunable("[Drivetrain] kP")
-  public static double drivetrainP = 2;
+  public static double drivetrainVelocityP = 2;
 
   //@Tunable("[Drivetrain] kI")
-  public static double drivetrainI = 0.001;
+  public static double drivetrainVelocityI = 0.001;
 
   //@Tunable("[Drivetrain] kD")
-  public static double drivetrainD = 4;
+  public static double drivetrainVelocityD = 4;
 
   //@Tunable("[Drivetrain] kF")
-  public static double drivetrainF = 1.2;
+  public static double drivetrainVelocityF = 1.2;
 
   //@Tunable("[Drivetrain] I-Zone")
-  public static int drivetrainIZone = 100;
+  public static int drivetrainVelocityIZone = 100;
+
+  // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
+  @Tunable("[Drivetrain] Position kP")
+  public static double drivetrainPositionP = 0;
+
+  @Tunable("[Drivetrain] Position kD")
+  public static double drivetrainPositionD = 0;
 
   //@Tunable("[Drivetrain] Braking Percent")
   public static double drivetrainBrakingPercent = 0.2;
@@ -242,13 +249,13 @@ public class Tuning {
   public static double profileHeadingP = 100;
 
   @Tunable("[MotionP] Profile Acceleration P")
-  public static double profileAccelP = 0;
+  public static double profileAccelF = 0;
 
   @Tunable("[MotionP] Profile Position P")
   public static double profilePositionP = 0.5;
 
   @Tunable("[MotionP] Profile Velocity P")
-  public static double profileVelocityP = 0.5;
+  public static double profileVelocityF = 0.5;
 
   @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.01;
