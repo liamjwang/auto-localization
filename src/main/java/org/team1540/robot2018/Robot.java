@@ -90,6 +90,10 @@ public class Robot extends IterativeRobot {
     zeroElevator.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroElevator);
 
+    Command zeroDrivetrain = new SimpleCommand("[Drivetrain] Zero Drivetrain", drivetrain::zeroEncoders);
+    zeroDrivetrain.setRunWhenDisabled(true);
+    SmartDashboard.putData(zeroDrivetrain);
+
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
     camera.setResolution(128, 73);
     camera.setFPS(30);
