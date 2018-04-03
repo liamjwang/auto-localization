@@ -113,7 +113,7 @@ public class Tuning {
   public static double elevatorDownMult = 0.5;
 
   //@Tunable("[Elevator] Max Spike Time")
-  public static double elevatorSpikeTime = 0;
+  public static double elevatorSpikeTime = 0.5;
 
   //@Tunable("[Elevator] Max Spike Current")
   public static double elevatorCurrentThreshold = 60;
