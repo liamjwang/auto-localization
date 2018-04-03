@@ -188,7 +188,7 @@ public class Tuning {
 
   // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
   @Tunable("[Drivetrain] Position kP")
-  public static double drivetrainPositionP = 0;
+  public static double drivetrainPositionP = 10;
 
   @Tunable("[Drivetrain] Position kD")
   public static double drivetrainPositionD = 0;
@@ -227,7 +227,7 @@ public class Tuning {
   public static int profileSampleRate = Config.SAMPLES_FAST;
 
   //@Tunable("[MotionP] TimeStep")
-  public static double profileTimeStep = 0.05;
+  public static double profileTimeStep = 0.01;
 
   //@Tunable("[MotionP] FitMethod")
   public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
@@ -246,19 +246,16 @@ public class Tuning {
   public static double profileWheelDistance = 11.812;
 
   @Tunable("[MotionP] Profile Heading P")
-  public static double profileHeadingP = 100;
+  public static double profileHeadingP = 0;
 
   @Tunable("[MotionP] Profile Acceleration P")
-  public static double profileAccelF = 0;
-
-  @Tunable("[MotionP] Profile Position P")
-  public static double profilePositionP = 0.5;
+  public static double profileAccelF = 0.0025;
 
   @Tunable("[MotionP] Profile Velocity P")
-  public static double profileVelocityF = 0.5;
+  public static double profileVelocityF = 0.006;
 
   @Tunable("[MotionP] Profile Loop Frequency")
-  public static double profileLoopFrequency = 0.01;
+  public static double profileLoopFrequency = 0.02;
 
   @Tunable("[MotionP] Profile Test X")
   public static double profileTestX = 50;
