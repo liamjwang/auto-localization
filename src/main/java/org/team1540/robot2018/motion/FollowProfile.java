@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
+import org.team1540.robot2018.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
@@ -20,6 +21,14 @@ public class FollowProfile extends Command {
   private Trajectory left;
   private Trajectory right;
   private boolean finished;
+
+  public FollowProfile(String profileName) {
+    DriveProfile profile = Robot.profiles.getProfile(profileName);
+    this.left = profile.getLeft();
+    this.right = profile.getRight();
+
+    requires(Robot.drivetrain);
+  }
 
   public FollowProfile(Trajectory left, Trajectory right) {
     this.left = left;
