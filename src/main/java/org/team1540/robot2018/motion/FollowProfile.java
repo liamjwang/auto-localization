@@ -130,5 +130,7 @@ public class FollowProfile extends Command {
     loop.stop();
     System.out.println("Profile Done!");
     Robot.drivetrain.configTalonsForVelocity();
+    Robot.drivetrain.setLeftVelocity(0);
+    Robot.drivetrain.setRightVelocity(0);
   }
 }
