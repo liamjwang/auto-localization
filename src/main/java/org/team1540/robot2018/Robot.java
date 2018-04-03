@@ -107,6 +107,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
+    Robot.drivetrain.configTalonsForVelocity();
     if (autoCommand != null) {
       autoCommand.cancel();
     }
@@ -200,6 +201,7 @@ public class Robot extends IterativeRobot {
     if (autoCommand != null) {
       autoCommand.cancel();
     }
+    Robot.drivetrain.configTalonsForVelocity();
   }
 
   @Override
