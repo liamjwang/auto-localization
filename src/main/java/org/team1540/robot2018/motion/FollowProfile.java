@@ -120,6 +120,7 @@ public class FollowProfile extends Command {
     timer.start();
     loop.startPeriodic(Tuning.profileLoopFrequency);
     finished = false;
+    Robot.drivetrain.zeroEncoders();
     Robot.drivetrain.configTalonsForPosition();
   }
 
