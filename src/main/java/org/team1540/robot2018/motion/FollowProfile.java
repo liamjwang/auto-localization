@@ -15,7 +15,7 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 
 public class FollowProfile extends Command {
-  private Notifier loop = new Notifier(this::run);
+  private Notifier loop;
   private Timer timer = new Timer();
   private Trajectory left;
   private Trajectory right;
@@ -118,6 +118,7 @@ public class FollowProfile extends Command {
     timer.reset();
     Robot.navx.zeroYaw();
     timer.start();
+    loop = new Notifier(this::run);
     loop.startPeriodic(Tuning.profileLoopFrequency);
     finished = false;
     Robot.drivetrain.zeroEncoders();
