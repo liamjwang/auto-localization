@@ -46,14 +46,10 @@ public class FollowProfile extends Command {
 
     // heading is negated for the left side only so that negative heading errors (i.e. too far right)
     // result in the left side slowing but the right side speeding up
-    Robot.drivetrain.setLeft(ControlMode.Position, leftSegment.position, getBump(leftSegment.acceleration, leftSegment.velocity, -headingError));
-    Robot.drivetrain.setRight(ControlMode.Position, rightSegment.position, getBump(rightSegment.acceleration, rightSegment.velocity, headingError));
-
-    System.out.println("Gyro Angle " + robotHeading);
-    System.out.println("Intended Heading " + desiredHeading);
-
-    System.out.println("Error" + headingError);
-    // System.out.println("Heading Correction "+ (Tuning.profileHeadingP *(leftSegment.heading - Math.toRadians(-Robot.navx.getYaw()))));
+    Robot.drivetrain.setLeft(ControlMode.Position, Tuning.drivetrainEncoderTPU
+        * leftSegment.position, getBump(leftSegment.acceleration, leftSegment.velocity, headingError));
+    Robot.drivetrain.setRight(ControlMode.Position, Tuning.drivetrainEncoderTPU
+        * rightSegment.position, getBump(rightSegment.acceleration, rightSegment.velocity, -headingError));
   }
 
   @Override
