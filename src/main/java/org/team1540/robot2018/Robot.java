@@ -98,6 +98,11 @@ public class Robot extends IterativeRobot {
     // unlike other static fields, initialized here because there's a high likelihood of it throwing
     // an exception and exceptions thrown during static initialization are not fun.
     profiles = new CSVProfileManager(new File("/home/lvuser/profiles"));
+
+    Command refreshProfiles = new SimpleCommand("[MotionP] Refresh Motion Profiles",
+        () -> profiles = new CSVProfileManager(new File("/home/lvuser/profiles")));
+    refreshProfiles.setRunWhenDisabled(true);
+    SmartDashboard.putData(refreshProfiles);
   }
 
   @Override
