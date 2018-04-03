@@ -33,8 +33,6 @@ public class FollowProfile extends Command {
     Segment leftSegment = getCurrentSegment(left, timer.get());
     Segment rightSegment = getCurrentSegment(right, timer.get());
 
-    double leftVelocity = (leftSegment.velocity * Tuning.drivetrainEncoderTPU) * 0.1;
-
     double robotHeading = 2 * PI - Math.toRadians(
         Robot.navx.getYaw() < 0 ? 360 + Robot.navx.getYaw() : Robot.navx.getYaw());
     double desiredHeading = leftSegment.heading;
