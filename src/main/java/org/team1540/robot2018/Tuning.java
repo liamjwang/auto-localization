@@ -52,7 +52,7 @@ public class Tuning {
 
   // ARMS
   //@Tunable("[Intake] Arm Hold Speed")
-  public static double armHoldSpeed = -0.1;
+  public static double armHoldSpeed = -0.2;
 
   //@Tunable("[Intake] Arm Joystick Constant")
   public static double armJoystickConstant = 0.5;
