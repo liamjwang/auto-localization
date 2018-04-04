@@ -163,7 +163,7 @@ public class OI {
   }
 
   public static boolean getTapeEnabled() {
-    return Utilities.processDeadzone(copilot.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone) > Tuning.triggerFullPressThreshold;
+    return copilot.getRawAxis(LEFT_TRIG) > Tuning.triggerFullPressThreshold;
   }
 
   static {
@@ -199,8 +199,6 @@ public class OI {
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-    // CLIMBER
 
   }
 }
