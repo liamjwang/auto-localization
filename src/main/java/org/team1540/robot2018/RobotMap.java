@@ -12,7 +12,7 @@ public class RobotMap {
 
   public static final int WRIST = 7;
 
-  // No 8 (previously climber tape measure)
+  public static final int TAPE = 8;
 
   public static final int WINCH_A = 9;
   public static final int WINCH_B = 10;

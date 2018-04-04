@@ -265,4 +265,8 @@ public class Tuning {
 
   @Tunable("[MotionP] Profile Test Angle")
   public static double profileTestAngle = 0;
+
+  // CLIMBER
+  @Tunable("[Climber] Trigger Full Press Threshold")
+  public static double triggerFullPressThreshold = 0.9;
 }
