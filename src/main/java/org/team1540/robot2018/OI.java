@@ -157,6 +157,15 @@ public class OI {
       && getWinchInAxis() < 0.5);
   static Button winchInFastButton = new SimpleButton(() -> getWinchInAxis() >= 0.5);
 
+  // TAPE
+  public static double getTapeAxis() {
+    return scale(Utilities.processDeadzone(-copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
+  }
+
+  public static boolean getTapeEnabled() {
+    return Utilities.processDeadzone(copilot.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone) > Tuning.triggerFullPressThreshold;
+  }
+
   static {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
@@ -190,5 +199,8 @@ public class OI {
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
     OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+
+    // CLIMBER
+
   }
 }

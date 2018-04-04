@@ -31,7 +31,8 @@ public class RobotMotorTest extends IterativeRobot {
       // Wrist
       new ChickenTalon(7),
 
-      // No 8 (previously climber tape measure)
+      // Climber Tape
+      new ChickenVictor(8),
 
       // Climber Winch
       new ChickenTalon(9),
