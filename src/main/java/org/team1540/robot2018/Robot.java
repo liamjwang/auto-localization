@@ -1,7 +1,5 @@
 package org.team1540.robot2018;
 
-import static org.team1540.robot2018.Tuning.profileTimeStep;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.cscore.UsbCamera;
@@ -14,11 +12,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Trajectory.Config;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.modifiers.TankModifier;
 import java.io.File;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
@@ -28,11 +21,11 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
+import org.team1540.robot2018.commands.auto.sequences.ProfileScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.RightHookAuto;
 import org.team1540.robot2018.commands.auto.sequences.RightScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
-import org.team1540.robot2018.motion.FollowProfile;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberTape;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -68,13 +61,14 @@ public class Robot extends IterativeRobot {
     // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    autoPosition.addObject("Middle", "Middle");
-    autoPosition.addObject("Left", "Left");
-    autoPosition.addObject("Right", "Right");
-    autoPosition.addDefault("Right Hook", "Right Hook");
+    autoPosition.addDefault("Middle", "Middle");
+    autoPosition.addObject("Left Scale", "Left Scale");
+    autoPosition.addObject("Left Hook Switch Then Scale", "Left Hook Switch Then Scale");
+    autoPosition.addObject("Left Hook Switch No Scale", "Left Hook Switch No Scale");
+    autoPosition.addObject("Right Hook", "Right Hook Switch");
+    autoPosition.addObject("Cross Line", "Cross Line");
     autoPosition.addObject("Stupid", "Stupid");
     autoPosition.addObject("Do Nothing", "Do Nothing");
-    autoPosition.addObject("Advanced Follower Test", "Advanced Follower Test");
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -119,6 +113,7 @@ public class Robot extends IterativeRobot {
     }
   }
 
+  @SuppressWarnings("Duplicates")
   @Override
   public void autonomousInit() {
     // TODO: Move auto logic into command
@@ -126,14 +121,47 @@ public class Robot extends IterativeRobot {
     wrist.setSensorPosition(0);
     autoCommand = null;
     switch (autoPosition.getSelected()) {
-      case "Left":
-        System.out.println("Left Auto Selected");
+      case "Left Scale":
+        System.out.println("Left Scale Auto Selected");
+        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Scale");
+          autoCommand = new ProfileScaleAuto("left_scale");
+        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+          System.out.println("Just Crossing the Line");
+          autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
+        } else {
+          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+          autoCommand = new SimpleProfileAuto("go_straight");
+        }
+        break;
+
+      case "Left Hook Switch Then Scale":
+        System.out.println("Left Hook Switch Then Scale Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
-          autoCommand = new SingleCubeSwitchAuto("left_to_left_switch");
+          System.out.println("Going for left switch");
+          autoCommand = new SingleCubeSwitchAuto("left_hook");
+        } else {
+          System.out.println("Going for scale");
+          if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
+            autoCommand = new ProfileScaleAuto("left_scale");
+          } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+            System.out.println("Just Crossing the Line");
+            autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
+          } else {
+            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+            autoCommand = new SimpleProfileAuto("go_straight");
+          }
+        }
+        break;
+
+      case "Left Hook Switch No Scale":
+        System.out.println("Left Hook Switch No Scale Selected");
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for left switch");
+          autoCommand = new SingleCubeSwitchAuto("left_hook");
         } else {
           System.out.println("Just Crossing the Line");
-          autoCommand = new SimpleProfileAuto("go_straight");
+          autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
         }
         break;
 
@@ -153,11 +181,13 @@ public class Robot extends IterativeRobot {
         }
         break;
 
-      case "Right":
-        System.out.println("Right Auto Selected");
+      case "Right Hook Switch":
+        System.out.println("Right Hook Switch Selected");
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          autoCommand = new SingleCubeSwitchAuto("go_straight");
+          System.out.println("Going for the right switch");
+          autoCommand = new SingleCubeSwitchAuto("right_hook"); //TODO: make this
         } else {
+          System.out.println("Crossing the line");
           autoCommand = new SimpleProfileAuto("go_straight");
         }
         break;
@@ -172,29 +202,18 @@ public class Robot extends IterativeRobot {
           autoCommand = new RightHookAuto();
         } else {
           System.out.println("Crossing the line");
-          autoCommand = new SimpleProfileAuto("right_hook_approach");
+          autoCommand = new SimpleProfileAuto("go_straight");
         }
+        break;
+
+      case "Cross Line":
+        autoCommand = new SimpleProfileAuto("go_straight");
         break;
 
       case "Stupid":
         System.out.println("Stupid Auto Selected");
         autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, 0.4);
         break;
-
-      case "Advanced Follower Test":
-        System.out.println("Testing Advanced Auto");
-        // DriveProfile profile = profiles.getProfile("go_straight");
-        double turningRadius = Math.sqrt(Math.pow(Tuning.profileBaseWidth, 2) + Math.pow
-            (Tuning.profileWheelDistance, 2));
-        Config config = new Config(Tuning.profileFitMethod, Tuning.profileSampleRate, profileTimeStep,
-            Tuning.profileMaxVel, Tuning.profileMaxAccel, Tuning.profileMaxJerk);
-        Trajectory trajectory = Pathfinder.generate(new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(Tuning.profileTestX, Tuning.profileTestY, Tuning.profileTestAngle)}, config);
-        TankModifier modifier = new TankModifier(trajectory).modify(turningRadius);
-        Trajectory left = modifier.getLeftTrajectory();
-        Trajectory right = modifier.getRightTrajectory();
-
-        Robot.drivetrain.zeroEncoders();
-        autoCommand = new FollowProfile(left, right);
     }
 
     if (autoCommand != null) {
