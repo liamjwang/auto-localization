@@ -88,5 +88,47 @@
       }
     ],
     "flip": true
+  },
+  "left_hook": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 100,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 148,
+        "y": -27.5,
+        "angle": 1.570796327
+      }
+    ],
+    "maxVel": 40.0,
+    "flip": true
+  },
+  "left_scale": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 175,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 275,
+        "y": -20,
+        "angle": -0.6
+      }
+    ],
+    "maxVel": 40.0,
+    "flip": true
   }
 }
