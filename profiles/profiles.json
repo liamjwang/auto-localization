@@ -130,5 +130,35 @@
     ],
     "maxVel": 40.0,
     "flip": true
+  },
+  "left_scale_back_to_switch": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 40,
+        "y": 50,
+        "angle": 1
+      }
+    ],
+    "flip": false
+  },
+  "left_switch_back_to_scale": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 50,
+        "y": -25,
+        "angle": -1.25
+      }
+    ],
+    "flip": true
   }
 }
