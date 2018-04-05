@@ -7,9 +7,11 @@ import static org.team1540.robot2018.Robot.winch;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import org.team1540.base.Utilities;
 import org.team1540.base.triggers.SimpleButton;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.arms.DropCube;
 import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
@@ -160,6 +162,7 @@ public class OI {
 
   // TAPE
   public static double getTapeAxis() {
+    // TODO: Negate tape motor instead of negating it here
     return scale(Utilities.processDeadzone(-copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
   }
 
@@ -170,7 +173,15 @@ public class OI {
   static {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
-    OI.ejectButton.whenPressed(new JoystickEject());
+
+    // OI.ejectButton.whenPressed(new JoystickEject());
+
+    OI.ejectButton.whenPressed(new ConditionalCommand(new JoystickEject(), new DropCube(Tuning.armDropTime)) {
+      @Override
+      protected boolean condition() {
+        return OI.getTapeEnabled();
+      }
+    });
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         arms));
