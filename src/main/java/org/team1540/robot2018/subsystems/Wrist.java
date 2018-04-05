@@ -64,7 +64,7 @@ public class Wrist extends Subsystem {
   }
 
   public void setMotionMagicPosition(double position) {
-    // wristMotor.set(ControlMode.MotionMagic, position);
+    wristMotor.set(ControlMode.MotionMagic, position);
   }
 
   public double getPosition() {
