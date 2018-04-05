@@ -25,10 +25,10 @@ public class Tuning {
   public static int crosshairsThicccness = 3;
 
   // @Tunable("-[Camera] Overhead Camera ID")
-  public static int overheadCamID = 0;
+  public static int overheadCamID = 1;
 
   // @Tunable("-[Camera] Turret Camera ID")
-  public static int turretCamID = 1;
+  public static int turretCamID = 0;
 
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
@@ -59,7 +59,7 @@ public class Tuning {
   //@Tunable("[Intake] Eject Speed Motor A")
   public static double intakeEjectSpeed = 0.8;
 
-  public static double intakeEjectSpeedAuto = 0.8;
+  public static double intakeEjectSpeedAuto = 0.5;
 
   // ARMS
   //@Tunable("[Intake] Arm Hold Speed")
@@ -257,10 +257,10 @@ public class Tuning {
   public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
 
   //@Tunable("[MotionP] LeftEncoderTicksPerUnit")
-  public static double profileLeftTPU = 52;
+  public static double profileLeftTPU = 51.25;
 
   //@Tunable("[MotionP] RightEncoderTicksPerUnit")
-  public static double profileRightTPU = 52;
+  public static double profileRightTPU = 51.25;
 
   @Tunable("[MotionP] WheelbaseWidth")
   public static double profileBaseWidth = 24;
