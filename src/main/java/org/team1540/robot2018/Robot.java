@@ -61,6 +61,7 @@ public class Robot extends IterativeRobot {
     // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
+    PowerManager.getInstance().setUpdateDelay(40);
 
     // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
@@ -106,7 +107,7 @@ public class Robot extends IterativeRobot {
 
       CvSink cvSink = CameraServer.getInstance().getVideo();
       CvSource outputStream = CameraServer.getInstance().putVideo(
-          "Camera " + Tuning.overheadCamID, 320, 240);
+          "Camera " + Tuning.turretCamID, 320, 240);
 
       Mat source = new Mat();
       Mat output = new Mat();
@@ -132,6 +133,9 @@ public class Robot extends IterativeRobot {
     // unlike other static fields, initialized here because there's a high likelihood of it throwing
     // an exception and exceptions thrown during static initialization are not fun.
     profiles = new CSVProfileManager(new File("/home/lvuser/profiles"));
+
+    SmartDashboard.putData(drivetrain);
+    SmartDashboard.putData(PowerManager.getInstance());
   }
 
   @Override
@@ -146,6 +150,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     // TODO: Move auto logic into command
+    PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
     autoCommand = null;
@@ -260,6 +265,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
+    PowerManager.getInstance().setRunning(true);
     if (autoCommand != null) {
       autoCommand.cancel();
     }
