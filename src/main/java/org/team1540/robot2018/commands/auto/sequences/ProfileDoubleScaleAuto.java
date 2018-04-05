@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
-import org.team1540.robot2018.commands.arms.OpenArms;
+import org.team1540.robot2018.commands.arms.DropCube;
 import org.team1540.robot2018.commands.elevator.MoveElevator;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.AutoIntake;
@@ -23,12 +23,13 @@ public class ProfileDoubleScaleAuto extends CommandGroup {
     // this causes the command group to execute these commands at the same time but wait for both to finish before moving on
     addSequential(new CommandGroup() {
       {
+        addParallel(new AutoIntake(), 4);
         addParallel(new FollowProfile(backupProfile));
-        addParallel(new OpenArms());
-        addParallel(new AutoIntake());
+        addSequential(new DropCube(2));
+        addParallel(new SimpleCommand("Arm Hold", () -> Robot.arms.set(Tuning.armHoldSpeed), Robot.arms));
       }
     });
-    addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
+    // addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
 
     // go back to the scale, raise elevator, eject cube
     addSequential(new CommandGroup() {
