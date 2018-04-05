@@ -21,9 +21,7 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
-import org.team1540.robot2018.commands.auto.sequences.ProfileScaleAuto;
-import org.team1540.robot2018.commands.auto.sequences.RightHookAuto;
-import org.team1540.robot2018.commands.auto.sequences.RightScaleAuto;
+import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
 import org.team1540.robot2018.subsystems.Arms;
@@ -62,7 +60,8 @@ public class Robot extends IterativeRobot {
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
     autoPosition.addDefault("Middle", "Middle");
-    autoPosition.addObject("Left Scale", "Left Scale");
+    autoPosition.addObject("Left Scale Then Switch", "Left Scale Then Switch");
+    autoPosition.addObject("Left Scale No Switch", "Left Scale No Switch");
     autoPosition.addObject("Left Hook Switch Then Scale", "Left Hook Switch Then Scale");
     autoPosition.addObject("Left Hook Switch No Scale", "Left Hook Switch No Scale");
     autoPosition.addObject("Right Hook", "Right Hook Switch");
@@ -121,14 +120,36 @@ public class Robot extends IterativeRobot {
     wrist.setSensorPosition(0);
     autoCommand = null;
     switch (autoPosition.getSelected()) {
-      case "Left Scale":
-        System.out.println("Left Scale Auto Selected");
+      case "Left Scale Then Switch":
+        System.out.println("Left Scale Auto Selected (Then Switch)");
         if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
           System.out.println("Going for Left Scale");
-          autoCommand = new ProfileScaleAuto("left_scale");
+          autoCommand = new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale");
+        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+          // TODO: crossover
+          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+            System.out.println("Going for Left Switch");
+            autoCommand = new SingleCubeSwitchAuto("left_hook");
+          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+            System.out.println("Just Crossing the Line");
+            autoCommand = new SimpleProfileAuto("go_straight");
+          } else {
+            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+            autoCommand = new SimpleProfileAuto("go_straight");
+          }
+        } else {
+          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+          autoCommand = new SimpleProfileAuto("go_straight");
+        }
+        break;
+      case "Left Scale No Switch":
+        System.out.println("Left Scale Auto Selected (No Switch)");
+        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Scale");
+          autoCommand = new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale");
         } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
           System.out.println("Just Crossing the Line");
-          autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
+          autoCommand = new SimpleProfileAuto("go_straight");
         } else {
           DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
           autoCommand = new SimpleProfileAuto("go_straight");
@@ -143,7 +164,7 @@ public class Robot extends IterativeRobot {
         } else {
           System.out.println("Going for scale");
           if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-            autoCommand = new ProfileScaleAuto("left_scale");
+            autoCommand = new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale");
           } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
             System.out.println("Just Crossing the Line");
             autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
@@ -186,20 +207,6 @@ public class Robot extends IterativeRobot {
         if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
           System.out.println("Going for the right switch");
           autoCommand = new SingleCubeSwitchAuto("right_hook"); //TODO: make this
-        } else {
-          System.out.println("Crossing the line");
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-
-      case "Right Hook":
-        System.out.println("Right Hook Selected");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Going for scale");
-          autoCommand = new RightScaleAuto();
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for switch");
-          autoCommand = new RightHookAuto();
         } else {
           System.out.println("Crossing the line");
           autoCommand = new SimpleProfileAuto("go_straight");
