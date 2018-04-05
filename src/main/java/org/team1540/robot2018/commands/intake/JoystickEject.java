@@ -27,6 +27,6 @@ public class JoystickEject extends TimedCommand {
 
   @Override
   protected void end() {
-    Robot.intake.holdCube();
+    // Robot.intake.holdCube();
   }
 }
