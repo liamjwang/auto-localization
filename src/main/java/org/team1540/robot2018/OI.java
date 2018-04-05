@@ -107,7 +107,7 @@ public class OI {
 
   static Button wristBackButton = new JoystickButton(copilot, B);
   static Button wristFwdButton = new JoystickButton(copilot, A);
-  static Button wrist45DegButton = new JoystickButton(copilot, X);
+  static Button wristTransitButton = new JoystickButton(copilot, X);
 
   static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
 
@@ -203,7 +203,7 @@ public class OI {
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
     OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
+    OI.wristTransitButton.whenPressed(new MoveWrist(Tuning.wristTransitPosition));
     OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 
     // ELEVATOR AND WRIST
