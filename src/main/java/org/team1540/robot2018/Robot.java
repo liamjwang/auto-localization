@@ -2,6 +2,8 @@ package org.team1540.robot2018;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,6 +18,10 @@ import java.io.File;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
@@ -89,9 +95,33 @@ public class Robot extends IterativeRobot {
     zeroDrivetrain.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroDrivetrain);
 
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(Tuning.camID);
-    camera.setResolution(128, 73);
-    camera.setFPS(30);
+    UsbCamera overheadCam = CameraServer.getInstance().startAutomaticCapture(Tuning.overheadCamID);
+    overheadCam.setResolution(128, 73);
+    overheadCam.setFPS(30);
+
+    // TODO: Move camera crosshairs into separate (command?)
+    new Thread(() -> {
+      UsbCamera turretCam = CameraServer.getInstance().startAutomaticCapture(Tuning.turretCamID);
+      turretCam.setResolution(320, 240);
+
+      CvSink cvSink = CameraServer.getInstance().getVideo();
+      CvSource outputStream = CameraServer.getInstance().putVideo(
+          "Camera " + Tuning.overheadCamID, 320, 240);
+
+      Mat source = new Mat();
+      Mat output = new Mat();
+
+      while (!Thread.interrupted()) {
+        cvSink.grabFrame(source);
+        Point pt1 = new Point(source.width() / 2 + Tuning.crosshairsSize, source.height() / 2);
+        Point pt2 = new Point(source.width() / 2 - Tuning.crosshairsSize, source.height() / 2);
+        Point pt3 = new Point(source.width() / 2, source.height() / 2 + Tuning.crosshairsSize);
+        Point pt4 = new Point(source.width() / 2, source.height() / 2 - Tuning.crosshairsSize);
+        Imgproc.line(source, pt1, pt2, new Scalar(0, 255, 0), Tuning.crosshairsThicccness);
+        Imgproc.line(source, pt3, pt4, new Scalar(0, 255, 0), Tuning.crosshairsThicccness);
+        outputStream.putFrame(source);
+      }
+    }).start();
 
     Command refreshProfiles = new SimpleCommand("[MotionP] Refresh Motion Profiles",
         () -> profiles = new CSVProfileManager(new File("/home/lvuser/profiles")));

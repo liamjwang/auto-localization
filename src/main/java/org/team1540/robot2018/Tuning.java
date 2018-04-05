@@ -18,8 +18,17 @@ public class Tuning {
   public static boolean isPandora = true;
 
   // CAMERA
-  //@Tunable("-[Camera] Camera ID")
-  public static int camID = 0;
+  //@Tunable("-[Camera] Crosshairs Size")
+  public static int crosshairsSize = 1000;
+
+  // @Tunable("-[Camera] Crosshairs Thickness")
+  public static int crosshairsThicccness = 3;
+
+  // @Tunable("-[Camera] Overhead Camera ID")
+  public static int overheadCamID = 0;
+
+  // @Tunable("-[Camera] Turret Camera ID")
+  public static int turretCamID = 1;
 
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
