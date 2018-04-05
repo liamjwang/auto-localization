@@ -47,6 +47,8 @@ public class RobotMotorTest extends IterativeRobot {
       // Intake
       new ChickenVictor(15),
       new ChickenVictor(16),
+      new ChickenTalon(17),
+      new ChickenTalon(18),
 
   };
   private SendableChooser<Integer>[] motorChoosers;
