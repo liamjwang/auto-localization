@@ -1,7 +1,10 @@
 package org.team1540.robot2018.commands.auto.sequences;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
+import org.team1540.robot2018.commands.arms.OpenArms;
 import org.team1540.robot2018.commands.elevator.MoveElevator;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.AutoIntake;
@@ -21,9 +24,11 @@ public class ProfileDoubleScaleAuto extends CommandGroup {
     addSequential(new CommandGroup() {
       {
         addParallel(new FollowProfile(backupProfile));
+        addParallel(new OpenArms());
         addParallel(new AutoIntake());
       }
     });
+    addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
 
     // go back to the scale, raise elevator, eject cube
     addSequential(new CommandGroup() {
