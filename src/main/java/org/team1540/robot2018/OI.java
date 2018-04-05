@@ -176,7 +176,7 @@ public class OI {
 
     // OI.ejectButton.whenPressed(new JoystickEject());
 
-    OI.ejectButton.whenPressed(new ConditionalCommand(new JoystickEject(), new DropCube(Tuning.armDropTime)) {
+    OI.ejectButton.whenPressed(new ConditionalCommand(new DropCube(Tuning.armDropTime), new JoystickEject()) {
       @Override
       protected boolean condition() {
         return OI.getTapeEnabled();
