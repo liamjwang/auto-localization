@@ -20,6 +20,7 @@ public class ProfileScaleAuto extends CommandGroup {
         // wait a little bit before moving the wrist so we don't hit the wall
         addSequential(new TimedCommand(Tuning.autoElevatorRaiseWait));
         addSequential(new CalibrateWrist());
+        addParallel(new MoveWrist(Tuning.wristTransitPosition));
         addSequential(new MoveElevator(false, Tuning.elevatorMaxPosition));
         addSequential(new MoveWrist(Tuning.wristBackPosition));
       }
