@@ -13,10 +13,10 @@ public class JoystickTape extends Command {
   @Override
   protected void execute() {
     if (OI.getTapeEnabled()) {
-      Robot.tape.set(OI.getTapeAxis() - (OI.getWinchInAxis() * 1.5));
+      Robot.tape.set(OI.getTapeAxis() + (OI.getWinchInAxis() * 1.5));
     }
     else {
-      Robot.tape.set(-(OI.getWinchInAxis() * 1.5));
+      Robot.tape.set((OI.getWinchInAxis() * 1.5));
     }
   }
 
