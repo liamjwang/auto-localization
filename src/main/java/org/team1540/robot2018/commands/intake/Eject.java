@@ -7,6 +7,7 @@ import org.team1540.robot2018.Tuning;
 public class Eject extends TimedCommand {
 
   private double speed;
+  private double time;
 
   public Eject(double speed) {
     super(Tuning.intakeEjectTime);
@@ -14,9 +15,14 @@ public class Eject extends TimedCommand {
     requires(Robot.intake);
   }
 
+  public Eject(double speed, double time) {
+    super(time);
+    this.speed = speed;
+    requires(Robot.intake);
+  }
+
   @Override
   protected void initialize() {
-    setTimeout(Tuning.intakeEjectTime);
   }
 
   @Override
