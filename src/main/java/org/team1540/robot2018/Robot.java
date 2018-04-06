@@ -75,7 +75,7 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Left Hook Switch Then Scale", "Left Hook Switch Then Scale");
     autoPosition.addObject("Left Hook Switch Then Double Scale", "Left Hook Switch Then Double Scale");
     autoPosition.addObject("Right Scale Then Switch", "Right Scale Then Switch");
-    autoPosition.addObject("Right Scale No Switch", "Right Scale No Switch");
+    // autoPosition.addObject("Right Scale No Switch", "Right Scale No Switch");
     autoPosition.addObject("Left Hook Switch No Scale", "Left Hook Switch No Scale");
     autoPosition.addObject("Right Hook", "Right Hook Switch");
     autoPosition.addObject("Cross Line", "Cross Line");
