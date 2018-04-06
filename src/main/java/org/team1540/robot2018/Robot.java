@@ -475,15 +475,15 @@ public class Robot extends IterativeRobot {
   @Override
   public void testPeriodic() {
     for (int chooserIndex = 0; chooserIndex < testMotorChoosers.length; chooserIndex++) {
-      if (testMotorChoosers[chooserIndex].getSelected() != -1) {
-        testMotors[testMotorChoosers[chooserIndex].getSelected() < testMotors.length ?
-            testMotorChoosers[chooserIndex].getSelected() :
-            (testMotorChoosers[chooserIndex].getSelected()) % testMotors.length]
-            .set(ControlMode.PercentOutput,
-                (testMotorChoosers[chooserIndex].getSelected() < testMotors.length ? 1 : -1) *
-                    Utilities.processDeadzone(
-                        testJoystick.getRawAxis(testJoystickChoosers[chooserIndex].getSelected()
-                        ), 0.1));
+      int selectedIndex = testMotorChoosers[chooserIndex].getSelected();
+      if (selectedIndex != -1) {
+        int motorIndex =
+            selectedIndex < testMotors.length ? selectedIndex : (selectedIndex) % testMotors.length;
+        double deadzoneAxis = Utilities.processDeadzone(
+            testJoystick.getRawAxis(testJoystickChoosers[chooserIndex].getSelected()
+            ), 0.1);
+        int negation = selectedIndex < testMotors.length ? 1 : -1;
+        testMotors[motorIndex].set(ControlMode.PercentOutput, negation * deadzoneAxis);
       }
     }
   }
