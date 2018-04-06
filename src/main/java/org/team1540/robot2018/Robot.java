@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -24,14 +23,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.team1540.base.Utilities;
 import org.team1540.base.adjustables.AdjustableManager;
-import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.base.wrappers.ChickenController;
-import org.team1540.base.wrappers.ChickenTalon;
-import org.team1540.base.wrappers.ChickenVictor;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
 import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
@@ -47,48 +41,6 @@ import org.team1540.robot2018.subsystems.Intake;
 import org.team1540.robot2018.subsystems.Wrist;
 
 public class Robot extends IterativeRobot {
-
-  // MOTOR TEST FIELDS
-  private Joystick testJoystick = new Joystick(0);
-  private ChickenController[] testMotors = new ChickenController[]{
-      // Drive Left
-      new ChickenTalon(1),
-      new ChickenTalon(2),
-      new ChickenTalon(3),
-
-      // Drive Right
-      new ChickenTalon(4),
-      new ChickenTalon(5),
-      new ChickenTalon(6),
-
-      // Wrist
-      new ChickenTalon(7),
-
-      // Climber Tape
-      new ChickenVictor(8),
-
-      // Climber Winch
-      new ChickenTalon(9),
-      new ChickenVictor(10),
-      new ChickenVictor(11),
-      new ChickenVictor(12),
-
-      // Lift
-      new ChickenTalon(13),
-      new ChickenTalon(14),
-
-      // Intake
-      new ChickenVictor(15),
-      new ChickenVictor(16),
-      new ChickenTalon(17),
-      new ChickenTalon(18),
-  };
-  private SendableChooser<Integer>[] testMotorChoosers;
-  private SendableChooser<Integer>[] testJoystickChoosers;
-
-  @Tunable("[MotorTest] testNumChoosers (Restart neccecary)")
-  public int testNumChoosers = 1;
-
   public static final DriveTrain drivetrain = new DriveTrain();
   public static final Intake intake = new Intake();
   public static final Arms arms = new Arms();
@@ -115,7 +67,6 @@ public class Robot extends IterativeRobot {
 
     // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
-    AdjustableManager.getInstance().add(this);
     autoPosition = new SendableChooser<>();
     autoPosition.addDefault("Middle", "Middle");
     autoPosition.addObject("Left Scale Then Switch", "Left Scale Then Switch");
@@ -394,48 +345,8 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.configTalonsForVelocity();
   }
 
-  @SuppressWarnings("Duplicates")
   @Override
   public void testInit() {
-    testMotorChoosers = new SendableChooser[testNumChoosers];
-    testJoystickChoosers = new SendableChooser[testNumChoosers];
-
-    for (int motorIndex = 0; motorIndex < testNumChoosers; motorIndex++) {
-      testMotorChoosers[motorIndex] = new SendableChooser<>();
-
-      testMotorChoosers[motorIndex].addDefault("(None)", -1);
-      for (int cc = 0; cc < testMotors.length; cc++) {
-        testMotorChoosers[motorIndex].addObject(
-            "Motor " + Integer.toString(cc + 1) + " (Forwards)", cc);
-      }
-      for (int cc = testMotors.length; cc < testMotors.length * 2; cc++) {
-        testMotorChoosers[motorIndex].addObject(
-            "Motor " + Integer.toString(cc - testMotors.length + 1) + " (Reversed)", cc);
-      }
-      SmartDashboard.putData("[MotorTest] MotorChooser "
-          + Integer.toString(motorIndex), testMotorChoosers[motorIndex]);
-
-      testJoystickChoosers[motorIndex] = new SendableChooser<>();
-      testJoystickChoosers[motorIndex].addDefault("LeftJoyY", 1);
-      testJoystickChoosers[motorIndex].addObject("LeftJoyX", 0);
-      testJoystickChoosers[motorIndex].addObject("RightJoyY", 5);
-      testJoystickChoosers[motorIndex].addObject("RightJoyX", 4);
-      testJoystickChoosers[motorIndex].addObject("RightTrig", 3);
-      testJoystickChoosers[motorIndex].addObject("LeftTrig", 2);
-
-      SmartDashboard.putData("[MotorTest] JoyChooser "
-          + Integer.toString(motorIndex), testJoystickChoosers[motorIndex]);
-    }
-
-    for (ChickenController motor : testMotors) {
-      if (motor != null) {
-        motor.setBrake(true);
-        motor.configPeakOutputForward(1);
-        motor.configPeakOutputReverse(-1);
-        motor.configClosedloopRamp(0);
-        motor.configOpenloopRamp(0);
-      }
-    }
   }
 
   @Override
@@ -469,22 +380,6 @@ public class Robot extends IterativeRobot {
       emergencyDriveCommand.start();
     } else {
       emergencyDriveCommand.cancel();
-    }
-  }
-
-  @Override
-  public void testPeriodic() {
-    for (int chooserIndex = 0; chooserIndex < testMotorChoosers.length; chooserIndex++) {
-      if (testMotorChoosers[chooserIndex].getSelected() != -1) {
-        testMotors[testMotorChoosers[chooserIndex].getSelected() < testMotors.length ?
-            testMotorChoosers[chooserIndex].getSelected() :
-            (testMotorChoosers[chooserIndex].getSelected()) % testMotors.length]
-            .set(ControlMode.PercentOutput,
-                (testMotorChoosers[chooserIndex].getSelected() < testMotors.length ? 1 : -1) *
-                    Utilities.processDeadzone(
-                        testJoystick.getRawAxis(testJoystickChoosers[chooserIndex].getSelected()
-                        ), 0.1));
-      }
     }
   }
 }
