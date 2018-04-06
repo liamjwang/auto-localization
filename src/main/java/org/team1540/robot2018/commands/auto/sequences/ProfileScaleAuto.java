@@ -26,7 +26,7 @@ public class ProfileScaleAuto extends CommandGroup {
         // addSequential(new TimedCommand(0.5));
       }
     });
-    addSequential(new Eject(Tuning.intakeEjectSpeedAuto));
+    addSequential(new Eject(Tuning.intakeEjectSpeedAuto, 1.5));
     addSequential(new GroundPosition());
   }
 }
