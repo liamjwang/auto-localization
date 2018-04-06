@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
     // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
-    PowerManager.getInstance().setUpdateDelay(40);
+    // PowerManager.getInstance().setUpdateDelay(40);
 
     // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
@@ -156,7 +156,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     // TODO: Move auto logic into command
-    PowerManager.getInstance().setRunning(false);
+    // PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
     autoCommand = null;
@@ -327,7 +327,7 @@ public class Robot extends IterativeRobot {
 
       case "Stupid":
         System.out.println("Stupid Auto Selected");
-        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, 0.4);
+        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4);
         break;
     }
 
@@ -338,7 +338,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
-    PowerManager.getInstance().setRunning(true);
+    // PowerManager.getInstance().setRunning(true);
     if (autoCommand != null) {
       autoCommand.cancel();
     }
