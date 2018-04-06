@@ -14,7 +14,6 @@ import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.base.wrappers.ChickenVictor;
 
-@SuppressWarnings("Duplicates")
 public class RobotMotorTest extends IterativeRobot {
 
   private Joystick driver = new Joystick(0);
@@ -50,6 +49,7 @@ public class RobotMotorTest extends IterativeRobot {
       new ChickenVictor(16),
       new ChickenTalon(17),
       new ChickenTalon(18),
+
   };
   private SendableChooser<Integer>[] motorChoosers;
   private SendableChooser<Integer>[] joystickChoosers;
@@ -134,15 +134,15 @@ public class RobotMotorTest extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
-      int selectedIndex = motorChoosers[chooserIndex].getSelected();
-      if (selectedIndex != -1) {
-        int motorIndex =
-            selectedIndex < motors.length ? selectedIndex : (selectedIndex) % motors.length;
-        double deadzoneAxis = Utilities.processDeadzone(
-            driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
-            ), 0.1);
-        int negation = selectedIndex < motors.length ? 1 : -1;
-        motors[motorIndex].set(ControlMode.PercentOutput, negation * deadzoneAxis);
+      if (motorChoosers[chooserIndex].getSelected() != -1) {
+        motors[motorChoosers[chooserIndex].getSelected() < motors.length ?
+            motorChoosers[chooserIndex].getSelected() :
+            (motorChoosers[chooserIndex].getSelected()) % motors.length]
+            .set(ControlMode.PercentOutput,
+                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) *
+                    Utilities.processDeadzone(
+                        driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
+                        ), 0.1));
       }
     }
   }
