@@ -34,6 +34,9 @@ public class Tuning {
   @Tunable("-[Auto] Stupid Drive Time")
   public static double stupidDriveTime = 2.5;
 
+  @Tunable("-[Auto] Stupid Drive Percent")
+  public static double stupidDrivePercent = -0.4;
+
   // INTAKE
   //@Tunable("[Intake] Auto Intake Spike Current")
   public static double intakeSpikeCurrent = 30.0;

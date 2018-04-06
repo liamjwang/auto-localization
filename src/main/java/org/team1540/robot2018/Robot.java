@@ -327,7 +327,7 @@ public class Robot extends IterativeRobot {
 
       case "Stupid":
         System.out.println("Stupid Auto Selected");
-        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4);
+        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, Tuning.stupidDrivePercent);
         break;
     }
 
