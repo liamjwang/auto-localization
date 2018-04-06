@@ -3,7 +3,7 @@ package org.team1540.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import org.team1540.base.ChickenSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.base.drive.PidDriveFactory;
 import org.team1540.base.drive.PowerJoystickScaling;
 import org.team1540.base.wrappers.ChickenTalon;
@@ -11,7 +11,7 @@ import org.team1540.robot2018.OI;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 
-public class DriveTrain extends ChickenSubsystem {
+public class DriveTrain extends Subsystem {
 
   private ChickenTalon driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
   private ChickenTalon driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
@@ -25,40 +25,7 @@ public class DriveTrain extends ChickenSubsystem {
   private ChickenTalon[] driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
 
   public DriveTrain() {
-    add(driveMotorAll);
-    setPriority(10);
-
-    driveLeftMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    driveRightMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-
-    driveLeftMotorA.setSensorPhase(Tuning.isPandora);
-
-    for (ChickenTalon talon : driveLeftMotors) {
-      talon.setInverted(false);
-    }
-
-    driveRightMotorA.setSensorPhase(true);
-
-    for (ChickenTalon talon : driveRightMotors) {
-      talon.setInverted(true);
-    }
-
-    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-
-    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.setBrake(true);
-    }
-
-    configTalonsForVelocity();
-
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.configClosedloopRamp(Tuning.drivetrainRampRate);
-      talon.configOpenloopRamp(Tuning.drivetrainRampRate);
-    }
+    reset();
   }
 
   @Override
@@ -135,6 +102,43 @@ public class DriveTrain extends ChickenSubsystem {
       talon.config_kD(0, Tuning.drivetrainVelocityD);
       talon.config_kF(0, Tuning.drivetrainVelocityF);
       talon.config_IntegralZone(0, Tuning.drivetrainVelocityIZone);
+    }
+  }
+
+  public void reset() {
+    driveLeftMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    driveRightMotorA.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    driveLeftMotorA.setSensorPhase(Tuning.isPandora);
+
+    for (ChickenTalon talon : driveLeftMotors) {
+      talon.setInverted(false);
+    }
+
+    driveRightMotorA.setSensorPhase(true);
+
+    for (ChickenTalon talon : driveRightMotors) {
+      talon.setInverted(true);
+    }
+
+    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+
+    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.setBrake(true);
+    }
+
+    configTalonsForVelocity();
+
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.configClosedloopRamp(Tuning.drivetrainRampRate);
+      talon.configOpenloopRamp(Tuning.drivetrainRampRate);
+      talon.configPeakOutputForward(1);
+      talon.configPeakOutputReverse(-1);
+      talon.enableCurrentLimit(false);
     }
   }
 
