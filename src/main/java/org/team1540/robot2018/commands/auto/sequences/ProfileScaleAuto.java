@@ -23,7 +23,7 @@ public class ProfileScaleAuto extends CommandGroup {
         addParallel(new MoveWrist(Tuning.wristTransitPosition));
         addSequential(new MoveElevator(false, Tuning.elevatorMaxPosition));
         addSequential(new MoveWrist(Tuning.wristBackPosition));
-        // addSequential(new TimedCommand(0.5));
+        addSequential(new TimedCommand(0.5));
       }
     });
     addSequential(new Eject(Tuning.intakeEjectSpeedAuto, 1.5));
