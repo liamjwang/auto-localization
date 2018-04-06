@@ -1,6 +1,7 @@
 package org.team1540.robot2018.commands.auto.sequences;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
@@ -29,7 +30,7 @@ public class ProfileDoubleScaleAuto extends CommandGroup {
         addParallel(new SimpleCommand("Arm Hold", () -> Robot.arms.set(Tuning.armHoldSpeed), Robot.arms));
       }
     });
-    // addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
+    addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
 
     // go back to the scale, raise elevator, eject cube
     addSequential(new CommandGroup() {
@@ -38,6 +39,7 @@ public class ProfileDoubleScaleAuto extends CommandGroup {
         addParallel(new MoveWrist(Tuning.wristTransitPosition));
         addSequential(new MoveElevator(false, Tuning.elevatorMaxPosition));
         addSequential(new MoveWrist(Tuning.wristBackPosition));
+        addSequential(new TimedCommand(0.5));
       }
     });
 

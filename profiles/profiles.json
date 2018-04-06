@@ -144,9 +144,9 @@
         "angle": 0
       },
       {
-        "x": 60,
-        "y": 70,
-        "angle": 1.25
+        "x": 50,
+        "y": 50,
+        "angle": -1.5
       }
     ],
     "flip": false
@@ -164,6 +164,72 @@
         "angle": -1.75
       }
     ],
+    "flip": true
+  },
+  "left_scale_straight": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 160,
+        "y": 40,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "left_scale_straight_back_to_switch": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 80,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "left_switch_straigh_back_to_scale": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 80,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "right_scale": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 175,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 275,
+        "y": 20,
+        "angle": 1
+      }
+    ],
+    "maxVel": 40.0,
     "flip": true
   }
 }

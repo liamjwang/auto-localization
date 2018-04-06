@@ -20,7 +20,7 @@ import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.JoystickEject;
-import org.team1540.robot2018.commands.wrist.CalibrateWrist;
+import org.team1540.robot2018.commands.wrist.CalibrateWristMotionMagic;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.triggers.StrictDPadButton;
@@ -202,7 +202,7 @@ public class OI {
     // WRIST
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
+    OI.wristFwdButton.whenPressed(new CalibrateWristMotionMagic());
     OI.wristTransitButton.whenPressed(new MoveWrist(Tuning.wristTransitPosition));
     OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 

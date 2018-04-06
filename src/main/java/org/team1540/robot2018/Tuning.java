@@ -152,10 +152,10 @@ public class Tuning {
   public static int wristIzone = 0;
 
   //@Tunable("[Wrist] Motion Cruise Velocity")
-  public static int wristCruiseVelocity = 600;
+  public static int wristCruiseVelocity = 1000;
 
   //@Tunable("[Wrist] Motion Max Acceleration")
-  public static int wristMaxAccel = 1000;
+  public static int wristMaxAccel = 6000;
 
   //@Tunable("[Wrist] Peak Current Limit")
   public static int wristCurrentLimit = 30;
