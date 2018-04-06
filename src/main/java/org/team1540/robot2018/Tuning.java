@@ -62,7 +62,7 @@ public class Tuning {
   //@Tunable("[Intake] Eject Speed Motor A")
   public static double intakeEjectSpeed = 0.8;
 
-  public static double intakeEjectSpeedAuto = 0.5;
+  public static double intakeEjectSpeedAuto = 0.25;
 
   // ARMS
   //@Tunable("[Intake] Arm Hold Speed")
