@@ -54,8 +54,6 @@ public class RobotMotorTest extends IterativeRobot {
   private SendableChooser<Integer>[] motorChoosers;
   private SendableChooser<Integer>[] joystickChoosers;
 
-  private int oldMotorIndex = -1;
-
   @Tunable("[MotorTest] numChoosers (Restart neccecary)")
   public int numChoosers = 1;
 
@@ -137,13 +135,9 @@ public class RobotMotorTest extends IterativeRobot {
   public void teleopPeriodic() {
     for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
       int selectedIndex = motorChoosers[chooserIndex].getSelected();
-      int motorIndex =
-          selectedIndex < motors.length ? selectedIndex : (selectedIndex) % motors.length;
-      if (motorIndex != oldMotorIndex && oldMotorIndex != -1) {
-        motors[motorIndex].set(ControlMode.PercentOutput, 0);
-      }
-      oldMotorIndex = motorIndex;
       if (selectedIndex != -1) {
+        int motorIndex =
+            selectedIndex < motors.length ? selectedIndex : (selectedIndex) % motors.length;
         double deadzoneAxis = Utilities.processDeadzone(
             driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
             ), 0.1);
