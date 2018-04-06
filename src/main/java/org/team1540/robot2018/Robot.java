@@ -394,7 +394,6 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.configTalonsForVelocity();
   }
 
-  @SuppressWarnings("Duplicates")
   @Override
   public void testInit() {
     testMotorChoosers = new SendableChooser[testNumChoosers];
