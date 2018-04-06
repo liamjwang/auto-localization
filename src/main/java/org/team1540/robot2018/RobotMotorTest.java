@@ -134,15 +134,15 @@ public class RobotMotorTest extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
-      if (motorChoosers[chooserIndex].getSelected() != -1) {
-        motors[motorChoosers[chooserIndex].getSelected() < motors.length ?
-            motorChoosers[chooserIndex].getSelected() :
-            (motorChoosers[chooserIndex].getSelected()) % motors.length]
-            .set(ControlMode.PercentOutput,
-                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) *
-                    Utilities.processDeadzone(
-                        driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
-                        ), 0.1));
+      int selectedIndex = motorChoosers[chooserIndex].getSelected();
+      if (selectedIndex != -1) {
+        int motorIndex =
+            selectedIndex < motors.length ? selectedIndex : (selectedIndex) % motors.length;
+        double deadzoneAxis = Utilities.processDeadzone(
+            driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
+            ), 0.1);
+        int negation = selectedIndex < motors.length ? 1 : -1;
+        motors[motorIndex].set(ControlMode.PercentOutput, negation * deadzoneAxis);
       }
     }
   }
