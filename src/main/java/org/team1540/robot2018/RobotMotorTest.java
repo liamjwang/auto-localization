@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -51,6 +52,8 @@ public class RobotMotorTest extends IterativeRobot {
       new ChickenTalon(18),
 
   };
+
+  private Spark leds = new Spark(9);
   private SendableChooser<Integer>[] motorChoosers;
   private SendableChooser<Integer>[] joystickChoosers;
 
@@ -61,6 +64,7 @@ public class RobotMotorTest extends IterativeRobot {
   public void robotInit() {
     AdjustableManager.getInstance().add(this);
     LiveWindow.disableAllTelemetry();
+    leds.set(0.35);
   }
 
   @Override
