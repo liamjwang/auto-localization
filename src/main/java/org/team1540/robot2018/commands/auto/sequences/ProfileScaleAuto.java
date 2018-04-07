@@ -6,7 +6,7 @@ import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.elevator.MoveElevator;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.Eject;
-import org.team1540.robot2018.commands.wrist.CalibrateWristMotionMagic;
+import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.motion.FollowProfile;
 
@@ -19,7 +19,7 @@ public class ProfileScaleAuto extends CommandGroup {
         addParallel(new FollowProfile(name));
         // wait a little bit before moving the wrist so we don't hit the wall
         addSequential(new TimedCommand(Tuning.autoElevatorRaiseWait));
-        addSequential(new CalibrateWristMotionMagic());
+        addSequential(new CalibrateWristMP(true));
         addParallel(new MoveWrist(Tuning.wristTransitPosition));
         addSequential(new MoveElevator(false, Tuning.elevatorMaxPosition));
         addSequential(new MoveWrist(Tuning.wristBackPosition));

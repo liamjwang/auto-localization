@@ -9,22 +9,24 @@ import org.team1540.robot2018.Tuning;
  */
 public class CalibrateWrist extends Command {
 
-  public CalibrateWrist() {
-    // super(Tuning.wristCalibrateTimeout);
+  private boolean out;
+
+  public CalibrateWrist(boolean out) {
+    this.out = out;
     requires(Robot.wrist);
   }
 
   @Override
   protected void initialize() {
     System.out.println("Calibrating wrist...");
-    Robot.wrist.set(1);
+    Robot.wrist.set(out ? 1 : -1);
   }
 
   @Override
   protected void end() {
     System.out.println(
         "Wrist calibrated. Position before calibration: " + Robot.wrist.getPosition());
-    Robot.wrist.setSensorPosition((int) Tuning.wristOutPosition);
+    Robot.wrist.setSensorPosition((int) (out ? Tuning.wristOutPosition : Tuning.wristBackPosition));
     Robot.wrist.stop();
   }
 

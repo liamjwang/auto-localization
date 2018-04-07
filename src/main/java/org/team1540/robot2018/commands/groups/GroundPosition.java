@@ -7,11 +7,11 @@ import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.elevator.CalibrateElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevator;
-import org.team1540.robot2018.commands.wrist.CalibrateWristMotionMagic;
+import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 
 public class GroundPosition extends CommandGroup {
   public GroundPosition() {
-    addSequential(new CalibrateWristMotionMagic());
+    addSequential(new CalibrateWristMP(true));
     addSequential(new SimpleConditionalCommand(
         () -> Robot.elevator.getPosition() > Tuning.elevatorGroundPosition,
         new MoveElevator(true, Tuning.elevatorGroundPosition)));
