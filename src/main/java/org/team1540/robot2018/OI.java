@@ -7,7 +7,6 @@ import static org.team1540.robot2018.Robot.winch;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import org.team1540.base.Utilities;
 import org.team1540.base.triggers.SimpleButton;
 import org.team1540.base.util.SimpleCommand;
@@ -17,10 +16,9 @@ import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.JoystickEject;
-import org.team1540.robot2018.commands.wrist.CalibrateWristMotionMagic;
+import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.triggers.StrictDPadButton;
@@ -109,7 +107,8 @@ public class OI {
   static Button wristFwdButton = new JoystickButton(copilot, A);
   static Button wristTransitButton = new JoystickButton(copilot, X);
 
-  static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
+  // static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
+  static Button dropButton = new JoystickButton(copilot, BACK);
 
   // WRIST
   public static double getWristAxis() {
@@ -174,14 +173,16 @@ public class OI {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
 
-    // OI.ejectButton.whenPressed(new JoystickEject());
+    OI.ejectButton.whenPressed(new JoystickEject());
 
-    OI.ejectButton.whenPressed(new ConditionalCommand(new DropCube(Tuning.armDropTime), new JoystickEject()) {
-      @Override
-      protected boolean condition() {
-        return OI.getTapeEnabled();
-      }
-    });
+    OI.dropButton.whenPressed(new DropCube(Tuning.armDropTime));
+
+    // OI.ejectButton.whenPressed(new ConditionalCommand(new DropCube(Tuning.armDropTime), new JoystickEject()) {
+    //   @Override
+    //   protected boolean condition() {
+    //     return OI.getTapeEnabled();
+    //   }
+    // });
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         arms));
@@ -202,7 +203,7 @@ public class OI {
     // WRIST
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
-    OI.wristFwdButton.whenPressed(new CalibrateWristMotionMagic());
+    OI.wristFwdButton.whenPressed(new CalibrateWristMP(true));
     OI.wristTransitButton.whenPressed(new MoveWrist(Tuning.wristTransitPosition));
     OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 
@@ -210,7 +211,7 @@ public class OI {
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
-    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+    // OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
 
     // WINCH
     OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
