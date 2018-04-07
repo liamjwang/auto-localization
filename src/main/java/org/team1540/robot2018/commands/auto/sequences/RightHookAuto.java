@@ -1,5 +1,7 @@
 package org.team1540.robot2018.commands.auto.sequences;
 
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2018.Tuning;
@@ -15,6 +17,6 @@ public class RightHookAuto extends CommandGroup {
     addParallel(new MoveWrist(Tuning.wrist45BackPosition));
     addSequential(new DriveTimed(ControlMode.PercentOutput, 1.6, -0.6, 0.1));
     addSequential(new Eject(1));
-    addSequential(new CalibrateWristMP(true));
+    addSequential(new CalibrateWristMP(OUT));
   }
 }

@@ -9,24 +9,28 @@ import org.team1540.robot2018.Tuning;
  */
 public class CalibrateWrist extends Command {
 
-  private boolean out;
+  public enum CalibratePosition {BACK, OUT}
 
-  public CalibrateWrist(boolean out) {
-    this.out = out;
+  private CalibratePosition position;
+
+  public CalibrateWrist(CalibratePosition position) {
+    this.position = position;
+
     requires(Robot.wrist);
   }
 
   @Override
   protected void initialize() {
     System.out.println("Calibrating wrist...");
-    Robot.wrist.set(out ? 1 : -1);
+    Robot.wrist.set(position == CalibratePosition.OUT ? 1 : -1);
   }
 
   @Override
   protected void end() {
     System.out.println(
         "Wrist calibrated. Position before calibration: " + Robot.wrist.getPosition());
-    Robot.wrist.setSensorPosition((int) (out ? Tuning.wristOutPosition : Tuning.wristBackPosition));
+    Robot.wrist.setSensorPosition((int) (
+        position == CalibratePosition.OUT ? Tuning.wristOutPosition : Tuning.wristBackPosition));
     Robot.wrist.stop();
   }
 

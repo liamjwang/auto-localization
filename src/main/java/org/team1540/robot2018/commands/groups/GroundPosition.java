@@ -1,5 +1,7 @@
 package org.team1540.robot2018.commands.groups;
 
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.team1540.base.util.SimpleConditionalCommand;
@@ -11,7 +13,7 @@ import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 
 public class GroundPosition extends CommandGroup {
   public GroundPosition() {
-    addSequential(new CalibrateWristMP(true));
+    addSequential(new CalibrateWristMP(OUT));
     addSequential(new SimpleConditionalCommand(
         () -> Robot.elevator.getPosition() > Tuning.elevatorGroundPosition,
         new MoveElevator(true, Tuning.elevatorGroundPosition)));

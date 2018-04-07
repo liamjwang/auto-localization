@@ -1,5 +1,7 @@
 package org.team1540.robot2018.commands.auto.sequences;
 
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.base.util.SimpleCommand;
@@ -16,7 +18,7 @@ public class SwitchDoubleCube extends CommandGroup {
   public SwitchDoubleCube(String side) {
 
     // Lower the wrist
-    addSequential(new CalibrateWristMP(true));
+    addSequential(new CalibrateWristMP(OUT));
 
     addSequential(new CommandGroup() {
       {
@@ -34,7 +36,7 @@ public class SwitchDoubleCube extends CommandGroup {
         addSequential(new FollowProfile(side + "_switch_to_middle_multi"));
         addSequential(new TimedCommand(0.2));
         addSequential(new MoveElevator(false, Tuning.elevatorGroundPosition));
-        addSequential(new CalibrateWristMP(true));
+        addSequential(new CalibrateWristMP(OUT));
       }
     });
 

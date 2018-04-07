@@ -1,5 +1,7 @@
 package org.team1540.robot2018.commands.auto.sequences;
 
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Tuning;
@@ -19,7 +21,7 @@ public class ProfileScaleAuto extends CommandGroup {
         addParallel(new FollowProfile(name));
         // wait a little bit before moving the wrist so we don't hit the wall
         addSequential(new TimedCommand(Tuning.autoElevatorRaiseWait));
-        addSequential(new CalibrateWristMP(true));
+        addSequential(new CalibrateWristMP(OUT));
         addParallel(new MoveWrist(Tuning.wristTransitPosition));
         addSequential(new MoveElevator(false, Tuning.elevatorMaxPosition));
         addSequential(new MoveWrist(Tuning.wristBackPosition));

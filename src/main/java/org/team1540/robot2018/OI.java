@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import static org.team1540.robot2018.Robot.arms;
 import static org.team1540.robot2018.Robot.intake;
 import static org.team1540.robot2018.Robot.winch;
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -203,7 +204,7 @@ public class OI {
     // WRIST
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
-    OI.wristFwdButton.whenPressed(new CalibrateWristMP(true));
+    OI.wristFwdButton.whenPressed(new CalibrateWristMP(OUT));
     OI.wristTransitButton.whenPressed(new MoveWrist(Tuning.wristTransitPosition));
     OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 
