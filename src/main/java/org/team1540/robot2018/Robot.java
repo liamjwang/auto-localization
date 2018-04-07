@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +21,7 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
+import org.team1540.robot2018.commands.auto.sequences.SwitchDoubleCube;
 import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.ProfileScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
@@ -71,6 +71,7 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Right Scale Then Switch", "Right Scale Then Switch");
     // autoPosition.addObject("Right Scale No Switch", "Right Scale No Switch");
     autoPosition.addObject("Left Hook Switch No Scale", "Left Hook Switch No Scale");
+    autoPosition.addObject("Center Double Cube", "Center Double Cube");
     autoPosition.addObject("Right Hook", "Right Hook Switch");
     autoPosition.addObject("Cross Line", "Cross Line");
     autoPosition.addObject("Stupid", "Stupid");
@@ -270,6 +271,16 @@ public class Robot extends IterativeRobot {
           autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4);
         }
         break;
+      case "Center Double Cube":
+        System.out.println("Middle Auto Selected");
+        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Switch");
+          autoCommand = new SwitchDoubleCube("left");
+        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+          System.out.println("Going for Right Switch");
+          autoCommand = new SwitchDoubleCube("right");
+        }
+        break;
 
       case "Right Hook Switch":
         System.out.println("Right Hook Switch Selected");
@@ -282,17 +293,25 @@ public class Robot extends IterativeRobot {
         }
         break;
       case "Right Scale Then Switch":
-        System.out.println("Right Scale or Switch");
+        System.out.println("Right Scale Auto Selected (Then Switch)");
         if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Going for the right scale");
+          System.out.println("Going for Right Scale");
           autoCommand = new ProfileScaleAuto("right_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          autoCommand = new CommandGroup() {
-            {
-              addSequential(new SingleCubeSwitchAuto("right_hook"));
-              addSequential(new DriveTimed(ControlMode.PercentOutput, 0.5, 0.5));
-            }
-          };
+        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
+          // TODO: crossover
+          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+            System.out.println("Going for Right Switch");
+            autoCommand = new SingleCubeSwitchAuto("right_hook");
+          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+            System.out.println("Just Crossing the Line");
+            autoCommand = new SimpleProfileAuto("go_straight");
+          } else {
+            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+            autoCommand = new SimpleProfileAuto("go_straight");
+          }
+        } else {
+          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+          autoCommand = new SimpleProfileAuto("go_straight");
         }
         break;
 

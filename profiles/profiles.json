@@ -64,6 +64,106 @@
     ],
     "flip": true
   },
+  "middle_to_right_switch_multi": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 105,
+        "y": -54,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "right_switch_to_middle_multi": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 105,
+        "y": -54,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "middle_to_left_switch_multi": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 100,
+        "y": 55,
+        "angle": 0
+      },
+      {
+        "x": 105,
+        "y": 55,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "left_switch_to_middle_multi": {
+    "points": [
+      {
+        "x": 105,
+        "y": 55,
+        "angle": 0
+      },
+      {
+        "x": 100,
+        "y": 55,
+        "angle": 0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "middle_to_cube": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 70,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "cube_to_middle": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 70,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
   "right_scale_approach": {
     "points": [
       {
@@ -110,6 +210,27 @@
         "x": 143,
         "y": -27.5,
         "angle": 1.570796327
+      }
+    ],
+    "maxVel": 40.0,
+    "flip": true
+  },
+  "right_hook": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 95,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 143,
+        "y": 27.5,
+        "angle": -1.570796327
       }
     ],
     "maxVel": 40.0,
