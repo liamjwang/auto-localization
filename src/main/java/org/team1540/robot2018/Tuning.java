@@ -15,13 +15,6 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
-  // CAMERA
-  // @Tunable("-[Camera] Overhead Camera ID")
-  public static int overheadCamID = 1;
-
-  // @Tunable("-[Camera] Turret Camera ID")
-  public static int turretCamID = 0;
-
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
   public static double stupidDriveTime = 2.5;

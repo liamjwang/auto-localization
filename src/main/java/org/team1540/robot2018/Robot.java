@@ -21,11 +21,11 @@ import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
-import org.team1540.robot2018.commands.auto.sequences.SwitchDoubleCube;
 import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.ProfileScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
+import org.team1540.robot2018.commands.auto.sequences.SwitchDoubleCube;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberTape;
 import org.team1540.robot2018.subsystems.ClimberWinch;
@@ -97,11 +97,11 @@ public class Robot extends IterativeRobot {
     zeroDrivetrain.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroDrivetrain);
 
-    UsbCamera overheadCam = CameraServer.getInstance().startAutomaticCapture(Tuning.overheadCamID);
+    UsbCamera overheadCam = CameraServer.getInstance().startAutomaticCapture(RobotMap.OVERHEAD_CAM_ID);
     overheadCam.setResolution(128, 73);
     overheadCam.setFPS(30);
 
-    UsbCamera turretCam = CameraServer.getInstance().startAutomaticCapture(Tuning.turretCamID);
+    UsbCamera turretCam = CameraServer.getInstance().startAutomaticCapture(RobotMap.TURRET_CAM_ID);
     turretCam.setResolution(128, 73);
     overheadCam.setFPS(30);
 
