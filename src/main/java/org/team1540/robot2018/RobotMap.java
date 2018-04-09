@@ -28,4 +28,8 @@ public class RobotMap {
 
   public static final int ARM_LEFT = 17;
   public static final int ARM_RIGHT = 18;
+
+  // CAMERA
+  public static final int OVERHEAD_CAM_ID = 1;
+  public static final int TURRET_CAM_ID = 0;
 }

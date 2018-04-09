@@ -97,11 +97,11 @@ public class Robot extends IterativeRobot {
     zeroDrivetrain.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroDrivetrain);
 
-    UsbCamera overheadCam = CameraServer.getInstance().startAutomaticCapture(Tuning.overheadCamID);
+    UsbCamera overheadCam = CameraServer.getInstance().startAutomaticCapture(RobotMap.OVERHEAD_CAM_ID);
     overheadCam.setResolution(128, 73);
     overheadCam.setFPS(30);
 
-    UsbCamera turretCam = CameraServer.getInstance().startAutomaticCapture(Tuning.turretCamID);
+    UsbCamera turretCam = CameraServer.getInstance().startAutomaticCapture(RobotMap.TURRET_CAM_ID);
     turretCam.setResolution(128, 73);
     overheadCam.setFPS(30);
 

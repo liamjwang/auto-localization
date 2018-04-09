@@ -18,13 +18,6 @@ public class Tuning {
   @Tunable("-[DriveTrain] Current Limit")
   public static int drivetrainCurrentLimit = 45;
 
-
-  // @Tunable("-[Camera] Overhead Camera ID")
-  public static int overheadCamID = 1;
-
-  // @Tunable("-[Camera] Turret Camera ID")
-  public static int turretCamID = 0;
-
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
   public static double stupidDriveTime = 2.5;
