@@ -1,7 +1,5 @@
 package org.team1540.robot2018;
 
-import jaci.pathfinder.Trajectory.Config;
-import jaci.pathfinder.Trajectory.FitMethod;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -18,12 +16,6 @@ public class Tuning {
   public static boolean isPandora = true;
 
   // CAMERA
-  //@Tunable("-[Camera] Crosshairs Size")
-  public static int crosshairsSize = 1000;
-
-  // @Tunable("-[Camera] Crosshairs Thickness")
-  public static int crosshairsThicccness = 3;
-
   // @Tunable("-[Camera] Overhead Camera ID")
   public static int overheadCamID = 1;
 
@@ -238,40 +230,6 @@ public class Tuning {
   //@Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU = 53.1271477663;
 
-  @Tunable("[MotionP] MaxVelocity")
-  public static double profileMaxVel = 40;
-
-  @Tunable("[MotionP] MaxAcceleration")
-  public static double profileMaxAccel = 40;
-
-  @Tunable("[MotionP] MaxJerk")
-  public static double profileMaxJerk = 2300;
-
-  //@Tunable("[MotionP] SecondsFromNeutralToFull")
-  public static double profileSecondsFromNeutralToFull = 0;
-
-  //@Tunable("[MotionP] SampleRate")
-  public static int profileSampleRate = Config.SAMPLES_FAST;
-
-  //@Tunable("[MotionP] TimeStep")
-  public static double profileTimeStep = 0.01;
-
-  //@Tunable("[MotionP] FitMethod")
-  public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
-
-  //@Tunable("[MotionP] LeftEncoderTicksPerUnit")
-  public static double profileLeftTPU = 51.25;
-
-  //@Tunable("[MotionP] RightEncoderTicksPerUnit")
-  public static double profileRightTPU = 51.25;
-
-  @Tunable("[MotionP] WheelbaseWidth")
-  public static double profileBaseWidth = 24;
-
-  // TODO: Rename profileWheelDistance to be more specific
-  //@Tunable("[MotionP] distanceBetweenWheels")
-  public static double profileWheelDistance = 11.812;
-
   @Tunable("[MotionP] Profile Heading P")
   public static double profileHeadingP = 0;
 
@@ -283,15 +241,6 @@ public class Tuning {
 
   @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.02;
-
-  @Tunable("[MotionP] Profile Test X")
-  public static double profileTestX = 50;
-
-  @Tunable("[MotionP] Profile Test Y")
-  public static double profileTestY = 0;
-
-  @Tunable("[MotionP] Profile Test Angle")
-  public static double profileTestAngle = 0;
 
   // AUTO
   public static double autoElevatorRaiseWait = 1;
