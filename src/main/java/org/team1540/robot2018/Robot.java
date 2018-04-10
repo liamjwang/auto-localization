@@ -128,7 +128,9 @@ public class Robot extends IterativeRobot {
     wrist.setSensorPosition(0);
     autoCommand = findCommand(autoPosition.getSelected().root);
     if (autoCommand != null) {
-
+      autoCommand.start();
+    } else {
+      DriverStation.reportError("Could not find auto command", false);
     }
   }
 
@@ -136,6 +138,9 @@ public class Robot extends IterativeRobot {
   private Command findCommand(DecisionNode root) {
     if (root.condition.getAsBoolean()) {
      if (root.profile != null) {
+       if (root.message != null) {
+         root.message.displayMessage();
+       }
        return root.profile.autoCommand;
      } else {
        if (root.children != null) {
