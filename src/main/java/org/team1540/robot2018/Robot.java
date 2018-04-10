@@ -13,9 +13,12 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
 import openrio.powerup.MatchData.OwnedSide;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
@@ -47,7 +50,7 @@ public class Robot extends IterativeRobot {
 
   private Command emergencyDriveCommand = new TankDrive();
 
-  private SendableChooser<String> autoPosition;
+  private SendableChooser<AutoMode> autoPosition;
   private SendableChooser<Boolean> driveMode;
 
   private Command autoCommand;
@@ -62,20 +65,9 @@ public class Robot extends IterativeRobot {
     // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
-    autoPosition.addDefault("Middle", "Middle");
-    autoPosition.addObject("Left Scale Then Switch", "Left Scale Then Switch");
-    autoPosition.addObject("Left Double Scale Then Switch", "Left Double Scale Then Switch");
-    autoPosition.addObject("Left Scale No Switch", "Left Scale No Switch");
-    autoPosition.addObject("Left Hook Switch Then Scale", "Left Hook Switch Then Scale");
-    autoPosition.addObject("Left Hook Switch Then Double Scale", "Left Hook Switch Then Double Scale");
-    autoPosition.addObject("Right Scale Then Switch", "Right Scale Then Switch");
-    // autoPosition.addObject("Right Scale No Switch", "Right Scale No Switch");
-    autoPosition.addObject("Left Hook Switch No Scale", "Left Hook Switch No Scale");
-    autoPosition.addObject("Center Double Cube", "Center Double Cube");
-    autoPosition.addObject("Right Hook", "Right Hook Switch");
-    autoPosition.addObject("Cross Line", "Cross Line");
-    autoPosition.addObject("Stupid", "Stupid");
-    autoPosition.addObject("Do Nothing", "Do Nothing");
+    for (AutoMode autoMode : AutoMode.values()) {
+      autoPosition.addObject(autoMode.name, autoMode);
+    }
 
     SmartDashboard.putData("Auto mode", autoPosition);
 
@@ -128,206 +120,35 @@ public class Robot extends IterativeRobot {
     }
   }
 
-  @SuppressWarnings("Duplicates")
   @Override
   public void autonomousInit() {
     // TODO: Move auto logic into command
     // PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
-    autoCommand = null;
-    switch (autoPosition.getSelected()) {
-      case "Left Double Scale Then Switch":
-        System.out.println("Left Scale Auto Selected (Then Switch)");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Scale");
-          autoCommand = new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          // TODO: crossover
-          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-            System.out.println("Going for Left Switch");
-            autoCommand = new SingleCubeSwitchAuto("left_hook");
-          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-            System.out.println("Just Crossing the Line");
-            autoCommand = new SimpleProfileAuto("go_straight");
-          } else {
-            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-            autoCommand = new SimpleProfileAuto("go_straight");
-          }
-        } else {
-          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-      case "Left Scale Then Switch":
-        System.out.println("Left Scale Auto Selected (Then Switch)");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Scale");
-          autoCommand = new ProfileScaleAuto("left_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          // TODO: crossover
-          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-            System.out.println("Going for Left Switch");
-            autoCommand = new SingleCubeSwitchAuto("left_hook");
-          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-            System.out.println("Just Crossing the Line");
-            autoCommand = new SimpleProfileAuto("go_straight");
-          } else {
-            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-            autoCommand = new SimpleProfileAuto("go_straight");
-          }
-        } else {
-          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-      case "Left Scale No Switch":
-        System.out.println("Left Scale Auto Selected (No Switch)");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Scale");
-          autoCommand = new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Just Crossing the Line");
-          autoCommand = new SimpleProfileAuto("go_straight");
-        } else {
-          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-      case "Left Double Scale No Switch":
-        System.out.println("Left Scale Auto Selected (No Switch)");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Scale");
-          autoCommand = new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Just Crossing the Line");
-          autoCommand = new SimpleProfileAuto("go_straight");
-        } else {
-          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-
-      case "Left Hook Switch Then Double Scale":
-        System.out.println("Left Hook Switch Then Scale Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for left switch");
-          autoCommand = new SingleCubeSwitchAuto("left_hook");
-        } else {
-          System.out.println("Going for scale");
-          if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-            autoCommand = new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale");
-          } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-            System.out.println("Just Crossing the Line");
-            autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
-          } else {
-            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-            autoCommand = new SimpleProfileAuto("go_straight");
-          }
-        }
-        break;
-      case "Left Hook Switch Then Scale":
-        System.out.println("Left Hook Switch Then Scale Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for left switch");
-          autoCommand = new SingleCubeSwitchAuto("left_hook");
-        } else {
-          System.out.println("Going for scale");
-          if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-            autoCommand = new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale");
-          } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-            System.out.println("Just Crossing the Line");
-            autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
-          } else {
-            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-            autoCommand = new SimpleProfileAuto("go_straight");
-          }
-        }
-        break;
-
-      case "Left Hook Switch No Scale":
-        System.out.println("Left Hook Switch No Scale Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for left switch");
-          autoCommand = new SingleCubeSwitchAuto("left_hook");
-        } else {
-          System.out.println("Just Crossing the Line");
-          autoCommand = new SimpleProfileAuto("go_straight"); // TODO: crossover
-        }
-        break;
-
-      case "Middle":
-        System.out.println("Middle Auto Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
-          autoCommand = new SingleCubeSwitchAuto("middle_to_left_switch");
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
-          autoCommand = new SingleCubeSwitchAuto("middle_to_right_switch");
-        } else {
-          DriverStation.reportError(
-              "Match data could not get owned switch side, reverting to base auto",
-              false);
-          autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, -0.4);
-        }
-        break;
-      case "Center Double Cube":
-        System.out.println("Middle Auto Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-          System.out.println("Going for Left Switch");
-          autoCommand = new SwitchDoubleCube("left");
-        } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Switch");
-          autoCommand = new SwitchDoubleCube("right");
-        }
-        break;
-
-      case "Right Hook Switch":
-        System.out.println("Right Hook Switch Selected");
-        if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-          System.out.println("Going for the right switch");
-          autoCommand = new SingleCubeSwitchAuto("right_hook"); //TODO: make this
-        } else {
-          System.out.println("Crossing the line");
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-      case "Right Scale Then Switch":
-        System.out.println("Right Scale Auto Selected (Then Switch)");
-        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
-          System.out.println("Going for Right Scale");
-          autoCommand = new ProfileScaleAuto("right_scale");
-        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
-          // TODO: crossover
-          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
-            System.out.println("Going for Right Switch");
-            autoCommand = new SingleCubeSwitchAuto("right_hook");
-          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
-            System.out.println("Just Crossing the Line");
-            autoCommand = new SimpleProfileAuto("go_straight");
-          } else {
-            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-            autoCommand = new SimpleProfileAuto("go_straight");
-          }
-        } else {
-          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
-          autoCommand = new SimpleProfileAuto("go_straight");
-        }
-        break;
-
-      case "Cross Line":
-        autoCommand = new SimpleProfileAuto("go_straight");
-        break;
-
-      case "Stupid":
-        System.out.println("Stupid Auto Selected");
-        autoCommand = new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, Tuning.stupidDrivePercent);
-        break;
-    }
-
+    autoCommand = findCommand(autoPosition.getSelected().root);
     if (autoCommand != null) {
-      autoCommand.start();
+
     }
+  }
+
+  // Depth first search
+  private Command findCommand(DecisionNode root) {
+    if (root.condition.getAsBoolean()) {
+     if (root.profile != null) {
+       return root.profile.autoCommand;
+     } else {
+       if (root.children != null) {
+         for (DecisionNode node : root.children) {
+          Command command = findCommand(node);
+          if (command != null) {
+            return command;
+          }
+         }
+       }
+     }
+    }
+    return null;
   }
 
   @Override
@@ -376,4 +197,199 @@ public class Robot extends IterativeRobot {
       emergencyDriveCommand.cancel();
     }
   }
+
+  private enum AutoMode {
+
+    LEFT_DOUBLE_SCALE_THEN_SWTICH("Left Double Scale Then Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_DOUBLE_SCALE_THEN_SWITCH),
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, new DecisionNode[]{
+            new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.LEFT_HOOK),
+            new DecisionNode(Posession.SWITCH_OWNED_RIGHT, MotionProfile.GO_STRAIGHT)
+        }),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    LEFT_SCALE_THEN_SWITCH("Left Scale Then Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_SCALE),
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, new DecisionNode[]{
+            new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.LEFT_HOOK),
+            new DecisionNode(Posession.SWITCH_OWNED_RIGHT, MotionProfile.GO_STRAIGHT)
+        }),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    LEFT_SCALE_NO_SWTICH("Left Scale No Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_SCALE),
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, MotionProfile.GO_STRAIGHT),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    LEFT_DOUBLE_SCALE_NO_SWITCH("Left Double Scale No Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_SCALE_NO_SWITCH),
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, MotionProfile.GO_STRAIGHT),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    LEFT_HOOK_SWITCH_THEN_DOUBLE_SCALE("Left Hook Switch Then Double Scale", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.LEFT_HOOK),
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_SCALE_STRAIGHT),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    LEFT_HOOK_SWITCH_THEN_SCALE("Left Hook Switch Then Scale", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.LEFT_HOOK),
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, MotionProfile.LEFT_SCALE_STRAIGHT),
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, MotionProfile.GO_STRAIGHT),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    MIDDLE("Middle", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.MIDDLE_TO_LEFT_SWITCH),
+        new DecisionNode(Posession.SWITCH_OWNED_RIGHT, MotionProfile.MIDDLE_TO_RIGHT_SWITCH),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    CENTER_DOUBLE_CUBE("Center Double Cube", new DecisionNode(new DecisionNode[]{
+       new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.SWITCH_DOUBLE_CUBE_LEFT),
+       new DecisionNode(Posession.SWITCH_OWNED_RIGHT, MotionProfile.SWITCH_DOUBLE_CUBE_RIGHT)
+    })),
+    RIGHT_HOOK_SWITCH("Right Hook Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SWITCH_OWNED_RIGHT, MotionProfile.RIGHT_HOOK),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT)
+    })),
+    RIGHT_SCALE_THEN_SWITCH("Right Scale Then Switch", new DecisionNode(new DecisionNode[]{
+        new DecisionNode(Posession.SCALE_OWNED_RIGHT, MotionProfile.RIGHT_SCALE),
+        new DecisionNode(Posession.SCALE_OWNED_LEFT, new DecisionNode[]{
+            new DecisionNode(Posession.SCALE_OWNED_RIGHT, MotionProfile.RIGHT_HOOK),
+            new DecisionNode(Posession.SWITCH_OWNED_LEFT, MotionProfile.GO_STRAIGHT),
+            new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+        }),
+        new DecisionNode(Posession.NO_DATA, MotionProfile.GO_STRAIGHT).setMessage(new Message("Could not get match data, reverting to base auto", true))
+    })),
+    CROSS_LINE("Cross Line", new DecisionNode(MotionProfile.GO_STRAIGHT)),
+    STUPID("Stupid", new DecisionNode(MotionProfile.DRIVE_TIMED));
+
+
+    private final String name;
+    private final DecisionNode root;
+
+    AutoMode(String name, DecisionNode root) {
+      this.name = name;
+      this.root = root;
+    }
+
+  }
+
+  private enum Posession {
+
+    SCALE_OWNED_LEFT(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT)),
+    SCALE_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT)),
+    SWITCH_OWNED_LEFT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT)),
+    SWITCH_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT)),
+    NO_DATA(() -> (true));
+
+    private final BooleanSupplier condition;
+    @Nullable
+    private final String message;
+    private final boolean isError;
+
+    Posession(BooleanSupplier condition) {
+      this.condition = condition;
+      this.message = null;
+      isError = false;
+    }
+
+    Posession(BooleanSupplier condition, String message, boolean isError) {
+      this.condition = condition;
+      this.message = message;
+      this.isError = isError;
+    }
+
+  }
+
+  private enum MotionProfile {
+    GO_STRAIGHT(new SimpleProfileAuto("go_straight"), "Crossing the line"),
+    LEFT_HOOK(new SingleCubeSwitchAuto("left_hook"), "Going for the left switch"),
+    LEFT_SCALE(new ProfileScaleAuto("left_scale"), "Going for the left scale"),
+    LEFT_SCALE_NO_SWITCH(new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale"), "Going for the left scale"),
+    LEFT_DOUBLE_SCALE_THEN_SWITCH(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale"), "Going for the left scale"),
+    LEFT_SCALE_STRAIGHT(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale"), "Going for left scale"),
+    MIDDLE_TO_LEFT_SWITCH(new SingleCubeSwitchAuto("middle_to_left_switch"), "Going for the left switch"),
+    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeSwitchAuto("middle_to_right_switch"), "Going for the right switch"),
+    SWITCH_DOUBLE_CUBE_LEFT(new SwitchDoubleCube("left"), "Going for the left switch"),
+    SWITCH_DOUBLE_CUBE_RIGHT(new SwitchDoubleCube("right"), "Going for the right switch"),
+    RIGHT_HOOK(new SingleCubeSwitchAuto("right_hook"), "Going for the right switch"),
+    RIGHT_SCALE(new ProfileScaleAuto("right_scale"), "Going for the right scale"),
+    DRIVE_TIMED(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, Tuning.stupidDrivePercent), "Driving straight for time");
+
+    private final Command autoCommand;
+    private final String defaultMessage;
+
+    MotionProfile(Command autoCommand, String defaultMessage) {
+      this.autoCommand = autoCommand;
+      this.defaultMessage = defaultMessage;
+    }
+
+  }
+
+  private static class DecisionNode {
+
+    @NotNull
+    final BooleanSupplier condition;
+    @Nullable
+    private Message message = null;
+    @Nullable
+    final MotionProfile profile;
+    @Nullable
+    final DecisionNode[] children;
+
+    public DecisionNode(Posession posession, @NotNull MotionProfile profile) {
+      this.condition = posession.condition;
+      this.profile = profile;
+      this.children = null;
+      message = new Message(profile.defaultMessage);
+    }
+
+    public DecisionNode(@NotNull MotionProfile profile) {
+      this.condition = () -> (true);
+      this.children = null;
+      this.profile = profile;
+    }
+
+    public DecisionNode(Posession posession, DecisionNode[] children) {
+      this.condition = posession.condition;
+      this.children = children;
+      this.profile = null;
+      message = new Message(profile.defaultMessage);
+    }
+
+    public DecisionNode(DecisionNode[] children) {
+      this.condition = () -> (true);
+      this.children = children;
+      this.profile = null;
+    }
+
+    public DecisionNode setMessage(Message message) {
+      this.message = message;
+      return this;
+    }
+
+  }
+
+  private static class Message {
+    private String message;
+    private boolean isError = false;
+
+    public Message(String message) {
+      this.message = message;
+    }
+
+    public Message(String message, boolean isError) {
+      this.message = message;
+      this.isError = isError;
+    }
+
+    public void displayMessage() {
+      if (isError) {
+        DriverStation.reportError(message, false);
+      } else {
+        System.out.println(message);
+      }
+    }
+
+  }
+
 }
