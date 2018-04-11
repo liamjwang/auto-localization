@@ -145,10 +145,12 @@ public class Robot extends IterativeRobot {
      } else {
        if (root.children != null) {
          for (DecisionNode node : root.children) {
-          Command command = findCommand(node);
-          if (command != null) {
-            return command;
-          }
+           if (node != null) {
+             Command command = findCommand(node);
+             if (command != null) {
+               return command;
+             }
+           }
          }
        }
      }
@@ -286,18 +288,19 @@ public class Robot extends IterativeRobot {
     SWITCH_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT)),
     NO_DATA(() -> (true));
 
+    @NotNull
     private final BooleanSupplier condition;
     @Nullable
     private final String message;
     private final boolean isError;
 
-    Posession(BooleanSupplier condition) {
+    Posession(@NotNull BooleanSupplier condition) {
       this.condition = condition;
       this.message = null;
       isError = false;
     }
 
-    Posession(BooleanSupplier condition, String message, boolean isError) {
+    Posession(@NotNull BooleanSupplier condition, @Nullable String message, boolean isError) {
       this.condition = condition;
       this.message = message;
       this.isError = isError;
@@ -354,14 +357,13 @@ public class Robot extends IterativeRobot {
       this.profile = profile;
     }
 
-    public DecisionNode(Posession posession, DecisionNode[] children) {
+    public DecisionNode(Posession posession, @NotNull DecisionNode[] children) {
       this.condition = posession.condition;
       this.children = children;
       this.profile = null;
-      message = new Message(profile.defaultMessage);
     }
 
-    public DecisionNode(DecisionNode[] children) {
+    public DecisionNode(@NotNull DecisionNode[] children) {
       this.condition = () -> (true);
       this.children = children;
       this.profile = null;
