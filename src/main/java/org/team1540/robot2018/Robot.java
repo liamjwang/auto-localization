@@ -205,6 +205,9 @@ public class Robot extends IterativeRobot {
     }
   }
 
+  /**
+   * Set of all available autonomous modes. To create a new autonomous mode, create a new enum and identify the root {@link DecisionNode} from which to perform a depth first tree traversal in search of a leaf.
+   */
   private enum AutoMode {
 
     LEFT_DOUBLE_SCALE_THEN_SWITCH(new DecisionNode(new DecisionNode[]{
@@ -351,6 +354,9 @@ public class Robot extends IterativeRobot {
 
   }
 
+  /**
+   * Class for use in a tree structure for deciding what autonomous routine to execute. Each decision node has a {@link #condition} that determines if it's possible to continue pathing down that node. Each decision node either has children, or if it is a leaf, an AutonomousRoutine.
+   */
   private static class DecisionNode {
 
     @NotNull
