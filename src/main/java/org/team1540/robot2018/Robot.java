@@ -55,6 +55,21 @@ public class Robot extends IterativeRobot {
 
   private Command autoCommand;
 
+  private static final BooleanSupplier SCALE_OWNED_LEFT = () -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT);
+  private static final BooleanSupplier SCALE_OWNED_RIGHT = () -> (MatchData.getOwnedSide
+      (GameFeature.SCALE) == OwnedSide.RIGHT);
+  private static final BooleanSupplier SWITCH_OWNED_LEFT = () -> (MatchData.getOwnedSide
+      (GameFeature.SWITCH_NEAR) == OwnedSide.LEFT);
+  private static final BooleanSupplier SWITCH_OWNED_RIGHT = () -> (MatchData.getOwnedSide
+      (GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT);
+  private static final BooleanSupplier SCALE_NO_DATA = () -> (MatchData.getOwnedSide(GameFeature
+      .SCALE) == OwnedSide.UNKNOWN);
+  private static final BooleanSupplier SWITCH_NO_DATA = () -> (MatchData.getOwnedSide(GameFeature
+      .SWITCH_NEAR) == OwnedSide.UNKNOWN);
+  
+  private static final Message SCALE_NO_DATA_MESSAGE = new Message("Could not get scale data", true);
+  private static final Message SWITCH_NO_DATA_MESSAGE = new Message("Could not get switch data", true);
+  
   @Override
   public void robotInit() {
     // disable unused things
@@ -213,69 +228,70 @@ public class Robot extends IterativeRobot {
   private enum AutoMode {
 
     LEFT_DOUBLE_SCALE_THEN_SWITCH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_DOUBLE_SCALE_THEN_SWITCH),
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, new DecisionNode[]{
-            new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
-            new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
-            new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_DOUBLE_SCALE_THEN_SWITCH),
+        new DecisionNode(SCALE_OWNED_RIGHT, new DecisionNode[]{
+            new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
+            new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
+            new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage
+                (SWITCH_NO_DATA_MESSAGE)
         }),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     LEFT_SCALE_THEN_SWITCH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE),
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, new DecisionNode[]{
-            new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
-            new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
-            new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE),
+        new DecisionNode(SCALE_OWNED_RIGHT, new DecisionNode[]{
+            new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
+            new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
+            new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE)
         }),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     LEFT_SCALE_NO_SWTICH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE),
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE),
+        new DecisionNode(SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     LEFT_DOUBLE_SCALE_NO_SWITCH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_NO_SWITCH),
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_NO_SWITCH),
+        new DecisionNode(SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     LEFT_HOOK_SWITCH_THEN_DOUBLE_SCALE(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_STRAIGHT),
-        new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_STRAIGHT),
+        new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE),
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     LEFT_HOOK_SWITCH_THEN_SCALE(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_STRAIGHT),
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
-        new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.LEFT_HOOK),
+        new DecisionNode(SCALE_OWNED_LEFT, AutonomousRoutine.LEFT_SCALE_STRAIGHT),
+        new DecisionNode(SCALE_OWNED_RIGHT, AutonomousRoutine.GO_STRAIGHT),
+        new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE),
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     MIDDLE(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.MIDDLE_TO_LEFT_SWITCH),
-        new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.MIDDLE_TO_RIGHT_SWITCH),
-        new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.MIDDLE_TO_LEFT_SWITCH),
+        new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.MIDDLE_TO_RIGHT_SWITCH),
+        new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE)
     })),
     CENTER_DOUBLE_CUBE(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.SWITCH_DOUBLE_CUBE_LEFT),
-        new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.SWITCH_DOUBLE_CUBE_RIGHT),
-        new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.SWITCH_DOUBLE_CUBE_LEFT),
+        new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.SWITCH_DOUBLE_CUBE_RIGHT),
+        new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE)
     })),
     RIGHT_HOOK_SWITCH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.RIGHT_HOOK),
-        new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.GO_STRAIGHT),
-        new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.RIGHT_HOOK),
+        new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.GO_STRAIGHT),
+        new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE)
     })),
     RIGHT_SCALE_THEN_SWITCH(new DecisionNode(new DecisionNode[]{
-        new DecisionNode(Posession.SCALE_OWNED_RIGHT, AutonomousRoutine.RIGHT_SCALE),
-        new DecisionNode(Posession.SCALE_OWNED_LEFT, new DecisionNode[]{
-            new DecisionNode(Posession.SWITCH_OWNED_RIGHT, AutonomousRoutine.RIGHT_HOOK),
-            new DecisionNode(Posession.SWITCH_OWNED_LEFT, AutonomousRoutine.GO_STRAIGHT),
-            new DecisionNode(Posession.SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SWITCH_NO_DATA.message)
+        new DecisionNode(SCALE_OWNED_RIGHT, AutonomousRoutine.RIGHT_SCALE),
+        new DecisionNode(SCALE_OWNED_LEFT, new DecisionNode[]{
+            new DecisionNode(SWITCH_OWNED_RIGHT, AutonomousRoutine.RIGHT_HOOK),
+            new DecisionNode(SWITCH_OWNED_LEFT, AutonomousRoutine.GO_STRAIGHT),
+            new DecisionNode(SWITCH_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SWITCH_NO_DATA_MESSAGE)
         }),
-        new DecisionNode(Posession.SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(Posession.SCALE_NO_DATA.message)
+        new DecisionNode(SCALE_NO_DATA, AutonomousRoutine.GO_STRAIGHT).setMessage(SCALE_NO_DATA_MESSAGE)
     })),
     CROSS_LINE(new DecisionNode(AutonomousRoutine.GO_STRAIGHT)),
     STUPID(new DecisionNode(AutonomousRoutine.DRIVE_TIMED));
@@ -296,34 +312,6 @@ public class Robot extends IterativeRobot {
       }
       name = nameMaker.toString().trim();
       this.root = root;
-    }
-
-  }
-
-  private enum Posession {
-
-    SCALE_OWNED_LEFT(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT)),
-    SCALE_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT)),
-    SWITCH_OWNED_LEFT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT)),
-    SWITCH_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT)),
-    SCALE_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SCALE)
-        == OwnedSide.UNKNOWN), "Could not get scale data", true),
-    SWITCH_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR)
-        == OwnedSide.UNKNOWN), "Could not get switch data", true);
-
-    @NotNull
-    private final BooleanSupplier condition;
-    @Nullable
-    private final Message message;
-
-    Posession(@NotNull BooleanSupplier condition) {
-      this.condition = condition;
-      this.message = null;
-    }
-
-    Posession(@NotNull BooleanSupplier condition, @Nullable String message, boolean isError) {
-      this.condition = condition;
-      this.message = new Message(message, isError);
     }
 
   }
@@ -375,8 +363,8 @@ public class Robot extends IterativeRobot {
     @Nullable
     final DecisionNode[] children;
 
-    public DecisionNode(Posession posession, @NotNull Robot.AutonomousRoutine profile) {
-      this.condition = posession.condition;
+    public DecisionNode(@NotNull BooleanSupplier condition, @NotNull Robot.AutonomousRoutine profile) {
+      this.condition = condition;
       this.profile = profile;
       this.children = null;
       message = new Message(profile.defaultMessage);
@@ -388,8 +376,8 @@ public class Robot extends IterativeRobot {
       this.profile = profile;
     }
 
-    public DecisionNode(Posession posession, @NotNull DecisionNode[] children) {
-      this.condition = posession.condition;
+    public DecisionNode(@NotNull BooleanSupplier condition, @NotNull DecisionNode[] children) {
+      this.condition = condition;
       this.children = children;
       this.profile = null;
     }
