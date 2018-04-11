@@ -322,22 +322,27 @@ public class Robot extends IterativeRobot {
   }
 
   private enum AutonomousRoutine {
-    GO_STRAIGHT(new SimpleProfileAuto("go_straight"), "Crossing the line"),
-    LEFT_HOOK(new SingleCubeSwitchAuto("left_hook"), "Going for the left switch"),
-    LEFT_SCALE(new ProfileScaleAuto("left_scale"), "Going for the left scale"),
-    LEFT_SCALE_NO_SWITCH(new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale"), "Going for the left scale"),
-    LEFT_DOUBLE_SCALE_THEN_SWITCH(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale"), "Going for the left scale"),
-    LEFT_SCALE_STRAIGHT(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale"), "Going for left scale"),
-    MIDDLE_TO_LEFT_SWITCH(new SingleCubeSwitchAuto("middle_to_left_switch"), "Going for the left switch"),
-    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeSwitchAuto("middle_to_right_switch"), "Going for the right switch"),
-    SWITCH_DOUBLE_CUBE_LEFT(new SwitchDoubleCube("left"), "Going for the left switch"),
-    SWITCH_DOUBLE_CUBE_RIGHT(new SwitchDoubleCube("right"), "Going for the right switch"),
-    RIGHT_HOOK(new SingleCubeSwitchAuto("right_hook"), "Going for the right switch"),
-    RIGHT_SCALE(new ProfileScaleAuto("right_scale"), "Going for the right scale"),
-    DRIVE_TIMED(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, Tuning.stupidDrivePercent), "Driving straight for time");
+    GO_STRAIGHT(new SimpleProfileAuto("go_straight")),
+    LEFT_HOOK(new SingleCubeSwitchAuto("left_hook")),
+    LEFT_SCALE(new ProfileScaleAuto("left_scale")),
+    LEFT_SCALE_NO_SWITCH(new ProfileDoubleScaleAuto("left_scale", "left_scale_back_to_switch", "left_switch_back_to_scale")),
+    LEFT_DOUBLE_SCALE_THEN_SWITCH(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale")),
+    LEFT_SCALE_STRAIGHT(new ProfileDoubleScaleAuto("left_scale_straight", "left_scale_straight_back_to_switch", "left_switch_straight_back_to_scale")),
+    MIDDLE_TO_LEFT_SWITCH(new SingleCubeSwitchAuto("middle_to_left_switch")),
+    MIDDLE_TO_RIGHT_SWITCH(new SingleCubeSwitchAuto("middle_to_right_switch")),
+    SWITCH_DOUBLE_CUBE_LEFT(new SwitchDoubleCube("left")),
+    SWITCH_DOUBLE_CUBE_RIGHT(new SwitchDoubleCube("right")),
+    RIGHT_HOOK(new SingleCubeSwitchAuto("right_hook")),
+    RIGHT_SCALE(new ProfileScaleAuto("right_scale")),
+    DRIVE_TIMED(new DriveTimed(ControlMode.PercentOutput, Tuning.stupidDriveTime, Tuning.stupidDrivePercent));
 
     private final Command autoCommand;
     private final String defaultMessage;
+
+    AutonomousRoutine(Command autoCommand) {
+      this.autoCommand = autoCommand;
+      this.defaultMessage = "Running routine " + this.name();
+    }
 
     AutonomousRoutine(Command autoCommand, String defaultMessage) {
       this.autoCommand = autoCommand;
