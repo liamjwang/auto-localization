@@ -137,23 +137,23 @@ public class Robot extends IterativeRobot {
   // Depth first search
   private Command findCommand(DecisionNode root) {
     if (root.condition.getAsBoolean()) {
-     if (root.profile != null) {
-       if (root.message != null) {
-         root.message.displayMessage();
-       }
-       return root.profile.autoCommand;
-     } else {
-       if (root.children != null) {
-         for (DecisionNode node : root.children) {
-           if (node != null) {
-             Command command = findCommand(node);
-             if (command != null) {
-               return command;
-             }
-           }
-         }
-       }
-     }
+      if (root.profile != null) {
+        if (root.message != null) {
+          root.message.displayMessage();
+        }
+        return root.profile.autoCommand;
+      } else {
+        if (root.children != null) {
+          for (DecisionNode node : root.children) {
+            if (node != null) {
+              Command command = findCommand(node);
+              if (command != null) {
+                return command;
+              }
+            }
+          }
+        }
+      }
     }
     return null;
   }
@@ -206,7 +206,9 @@ public class Robot extends IterativeRobot {
   }
 
   /**
-   * Set of all available autonomous modes. To create a new autonomous mode, create a new enum and identify the root {@link DecisionNode} from which to perform a depth first tree traversal in search of a leaf.
+   * Set of all available autonomous modes. To create a new autonomous mode, create a new enum and
+   * identify the root {@link DecisionNode} from which to perform a depth first tree traversal in
+   * search of a leaf.
    */
   private enum AutoMode {
 
@@ -304,8 +306,10 @@ public class Robot extends IterativeRobot {
     SCALE_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT)),
     SWITCH_OWNED_LEFT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT)),
     SWITCH_OWNED_RIGHT(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT)),
-    SCALE_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.UNKNOWN), "Could not get scale data", true),
-    SWITCH_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.UNKNOWN), "Could not get switch data", true);
+    SCALE_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SCALE)
+        == OwnedSide.UNKNOWN), "Could not get scale data", true),
+    SWITCH_NO_DATA(() -> (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR)
+        == OwnedSide.UNKNOWN), "Could not get switch data", true);
 
     @NotNull
     private final BooleanSupplier condition;
@@ -355,7 +359,10 @@ public class Robot extends IterativeRobot {
   }
 
   /**
-   * Class for use in a tree structure for deciding what autonomous routine to execute. Each decision node has a {@link #condition} that determines if it's possible to continue pathing down that node. Each decision node either has children, or if it is a leaf, an AutonomousRoutine.
+   * Class for use in a tree structure for deciding what autonomous routine to execute. Each
+   * decision node has a {@link #condition} that determines if it's possible to continue pathing
+   * down that node. Each decision node either has children, or if it is a leaf, an
+   * AutonomousRoutine.
    */
   private static class DecisionNode {
 
@@ -397,7 +404,6 @@ public class Robot extends IterativeRobot {
       this.message = message;
       return this;
     }
-
   }
 
   private static class Message {
@@ -420,7 +426,5 @@ public class Robot extends IterativeRobot {
         System.out.println(message);
       }
     }
-
   }
-
 }
