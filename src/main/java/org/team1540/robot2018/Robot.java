@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.File;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.GameFeature;
@@ -66,10 +67,10 @@ public class Robot extends IterativeRobot {
       .SCALE) == OwnedSide.UNKNOWN);
   private static final BooleanSupplier SWITCH_NO_DATA = () -> (MatchData.getOwnedSide(GameFeature
       .SWITCH_NEAR) == OwnedSide.UNKNOWN);
-  
+
   private static final Message SCALE_NO_DATA_MESSAGE = new Message("Could not get scale data", true);
   private static final Message SWITCH_NO_DATA_MESSAGE = new Message("Could not get switch data", true);
-  
+
   @Override
   public void robotInit() {
     // disable unused things
@@ -141,8 +142,9 @@ public class Robot extends IterativeRobot {
     // PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
-    autoCommand = findCommand(autoPosition.getSelected().root);
-    if (autoCommand != null) {
+    Optional<Command> autoCommandOptional = findCommand(autoPosition.getSelected().root);
+    if (autoCommandOptional.isPresent()) {
+      autoCommand = autoCommandOptional.get();
       autoCommand.start();
     } else {
       DriverStation.reportError("Could not find auto command", false);
@@ -150,27 +152,23 @@ public class Robot extends IterativeRobot {
   }
 
   // Depth first search
-  private Command findCommand(DecisionNode root) {
+  private Optional<Command> findCommand(DecisionNode root) {
     if (root.condition.getAsBoolean()) {
-      if (root.profile != null) {
-        if (root.message != null) {
-          root.message.displayMessage();
-        }
-        return root.profile.autoCommand;
+      if (root.getProfile().isPresent()) {
+        root.getMessage().ifPresent(Message::displayMessage);
+        return Optional.of(root.getProfile().get().autoCommand);
       } else {
-        if (root.children != null) {
-          for (DecisionNode node : root.children) {
-            if (node != null) {
-              Command command = findCommand(node);
-              if (command != null) {
-                return command;
-              }
+        if (root.getChildren().isPresent()) {
+          for (DecisionNode node : root.getChildren().get()) {
+            Optional<Command> command = findCommand(node);
+            if (command.isPresent()) {
+              return command;
             }
           }
         }
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override
@@ -355,13 +353,13 @@ public class Robot extends IterativeRobot {
   private static class DecisionNode {
 
     @NotNull
-    final BooleanSupplier condition;
+    private final BooleanSupplier condition;
     @Nullable
     private Message message = null;
     @Nullable
-    final Robot.AutonomousRoutine profile;
+    private final Robot.AutonomousRoutine profile;
     @Nullable
-    final DecisionNode[] children;
+    private final DecisionNode[] children;
 
     public DecisionNode(@NotNull BooleanSupplier condition, @NotNull Robot.AutonomousRoutine profile) {
       this.condition = condition;
@@ -392,6 +390,24 @@ public class Robot extends IterativeRobot {
       this.message = message;
       return this;
     }
+
+    @NotNull
+    public BooleanSupplier getCondition() {
+      return condition;
+    }
+
+    public Optional<Message> getMessage() {
+      return Optional.ofNullable(message);
+    }
+
+    public Optional<AutonomousRoutine> getProfile() {
+      return Optional.ofNullable(profile);
+    }
+
+    public Optional<DecisionNode[]> getChildren() {
+      return Optional.ofNullable(children);
+    }
+
   }
 
   private static class Message {
