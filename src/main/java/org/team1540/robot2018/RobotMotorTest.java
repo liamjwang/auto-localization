@@ -3,6 +3,7 @@ package org.team1540.robot2018;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +32,8 @@ public class RobotMotorTest extends IterativeRobot {
       // Wrist
       new ChickenTalon(7),
 
-      // No 8 (previously climber tape measure)
+      // Climber Tape
+      new ChickenVictor(8),
 
       // Climber Winch
       new ChickenTalon(9),
@@ -46,8 +48,12 @@ public class RobotMotorTest extends IterativeRobot {
       // Intake
       new ChickenVictor(15),
       new ChickenVictor(16),
+      new ChickenTalon(17),
+      new ChickenTalon(18),
 
   };
+
+  private Spark leds = new Spark(9);
   private SendableChooser<Integer>[] motorChoosers;
   private SendableChooser<Integer>[] joystickChoosers;
 
@@ -58,6 +64,7 @@ public class RobotMotorTest extends IterativeRobot {
   public void robotInit() {
     AdjustableManager.getInstance().add(this);
     LiveWindow.disableAllTelemetry();
+    leds.set(0.35);
   }
 
   @Override
@@ -78,13 +85,15 @@ public class RobotMotorTest extends IterativeRobot {
 
       motorChoosers[motorIndex].addDefault("(None)", -1);
       for (int cc = 0; cc < motors.length; cc++) {
-        motorChoosers[motorIndex].addObject("Motor " + Integer.toString(cc + 1) + " (Forwards)", cc);
+        motorChoosers[motorIndex].addObject(
+            "Motor " + Integer.toString(cc + 1) + " (Forwards)", cc);
       }
       for (int cc = motors.length; cc < motors.length * 2; cc++) {
         motorChoosers[motorIndex].addObject(
             "Motor " + Integer.toString(cc - motors.length + 1) + " (Reversed)", cc);
       }
-      SmartDashboard.putData("[MotorTest] MotorChooser "+Integer.toString(motorIndex), motorChoosers[motorIndex]);
+      SmartDashboard.putData(
+          "[MotorTest] MotorChooser " + Integer.toString(motorIndex), motorChoosers[motorIndex]);
 
       joystickChoosers[motorIndex] = new SendableChooser<>();
       joystickChoosers[motorIndex].addDefault("LeftJoyY", 1);
@@ -94,7 +103,8 @@ public class RobotMotorTest extends IterativeRobot {
       joystickChoosers[motorIndex].addObject("RightTrig", 3);
       joystickChoosers[motorIndex].addObject("LeftTrig", 2);
 
-      SmartDashboard.putData("[MotorTest] JoyChooser "+Integer.toString(motorIndex), joystickChoosers[motorIndex]);
+      SmartDashboard.putData(
+          "[MotorTest] JoyChooser " + Integer.toString(motorIndex), joystickChoosers[motorIndex]);
     }
 
     for (ChickenController motor : motors) {
@@ -128,15 +138,15 @@ public class RobotMotorTest extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     for (int chooserIndex = 0; chooserIndex < motorChoosers.length; chooserIndex++) {
-      if (motorChoosers[chooserIndex].getSelected() != -1) {
-        motors[motorChoosers[chooserIndex].getSelected() < motors.length ?
-            motorChoosers[chooserIndex].getSelected() :
-                (motorChoosers[chooserIndex].getSelected()) % motors.length]
-            .set(ControlMode.PercentOutput,
-                (motorChoosers[chooserIndex].getSelected() < motors.length ? 1 : -1) *
-                    Utilities.processDeadzone(
-                        driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
-                        ), 0.1));
+      int selectedIndex = motorChoosers[chooserIndex].getSelected();
+      if (selectedIndex != -1) {
+        int motorIndex =
+            selectedIndex < motors.length ? selectedIndex : (selectedIndex) % motors.length;
+        double deadzoneAxis = Utilities.processDeadzone(
+            driver.getRawAxis(joystickChoosers[chooserIndex].getSelected()
+            ), 0.1);
+        int negation = selectedIndex < motors.length ? 1 : -1;
+        motors[motorIndex].set(ControlMode.PercentOutput, negation * deadzoneAxis);
       }
     }
   }

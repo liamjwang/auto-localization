@@ -28,15 +28,15 @@ public class ElevatorTuningRobot extends IterativeRobot {
 
   private SendableChooser<TuningMode> chooser = new SendableChooser<>();
   @Tunable("P")
-  public double p;
+  public double p = Tuning.elevatorP;
   @Tunable("I")
-  public double i;
+  public double i = Tuning.elevatorI;
   @Tunable("D")
-  public double d;
+  public double d = Tuning.elevatorD;
   @Tunable("F")
-  public double fUpper;
+  public double fUpper = Tuning.elevatorFGoingUp;
   @Tunable("F Down")
-  public double fDown;
+  public double fDown = Tuning.elevatorFGoingDown;
   @Tunable("PID Mode")
   public boolean usingPid;
   @Tunable("PID Target")

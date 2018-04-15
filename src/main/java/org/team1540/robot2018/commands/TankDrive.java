@@ -7,6 +7,7 @@ import org.team1540.robot2018.Robot;
 public class TankDrive extends Command {
   public TankDrive() {
     requires(Robot.drivetrain);
+    Robot.drivetrain.reset();
   }
 
   @Override

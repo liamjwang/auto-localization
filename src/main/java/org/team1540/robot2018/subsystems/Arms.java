@@ -13,8 +13,8 @@ public class Arms extends Subsystem {
   private ChickenTalon armMotorRight = new ChickenTalon(RobotMap.ARM_RIGHT);
 
   public Arms() {
-    armMotorLeft.setInverted(false);
-    armMotorRight.setInverted(true);
+    armMotorLeft.setInverted(true);
+    armMotorRight.setInverted(false);
     armMotorLeft.setBrake(false);
     armMotorRight.setBrake(false);
   }

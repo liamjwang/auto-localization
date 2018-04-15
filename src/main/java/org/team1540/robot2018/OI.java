@@ -2,6 +2,8 @@ package org.team1540.robot2018;
 
 import static org.team1540.robot2018.Robot.arms;
 import static org.team1540.robot2018.Robot.intake;
+import static org.team1540.robot2018.Robot.winch;
+import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -9,15 +11,15 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
 import org.team1540.base.triggers.SimpleButton;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.robot2018.commands.arms.DropCube;
 import org.team1540.robot2018.commands.arms.JoystickArms;
 import org.team1540.robot2018.commands.elevator.JoystickElevator;
 import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.FrontScale;
 import org.team1540.robot2018.commands.groups.GroundPosition;
-import org.team1540.robot2018.commands.groups.HoldElevatorWrist;
 import org.team1540.robot2018.commands.groups.IntakeSequence;
 import org.team1540.robot2018.commands.intake.JoystickEject;
-import org.team1540.robot2018.commands.wrist.CalibrateWrist;
+import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
 import org.team1540.robot2018.triggers.StrictDPadButton;
@@ -104,9 +106,10 @@ public class OI {
 
   static Button wristBackButton = new JoystickButton(copilot, B);
   static Button wristFwdButton = new JoystickButton(copilot, A);
-  static Button wrist45DegButton = new JoystickButton(copilot, X);
+  static Button wristTransitButton = new JoystickButton(copilot, X);
 
-  static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
+  // static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
+  static Button dropButton = new JoystickButton(copilot, BACK);
 
   // WRIST
   public static double getWristAxis() {
@@ -157,10 +160,30 @@ public class OI {
       && getWinchInAxis() < 0.5);
   static Button winchInFastButton = new SimpleButton(() -> getWinchInAxis() >= 0.5);
 
+  // TAPE
+  public static double getTapeAxis() {
+    // TODO: Negate tape motor instead of negating it here
+    return scale(Utilities.processDeadzone(-copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
+  }
+
+  public static boolean getTapeEnabled() {
+    return copilot.getRawAxis(LEFT_TRIG) > Tuning.triggerFullPressThreshold;
+  }
+
   static {
     // INTAKE
     OI.intakeSequenceButton.whenPressed(new IntakeSequence());
+
     OI.ejectButton.whenPressed(new JoystickEject());
+
+    OI.dropButton.whenPressed(new DropCube(Tuning.armDropTime));
+
+    // OI.ejectButton.whenPressed(new ConditionalCommand(new DropCube(Tuning.armDropTime), new JoystickEject()) {
+    //   @Override
+    //   protected boolean condition() {
+    //     return OI.getTapeEnabled();
+    //   }
+    // });
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         arms));
@@ -181,14 +204,21 @@ public class OI {
     // WRIST
     OI.enableWristAxisControlButton.whileHeld(new JoystickWrist());
 
-    OI.wristFwdButton.whenPressed(new CalibrateWrist());
-    OI.wrist45DegButton.whenPressed(new MoveWrist(Tuning.wrist45FwdPosition));
+    OI.wristFwdButton.whenPressed(new CalibrateWristMP(OUT));
+    OI.wristTransitButton.whenPressed(new MoveWrist(Tuning.wristTransitPosition));
     OI.wristBackButton.whenPressed(new MoveWrist(Tuning.wristBackPosition));
 
     // ELEVATOR AND WRIST
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
-    OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+    // OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
+
+    // WINCH
+    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
+        .winchInLowVel), winch));
+
+    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
+        .winchInHighVel), winch));
   }
 }

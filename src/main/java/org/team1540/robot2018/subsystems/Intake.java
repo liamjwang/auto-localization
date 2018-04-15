@@ -17,7 +17,7 @@ public class Intake extends Subsystem {
 
   public Intake() {
     intakeMotorA.setInverted(true);
-    intakeMotorB.setInverted(true);
+    intakeMotorB.setInverted(false);
   }
 
   @Override

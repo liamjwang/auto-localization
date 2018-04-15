@@ -2,20 +2,20 @@ package org.team1540.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import org.team1540.base.ChickenSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.robot2018.RobotMap;
 import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.elevator.HoldElevator;
 
-public class Elevator extends ChickenSubsystem {
+public class Elevator extends Subsystem {
 
   private ChickenTalon elevatorMotorA = new ChickenTalon(RobotMap.ELEVATOR_A);
   private ChickenTalon elevatorMotorB = new ChickenTalon(RobotMap.ELEVATOR_B);
 
   public Elevator() {
-    add(elevatorMotorA, elevatorMotorB);
-    setPriority(10);
+    // add(elevatorMotorA, elevatorMotorB);
+    // setPriority(10);
 
     elevatorMotorA.config_kP(0, Tuning.elevatorP);
     elevatorMotorA.config_kI(0, Tuning.elevatorI);

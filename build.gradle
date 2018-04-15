@@ -13,6 +13,11 @@ sourceCompatibility = 1.8
 
 repositories {
     maven { url "https://jitpack.io" }
+    mavenCentral()
+}
+
+wpi {
+    ctreVersion = "5.3.1.0"
 }
 
 dependencies {
@@ -27,6 +32,8 @@ dependencies {
 def TEAM = 1540
 
 //def ROBOT_CLASS = "org.team1540.robot2018.WristTuningRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.ElevatorTuningRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.SpinnyTestRobot"
 //def ROBOT_CLASS = "org.team1540.robot2018.RobotMotorTest"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
@@ -46,10 +53,13 @@ deploy {
             targets << "roborio"
 //            debug = true
         }
+        // TODO: Only generate and deploy profiles when deploying robots classes that use the profiles
+        // TODO: Cache profiles after deployment and only generate them again if the profiles.json has been modified
+        // TODO: Generate profile CSV files in a separate folder from the profiles.json and trajectory.properties file
         fileCollectionArtifact('motionProfiles') {
             dependsOn("generateProfiles")
             targets << 'roborio'
-            files = fileTree(dir: 'profiles', include: "**/*.csv")
+            files = fileTree(dir: 'profiles/generated', include: "**/*.csv")
             directory = "/home/lvuser/profiles"
         }
     }

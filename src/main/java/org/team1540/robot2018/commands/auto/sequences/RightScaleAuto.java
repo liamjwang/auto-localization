@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2018.Tuning;
 import org.team1540.robot2018.commands.auto.DriveTimed;
-import org.team1540.robot2018.commands.auto.RunProfile;
 import org.team1540.robot2018.commands.elevator.MoveElevatorSafe;
 import org.team1540.robot2018.commands.groups.GroundPosition;
 import org.team1540.robot2018.commands.intake.Eject;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
+import org.team1540.robot2018.motion.FollowProfile;
 
 public class RightScaleAuto extends CommandGroup {
   public RightScaleAuto() {
@@ -21,7 +21,7 @@ public class RightScaleAuto extends CommandGroup {
         addSequential(new MoveWrist(Tuning.wristTransitPosition));
       }
     });
-    addSequential(new RunProfile("right_scale_approach"));
+    addSequential(new FollowProfile("right_scale_approach"));
     addSequential(new DriveTimed(ControlMode.Velocity, 0.8, -450, 150));
     addSequential(new MoveElevatorSafe(false, Tuning.elevatorMaxPosition));
     addSequential(new MoveWrist(Tuning.wristBackPosition));

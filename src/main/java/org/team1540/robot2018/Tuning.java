@@ -1,7 +1,5 @@
 package org.team1540.robot2018;
 
-import jaci.pathfinder.Trajectory.Config;
-import jaci.pathfinder.Trajectory.FitMethod;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -17,13 +15,12 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
-  // CAMERA
-  //@Tunable("-[Camera] Camera ID")
-  public static int camID = 0;
-
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
   public static double stupidDriveTime = 2.5;
+
+  @Tunable("-[Auto] Stupid Drive Percent")
+  public static double stupidDrivePercent = -0.4;
 
   // INTAKE
   //@Tunable("[Intake] Auto Intake Spike Current")
@@ -50,9 +47,17 @@ public class Tuning {
   //@Tunable("[Intake] Eject Speed Motor A")
   public static double intakeEjectSpeed = 0.8;
 
+  public static double intakeEjectSpeedAuto = 0.35;
+
   // ARMS
   //@Tunable("[Intake] Arm Hold Speed")
-  public static double armHoldSpeed = -0.1;
+  public static double armHoldSpeed = -0.2;
+
+  //@Tunable("[Intake] Arm Drop Speed")
+  public static double armDropSpeed = 0.7;
+
+  //@Tunable("[Intake] Arm Drop Time")
+  public static double armDropTime = 0.7;
 
   //@Tunable("[Intake] Arm Joystick Constant")
   public static double armJoystickConstant = 0.5;
@@ -113,7 +118,7 @@ public class Tuning {
   public static double elevatorDownMult = 0.5;
 
   //@Tunable("[Elevator] Max Spike Time")
-  public static double elevatorSpikeTime = 0;
+  public static double elevatorSpikeTime = 0.5;
 
   //@Tunable("[Elevator] Max Spike Current")
   public static double elevatorCurrentThreshold = 60;
@@ -135,10 +140,10 @@ public class Tuning {
   public static int wristIzone = 0;
 
   //@Tunable("[Wrist] Motion Cruise Velocity")
-  public static int wristCruiseVelocity = 600;
+  public static int wristCruiseVelocity = 1000;
 
   //@Tunable("[Wrist] Motion Max Acceleration")
-  public static int wristMaxAccel = 1000;
+  public static int wristMaxAccel = 6000;
 
   //@Tunable("[Wrist] Peak Current Limit")
   public static int wristCurrentLimit = 30;
@@ -170,21 +175,35 @@ public class Tuning {
   //@Tunable("[Wrist] Max Wrist Deviation")
   public static double maxWristDeviation = 200;
 
+  // WINCH
+  @Tunable("[Winch] In Low Velocity")
+  public static double winchInLowVel = -0.4;
+
+  @Tunable("[Winch] In High Velocity")
+  public static double winchInHighVel = -1;
+
   // DRIVETRAIN
   //@Tunable("[Drivetrain] kP")
-  public static double drivetrainP = 2;
+  public static double drivetrainVelocityP = 2;
 
   //@Tunable("[Drivetrain] kI")
-  public static double drivetrainI = 0.001;
+  public static double drivetrainVelocityI = 0.001;
 
   //@Tunable("[Drivetrain] kD")
-  public static double drivetrainD = 4;
+  public static double drivetrainVelocityD = 4;
 
   //@Tunable("[Drivetrain] kF")
-  public static double drivetrainF = 1.2;
+  public static double drivetrainVelocityF = 1.2;
 
   //@Tunable("[Drivetrain] I-Zone")
-  public static int drivetrainIZone = 100;
+  public static int drivetrainVelocityIZone = 100;
+
+  // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
+  @Tunable("[Drivetrain] Position kP")
+  public static double drivetrainPositionP = 10;
+
+  @Tunable("[Drivetrain] Position kD")
+  public static double drivetrainPositionD = 0;
 
   //@Tunable("[Drivetrain] Braking Percent")
   public static double drivetrainBrakingPercent = 0.2;
@@ -202,39 +221,24 @@ public class Tuning {
   public static double drivetrainJoystickPower = 2;
 
   //@Tunable("[Drivetrain] EncoderTPU")
-  public static double drivetrainEncoderTPU;
+  public static double drivetrainEncoderTPU = 53.1271477663;
 
-  //@Tunable("[MotionP] MaxVelocity")
-  public static double profileMaxVel = 40;
+  @Tunable("[MotionP] Profile Heading P")
+  public static double profileHeadingP = 0;
 
-  //@Tunable("[MotionP] MaxAcceleration")
-  public static double profileMaxAccel = 40;
+  @Tunable("[MotionP] Profile Acceleration P")
+  public static double profileAccelF = 0.0025;
 
-  //@Tunable("[MotionP] MaxJerk")
-  public static double profileMaxJerk = 2300;
+  @Tunable("[MotionP] Profile Velocity P")
+  public static double profileVelocityF = 0.006;
 
-  //@Tunable("[MotionP] SecondsFromNeutralToFull")
-  public static double profileSecondsFromNeutralToFull = 0;
+  @Tunable("[MotionP] Profile Loop Frequency")
+  public static double profileLoopFrequency = 0.02;
 
-  //@Tunable("[MotionP] SampleRate")
-  public static int profileSampleRate = Config.SAMPLES_FAST;
+  // AUTO
+  public static double autoElevatorRaiseWait = 1;
 
-  //@Tunable("[MotionP] TimeStep")
-  public static double profileTimeStep = 0.05;
-
-  //@Tunable("[MotionP] FitMethod")
-  public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
-
-  //@Tunable("[MotionP] LeftEncoderTicksPerUnit")
-  public static double profileLeftTPU = 52;
-
-  //@Tunable("[MotionP] RightEncoderTicksPerUnit")
-  public static double profileRightTPU = 52;
-
-  //@Tunable("[MotionP] WheelbaseWidth")
-  public static double profileBaseWidth = 25.091;
-
-  // TODO: Rename profileWheelDistance to be more specific
-  //@Tunable("[MotionP] distanceBetweenWheels")
-  public static double profileWheelDistance = 11.812;
+  // CLIMBER
+  @Tunable("[Climber] Trigger Full Press Threshold")
+  public static double triggerFullPressThreshold = 0.9;
 }
