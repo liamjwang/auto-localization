@@ -124,6 +124,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void disabledInit() {
     Robot.drivetrain.configTalonsForVelocity();
+    Robot.drivetrain.setBrake(false);
     if (autoCommand != null) {
       autoCommand.cancel();
     }
@@ -136,6 +137,7 @@ public class Robot extends IterativeRobot {
     // PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
+    Robot.drivetrain.setBrake(true);
     autoCommand = null;
     switch (autoPosition.getSelected()) {
       case "Left Double Scale Then Switch":
@@ -356,6 +358,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopInit() {
     // PowerManager.getInstance().setRunning(true);
+    Robot.drivetrain.setBrake(true);
     if (autoCommand != null) {
       autoCommand.cancel();
     }
