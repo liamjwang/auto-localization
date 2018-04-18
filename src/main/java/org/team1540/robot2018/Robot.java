@@ -66,6 +66,7 @@ public class Robot extends IterativeRobot {
     autoPosition.addObject("Left Scale Then Switch", "Left Scale Then Switch");
     autoPosition.addObject("Left Double Scale Then Switch", "Left Double Scale Then Switch");
     autoPosition.addObject("Left Scale No Switch", "Left Scale No Switch");
+    autoPosition.addObject("Left Scale Hook No Switch", "Left Scale Hook No Switch");
     autoPosition.addObject("Left Hook Switch Then Scale", "Left Hook Switch Then Scale");
     autoPosition.addObject("Left Hook Switch Then Double Scale", "Left Hook Switch Then Double Scale");
     autoPosition.addObject("Right Scale Then Switch", "Right Scale Then Switch");
@@ -189,6 +190,28 @@ public class Robot extends IterativeRobot {
         } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
           System.out.println("Just Crossing the Line");
           autoCommand = new SimpleProfileAuto("go_straight");
+        } else {
+          DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+          autoCommand = new SimpleProfileAuto("go_straight");
+        }
+        break;
+      case "Left Scale Hook No Switch":
+        System.out.println("Left Scale Hook No Switch");
+        if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.LEFT) {
+          System.out.println("Going for Left Scale Hook");
+          autoCommand = new ProfileScaleAuto("left_scale_hook");
+        } else if (MatchData.getOwnedSide(GameFeature.SCALE) == OwnedSide.RIGHT) {
+          // TODO: crossover
+          if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.LEFT) {
+            System.out.println("Going for Left Switch");
+            autoCommand = new SingleCubeSwitchAuto("left_hook");
+          } else if (MatchData.getOwnedSide(GameFeature.SWITCH_NEAR) == OwnedSide.RIGHT) {
+            System.out.println("Just Crossing the Line");
+            autoCommand = new SimpleProfileAuto("go_straight");
+          } else {
+            DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
+            autoCommand = new SimpleProfileAuto("go_straight");
+          }
         } else {
           DriverStation.reportError("Match data could not get owned scale side, reverting to base auto", false);
           autoCommand = new SimpleProfileAuto("go_straight");
