@@ -94,6 +94,36 @@
     ],
     "flip": true
   },
+  "middle_to_cube_right": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 70,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "cube_to_middle_right": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 30,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
   "middle_to_left_switch_multi": {
     "points": [
       {
@@ -134,7 +164,7 @@
     ],
     "flip": true
   },
-  "middle_to_cube": {
+  "middle_to_cube_left": {
     "points": [
       {
         "x": 0,
@@ -149,7 +179,7 @@
     ],
     "flip": false
   },
-  "cube_to_middle": {
+  "cube_to_middle_left": {
     "points": [
       {
         "x": 0,
