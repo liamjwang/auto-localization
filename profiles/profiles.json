@@ -87,11 +87,12 @@
         "angle": 0
       },
       {
-        "x": 100,
-        "y": -50,
+        "x": 85,
+        "y": -68,
         "angle": 0
       }
     ],
+    "maxAccel": 70,
     "flip": true
   },
   "middle_to_cube_right": {
@@ -117,7 +118,7 @@
         "angle": 0
       },
       {
-        "x": 30,
+        "x": 70,
         "y": 0,
         "angle": 0
       }
