@@ -17,11 +17,12 @@ import org.team1540.robot2018.motion.FollowProfile;
 public class SwitchDoubleCube extends CommandGroup {
   public SwitchDoubleCube(String side) {
 
-    // Lower the wrist
-    addSequential(new CalibrateWristMP(OUT));
 
     addSequential(new CommandGroup() {
       {
+        // Lower the wrist
+        addParallel(new CalibrateWristMP(OUT));
+        addSequential(new TimedCommand(0.2));
         // Go to the switch and raise elevator at the same time
         addParallel(new FollowProfile("middle_to_" + side + "_switch_multi"));
         addSequential(new MoveElevator(false, Tuning.elevatorFrontSwitchPosition));
@@ -33,7 +34,7 @@ public class SwitchDoubleCube extends CommandGroup {
     addSequential(new CommandGroup() {
       {
         // Go back to the middle and move elevator down and recalibrate the wrist
-        addSequential(new FollowProfile(side + "_switch_to_middle_multi"));
+        addParallel(new FollowProfile(side + "_switch_to_middle_multi"));
         addSequential(new TimedCommand(0.2));
         addSequential(new MoveElevator(false, Tuning.elevatorGroundPosition));
         addSequential(new CalibrateWristMP(OUT));
@@ -44,7 +45,7 @@ public class SwitchDoubleCube extends CommandGroup {
       {
         // Intake the cube while driving forwards
         addParallel(new AutoIntake(), 4);
-        addParallel(new FollowProfile("middle_to_cube"));
+        addParallel(new FollowProfile("middle_to_cube_" + side));
         addSequential(new DropCube(2));
         addParallel(new SimpleCommand("Arm Hold", () -> Robot.arms.set(Tuning.armHoldSpeed), Robot.arms));
       }
@@ -52,7 +53,7 @@ public class SwitchDoubleCube extends CommandGroup {
     addParallel(new SimpleCommand("Stop opening arms", () -> {}, Robot.arms));
 
     // Go back to the middle
-    addSequential(new FollowProfile("cube_to_middle"));
+    addSequential(new FollowProfile("cube_to_middle_" + side));
 
     addSequential(new CommandGroup() {
       {
