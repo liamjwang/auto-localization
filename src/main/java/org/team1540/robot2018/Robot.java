@@ -123,7 +123,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledInit() {
-    Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
     Robot.drivetrain.setBrake(false);
     Robot.wrist.setBrake(false);
@@ -363,7 +362,6 @@ public class Robot extends IterativeRobot {
     // PowerManager.getInstance().setRunning(true);
     Robot.drivetrain.reset();
     Robot.wrist.setBrake(true);
-    Robot.drivetrain.enableCurrentLimiting();
     if (autoCommand != null) {
       autoCommand.cancel();
     }
