@@ -19,10 +19,10 @@ public class Tuning {
 
   // CAMERA
   //@Tunable("-[Camera] Crosshairs Size")
-  public static int crosshairsSize = 1000;
+  public static int crosshairsSize = 1000; // Unused
 
   // @Tunable("-[Camera] Crosshairs Thickness")
-  public static int crosshairsThicccness = 3;
+  public static int crosshairsThicccness = 3; // Unused
 
   // @Tunable("-[Camera] Overhead Camera ID")
   public static int overheadCamID = 1;
@@ -191,10 +191,10 @@ public class Tuning {
   public static double maxWristDeviation = 200;
 
   // WINCH
-  @Tunable("[Winch] In Low Velocity")
+  // @Tunable("[Winch] In Low Velocity")
   public static double winchInLowVel = -0.4;
 
-  @Tunable("[Winch] In High Velocity")
+  // @Tunable("[Winch] In High Velocity")
   public static double winchInHighVel = -1;
 
   // DRIVETRAIN
@@ -214,10 +214,10 @@ public class Tuning {
   public static int drivetrainVelocityIZone = 100;
 
   // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
-  @Tunable("[Drivetrain] Position kP")
+  // @Tunable("[Drivetrain] Position kP")
   public static double drivetrainPositionP = 10;
 
-  @Tunable("[Drivetrain] Position kD")
+  // @Tunable("[Drivetrain] Position kD")
   public static double drivetrainPositionD = 0;
 
   //@Tunable("[Drivetrain] Braking Percent")
@@ -238,17 +238,17 @@ public class Tuning {
   //@Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU = 53.1271477663;
 
-  @Tunable("[MotionP] MaxVelocity")
-  public static double profileMaxVel = 40;
+  // @Tunable("[MotionP] MaxVelocity")
+  public static double profileMaxVel = 40; // Unused
 
-  @Tunable("[MotionP] MaxAcceleration")
-  public static double profileMaxAccel = 40;
+  // @Tunable("[MotionP] MaxAcceleration")
+  public static double profileMaxAccel = 40; // Unused
 
-  @Tunable("[MotionP] MaxJerk")
-  public static double profileMaxJerk = 2300;
+  // @Tunable("[MotionP] MaxJerk")
+  public static double profileMaxJerk = 2300; // Unused
 
   //@Tunable("[MotionP] SecondsFromNeutralToFull")
-  public static double profileSecondsFromNeutralToFull = 0;
+  public static double profileSecondsFromNeutralToFull = 0; // Unused
 
   //@Tunable("[MotionP] SampleRate")
   public static int profileSampleRate = Config.SAMPLES_FAST;
@@ -260,43 +260,43 @@ public class Tuning {
   public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
 
   //@Tunable("[MotionP] LeftEncoderTicksPerUnit")
-  public static double profileLeftTPU = 51.25;
+  public static double profileLeftTPU = 51.25; // Unused
 
   //@Tunable("[MotionP] RightEncoderTicksPerUnit")
-  public static double profileRightTPU = 51.25;
+  public static double profileRightTPU = 51.25; // Unused
 
-  @Tunable("[MotionP] WheelbaseWidth")
-  public static double profileBaseWidth = 24;
+  // @Tunable("[MotionP] WheelbaseWidth")
+  public static double profileBaseWidth = 24; // Unused
 
   // TODO: Rename profileWheelDistance to be more specific
   //@Tunable("[MotionP] distanceBetweenWheels")
-  public static double profileWheelDistance = 11.812;
+  public static double profileWheelDistance = 11.812; // Unused
 
-  @Tunable("[MotionP] Profile Heading P")
+  // @Tunable("[MotionP] Profile Heading P")
   public static double profileHeadingP = 0;
 
-  @Tunable("[MotionP] Profile Acceleration P")
+  // @Tunable("[MotionP] Profile Acceleration P")
   public static double profileAccelF = 0.0025;
 
-  @Tunable("[MotionP] Profile Velocity P")
+  // @Tunable("[MotionP] Profile Velocity P")
   public static double profileVelocityF = 0.006;
 
-  @Tunable("[MotionP] Profile Loop Frequency")
+  // @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.02;
 
-  @Tunable("[MotionP] Profile Test X")
-  public static double profileTestX = 50;
+  // @Tunable("[MotionP] Profile Test X")
+  public static double profileTestX = 50; // Unused
 
-  @Tunable("[MotionP] Profile Test Y")
-  public static double profileTestY = 0;
+  // @Tunable("[MotionP] Profile Test Y")
+  public static double profileTestY = 0; // Unused
 
-  @Tunable("[MotionP] Profile Test Angle")
-  public static double profileTestAngle = 0;
+  // @Tunable("[MotionP] Profile Test Angle")
+  public static double profileTestAngle = 0; // Unused
 
   // AUTO
   public static double autoElevatorRaiseWait = 1;
 
   // CLIMBER
-  @Tunable("[Climber] Trigger Full Press Threshold")
+  // @Tunable("[Climber] Trigger Full Press Threshold")
   public static double triggerFullPressThreshold = 0.9;
 }
