@@ -140,6 +140,16 @@ public class DriveTrain extends Subsystem {
     }
   }
 
+  public void enableCurrentLimiting() {
+    System.out.println("Current limiting enabled!");
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.configPeakCurrentLimit(0, 20); // Set peak to zero to just use continuous current limit
+      talon.configPeakCurrentDuration(0, 20);
+      talon.configContinuousCurrentLimit(10, 20);
+      talon.enableCurrentLimit(true);
+    }
+  }
+
   public void setBrake(Boolean state) {
     for (ChickenTalon talon : driveMotorAll) {
       talon.setBrake(state);
