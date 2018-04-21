@@ -145,7 +145,7 @@ public class DriveTrain extends Subsystem {
     for (ChickenTalon talon : driveMotorAll) {
       talon.configPeakCurrentLimit(0, 20); // Set peak to zero to just use continuous current limit
       talon.configPeakCurrentDuration(0, 20);
-      talon.configContinuousCurrentLimit(10, 20);
+      talon.configContinuousCurrentLimit(Tuning.drivetrainCurrentLimit, 20);
       talon.enableCurrentLimit(true);
     }
   }

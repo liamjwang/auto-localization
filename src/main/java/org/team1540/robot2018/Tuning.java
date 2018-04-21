@@ -17,6 +17,9 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
+  @Tunable("-[DriveTrain] Current Limit")
+  public static int drivetrainCurrentLimit = 45;
+
   // CAMERA
   //@Tunable("-[Camera] Crosshairs Size")
   public static int crosshairsSize = 1000; // Unused
