@@ -85,6 +85,8 @@ public class Robot extends IterativeRobot {
     driveMode.addObject("Manual Override", true);
     SmartDashboard.putData("[Drivetrain] ***** DRIVE OVERRIDE *****", driveMode);
 
+    SmartDashboard.putData("Disable Current Limiting", new SimpleCommand("Disable Current Limits", Robot.drivetrain::reset));
+
     // TODO: Move SmartDashboard commands to separate class
     Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
