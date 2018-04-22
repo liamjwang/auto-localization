@@ -42,7 +42,7 @@ public class Wrist extends Subsystem {
     return wristMotor.getOutputCurrent();
   }
 
-  public void setBrake(Boolean state) {
+  public void setBrake(boolean state) {
     wristMotor.setBrake(state);
   }
 
