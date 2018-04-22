@@ -30,7 +30,6 @@ public class Intake extends Subsystem {
   }
 
   public double getCurrent() {
-    // TODO: better method of adjusting tuning between robots
     if (Tuning.isPandora) {
       return pdp.getCurrent(5) - Robot.wrist.getCurrent() - Robot.arms.getCurrent();
     } else {

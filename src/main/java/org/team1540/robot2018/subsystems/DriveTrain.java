@@ -127,9 +127,7 @@ public class DriveTrain extends Subsystem {
     driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
     driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
 
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.setBrake(true);
-    }
+    setBrake(true);
 
     configTalonsForVelocity();
 
@@ -139,6 +137,22 @@ public class DriveTrain extends Subsystem {
       talon.configPeakOutputForward(1);
       talon.configPeakOutputReverse(-1);
       talon.enableCurrentLimit(false);
+    }
+  }
+
+  public void enableCurrentLimiting() {
+    System.out.println("Current limiting enabled!");
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.configPeakCurrentLimit(0, 20); // Set peak to zero to just use continuous current limit
+      talon.configPeakCurrentDuration(0, 20);
+      talon.configContinuousCurrentLimit(Tuning.drivetrainCurrentLimit, 20);
+      talon.enableCurrentLimit(true);
+    }
+  }
+
+  public void setBrake(Boolean state) {
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.setBrake(state);
     }
   }
 

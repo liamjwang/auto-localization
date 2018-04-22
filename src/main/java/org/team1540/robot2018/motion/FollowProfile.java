@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
-import org.team1540.robot2018.CSVProfileManager.DriveProfile;
+import org.team1540.robot2018.motion.CSVProfileManager.DriveProfile;
 import org.team1540.robot2018.Robot;
 import org.team1540.robot2018.Tuning;
 

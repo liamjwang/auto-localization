@@ -73,7 +73,7 @@
       },
       {
         "x": 100,
-        "y": -34,
+        "y": -50,
         "angle": 0
       }
     ],
@@ -87,54 +87,15 @@
         "angle": 0
       },
       {
-        "x": 100,
-        "y": -34,
+        "x": 89,
+        "y": -68,
         "angle": 0
       }
     ],
+    "maxAccel": 70,
     "flip": true
   },
-  "middle_to_left_switch_multi": {
-    "points": [
-      {
-        "x": 0,
-        "y": 0,
-        "angle": 0
-      },
-      {
-        "x": 100,
-        "y": 55,
-        "angle": 0
-      },
-      {
-        "x": 105,
-        "y": 55,
-        "angle": 0
-      }
-    ],
-    "flip": false
-  },
-  "left_switch_to_middle_multi": {
-    "points": [
-      {
-        "x": 105,
-        "y": 55,
-        "angle": 0
-      },
-      {
-        "x": 100,
-        "y": 55,
-        "angle": 0
-      },
-      {
-        "x": 0,
-        "y": 0,
-        "angle": 0
-      }
-    ],
-    "flip": true
-  },
-  "middle_to_cube": {
+  "middle_to_cube_right": {
     "points": [
       {
         "x": 0,
@@ -149,7 +110,77 @@
     ],
     "flip": false
   },
-  "cube_to_middle": {
+  "cube_to_middle_right": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 70,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "middle_to_left_switch_multi": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 80,
+        "y": 60,
+        "angle": 0
+      },
+      {
+        "x": 100,
+        "y": 60,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "left_switch_to_middle_multi": {
+    "points": [
+      {
+        "x": 105,
+        "y": 60,
+        "angle": 0
+      },
+      {
+        "x": 100,
+        "y": 60,
+        "angle": 0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": true
+  },
+  "middle_to_cube_left": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 70,
+        "y": 0,
+        "angle": 0
+      }
+    ],
+    "flip": false
+  },
+  "cube_to_middle_left": {
     "points": [
       {
         "x": 0,
@@ -250,6 +281,26 @@
         "x": 275,
         "y": -20,
         "angle": -1
+      }
+    ],
+    "flip": true
+  },
+  "left_scale_hook": {
+    "points": [
+      {
+        "x": 0,
+        "y": 0,
+        "angle": 0
+      },
+      {
+        "x": 225,
+        "y": 20,
+        "angle": 0
+      },
+      {
+        "x": 300,
+        "y": -10,
+        "angle": -1.57
       }
     ],
     "flip": true

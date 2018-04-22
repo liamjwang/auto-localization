@@ -15,6 +15,9 @@ public class Tuning {
   @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
+  @Tunable("-[DriveTrain] Current Limit")
+  public static int drivetrainCurrentLimit = 45;
+
   // AUTO
   @Tunable("-[Auto] Stupid Drive Time")
   public static double stupidDriveTime = 2.5;
@@ -176,10 +179,10 @@ public class Tuning {
   public static double maxWristDeviation = 200;
 
   // WINCH
-  @Tunable("[Winch] In Low Velocity")
+  // @Tunable("[Winch] In Low Velocity")
   public static double winchInLowVel = -0.4;
 
-  @Tunable("[Winch] In High Velocity")
+  // @Tunable("[Winch] In High Velocity")
   public static double winchInHighVel = -1;
 
   // DRIVETRAIN
@@ -199,10 +202,10 @@ public class Tuning {
   public static int drivetrainVelocityIZone = 100;
 
   // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
-  @Tunable("[Drivetrain] Position kP")
+  // @Tunable("[Drivetrain] Position kP")
   public static double drivetrainPositionP = 10;
 
-  @Tunable("[Drivetrain] Position kD")
+  // @Tunable("[Drivetrain] Position kD")
   public static double drivetrainPositionD = 0;
 
   //@Tunable("[Drivetrain] Braking Percent")
@@ -223,22 +226,19 @@ public class Tuning {
   //@Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU = 53.1271477663;
 
-  @Tunable("[MotionP] Profile Heading P")
+  // @Tunable("[MotionP] Profile Heading P")
   public static double profileHeadingP = 0;
 
-  @Tunable("[MotionP] Profile Acceleration P")
+  // @Tunable("[MotionP] Profile Acceleration P")
   public static double profileAccelF = 0.0025;
 
-  @Tunable("[MotionP] Profile Velocity P")
+  // @Tunable("[MotionP] Profile Velocity P")
   public static double profileVelocityF = 0.006;
 
-  @Tunable("[MotionP] Profile Loop Frequency")
+  // @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.02;
 
   // AUTO
   public static double autoElevatorRaiseWait = 1;
 
-  // CLIMBER
-  @Tunable("[Climber] Trigger Full Press Threshold")
-  public static double triggerFullPressThreshold = 0.9;
 }

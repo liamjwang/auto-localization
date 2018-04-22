@@ -26,15 +26,15 @@ dependencies {
     compile navx()
     compile pathfinder()
     compile openrio.powerup.matchData()
-    compile "org.team1540:rooster:master-SNAPSHOT"
+    compile "org.team1540:rooster:0.9.1"
 }
 
 def TEAM = 1540
 
-//def ROBOT_CLASS = "org.team1540.robot2018.WristTuningRobot"
-//def ROBOT_CLASS = "org.team1540.robot2018.ElevatorTuningRobot"
-//def ROBOT_CLASS = "org.team1540.robot2018.SpinnyTestRobot"
-//def ROBOT_CLASS = "org.team1540.robot2018.RobotMotorTest"
+//def ROBOT_CLASS = "org.team1540.robot2018.testing.WristTuningRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.testing.ElevatorTuningRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.testing.SpinnyTestRobot"
+//def ROBOT_CLASS = "org.team1540.robot2018.testing.RobotMotorTest"
 def ROBOT_CLASS = "org.team1540.robot2018.Robot"
 
 task generateProfiles(type:Exec) {
@@ -51,11 +51,7 @@ deploy {
     artifacts {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"
-//            debug = true
         }
-        // TODO: Only generate and deploy profiles when deploying robots classes that use the profiles
-        // TODO: Cache profiles after deployment and only generate them again if the profiles.json has been modified
-        // TODO: Generate profile CSV files in a separate folder from the profiles.json and trajectory.properties file
         fileCollectionArtifact('motionProfiles') {
             dependsOn("generateProfiles")
             targets << 'roborio'

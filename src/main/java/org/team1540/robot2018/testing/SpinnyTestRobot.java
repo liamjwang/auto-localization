@@ -1,4 +1,4 @@
-package org.team1540.robot2018;
+package org.team1540.robot2018.testing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenTalon;
+import org.team1540.robot2018.RobotMap;
+import org.team1540.robot2018.Tuning;
 
 /**
  * Robot for testing the wheelbase width

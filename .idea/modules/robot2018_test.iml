@@ -3,14 +3,11 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../out/test/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../src/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="robot2018_main" />
-    <orderEntry type="library" name="Gradle: org.team1540:rooster:master-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.team1540:rooster:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2018.4.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:4.1.0" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:3.2.0" level="project" />

@@ -42,6 +42,10 @@ public class Wrist extends Subsystem {
     return wristMotor.getOutputCurrent();
   }
 
+  public void setBrake(boolean state) {
+    wristMotor.setBrake(state);
+  }
+
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new HoldWrist());
