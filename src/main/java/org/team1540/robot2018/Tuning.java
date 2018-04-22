@@ -238,15 +238,6 @@ public class Tuning {
   // @Tunable("[MotionP] Profile Loop Frequency")
   public static double profileLoopFrequency = 0.02;
 
-  // @Tunable("[MotionP] Profile Test X")
-  public static double profileTestX = 50; // Unused
-
-  // @Tunable("[MotionP] Profile Test Y")
-  public static double profileTestY = 0; // Unused
-
-  // @Tunable("[MotionP] Profile Test Angle")
-  public static double profileTestAngle = 0; // Unused
-
   // AUTO
   public static double autoElevatorRaiseWait = 1;
 
