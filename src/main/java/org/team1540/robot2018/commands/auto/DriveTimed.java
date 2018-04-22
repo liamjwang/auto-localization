@@ -26,9 +26,8 @@ public class DriveTimed extends TimedCommand {
     requires(Robot.drivetrain);
   }
 
-  // TODO: Change this initialize to periodic
   @Override
-  protected void initialize() {
+  protected void execute() {
     Robot.drivetrain.setLeft(mode, leftValue);
     Robot.drivetrain.setRight(mode, rightValue);
   }
