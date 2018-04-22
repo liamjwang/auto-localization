@@ -157,20 +157,12 @@ public class OI {
 
     OI.dropButton.whenPressed(new DropCube(Tuning.armDropTime));
 
-    // OI.ejectButton.whenPressed(new ConditionalCommand(new DropCube(Tuning.armDropTime), new JoystickEject()) {
-    //   @Override
-    //   protected boolean condition() {
-    //     return OI.getTapeEnabled();
-    //   }
-    // });
 
     OI.stopIntakeButton.whenPressed(new SimpleCommand("Stop intake", intake::holdCube, intake,
         arms));
 
     // ARMS
     OI.intakeSequenceButton.whileHeld(new JoystickArms());
-    // OI.intakeSequenceButton.whileHeld(new SimpleCommand("Intake Arm Open", () -> arms.set
-    //     (Tuning.intakeArmSpeed), arms));
 
     // ELEVATOR
     OI.enableElevatorAxisControlButton.whileHeld(new JoystickElevator());
