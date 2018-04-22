@@ -14,7 +14,6 @@ public class DropCube extends TimedCommand {
 
   @Override
   protected void execute() {
-    // TODO: Invert motors instead of negating set values
     Robot.arms.set(Tuning.armDropSpeed,
         Tuning.armDropSpeed);
   }

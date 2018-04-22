@@ -56,7 +56,6 @@ public class Robot extends IterativeRobot {
     PowerManager.getInstance().interrupt();
     // PowerManager.getInstance().setUpdateDelay(40);
 
-    // TODO: Move auto chooser into command
     AdjustableManager.getInstance().add(new Tuning());
     autoPosition = new SendableChooser<>();
     autoPosition.addDefault("Middle", "Middle");
@@ -84,7 +83,6 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putData("Disable Current Limiting", new SimpleCommand("Disable Current Limits", Robot.drivetrain::reset));
 
-    // TODO: Move SmartDashboard commands to separate class
     Command zeroWrist = new SimpleCommand("[Wrist] Zero Wrist", wrist::resetEncoder);
     zeroWrist.setRunWhenDisabled(true);
     SmartDashboard.putData(zeroWrist);
@@ -134,7 +132,6 @@ public class Robot extends IterativeRobot {
   @SuppressWarnings("Duplicates")
   @Override
   public void autonomousInit() {
-    // TODO: Move auto logic into command
     // PowerManager.getInstance().setRunning(false);
     elevator.resetEncoder();
     wrist.setSensorPosition(0);
