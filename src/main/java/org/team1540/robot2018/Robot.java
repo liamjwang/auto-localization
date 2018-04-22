@@ -28,8 +28,6 @@ import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
 import org.team1540.robot2018.motion.CSVProfileManager;
 import org.team1540.robot2018.subsystems.Arms;
-import org.team1540.robot2018.subsystems.ClimberTape;
-import org.team1540.robot2018.subsystems.ClimberWinch;
 import org.team1540.robot2018.subsystems.DriveTrain;
 import org.team1540.robot2018.subsystems.Elevator;
 import org.team1540.robot2018.subsystems.Intake;
@@ -41,8 +39,6 @@ public class Robot extends IterativeRobot {
   public static final Arms arms = new Arms();
   public static final Elevator elevator = new Elevator();
   public static final Wrist wrist = new Wrist();
-  public static final ClimberWinch winch = new ClimberWinch();
-  public static final ClimberTape tape = new ClimberTape();
   public static CSVProfileManager profiles;
   public static AHRS navx = new AHRS(Port.kMXP);
 

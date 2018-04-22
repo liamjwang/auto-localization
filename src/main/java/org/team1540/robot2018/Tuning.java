@@ -299,7 +299,4 @@ public class Tuning {
   // AUTO
   public static double autoElevatorRaiseWait = 1;
 
-  // CLIMBER
-  // @Tunable("[Climber] Trigger Full Press Threshold")
-  public static double triggerFullPressThreshold = 0.9;
 }

@@ -2,7 +2,6 @@ package org.team1540.robot2018;
 
 import static org.team1540.robot2018.Robot.arms;
 import static org.team1540.robot2018.Robot.intake;
-import static org.team1540.robot2018.Robot.winch;
 import static org.team1540.robot2018.commands.wrist.CalibrateWrist.CalibratePosition.OUT;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -149,26 +148,6 @@ public class OI {
     return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
-  // WINCH
-  public static double getWinchInAxis() {
-    return scale(Utilities.processDeadzone(copilot.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
-  }
-
-  // TODO: Add a joystick range button to ROOSTER
-  // TODO: Rewrite this logic into a single command
-  static Button winchInSlowButton = new SimpleButton(() -> getWinchInAxis() > Tuning.axisDeadzone
-      && getWinchInAxis() < 0.5);
-  static Button winchInFastButton = new SimpleButton(() -> getWinchInAxis() >= 0.5);
-
-  // TAPE
-  public static double getTapeAxis() {
-    // TODO: Negate tape motor instead of negating it here
-    return scale(Utilities.processDeadzone(-copilot.getRawAxis(LEFT_X), Tuning.axisDeadzone), 2);
-  }
-
-  public static boolean getTapeEnabled() {
-    return copilot.getRawAxis(LEFT_TRIG) > Tuning.triggerFullPressThreshold;
-  }
 
   static {
     // INTAKE
@@ -212,13 +191,5 @@ public class OI {
     OI.elevatorLowerButton.whenPressed(new GroundPosition());
     OI.elevatorFrontScaleButton.whenPressed(new FrontScale());
 
-    // OI.holdElevatorWristButton.whenPressed(new HoldElevatorWrist());
-
-    // WINCH
-    OI.winchInSlowButton.whileHeld(new SimpleCommand("Winch In Low", () -> winch.set(Tuning
-        .winchInLowVel), winch));
-
-    OI.winchInFastButton.whileHeld(new SimpleCommand("Winch In High", () -> winch.set(Tuning
-        .winchInHighVel), winch));
   }
 }
