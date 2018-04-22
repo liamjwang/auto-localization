@@ -1,4 +1,4 @@
-package org.team1540.robot2018;
+package org.team1540.robot2018.motion;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;

@@ -26,6 +26,7 @@ import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.ProfileScaleAuto;
 import org.team1540.robot2018.commands.auto.sequences.SimpleProfileAuto;
 import org.team1540.robot2018.commands.auto.sequences.SingleCubeSwitchAuto;
+import org.team1540.robot2018.motion.CSVProfileManager;
 import org.team1540.robot2018.subsystems.Arms;
 import org.team1540.robot2018.subsystems.ClimberTape;
 import org.team1540.robot2018.subsystems.ClimberWinch;
