@@ -1,4 +1,4 @@
-package org.team1540.robot2018;
+package org.team1540.robot2018.testing;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -14,6 +14,7 @@ import org.team1540.base.adjustables.Tunable;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.base.wrappers.ChickenController;
 import org.team1540.base.wrappers.ChickenTalon;
+import org.team1540.robot2018.Tuning;
 
 public class ElevatorTuningRobot extends IterativeRobot {
   @Tunable("Ramp")
