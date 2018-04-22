@@ -1,7 +1,5 @@
 package org.team1540.robot2018;
 
-import jaci.pathfinder.Trajectory.Config;
-import jaci.pathfinder.Trajectory.FitMethod;
 import org.team1540.base.adjustables.Tunable;
 
 public class Tuning {
@@ -20,12 +18,6 @@ public class Tuning {
   @Tunable("-[DriveTrain] Current Limit")
   public static int drivetrainCurrentLimit = 45;
 
-  // CAMERA
-  //@Tunable("-[Camera] Crosshairs Size")
-  public static int crosshairsSize = 1000; // Unused
-
-  // @Tunable("-[Camera] Crosshairs Thickness")
-  public static int crosshairsThicccness = 3; // Unused
 
   // @Tunable("-[Camera] Overhead Camera ID")
   public static int overheadCamID = 1;
@@ -240,40 +232,6 @@ public class Tuning {
 
   //@Tunable("[Drivetrain] EncoderTPU")
   public static double drivetrainEncoderTPU = 53.1271477663;
-
-  // @Tunable("[MotionP] MaxVelocity")
-  public static double profileMaxVel = 40; // Unused
-
-  // @Tunable("[MotionP] MaxAcceleration")
-  public static double profileMaxAccel = 40; // Unused
-
-  // @Tunable("[MotionP] MaxJerk")
-  public static double profileMaxJerk = 2300; // Unused
-
-  //@Tunable("[MotionP] SecondsFromNeutralToFull")
-  public static double profileSecondsFromNeutralToFull = 0; // Unused
-
-  //@Tunable("[MotionP] SampleRate")
-  public static int profileSampleRate = Config.SAMPLES_FAST;
-
-  //@Tunable("[MotionP] TimeStep")
-  public static double profileTimeStep = 0.01;
-
-  //@Tunable("[MotionP] FitMethod")
-  public static FitMethod profileFitMethod = FitMethod.HERMITE_CUBIC;
-
-  //@Tunable("[MotionP] LeftEncoderTicksPerUnit")
-  public static double profileLeftTPU = 51.25; // Unused
-
-  //@Tunable("[MotionP] RightEncoderTicksPerUnit")
-  public static double profileRightTPU = 51.25; // Unused
-
-  // @Tunable("[MotionP] WheelbaseWidth")
-  public static double profileBaseWidth = 24; // Unused
-
-  // TODO: Rename profileWheelDistance to be more specific
-  //@Tunable("[MotionP] distanceBetweenWheels")
-  public static double profileWheelDistance = 11.812; // Unused
 
   // @Tunable("[MotionP] Profile Heading P")
   public static double profileHeadingP = 0;
