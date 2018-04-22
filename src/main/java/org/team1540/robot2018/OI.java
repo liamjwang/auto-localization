@@ -107,7 +107,6 @@ public class OI {
   static Button wristFwdButton = new JoystickButton(copilot, A);
   static Button wristTransitButton = new JoystickButton(copilot, X);
 
-  // static Button holdElevatorWristButton = new JoystickButton(copilot, BACK);
   static Button dropButton = new JoystickButton(copilot, BACK);
 
   // WRIST
