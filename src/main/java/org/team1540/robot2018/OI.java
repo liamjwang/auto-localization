@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.team1540.base.Utilities;
+import org.team1540.base.triggers.DPadAxis;
 import org.team1540.base.triggers.SimpleButton;
+import org.team1540.base.triggers.StrictDPadButton;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.robot2018.commands.arms.DropCube;
 import org.team1540.robot2018.commands.arms.JoystickArms;
@@ -21,8 +23,6 @@ import org.team1540.robot2018.commands.intake.JoystickEject;
 import org.team1540.robot2018.commands.wrist.CalibrateWristMP;
 import org.team1540.robot2018.commands.wrist.JoystickWrist;
 import org.team1540.robot2018.commands.wrist.MoveWrist;
-import org.team1540.robot2018.triggers.StrictDPadButton;
-import org.team1540.robot2018.triggers.StrictDPadButton.DPadAxis;
 
 /*
  * Button Mapping
