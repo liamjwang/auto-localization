@@ -12,10 +12,9 @@ public class TankDrive extends Command {
 
   @Override
   protected void execute() {
-    // TODO: Invert motors instead of negating set values
     double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
-    Robot.drivetrain.setLeftPercent(-OI.getTankdriveLeftAxis() + triggerValue);
-    Robot.drivetrain.setRightPercent(-OI.getTankdriveRightAxis() + triggerValue);
+    Robot.drivetrain.setLeftPercent(triggerValue - OI.getTankdriveLeftAxis());
+    Robot.drivetrain.setRightPercent(triggerValue - OI.getTankdriveRightAxis());
   }
 
   @Override
