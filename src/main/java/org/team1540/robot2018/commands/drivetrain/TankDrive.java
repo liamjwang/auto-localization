@@ -1,4 +1,4 @@
-package org.team1540.robot2018.commands;
+package org.team1540.robot2018.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2018.OI;

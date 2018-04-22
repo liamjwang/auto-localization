@@ -19,7 +19,7 @@ import openrio.powerup.MatchData.OwnedSide;
 import org.team1540.base.adjustables.AdjustableManager;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
-import org.team1540.robot2018.commands.TankDrive;
+import org.team1540.robot2018.commands.drivetrain.TankDrive;
 import org.team1540.robot2018.commands.auto.DriveTimed;
 import org.team1540.robot2018.commands.auto.sequences.SwitchDoubleCube;
 import org.team1540.robot2018.commands.auto.sequences.ProfileDoubleScaleAuto;
