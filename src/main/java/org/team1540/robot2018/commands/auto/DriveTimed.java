@@ -27,7 +27,7 @@ public class DriveTimed extends TimedCommand {
   }
 
   @Override
-  protected void initialize() {
+  protected void execute() {
     Robot.drivetrain.setLeft(mode, leftValue);
     Robot.drivetrain.setRight(mode, rightValue);
   }
