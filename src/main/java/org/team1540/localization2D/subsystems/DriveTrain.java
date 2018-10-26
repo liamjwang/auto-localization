@@ -1,4 +1,4 @@
-package org.team1540.robot2018.subsystems;
+package org.team1540.localization2D.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.base.drive.PidDriveFactory;
 import org.team1540.base.drive.PowerJoystickScaling;
 import org.team1540.base.wrappers.ChickenTalon;
-import org.team1540.robot2018.OI;
-import org.team1540.robot2018.RobotMap;
-import org.team1540.robot2018.Tuning;
+import org.team1540.localization2D.OI;
+import org.team1540.localization2D.RobotMap;
+import org.team1540.localization2D.Tuning;
 
 public class DriveTrain extends Subsystem {
 
