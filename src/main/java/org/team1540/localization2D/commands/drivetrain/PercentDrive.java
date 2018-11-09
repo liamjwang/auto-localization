@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.localization2D.OI;
 import org.team1540.localization2D.Robot;
 
-public class TankDrive extends Command {
-  public TankDrive() {
+public class PercentDrive extends Command {
+  public PercentDrive() {
     requires(Robot.drivetrain);
     Robot.drivetrain.reset();
   }

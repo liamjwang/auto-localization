@@ -186,6 +186,12 @@ public class Tuning {
   public static double winchInHighVel = -1;
 
   // DRIVETRAIN
+  @Tunable("[Drivetrain] ticksPerMeter")
+  public static double drivetrainTicksPerMeter = 2056.97193;
+
+  @Tunable("[Drivetrain] radius")
+  public static double drivetrainRadius = 0.312043043;
+
   //@Tunable("[Drivetrain] kP")
   public static double drivetrainVelocityP = 2;
 
