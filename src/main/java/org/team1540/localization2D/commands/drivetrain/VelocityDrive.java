@@ -20,10 +20,10 @@ public class VelocityDrive extends Command {
     double rightSetpoint = (triggerValue - OI.getTankdriveRightAxis()) * Tuning.drivetrainMaxVelocity;
     Robot.drivetrain.setLeftVelocity(leftSetpoint);
     Robot.drivetrain.setRightVelocity(rightSetpoint);
-    SmartDashboard.putNumber("leftVelSetpoint", leftSetpoint);
-    SmartDashboard.putNumber("rightVelSetpoint", rightSetpoint);
-    SmartDashboard.putNumber("leftVel", Robot.drivetrain.getLeftVelocity());
-    SmartDashboard.putNumber("rightVel", Robot.drivetrain.getRightVelocity());
+    SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
+    SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
+    SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocity());
+    SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocity());
   }
 
   @Override

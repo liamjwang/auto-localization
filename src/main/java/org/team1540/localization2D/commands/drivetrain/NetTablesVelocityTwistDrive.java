@@ -15,16 +15,16 @@ public class NetTablesVelocityTwistDrive extends Command {
 
   @Override
   protected void execute() {
-    double cmdVelX = SmartDashboard.getNumber("cmd_vel_x", 0);
-    double cmdVelOmega = SmartDashboard.getNumber("cmd_vel_omega", 0);
+    double cmdVelX = SmartDashboard.getNumber("cmd_vel-linear-x", 0);
+    double cmdVelOmega = SmartDashboard.getNumber("cmd_vel-angular-z", 0);
     double leftSetpoint = (cmdVelX-cmdVelOmega*Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
     double rightSetpoint = (cmdVelX+cmdVelOmega*Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
     Robot.drivetrain.setLeftVelocity(leftSetpoint);
     Robot.drivetrain.setRightVelocity(rightSetpoint);
-    SmartDashboard.putNumber("leftVelSetpoint", leftSetpoint);
-    SmartDashboard.putNumber("rightVelSetpoint", rightSetpoint);
-    SmartDashboard.putNumber("leftVel", Robot.drivetrain.getLeftVelocity());
-    SmartDashboard.putNumber("rightVel", Robot.drivetrain.getRightVelocity());
+    SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
+    SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
+    SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocity());
+    SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocity());
 
   }
 

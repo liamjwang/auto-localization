@@ -192,19 +192,19 @@ public class Tuning {
   @Tunable("[Drivetrain] radius")
   public static double drivetrainRadius = 0.312043043;
 
-  //@Tunable("[Drivetrain] kP")
+  @Tunable("[Drivetrain] kP")
   public static double drivetrainVelocityP = 2;
 
-  //@Tunable("[Drivetrain] kI")
-  public static double drivetrainVelocityI = 0.001;
+  @Tunable("[Drivetrain] kI")
+  public static double drivetrainVelocityI = 0.01;
 
-  //@Tunable("[Drivetrain] kD")
+  @Tunable("[Drivetrain] kD")
   public static double drivetrainVelocityD = 4;
 
-  //@Tunable("[Drivetrain] kF")
+  @Tunable("[Drivetrain] kF")
   public static double drivetrainVelocityF = 1.2;
 
-  //@Tunable("[Drivetrain] I-Zone")
+  @Tunable("[Drivetrain] I-Zone")
   public static int drivetrainVelocityIZone = 100;
 
   // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
