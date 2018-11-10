@@ -16,7 +16,7 @@ public class UDPServer implements Runnable {
   private double cmdVelX = 0;
   private double cmdVelTheta = 0;
 
-  private InetAddress IPAddress = InetAddress.getByName("DESKTOP-B28AO.local");
+  private InetAddress IPAddress = InetAddress.getByName("10.15.40.199");
 
   UDPServer() throws SocketException, UnknownHostException {
     t = new Thread(this);

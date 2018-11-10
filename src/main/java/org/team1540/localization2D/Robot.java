@@ -128,15 +128,17 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("twist-linear-x", xvel);
     SmartDashboard.putNumber("twist-angular-z", thetavel);
 
-    try {
-      serv.sendPoseAndTwist(
-          accum2D.getXpos(),
-          accum2D.getYpos(),
-          gyroAngle,
-          xvel,
-          thetavel);
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (serv != null) {
+        try {
+            serv.sendPoseAndTwist(
+                    accum2D.getXpos(),
+                    accum2D.getYpos(),
+                    gyroAngle,
+                    xvel,
+                    thetavel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

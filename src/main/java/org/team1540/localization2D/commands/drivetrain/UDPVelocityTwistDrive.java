@@ -14,8 +14,12 @@ public class UDPVelocityTwistDrive extends Command {
 
   @Override
   protected void execute() {
-    double cmdVelX = Robot.serv.getCmdVelX();
-    double cmdVelOmega = Robot.serv.getCmdVelTheta();
+    double cmdVelX = 0;
+    double cmdVelOmega = 0;
+    if (Robot.serv != null) {
+      cmdVelX = Robot.serv.getCmdVelX();
+      cmdVelOmega = Robot.serv.getCmdVelTheta();
+    }
     double leftSetpoint = (cmdVelX-cmdVelOmega*Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
     double rightSetpoint = (cmdVelX+cmdVelOmega*Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
     Robot.drivetrain.setLeftVelocity(leftSetpoint);
