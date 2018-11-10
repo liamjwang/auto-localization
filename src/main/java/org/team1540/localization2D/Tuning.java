@@ -186,6 +186,9 @@ public class Tuning {
   public static double winchInHighVel = -1;
 
   // DRIVETRAIN
+  @Tunable("[Drivetrain] UDP Timeout")
+  public static double drivetrainUDPTimeout = 1000;
+
   @Tunable("[Drivetrain] ticksPerMeter")
   public static double drivetrainTicksPerMeter = 2056.97193;
 

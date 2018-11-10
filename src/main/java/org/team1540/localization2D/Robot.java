@@ -8,14 +8,24 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.io.IOException;
 import org.team1540.base.power.PowerManager;
-import org.team1540.localization2D.commands.drivetrain.NetTablesVelocityTwistDrive;
+import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static AHRS navx = new AHRS(Port.kMXP);
+  public static UDPServer serv;
+
+  static {
+    try {
+      serv = new UDPServer();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   private SendableChooser<String> autoPosition;
   private SendableChooser<Boolean> driveMode;
@@ -47,7 +57,7 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.reset();
     Robot.drivetrain.zeroEncoders();
     Robot.drivetrain.configTalonsForVelocity();
-    new NetTablesVelocityTwistDrive().start();
+    new UDPVelocityTwistDrive().start();
     localizationInit();
   }
 
@@ -86,6 +96,10 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
   }
 
+  @Override
+  public void testPeriodic() {
+  }
+
   private LocalizationAccum2D accum2D = new LocalizationAccum2D();
 
   private void localizationInit() {
@@ -103,6 +117,7 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putNumber("pose-position-x", accum2D.getXpos());
     SmartDashboard.putNumber("pose-position-y", accum2D.getYpos());
+    SmartDashboard.putNumber("pose-orientation-z", gyroAngle);
 
     double leftVelocity = drivetrain.getLeftVelocity()*10/Tuning.drivetrainTicksPerMeter;
     double rightVelocity = drivetrain.getRightVelocity()*10/Tuning.drivetrainTicksPerMeter;
@@ -113,10 +128,21 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("twist-linear-x", xvel);
     SmartDashboard.putNumber("twist-angular-z", thetavel);
 
+    try {
+      serv.sendPoseAndTwist(
+          accum2D.getXpos(),
+          accum2D.getYpos(),
+          gyroAngle,
+          xvel,
+          thetavel);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
     // SmartDashboard.putNumber("Left Distance", leftDistance);
     // SmartDashboard.putNumber("Right Distance", rightDistance);
 
-    SmartDashboard.putNumber("pose-orientation-z", gyroAngle);
 
     if (SmartDashboard.getBoolean("timertest", false)) {
       SmartDashboard.putBoolean("timertest", false);
