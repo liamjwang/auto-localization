@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.team1540.base.power.PowerManager;
+import org.team1540.base.util.Executable;
+import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
@@ -39,26 +41,30 @@ public class Robot extends IterativeRobot {
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
 
-    SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData(PowerManager.getInstance());
+//    SmartDashboard.putData(drivetrain);
+//    SmartDashboard.putData(PowerManager.getInstance());
+
+    Command reset = new SimpleCommand("Reset", () -> {
+        System.out.println("Reset odometry!");
+      localizationInit();
+    });
+    reset.setRunWhenDisabled(true);
+    reset.start();
+    SmartDashboard.putData(reset);
   }
 
   @Override
   public void disabledInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-    Robot.drivetrain.zeroEncoders();
     Robot.drivetrain.setBrake(false);
-    localizationInit();
   }
 
   @Override
   public void autonomousInit() {
     Robot.drivetrain.reset();
-    Robot.drivetrain.zeroEncoders();
     Robot.drivetrain.configTalonsForVelocity();
     new UDPVelocityTwistDrive().start();
-    localizationInit();
   }
 
   @Override
@@ -67,7 +73,6 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.enableCurrentLimiting();
     Robot.drivetrain.configTalonsForVelocity();
     new VelocityDrive().start();
-    localizationInit();
   }
 
   @Override
@@ -79,7 +84,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putData(Scheduler.getInstance());
+//    SmartDashboard.putData(Scheduler.getInstance());
     Scheduler.getInstance().run();
     localizationPeriodic();
   }
@@ -105,7 +110,7 @@ public class Robot extends IterativeRobot {
   private void localizationInit() {
     Robot.navx.zeroYaw();
     accum2D.reset();
-    SmartDashboard.putBoolean("timertest", false);
+    Robot.drivetrain.zeroEncoders();
   }
 
   private void localizationPeriodic() {
@@ -125,8 +130,8 @@ public class Robot extends IterativeRobot {
     double xvel = (leftVelocity + rightVelocity) / 2;
     double thetavel = (leftVelocity-rightVelocity)/(Tuning.drivetrainRadius)/2;
 
-    SmartDashboard.putNumber("twist-linear-x", xvel);
-    SmartDashboard.putNumber("twist-angular-z", thetavel);
+//    SmartDashboard.putNumber("twist-linear-x", xvel);
+//    SmartDashboard.putNumber("twist-angular-z", thetavel);
 
     if (serv != null) {
         try {
@@ -146,8 +151,5 @@ public class Robot extends IterativeRobot {
     // SmartDashboard.putNumber("Right Distance", rightDistance);
 
 
-    if (SmartDashboard.getBoolean("timertest", false)) {
-      SmartDashboard.putBoolean("timertest", false);
-    }
   }
 }
