@@ -3,16 +3,11 @@ package org.team1540.localization2D.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.team1540.base.drive.PidDriveFactory;
-import org.team1540.base.drive.PowerJoystickScaling;
 import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.localization2D.RobotMap;
 import org.team1540.localization2D.Tuning;
-import org.team1540.localization2D.commands.drivetrain.NetTablesVelocityTwistDrive;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
-import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 
 public class DriveTrain extends Subsystem {
 
@@ -33,7 +28,7 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new NetTablesVelocityTwistDrive());
+    setDefaultCommand(new PercentDrive());
     // setDefaultCommand(new PidDriveFactory()
     //     .setSubsystem(this)
     //     .setLeft(driveLeftMotorA)
