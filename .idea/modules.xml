@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D_main.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D_main.iml" group="localization2D" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D_test.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D_test.iml" group="localization2D" />
-      <module fileurl="file://$PROJECT_DIR$/pandora-titan-2018.iml" filepath="$PROJECT_DIR$/pandora-titan-2018.iml" />
     </modules>
   </component>
 </project>

@@ -41,7 +41,6 @@ public class LocalizationAccum2D {
     double deltaLeft = 0;
 
     if (deltaRads != 0) {
-      //System.out.println("--_--__--");
       // Calculate radius of turn
       double avgRadius =
           (calcRadius(deltaDistanceLeft, deltaRads) + calcRadius(deltaDistanceRight, deltaRads))

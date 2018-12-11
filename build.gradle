@@ -4,6 +4,7 @@ import jaci.openrio.gradle.frc.RoboRIO
 
 plugins {
     id "java"
+    id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
 }
 
