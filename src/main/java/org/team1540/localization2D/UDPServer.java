@@ -3,6 +3,7 @@ package org.team1540.localization2D;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class UDPServer implements Runnable {
 
@@ -15,6 +16,7 @@ public class UDPServer implements Runnable {
 
   private double cmdVelX = 0;
   private double cmdVelTheta = 0;
+  private double timeStamp = 0;
 
   private InetAddress IPAddress = InetAddress.getByName("10.15.40.199");
 
@@ -28,17 +30,18 @@ public class UDPServer implements Runnable {
   @Override
   public void run() {
     try {
-      DatagramSocket serverSocket = new DatagramSocket(9876);
+      DatagramSocket serverSocket = new DatagramSocket(5801);
       byte[] data = new byte[DOUBLE_LENGTH * 2];
       while (true) {
         DatagramPacket receivePacket = new DatagramPacket(data, data.length);
-        System.out.println("Waiting for packet");
         serverSocket.receive(receivePacket);
-        System.out.println(receivePacket.getPort());
         data = receivePacket.getData();
-        ByteBuffer buf = ByteBuffer.wrap(data);
+        ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
+//        timeStamp = buf.getDouble();
         cmdVelX = buf.getDouble();
+//        System.out.println(cmdVelX);
         cmdVelTheta = buf.getDouble();
+//        System.out.println("X: " + cmdVelX + " Theta: " + cmdVelTheta);
         lastRecievedTime = System.currentTimeMillis();
       }
     } catch (Exception e) {
@@ -54,10 +57,9 @@ public class UDPServer implements Runnable {
         .putDouble(twistX)
         .putDouble(twistOmega)
         .array();
-    DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 4445);
+    DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 5800);
     clientSocket.send(sendPacket);
 
-    System.out.println("Data sent: "+IPAddress.toString());
   }
 
   public static double toDouble(byte[] bytes) {
