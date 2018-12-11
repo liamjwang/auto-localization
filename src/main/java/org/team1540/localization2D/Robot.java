@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.team1540.base.power.PowerManager;
-import org.team1540.base.util.Executable;
 import org.team1540.base.util.SimpleCommand;
+import org.team1540.localization2D.autogroups.TestSequence;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
@@ -50,7 +50,13 @@ public class Robot extends IterativeRobot {
     });
     reset.setRunWhenDisabled(true);
     reset.start();
-    SmartDashboard.putData(reset);
+      SmartDashboard.putData(reset);
+
+      Command runTEB = new SimpleCommand("Start segment", () -> {
+        new UDPVelocityTwistDrive(2, 0, 0, false).start();
+    });
+//      runTEB.start();
+    SmartDashboard.putData(runTEB);
   }
 
   @Override
@@ -64,7 +70,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-    new UDPVelocityTwistDrive().start();
+    new TestSequence().start();
   }
 
   @Override
@@ -105,7 +111,7 @@ public class Robot extends IterativeRobot {
   public void testPeriodic() {
   }
 
-  private LocalizationAccum2D accum2D = new LocalizationAccum2D();
+  private static LocalizationAccum2D accum2D = new LocalizationAccum2D();
 
   private void localizationInit() {
     Robot.navx.zeroYaw();
@@ -152,4 +158,9 @@ public class Robot extends IterativeRobot {
 
 
   }
+
+
+    public static double getPosX() { return accum2D.getXpos(); }
+    public static double getPosY() { return accum2D.getYpos(); }
+
 }
