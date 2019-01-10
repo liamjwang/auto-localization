@@ -6,22 +6,39 @@ import org.team1540.localization2D.Robot;
 import org.team1540.localization2D.Tuning;
 
 public class UDPVelocityTwistDrive extends Command {
-  public UDPVelocityTwistDrive(int xGoal, int yGoal, int angleGoal, boolean freeGoalVel) {
-      SmartDashboard.putNumber("goal_position_x", xGoal);
-      SmartDashboard.putNumber("goal_position_y", yGoal);
-      SmartDashboard.putNumber("goal_orientation_z", angleGoal);
-      SmartDashboard.putBoolean("free_goal_vel", freeGoalVel);
-    requires(Robot.drivetrain);
-    Robot.drivetrain.reset();
-    Robot.drivetrain.configTalonsForVelocity();
+    double xGoal;
+    double yGoal;
+    double angleGoal;
+    boolean freeGoalVel;
+
+    boolean checkEnd;
+
+  public UDPVelocityTwistDrive(double xGoal, double yGoal, double angleGoal, boolean freeGoalVel) {
+      this.xGoal = xGoal;
+      this.yGoal = yGoal;
+      this.angleGoal = angleGoal;
+      this.freeGoalVel = freeGoalVel;
+
+      this.checkEnd = true;
+      requires(Robot.drivetrain);
   }
     public UDPVelocityTwistDrive() {
+      this.checkEnd = false;
         requires(Robot.drivetrain);
+    }
+
+    @Override
+    protected void initialize() {
+        System.out.println("Set goal to " + xGoal);
+        SmartDashboard.putNumber("--------goal_position_x", xGoal);
+        SmartDashboard.putNumber("--------goal_position_y", yGoal);
+        SmartDashboard.putNumber("--------goal_orientation_z", angleGoal);
+        SmartDashboard.putBoolean("--------free_goal_vel", freeGoalVel);
         Robot.drivetrain.reset();
         Robot.drivetrain.configTalonsForVelocity();
     }
 
-  @Override
+    @Override
   protected void execute() {
     double cmdVelX = 0;
     double cmdVelOmega = 0;
@@ -42,16 +59,31 @@ public class UDPVelocityTwistDrive extends Command {
 
     @Override
     protected boolean isFinished() {
-        double xError = SmartDashboard.getNumber("goal_position_x", 0) - Robot.getPosX();
-        double yError = SmartDashboard.getNumber("goal_position_y", 0) - Robot.getPosY();
-        double angleError = AngleDifference(SmartDashboard.getNumber("goal_orientation_z", 0)*180/2*Math.PI, Robot.navx.getYaw());
+      if (!this.checkEnd) {
+          return false;
+      }
+        double xError = xGoal - Robot.getPosX();
+        double yError = yGoal - Robot.getPosY();
+        double angleError = angleGoal*180/Math.PI - Robot.navx.getYaw();
+        while (angleError > 180) {
+            angleError -= 360;
+        }
+        while (angleError < -180) {
+            angleError += 360;
+        }
         System.out.println(
                 "xError "+xError+
                         " yError "+yError+
                         " angleError "+angleError);
-        return Math.abs(xError) < 0.04 &&
+        boolean finished = Math.abs(xError) < 0.04 &&
                 Math.abs(yError) < 0.04 &&
                 Math.abs(angleError) < 1;
+        if (finished) {
+            System.out.println("Close to goal: " + xGoal + " " + yGoal);
+            Robot.drivetrain.setLeftVelocity(0);
+            Robot.drivetrain.setRightVelocity(0);
+        }
+        return finished;
     }
 
     public static double AngleDifference( double angle1, double angle2 )

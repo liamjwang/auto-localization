@@ -1,6 +1,8 @@
 package org.team1540.localization2D;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.autogroups.TestSequence;
+import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
@@ -78,19 +81,27 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.reset();
     Robot.drivetrain.enableCurrentLimiting();
     Robot.drivetrain.configTalonsForVelocity();
-    new VelocityDrive().start();
+    new PercentDrive().start();
+//    new VelocityDrive().start();
   }
 
   @Override
   public void testInit() {
-    SmartDashboard.putNumber("goal-position-x", 10);
-    SmartDashboard.putNumber("goal-position-y", 0);
-    SmartDashboard.putNumber("goal-orientation-z", 0);
+    Robot.drivetrain.reset();
+    Robot.drivetrain.configTalonsForVelocity();
+    new UDPVelocityTwistDrive(0, 0, 0, false).start();
   }
 
   @Override
   public void robotPeriodic() {
 //    SmartDashboard.putData(Scheduler.getInstance());
+    NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight");
+    double tx0 = 27.85* limeTable.getEntry("tx0").getDouble(0);
+    limeTable.getEntry("tx00").setDouble(tx0);
+
+      double tx1 = 27.85* limeTable.getEntry("tx1").getDouble(0);
+      limeTable.getEntry("tx11").setDouble(tx1);
+
     Scheduler.getInstance().run();
     localizationPeriodic();
   }
@@ -135,6 +146,9 @@ public class Robot extends IterativeRobot {
 
     double xvel = (leftVelocity + rightVelocity) / 2;
     double thetavel = (leftVelocity-rightVelocity)/(Tuning.drivetrainRadius)/2;
+
+
+//          SmartDashboard.putNumber("../limelight/tx00", SmartDashboard.getNumber("../limelight/tx0", 0)*26.85);
 
 //    SmartDashboard.putNumber("twist-linear-x", xvel);
 //    SmartDashboard.putNumber("twist-angular-z", thetavel);
