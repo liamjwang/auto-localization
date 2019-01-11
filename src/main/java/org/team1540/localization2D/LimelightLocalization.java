@@ -10,8 +10,8 @@ public class LimelightLocalization {
 
   private static double TOLERANCE = 0.0001;
 
-  private static double HORIZONTAL_FOV = 54.0 * Math.PI / 180.0;
-  private static double VERTICAL_FOV = 41.0 * Math.PI / 180.0;
+  private static double HORIZONTAL_FOV = Math.toRadians(54.0);
+  private static double VERTICAL_FOV = Math.toRadians(41.0);
 
   private static Vector2D anglesFromScreenSpace(Vector2D normalizedScreenPoint) {
     //http://docs.limelightvision.io/en/latest/theory.html#from-pixels-to-angles
