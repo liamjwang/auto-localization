@@ -10,20 +10,20 @@ public class LimelightLocalization {
 
   private static double TOLERANCE = 0.0001;
 
-  private static double HORIZONTAL_FOV = 50;
-  private static double VERTICAL_FOV = 50;
+  private static double HORIZONTAL_FOV = 54.0 * Math.PI / 180.0;
+  private static double VERTICAL_FOV = 41.0 * Math.PI / 180.0;
 
   private static Vector2D anglesFromScreenSpace(Vector2D normalizedScreenPoint) {
     //http://docs.limelightvision.io/en/latest/theory.html#from-pixels-to-angles
     double vpw = 2.0 * Math.tan(HORIZONTAL_FOV / 2);
     double vph = 2.0 * Math.tan(VERTICAL_FOV / 2);
 
-    double screenSpaceX = vpw / 2.0 * normalizedScreenPoint.getX();
+    double screenSpaceX = vpw / 2.0 * -normalizedScreenPoint.getX(); // X is negated
     double screenSpaceY = vph / 2.0 * normalizedScreenPoint.getY();
 
     return new Vector2D(
-        Math.atan2(1, screenSpaceX),
-        Math.atan2(1, screenSpaceY)
+        Math.PI / 2 - Math.atan2(1, screenSpaceX),
+        Math.PI / 2 - Math.atan2(1, screenSpaceY)
     );
   }
 
@@ -31,13 +31,13 @@ public class LimelightLocalization {
     double yaw = screenAngles.getX();
     double pitch = screenAngles.getY();
 
-    Vector3D camVector = new Vector3D(Math.cos(yaw) * Math.cos(pitch),
+    Vector3D pixelVector = new Vector3D(Math.cos(yaw) * Math.cos(pitch),
         Math.sin(yaw) * Math.cos(pitch),
         Math.sin(pitch));
 
-    cameraRotation.applyTo(camVector);
+    Vector3D pixelVectorRotated = cameraRotation.applyTo(pixelVector);
 
-    return new Line(cameraPosition, cameraPosition.add(camVector), TOLERANCE);
+    return new Line(cameraPosition, cameraPosition.add(pixelVectorRotated), TOLERANCE);
   }
 
   private static Vector3D getIntersection(Line line, double height) {
@@ -54,9 +54,8 @@ public class LimelightLocalization {
   }
 
   private static double angleFromVisionTargets(Vector2D left, Vector2D right) {
-    Vector2D difference = right.subtract(left);
-    System.out.println(difference);
-    return Math.atan2(difference.getY(), difference.getX()) - Math.atan2(0, 1);
+    Vector2D difference = left.subtract(right);
+    return Math.atan2(difference.getY(), difference.getX());
   }
 
   private static Vector2D xyFromVector3D(Vector3D vec) {
@@ -72,6 +71,6 @@ public class LimelightLocalization {
         midpoint(leftPoint, rightPoint),
         new Vector3D(0, 0, angleFromVisionTargets(
             xyFromVector3D(leftPoint),
-            xyFromVector3D(rightPoint))));
+            xyFromVector3D(rightPoint)) - Math.PI / 2));
   }
 }
