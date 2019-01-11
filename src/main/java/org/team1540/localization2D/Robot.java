@@ -183,13 +183,14 @@ public class Robot extends IterativeRobot {
   private void limelightLocalizationPeriodic() {
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
+    // TODO: Filter limelight contours using size, angle, etc.
     double tx0 = limelightTable.getEntry("tx0").getDouble(100);
     double ty0 = limelightTable.getEntry("ty0").getDouble(100);
 
     double tx1 = limelightTable.getEntry("tx1").getDouble(100);
     double ty1 = limelightTable.getEntry("ty1").getDouble(100);
 
-    if (tx0 > 99 || ty0 > 99 || tx1 > 99 || ty1 > 99) {
+    if (tx0 + tx1 + ty0 + ty1 > 5) {
       System.out.println("Unable to get limelight values!");
       return;
     }
