@@ -205,7 +205,7 @@ public class Robot extends IterativeRobot {
        rightAngles = new Vector2D(tx1, ty1);
     }
 
-    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, 0.5, new Vector3D(0, 0, 1.2), new Rotation(Vector3D.PLUS_J, -Math.PI/4, RotationConvention.VECTOR_OPERATOR));
+    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, 0.5, new Vector3D(0, 0, 1.2), new Rotation(Vector3D.PLUS_J, -Math.PI/4, RotationConvention.FRAME_TRANSFORM));
 
     SmartDashboard.putNumber("limelight-pose/position/x", pose.position.getX());
     SmartDashboard.putNumber("limelight-pose/position/y", pose.position.getY());
