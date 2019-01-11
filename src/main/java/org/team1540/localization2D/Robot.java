@@ -10,7 +10,13 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.IOException;
+import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.base.power.PowerManager;
 import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.autogroups.TestSequence;
@@ -104,6 +110,7 @@ public class Robot extends IterativeRobot {
 
     Scheduler.getInstance().run();
     localizationPeriodic();
+    limelightLocalizationPeriodic();
   }
 
   @Override
@@ -172,6 +179,39 @@ public class Robot extends IterativeRobot {
 
 
   }
+
+  private void limelightLocalizationPeriodic() {
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    double tx0 = limelightTable.getEntry("tx0").getDouble(100);
+    double ty0 = limelightTable.getEntry("ty0").getDouble(100);
+
+    double tx1 = limelightTable.getEntry("tx1").getDouble(100);
+    double ty1 = limelightTable.getEntry("ty1").getDouble(100);
+
+    if (tx0 > 99 || ty0 > 99 || tx1 > 99 || ty1 > 99) {
+      System.out.println("Unable to get limelight values!");
+      return;
+    }
+
+    Vector2D leftAngles;
+    Vector2D rightAngles;
+
+    if (tx0 < tx1) {
+       leftAngles = new Vector2D(tx0, ty0);
+       rightAngles = new Vector2D(tx1, ty1);
+    } else {
+       leftAngles = new Vector2D(tx0, ty0);
+       rightAngles = new Vector2D(tx1, ty1);
+    }
+
+    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, 0.5, new Vector3D(0, 0, 1.2), new Rotation(Vector3D.PLUS_J, -Math.PI/4, RotationConvention.VECTOR_OPERATOR));
+
+    SmartDashboard.putNumber("limelight-pose/position/x", pose.position.getX());
+    SmartDashboard.putNumber("limelight-pose/position/y", pose.position.getY());
+    SmartDashboard.putNumber("limelight-pose/orientation/z", pose.orientation.getZ());
+  }
+
 
 
     public static double getPosX() { return accum2D.getXpos(); }
