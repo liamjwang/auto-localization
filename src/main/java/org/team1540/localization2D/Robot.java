@@ -181,6 +181,12 @@ public class Robot extends IterativeRobot {
   }
 
   private void limelightLocalizationPeriodic() {
+
+    double CAMERA_TILT = Math.toRadians(-45.0); // Tilt of vision target in radians
+    double PLANE_HEIGHT = 0.5; // Height of vision targets in meters
+    Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.2); // Position of camera in meters
+
+
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
     // TODO: Filter limelight contours using size, angle, etc.
@@ -206,7 +212,8 @@ public class Robot extends IterativeRobot {
        rightAngles = new Vector2D(tx1, ty1);
     }
 
-    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, 0.5, new Vector3D(0, 0, 1.2), new Rotation(Vector3D.PLUS_J, -Math.PI/4, RotationConvention.FRAME_TRANSFORM));
+    Rotation cameraRotation = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
+    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
 
     SmartDashboard.putNumber("limelight-pose/position/x", pose.position.getX());
     SmartDashboard.putNumber("limelight-pose/position/y", pose.position.getY());
