@@ -183,8 +183,8 @@ public class Robot extends IterativeRobot {
   private void limelightLocalizationPeriodic() {
 
     double CAMERA_TILT = Math.toRadians(-45.0); // Tilt of vision target in radians
-    double PLANE_HEIGHT = 0.5; // Height of vision targets in meters
-    Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.2); // Position of camera in meters
+    double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
+    Vector3D CAMERA_POSITION = new Vector3D(0.13, 0, 1.26); // Position of camera in meters
 
 
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -215,12 +215,16 @@ public class Robot extends IterativeRobot {
     Rotation cameraRotation = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
     Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
 
-    SmartDashboard.putNumber("limelight-pose/position/x", pose.position.getX());
-    SmartDashboard.putNumber("limelight-pose/position/y", pose.position.getY());
-    SmartDashboard.putNumber("limelight-pose/orientation/z", pose.orientation.getZ());
+    double off = -0.4;
+    double x_off = pose.position.getX()+off*Math.cos(pose.orientation.getZ());
+    double y_off = pose.position.getY()+off*Math.sin(pose.orientation.getZ());
+
+    // System.out.printf("x: %08.3f y: %08.3f z: %08.3f\n", pose.position.getX(), pose.position.getY(), pose.orientation.getZ());
+
+    SmartDashboard.putNumber("limelight-pose/position/x", x_off);
+    SmartDashboard.putNumber("limelight-pose/position/y", -y_off);
+    SmartDashboard.putNumber("limelight-pose/orientation/z", -pose.orientation.getZ());
   }
-
-
 
     public static double getPosX() { return accum2D.getXpos(); }
     public static double getPosY() { return accum2D.getYpos(); }
