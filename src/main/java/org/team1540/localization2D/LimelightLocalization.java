@@ -1,5 +1,6 @@
 package org.team1540.localization2D;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Plane;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -55,7 +56,11 @@ public class LimelightLocalization {
 
   private static double angleFromVisionTargets(Vector2D left, Vector2D right) {
     Vector2D difference = left.subtract(right);
-    return Math.atan2(difference.getY(), difference.getX());
+    double atan = Math.atan(difference.getY() / difference.getX())+Math.PI/2;
+    if (atan > Math.PI/2) {
+      atan = atan-Math.PI;
+    }
+    return atan;
   }
 
   private static Vector2D xyFromVector3D(Vector3D vec) {
@@ -71,6 +76,6 @@ public class LimelightLocalization {
         midpoint(leftPoint, rightPoint),
         new Vector3D(0, 0, angleFromVisionTargets(
             xyFromVector3D(leftPoint),
-            xyFromVector3D(rightPoint)) - Math.PI / 2));
+            xyFromVector3D(rightPoint))));
   }
 }
