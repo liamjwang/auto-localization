@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Plane;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -11,8 +12,8 @@ public class LimelightLocalization {
 
   private static double TOLERANCE = 0.0001;
 
-  private static double HORIZONTAL_FOV = Math.toRadians(54.0);
-  private static double VERTICAL_FOV = Math.toRadians(41.0);
+  private static double HORIZONTAL_FOV = Math.toRadians(59.6);
+  private static double VERTICAL_FOV = Math.toRadians(45.7);
 
   private static Vector2D anglesFromScreenSpace(Vector2D normalizedScreenPoint) {
     //http://docs.limelightvision.io/en/latest/theory.html#from-pixels-to-angles
@@ -32,9 +33,13 @@ public class LimelightLocalization {
     double yaw = screenAngles.getX();
     double pitch = screenAngles.getY();
 
-    Vector3D pixelVector = new Vector3D(Math.cos(yaw) * Math.cos(pitch),
-        Math.sin(yaw) * Math.cos(pitch),
-        Math.sin(pitch));
+    Vector3D pixelVector = Vector3D.PLUS_I;
+
+    Rotation pitchRot = new Rotation(Vector3D.PLUS_J, pitch, RotationConvention.FRAME_TRANSFORM);
+    Rotation yawRot = new Rotation(Vector3D.PLUS_K, yaw, RotationConvention.FRAME_TRANSFORM);
+
+    pixelVector = pitchRot.applyTo(pixelVector);
+    pixelVector = yawRot.applyTo(pixelVector);
 
     Vector3D pixelVectorRotated = cameraRotation.applyTo(pixelVector);
 
