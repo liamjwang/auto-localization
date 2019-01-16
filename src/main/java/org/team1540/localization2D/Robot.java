@@ -182,9 +182,11 @@ public class Robot extends IterativeRobot {
 
   private void limelightLocalizationPeriodic() {
 
-    double CAMERA_TILT = Math.toRadians(-43.0); // Tilt of vision target in radians
+    double CAMERA_TILT = Math.toRadians(-40.2);
+    double CAMERA_ROLL = Math.toRadians(-1.38);
     double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
-    Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.26); // Position of camera in meters
+    // Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.26); // Position of camera in meters
+    Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
 
 
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -212,18 +214,24 @@ public class Robot extends IterativeRobot {
        rightAngles = new Vector2D(tx0, ty0);
     }
 
-    Rotation cameraRotation = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
+
+    // Rotation cameraRotation = cameraRoll.applyTo(cameraTilt);
+    Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
     Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
 
-    // double off = -0.4;
-    double x_off = pose.position.getX();//+off*Math.cos(pose.orientation.getZ());
-    double y_off = pose.position.getY();//+off*Math.sin(pose.orientation.getZ());
-
+    double off = -0.5;
+    double x_off = pose.position.getX()+off*Math.cos(pose.orientation.getZ());
+    double y_off = pose.position.getY()+off*Math.sin(pose.orientation.getZ());
+    //
+    // double x_off = pose.position.getX();//+off*Math.cos(pose.orientation.getZ());
+    // double y_off = pose.position.getY();//+off*Math.sin(pose.orientation.getZ());
     // System.out.printf("x: %08.3f y: %08.3f z: %08.3f\n", pose.position.getX(), pose.position.getY(), pose.orientation.getZ());
 
     SmartDashboard.putNumber("limelight-pose/position/x", x_off);
-    SmartDashboard.putNumber("limelight-pose/position/y", -y_off);
-    SmartDashboard.putNumber("limelight-pose/orientation/z", -pose.orientation.getZ());
+    SmartDashboard.putNumber("limelight-pose/position/y", y_off);
+    SmartDashboard.putNumber("limelight-pose/orientation/z", pose.orientation.getZ());
   }
 
     public static double getPosX() { return accum2D.getXpos(); }
