@@ -203,16 +203,8 @@ public class Robot extends IterativeRobot {
       return;
     }
 
-    Vector2D leftAngles;
-    Vector2D rightAngles;
-
-    if (tx0 < tx1) {
-       leftAngles = new Vector2D(tx0, ty0);
-       rightAngles = new Vector2D(tx1, ty1);
-    } else {
-       leftAngles = new Vector2D(tx1, ty1);
-       rightAngles = new Vector2D(tx0, ty0);
-    }
+    Vector2D leftAngles = new Vector2D(tx0, ty0);
+    Vector2D rightAngles = new Vector2D(tx1, ty1);
 
     Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
     Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
