@@ -7,23 +7,21 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.base.power.PowerManager;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.autogroups.TestSequence;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
-import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
+import org.team1540.rooster.power.PowerManager;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
@@ -72,11 +70,18 @@ public class Robot extends IterativeRobot {
   public void disabledInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-    Robot.drivetrain.setBrake(false);
+    new TimedCommand(2) {
+      @Override
+      protected void end() {
+        Robot.drivetrain.setBrake(false);
+      }
+    };
+
   }
 
   @Override
   public void autonomousInit() {
+
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
     new TestSequence().start();

@@ -1,6 +1,6 @@
 package org.team1540.localization2D;
 
-import org.team1540.base.adjustables.Tunable;
+import org.team1540.rooster.adjustables.Tunable;
 
 public class Tuning {
 
@@ -212,7 +212,7 @@ public class Tuning {
 
   // only need PD according to https://www.chiefdelphi.com/forums/showthread.php?p=1751198#post1751198
   // @Tunable("[Drivetrain] Position kP")
-  public static double drivetrainPositionP = 10;
+  public static double drivetrainPositionP = 1;
 
   // @Tunable("[Drivetrain] Position kD")
   public static double drivetrainPositionD = 0;

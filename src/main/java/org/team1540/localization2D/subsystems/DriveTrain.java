@@ -4,10 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.team1540.base.wrappers.ChickenTalon;
 import org.team1540.localization2D.RobotMap;
 import org.team1540.localization2D.Tuning;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
+import org.team1540.rooster.drive.pipeline.CTREOutput;
+import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class DriveTrain extends Subsystem {
 
@@ -92,6 +93,22 @@ public class DriveTrain extends Subsystem {
       talon.config_kF(0, 0);
       talon.config_IntegralZone(0, 0);
     }
+  }
+
+  public CTREOutput getCTREOutput() {
+    return new CTREOutput(driveLeftMotorA, driveRightMotorA);
+  }
+
+  public void setLeftVelocity(double velocity) {
+    driveLeftMotorA.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setRightVelocity(double velocity) {
+    driveRightMotorA.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setLeftPosition(double value) {
+    this.driveLeftMotorA.set(ControlMode.Position, value);
   }
 
   public void configTalonsForVelocity() {
