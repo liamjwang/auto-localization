@@ -249,5 +249,11 @@ public class Tuning {
 
   // AUTO
   public static double autoElevatorRaiseWait = 1;
+  public static double headingP = 0.0;
+  // public static double kAApp = .026499792;
+  public static double kAApp = 0;
+  public static double kVApp = .084333333;
+  public static double tpu = 645.5;
+  public static double vIntercept = .054083333;
 
 }

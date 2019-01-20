@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.localization2D.RobotMap;
 import org.team1540.localization2D.Tuning;
-import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -20,37 +19,17 @@ public class DriveTrain extends Subsystem {
   private ChickenTalon driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
   private ChickenTalon driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
   private ChickenTalon[] driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
-  private ChickenTalon[] driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC, driveRightMotorA, driveRightMotorB, driveRightMotorC};
+  public ChickenTalon[] driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC, driveRightMotorA, driveRightMotorB, driveRightMotorC};
   private ChickenTalon[] driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
 
   public DriveTrain() {
     reset();
   }
 
-  @Override
-  public void initDefaultCommand() {
-    setDefaultCommand(new PercentDrive());
-    // setDefaultCommand(new PidDriveFactory()
-    //     .setSubsystem(this)
-    //     .setLeft(driveLeftMotorA)
-    //     .setRight(driveRightMotorA)
-    //     .setJoystick(OI.driver)
-    //     .setLeftAxis(1)
-    //     .setRightAxis(5)
-    //     .setForwardTrigger(3)
-    //     .setBackTrigger(2)
-    //     .setDeadzone(Tuning.axisDeadzone)
-    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-    //     .setInvertLeft(true)
-    //     .setInvertRight(true)
-    //     .setInvertLeftBrakeDirection(false)
-    //     .setInvertRightBrakeDirection(false)
-    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-    //     .setBrakingStopZone(Tuning.axisDeadzone)
-    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-    //     .setMaxVel(Tuning.drivetrainMaxVelocity)
-    //     .createPidDrive()
-    // );
+  public void configFactoryDefault() {
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.configFactoryDefault();
+    }
   }
 
   public void setLeft(ControlMode mode, double value) {
@@ -77,19 +56,14 @@ public class DriveTrain extends Subsystem {
     this.driveRightMotorA.set(ControlMode.PercentOutput, value);
   }
 
-  public void setLeftVelocity(double velocity) {
-    driveLeftMotorA.set(ControlMode.Velocity, velocity);
-  }
-
-  public void setRightVelocity(double velocity) {
-    driveRightMotorA.set(ControlMode.Velocity, velocity);
-  }
-
   public void configTalonsForPosition() {
     for (ChickenTalon talon : driveMotorMasters) {
       talon.config_kP(0, Tuning.drivetrainPositionP);
       talon.config_kI(0, 0);
       talon.config_kD(0, Tuning.drivetrainPositionD);
+      // talon.config_kP(0, 0);
+      // talon.config_kI(0, 0);
+      // talon.config_kD(0, 0);
       talon.config_kF(0, 0);
       talon.config_IntegralZone(0, 0);
     }
@@ -166,6 +140,38 @@ public class DriveTrain extends Subsystem {
     }
   }
 
+  public void disableCurrentLimiting() {
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.enableCurrentLimit(false);
+    }
+  }
+
+  @Override
+  public void initDefaultCommand() {
+    // setDefaultCommand(new PercentDrive());
+    // setDefaultCommand(new PidDriveFactory()
+    //     .setSubsystem(this)
+    //     .setLeft(driveLeftMotorA)
+    //     .setRight(driveRightMotorA)
+    //     .setJoystick(OI.driver)
+    //     .setLeftAxis(1)
+    //     .setRightAxis(5)
+    //     .setForwardTrigger(3)
+    //     .setBackTrigger(2)
+    //     .setDeadzone(Tuning.axisDeadzone)
+    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
+    //     .setInvertLeft(true)
+    //     .setInvertRight(true)
+    //     .setInvertLeftBrakeDirection(false)
+    //     .setInvertRightBrakeDirection(false)
+    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
+    //     .setBrakingStopZone(Tuning.axisDeadzone)
+    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
+    //     .setMaxVel(Tuning.drivetrainMaxVelocity)
+    //     .createPidDrive()
+    // );
+  }
+
   public void setBrake(Boolean state) {
     for (ChickenTalon talon : driveMotorAll) {
       talon.setBrake(state);
@@ -196,4 +202,9 @@ public class DriveTrain extends Subsystem {
     driveLeftMotorA.setSelectedSensorPosition(0);
     driveRightMotorA.setSelectedSensorPosition(0);
   }
+
+  public void setRightPosition(double value) {
+    this.driveRightMotorA.set(ControlMode.Position, value);
+  }
+
 }

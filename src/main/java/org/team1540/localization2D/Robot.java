@@ -4,7 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.TimedCommand;
@@ -12,29 +13,38 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
+import java.util.OptionalDouble;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.localization2D.autogroups.TestSequence;
-import org.team1540.localization2D.commands.drivetrain.PercentDrive;
-import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
+import org.team1540.rooster.drive.pipeline.DriveData;
+import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
+import org.team1540.rooster.drive.pipeline.HeadingPIDProcessor;
+import org.team1540.rooster.drive.pipeline.TankDriveData;
+import org.team1540.rooster.drive.pipeline.UnitScaler;
+import org.team1540.rooster.functional.Executable;
+import org.team1540.rooster.functional.Input;
 import org.team1540.rooster.power.PowerManager;
-import org.team1540.rooster.util.SimpleCommand;
+import org.team1540.rooster.testers.motor.SimpleControllersTester;
+import org.team2471.frc.lib.motion_profiling.Autonomous;
+import org.team2471.frc.lib.motion_profiling.Path2D;
+import org.team2471.frc.lib.motion_profiling.Path2D.RobotDirection;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static AHRS navx = new AHRS(Port.kMXP);
   public static UDPServer serv;
+  private static XboxController xboxController = new XboxController(1);
 
-  static {
-    try {
-      serv = new UDPServer();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  // static {
+  //   try {
+  //     serv = new UDPServer();
+  //   } catch (Exception e) {
+  //     e.printStackTrace();
+  //   }
+  // }
 
   private SendableChooser<String> autoPosition;
   private SendableChooser<Boolean> driveMode;
@@ -51,25 +61,24 @@ public class Robot extends IterativeRobot {
 //    SmartDashboard.putData(drivetrain);
 //    SmartDashboard.putData(PowerManager.getInstance());
 
-    Command reset = new SimpleCommand("Reset", () -> {
-        System.out.println("Reset odometry!");
-      localizationInit();
-    });
-    reset.setRunWhenDisabled(true);
-    reset.start();
-      SmartDashboard.putData(reset);
-
-      Command runTEB = new SimpleCommand("Start segment", () -> {
-        new UDPVelocityTwistDrive(2, 0, 0, false).start();
-    });
-//      runTEB.start();
-    SmartDashboard.putData(runTEB);
+    //     Command reset = new SimpleCommand("Reset", () -> {
+    //         System.out.println("Reset odometry!");
+    //       localizationInit();
+    //     });
+    //     reset.setRunWhenDisabled(true);
+    //     reset.start();
+    //       SmartDashboard.putData(reset);
+    //
+    //       Command runTEB = new SimpleCommand("Start segment", () -> {
+    //         new UDPVelocityTwistDrive(2, 0, 0, false).start();
+    //     });
+    // //      runTEB.start();
+    //     SmartDashboard.putData(runTEB);
   }
 
   @Override
   public void disabledInit() {
     Robot.drivetrain.reset();
-    Robot.drivetrain.configTalonsForVelocity();
     new TimedCommand(2) {
       @Override
       protected void end() {
@@ -82,17 +91,100 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 
-    Robot.drivetrain.reset();
-    Robot.drivetrain.configTalonsForVelocity();
-    new TestSequence().start();
+    drivetrain.configFactoryDefault();
+    drivetrain.reset();
+    drivetrain.configTalonsForPosition();
+    drivetrain.disableCurrentLimiting();
+
+    Path2D path = new Path2D();
+    path.setMirrored(false);
+    path.setRobotDirection(RobotDirection.FORWARD);
+
+    //    double theta = SmartDashboard.getNumber("goal_position_z", 0);
+    //    path.addPointAndTangent(SmartDashboard.getNumber("goal_position_x", 0),
+    //        SmartDashboard.getNumber("goal_position_y", 0), Math.cos(theta), Math.sin(theta));;
+
+    // path.addPointAndTangent(0.0, 0.0, 0.0, 4.0);
+    // path.addPointAndTangent(2.0, 5.0, 0.0, 4.0);
+    // path.addEasePoint(0.0, 0.0);
+    // path.addEasePoint(1.9, 1.0);
+
+    // path.addPointAndTangent(0, 0, 2, 0);
+    // path.addPointAndTangent(4, 4, -2, 0);
+    //
+    path.addPointAndTangent(0, 0, 0, 0);
+    path.addPointAndTangent(4, 0, 0, 0);
+
+    path.addEasePoint(0.0, 0.0);
+    path.addEasePoint(3.0, 1.0);
+
+    path.setSpeed(1);
+    Autonomous autonomous = new Autonomous("Auto");
+    autonomous.setMirrored(false);
+    autonomous.setRobotLength(2.49);
+    autonomous.setRobotWidth(2.00);
+    autonomous.setTrackWidth(2.00);
+    path.setAutonomous(autonomous);
+    System.out.println("Starting");
+
+    new Command() {
+
+      // private MeanLibInput input = new MeanLibInput(path);
+      private Input<TankDriveData> input = () -> new TankDriveData(
+          new DriveData(
+              OptionalDouble.of(0),
+              OptionalDouble.of(1),
+              OptionalDouble.empty(),
+              OptionalDouble.empty()
+          ),
+          new DriveData(
+              OptionalDouble.of(0),
+              OptionalDouble.of(1),
+              OptionalDouble.empty(),
+              OptionalDouble.empty()
+          ),
+          OptionalDouble.empty(),
+          OptionalDouble.empty()
+      );
+      private Executable pipeline = input
+          .then(new FeedForwardProcessor(Tuning.kVApp, Tuning.vIntercept, Tuning.kAApp))
+          .then(new HeadingPIDProcessor(Tuning.headingP, () -> Math.toRadians(navx.getYaw())))
+          .then(new UnitScaler(Tuning.tpu, .1))
+          .then((data) -> {
+            SmartDashboard.putNumber("pipeline_lPos", data.left.position.orElse(-1));
+            SmartDashboard.putNumber("pipeline_rPos", data.right.position.orElse(-1));
+            SmartDashboard.putNumber("pipeline_lVel", data.left.velocity.orElse(-1));
+            SmartDashboard.putNumber("pipeline_rVel", data.right.velocity.orElse(-1));
+            SmartDashboard.putNumber("pipeline_lAFF", data.left.additionalFeedForward.orElse(-1));
+            SmartDashboard.putNumber("pipeline_rAFF", data.right.additionalFeedForward.orElse(-1));
+            return data;
+          })
+          .then(drivetrain.getCTREOutput());
+
+      {
+        requires(drivetrain);
+      }
+
+      @Override
+      protected void execute() {
+        pipeline.execute();
+      }
+
+      @Override
+      protected boolean isFinished() {
+        // return input.isFinished();
+        return false;
+      }
+    }.start();
   }
 
   @Override
   public void teleopInit() {
     Robot.drivetrain.reset();
-    Robot.drivetrain.enableCurrentLimiting();
-    Robot.drivetrain.configTalonsForVelocity();
-    new PercentDrive().start();
+    Robot.drivetrain.configFactoryDefault();
+    Scheduler.getInstance().removeAll();
+    new SimpleControllersTester(drivetrain.driveMotorAll).addAllSendables().start();
+    // new PercentDrive().start();
 //    new VelocityDrive().start();
   }
 
@@ -100,22 +192,22 @@ public class Robot extends IterativeRobot {
   public void testInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-    new UDPVelocityTwistDrive(0, 0, 0, false).start();
+    // new UDPVelocityTwistDrive(0, 0, 0, false).start();
   }
 
   @Override
   public void robotPeriodic() {
-//    SmartDashboard.putData(Scheduler.getInstance());
-    NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight");
-    double tx0 = 27.85* limeTable.getEntry("tx0").getDouble(0);
-    limeTable.getEntry("tx00").setDouble(tx0);
-
-      double tx1 = 27.85* limeTable.getEntry("tx1").getDouble(0);
-      limeTable.getEntry("tx11").setDouble(tx1);
-
     Scheduler.getInstance().run();
-    localizationPeriodic();
-    limelightLocalizationPeriodic();
+
+    SmartDashboard.putData(Scheduler.getInstance());
+    //     NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight");
+    //     double tx0 = 27.85* limeTable.getEntry("tx0").getDouble(0);
+    //     limeTable.getEntry("tx00").setDouble(tx0);
+    //
+    //       double tx1 = 27.85* limeTable.getEntry("tx1").getDouble(0);
+    //       limeTable.getEntry("tx11").setDouble(tx1);
+    //     localizationPeriodic();
+    //     limelightLocalizationPeriodic();
   }
 
   @Override
