@@ -39,10 +39,10 @@ def TEAM = 1540
 //def ROBOT_CLASS = "org.team1540.localization2D.testing.RobotMotorTest"
 def ROBOT_CLASS = "org.team1540.localization2D.Robot"
 
-task generateProfiles(type:Exec) {
-    workingDir 'profiles'
-    commandLine 'java', '-jar', '../generation/path-util.jar'
-}
+//task generateProfiles(type:Exec) {
+//    workingDir 'profiles'
+//    commandLine 'java', '-jar', '../generation/path-util.jar'
+//}
 
 deploy {
     targets {
@@ -54,12 +54,12 @@ deploy {
         artifact('frcJava', FRCJavaArtifact) {
             targets << "roborio"
         }
-        fileCollectionArtifact('motionProfiles') {
-            dependsOn("generateProfiles")
-            targets << 'roborio'
-            files = fileTree(dir: 'profiles/generated', include: "**/*.csv")
-            directory = "/home/lvuser/profiles"
-        }
+//        fileCollectionArtifact('motionProfiles') {
+//            dependsOn("generateProfiles")
+//            targets << 'roborio'
+//            files = fileTree(dir: 'profiles/generated', include: "**/*.csv")
+//            directory = "/home/lvuser/profiles"
+//        }
     }
 }
 
