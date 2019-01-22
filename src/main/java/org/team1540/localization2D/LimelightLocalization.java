@@ -1,10 +1,10 @@
 package org.team1540.localization2D;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Plane;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -72,14 +72,14 @@ public class LimelightLocalization {
     return new Vector2D(vec.getX(), vec.getY());
   }
 
-  public static Pose poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
+  public static Transform poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
 
     Vector3D leftPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(leftAngles), cameraPosition, cameraRotation), planeHeight);
     Vector3D rightPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(rightAngles), cameraPosition, cameraRotation), planeHeight);
 
-    return new Pose(
+    return new Transform(
         midpoint(leftPoint, rightPoint),
-        new Vector3D(0, 0, angleFromVisionTargets(
+        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
             xyFromVector3D(leftPoint),
             xyFromVector3D(rightPoint))));
   }
