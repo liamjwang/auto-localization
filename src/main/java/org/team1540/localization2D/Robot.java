@@ -203,8 +203,30 @@ public class Robot extends IterativeRobot {
       return;
     }
 
-    Vector2D leftAngles = new Vector2D(tx0, ty0);
-    Vector2D rightAngles = new Vector2D(tx1, ty1);
+    double upperLimit = 0.86;
+    double lowerLimit = -0.61;
+    double leftAndRightLimit = 0.90;
+
+    if (tx0 == 0 || tx1 == 0 || ty0 == 0 || ty1 == 0) {
+      System.out.println("Ignoring limelight - highly unlikely values");
+      return;
+    }
+    if (ty0 > upperLimit || ty1 > upperLimit) {
+      System.out.println("Ignoring limelight - upper limit");
+      return;
+    }
+    if (ty0 < lowerLimit || ty1 < lowerLimit) {
+      System.out.println("Ignoring limelight - lower limit");
+      return;
+    }
+    if (Math.abs(tx0) > leftAndRightLimit || Math.abs(tx1) > leftAndRightLimit) {
+      System.out.println("Ignoring limelight - left/right limit");
+      return;
+    }
+    System.out.println("Good limelight values!");
+
+    Vector2D leftAngles = new Vector2D(-tx0, ty0);
+    Vector2D rightAngles = new Vector2D(-tx1, ty1);
 
     Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
     Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
