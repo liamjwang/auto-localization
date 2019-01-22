@@ -64,7 +64,7 @@ public class UDPVelocityTwistDrive extends Command {
       }
         double xError = xGoal - Robot.getPosX();
         double yError = yGoal - Robot.getPosY();
-        double angleError = angleGoal*180/Math.PI - Robot.navx.getYaw();
+        double angleError = angleGoal*180/Math.PI - (-Robot.navx.getYaw());
         while (angleError > 180) {
             angleError -= 360;
         }
