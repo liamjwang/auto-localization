@@ -29,11 +29,13 @@ public class UDPVelocityTwistDrive extends Command {
 
     @Override
     protected void initialize() {
-        System.out.println("Set goal to " + xGoal);
-        SmartDashboard.putNumber("--------goal_position_x", xGoal);
-        SmartDashboard.putNumber("--------goal_position_y", yGoal);
-        SmartDashboard.putNumber("--------goal_orientation_z", angleGoal);
-        SmartDashboard.putBoolean("--------free_goal_vel", freeGoalVel);
+    if (checkEnd) {
+      System.out.println("Set goal to " + xGoal);
+      SmartDashboard.putNumber("--------goal_position_x", xGoal);
+      SmartDashboard.putNumber("--------goal_position_y", yGoal);
+      SmartDashboard.putNumber("--------goal_orientation_z", angleGoal);
+      SmartDashboard.putBoolean("--------free_goal_vel", freeGoalVel);
+    }
         Robot.drivetrain.reset();
         Robot.drivetrain.configTalonsForVelocity();
     }
