@@ -18,7 +18,7 @@ public class UDPServer implements Runnable {
   private double cmdVelTheta = 0;
   private double timeStamp = 0;
 
-  private InetAddress IPAddress = InetAddress.getByName("10.15.40.199");
+  private InetAddress IPAddress = InetAddress.getByName("10.15.40.75");
 
   UDPServer() throws SocketException, UnknownHostException {
     t = new Thread(this);
@@ -59,7 +59,6 @@ public class UDPServer implements Runnable {
         .array();
     DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 5800);
     clientSocket.send(sendPacket);
-
   }
 
   public static double toDouble(byte[] bytes) {
