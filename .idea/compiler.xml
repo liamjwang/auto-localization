@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="localization2D_main" target="1.8" />
       <module name="localization2D_test" target="1.8" />
+      <module name="org.team1540.localization2D.main" target="1.8" />
+      <module name="org.team1540.localization2D.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
