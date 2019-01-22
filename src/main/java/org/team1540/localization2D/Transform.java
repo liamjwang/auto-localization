@@ -1,13 +1,14 @@
 package org.team1540.localization2D;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-public class Pose {
+public class Transform {
 
   public Vector3D position;
-  public Vector3D orientation;
+  public Rotation orientation;
 
-  Pose(Vector3D position, Vector3D orientation) {
+  Transform(Vector3D position, Rotation orientation) {
     this.position = position;
     this.orientation = orientation;
   }
