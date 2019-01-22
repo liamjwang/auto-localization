@@ -140,7 +140,7 @@ public class Robot extends IterativeRobot {
   private void localizationPeriodic() {
     double leftDistance = drivetrain.getLeftPosition()/Tuning.drivetrainTicksPerMeter;
     double rightDistance = drivetrain.getRightPosition()/Tuning.drivetrainTicksPerMeter;
-    double gyroAngle = Robot.navx.getAngle();
+    double gyroAngle = -Robot.navx.getAngle();
 
     accum2D.update(leftDistance, rightDistance, Math.toRadians(gyroAngle));
 
