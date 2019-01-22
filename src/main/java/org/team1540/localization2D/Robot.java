@@ -10,11 +10,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.base.power.PowerManager;
@@ -22,7 +21,6 @@ import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.autogroups.TestSequence;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
-import org.team1540.localization2D.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
 
 public class Robot extends IterativeRobot {
@@ -42,6 +40,9 @@ public class Robot extends IterativeRobot {
   private SendableChooser<Boolean> driveMode;
 
   private Command autoCommand;
+  private Transform goal_pose;
+  private Transform map_to_odom;
+  private Transform odom_to_base_link;
 
 
   @Override
@@ -79,7 +80,14 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-    new TestSequence().start();
+
+    double pos_x = SmartDashboard.getNumber("limelight-pose/position/x", 0);
+    double pos_y = SmartDashboard.getNumber("limelight-pose/position/y", 0);
+    double ori_z = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
+    this.goal_pose = new Transform(new Vector3D(pos_x,
+        pos_y, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, ori_z));
+    new TestSequence(pos_x, pos_y, ori_z).start();
+    // new UDPVelocityTwistDrive().start();
   }
 
   @Override
@@ -160,6 +168,13 @@ public class Robot extends IterativeRobot {
 //    SmartDashboard.putNumber("twist-linear-x", xvel);
 //    SmartDashboard.putNumber("twist-angular-z", thetavel);
 
+    this.odom_to_base_link = new Transform(new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, Math.toRadians(gyroAngle)));
+
+    Transform map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
+
+    SmartDashboard.putNumber("robot-pose/position/x", odom_to_base_link.position.getX());
+    SmartDashboard.putNumber("robot-pose/position/y", odom_to_base_link.position.getY());
+    SmartDashboard.putNumber("robot-pose/orientation/z", odom_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
     if (serv != null) {
         try {
             serv.sendPoseAndTwist(
@@ -231,21 +246,37 @@ public class Robot extends IterativeRobot {
     Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
     Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
 
-    // Rotation cameraRotation = cameraRoll.applyTo(cameraTilt);
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
-    Pose pose = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
+    Transform base_link_to_target = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
 
-    double off = -0.5;
-    double x_off = pose.position.getX()+off*Math.cos(pose.orientation.getZ());
-    double y_off = pose.position.getY()+off*Math.sin(pose.orientation.getZ());
-    //
-    // double x_off = pose.position.getX();//+off*Math.cos(pose.orientation.getZ());
-    // double y_off = pose.position.getY();//+off*Math.sin(pose.orientation.getZ());
-    // System.out.printf("x: %08.3f y: %08.3f z: %08.3f\n", pose.position.getX(), pose.position.getY(), pose.orientation.getZ());
+    Transform odom_to_target = addPoses(this.odom_to_base_link, base_link_to_target);
 
-    SmartDashboard.putNumber("limelight-pose/position/x", x_off);
-    SmartDashboard.putNumber("limelight-pose/position/y", y_off);
-    SmartDashboard.putNumber("limelight-pose/orientation/z", pose.orientation.getZ());
+    double[] angles = odom_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
+
+    double off = -0.5; // TODO: do this with transforms
+    // double off = 0;
+    double x_off = odom_to_target.position.getX()+off*Math.cos(angles[2]);
+    double y_off = odom_to_target.position.getY()+off*Math.sin(angles[2]);
+
+    Transform limePoseWithOffset = new Transform(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
+
+    this.map_to_odom = subtractPoses(this.goal_pose, limePoseWithOffset);
+
+    SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.position.getX());
+    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.position.getZ());
+    SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+
+    SmartDashboard.putNumber("limelight-pose/position/x_og", base_link_to_target.position.getX());
+    SmartDashboard.putNumber("limelight-pose/position/y_og", base_link_to_target.position.getY());
+    SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+  }
+
+  private Transform addPoses(Transform from, Transform to) {
+    return new Transform(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
+  }
+
+  private Transform subtractPoses(Transform from, Transform to) {
+    return new Transform(from.position.subtract(from.orientation.applyTo(to.position)), from.orientation.applyInverseTo(to.orientation));
   }
 
     public static double getPosX() { return accum2D.getXpos(); }
