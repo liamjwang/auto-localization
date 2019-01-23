@@ -148,9 +148,9 @@ public class Robot extends IterativeRobot {
   private void localizationPeriodic() {
     double leftDistance = drivetrain.getLeftPosition()/Tuning.drivetrainTicksPerMeter;
     double rightDistance = drivetrain.getRightPosition()/Tuning.drivetrainTicksPerMeter;
-    double gyroAngle = -Robot.navx.getAngle();
+    double gyroAngle = Math.toRadians(-Robot.navx.getAngle());
 
-    accum2D.update(leftDistance, rightDistance, Math.toRadians(gyroAngle));
+    accum2D.update(leftDistance, rightDistance, gyroAngle);
 
     SmartDashboard.putNumber("pose-position-x", accum2D.getXpos());
     SmartDashboard.putNumber("pose-position-y", accum2D.getYpos());
@@ -168,7 +168,9 @@ public class Robot extends IterativeRobot {
 //    SmartDashboard.putNumber("twist-linear-x", xvel);
 //    SmartDashboard.putNumber("twist-angular-z", thetavel);
 
-    this.odom_to_base_link = new Transform(new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, Math.toRadians(gyroAngle)));
+    this.odom_to_base_link = new Transform(
+        new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
+        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, Math.toRadians(gyroAngle)));
 
     Transform map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
 
