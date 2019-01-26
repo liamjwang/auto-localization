@@ -19,6 +19,7 @@ import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.datastructures.Transform;
 import org.team1540.localization2D.networking.UDPServer;
+import org.team1540.localization2D.rumble.RumbleForTime;
 import org.team1540.localization2D.subsystems.DriveTrain;
 import org.team1540.localization2D.utils.CameraLocalization;
 import org.team1540.localization2D.utils.LocalizationAccum2D;
@@ -155,6 +156,8 @@ public class Robot extends IterativeRobot {
 
   }
 
+  private boolean isFound = false;
+
   private void limelightLocalizationPeriodic() {
 
     double CAMERA_TILT = Math.toRadians(-40.2);
@@ -207,6 +210,10 @@ public class Robot extends IterativeRobot {
     if (debug) {System.out.println("Good limelight values!");}
     if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
       leds.set(ColorPattern.LIME);
+      if (!isFound) {
+        isFound = true;
+        new RumbleForTime(OI.driver, 1, 0.2).start();
+      }
     }
 
     Vector2D leftAngles = new Vector2D(-tx0, ty0);
@@ -249,6 +256,9 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putBoolean("limelight-pose/correct", false);
     if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
       leds.set(ColorPattern.RED);
+    }
+    if (isFound) {
+      isFound = false;
     }
   }
 
