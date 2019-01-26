@@ -94,7 +94,9 @@ public class OI {
       alignCommand.start();
     }));
     OI.autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
-      alignCommand.cancel();
+      if (alignCommand != null) {
+        alignCommand.cancel();
+      }
     }));
   }
 }
