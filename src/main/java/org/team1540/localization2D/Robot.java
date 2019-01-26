@@ -50,16 +50,7 @@ public class Robot extends IterativeRobot {
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
 
-//    SmartDashboard.putData(drivetrain);
-//    SmartDashboard.putData(PowerManager.getInstance());
-
-    Command reset = new SimpleCommand("Reset", () -> {
-        System.out.println("Reset odometry!");
-      localizationInit();
-    });
-    reset.setRunWhenDisabled(true);
-    reset.start();
-      SmartDashboard.putData(reset);
+    localizationInit();
 
       Command runTEB = new SimpleCommand("Start segment", () -> {
         new UDPVelocityTwistDrive(2, 0, 0, false).start();
