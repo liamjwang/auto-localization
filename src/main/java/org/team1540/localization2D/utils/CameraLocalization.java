@@ -13,15 +13,16 @@ public class CameraLocalization {
 
   private static double TOLERANCE = 0.0001;
 
-  private static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
-  private static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
+  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
+  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
 
   public static Vector2D anglesFromScreenSpace(Vector2D normalizedScreenPoint, double hoz_fov, double vert_fov) {
     //http://docs.limelightvision.io/en/latest/theory.html#from-pixels-to-angles
     double vpw = 2.0 * Math.tan(hoz_fov / 2);
     double vph = 2.0 * Math.tan(vert_fov / 2);
 
-    double screenSpaceX = vpw / 2.0 * -normalizedScreenPoint.getX(); // X is negated
+    double screenSpaceX = vpw / 2.0
+        * -normalizedScreenPoint.getX(); // X is negated TODO: Move this negation elsewhere
     double screenSpaceY = vph / 2.0 * normalizedScreenPoint.getY();
 
     return new Vector2D(
@@ -52,7 +53,7 @@ public class CameraLocalization {
         .intersection(line);
   }
 
-  private static Vector3D midpoint(Vector3D a, Vector3D b) {
+  public static Vector3D midpoint(Vector3D a, Vector3D b) {
     return new Vector3D(
         (a.getX() + b.getX()) / 2,
         (a.getY() + b.getY()) / 2,
@@ -60,7 +61,7 @@ public class CameraLocalization {
     );
   }
 
-  private static double angleFromVisionTargets(Vector2D left, Vector2D right) {
+  public static double angleFromVisionTargets(Vector2D left, Vector2D right) {
     Vector2D difference = left.subtract(right);
     double atan = Math.atan(difference.getY() / difference.getX())+Math.PI/2;
     if (atan > Math.PI/2) {
@@ -73,10 +74,10 @@ public class CameraLocalization {
     return new Vector2D(vec.getX(), vec.getY());
   }
 
-  public static Transform poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
+  public static Transform poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation, double hoz_fov, double vert_fov) {
 
-    Vector3D leftPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(leftAngles, LIMELIGHT_HORIZONTAL_FOV, LIMELIGHT_VERTICAL_FOV), cameraPosition, cameraRotation), planeHeight);
-    Vector3D rightPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(rightAngles, LIMELIGHT_HORIZONTAL_FOV, LIMELIGHT_VERTICAL_FOV), cameraPosition, cameraRotation), planeHeight);
+    Vector3D leftPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(leftAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+    Vector3D rightPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(rightAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
 
     return new Transform(
         midpoint(leftPoint, rightPoint),
