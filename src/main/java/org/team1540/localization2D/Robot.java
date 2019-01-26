@@ -15,7 +15,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.localization2D.autogroups.TestSequence;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
@@ -68,14 +67,6 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
-
-    double pos_x = SmartDashboard.getNumber("limelight-pose/position/x", 0);
-    double pos_y = SmartDashboard.getNumber("limelight-pose/position/y", 0);
-    double ori_z = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
-    this.goal_pose = new Transform(new Vector3D(pos_x,
-        pos_y, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, ori_z));
-    new TestSequence(pos_x, pos_y, ori_z).start();
-    // new UDPVelocityTwistDrive().start();
   }
 
   @Override
