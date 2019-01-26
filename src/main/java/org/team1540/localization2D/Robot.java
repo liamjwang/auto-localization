@@ -96,14 +96,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-    //    SmartDashboard.putData(Scheduler.getInstance());
-    NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight-a");
-    double tx0 = 27.85 * limeTable.getEntry("tx0").getDouble(0);
-    limeTable.getEntry("tx00").setDouble(tx0);
-
-    double tx1 = 27.85 * limeTable.getEntry("tx1").getDouble(0);
-    limeTable.getEntry("tx11").setDouble(tx1);
-
     Scheduler.getInstance().run();
     localizationPeriodic();
     limelightLocalizationPeriodic();
