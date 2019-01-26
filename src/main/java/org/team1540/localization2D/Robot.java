@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -55,7 +54,6 @@ public class Robot extends IterativeRobot {
     Command runTEB = new SimpleCommand("Start segment", () -> {
       new UDPVelocityTwistDrive(2, 0, 0, false).start();
     });
-    //      runTEB.start();
     SmartDashboard.putData(runTEB);
   }
 
