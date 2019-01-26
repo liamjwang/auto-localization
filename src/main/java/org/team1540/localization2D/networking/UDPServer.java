@@ -1,9 +1,14 @@
-package org.team1540.localization2D;
+package org.team1540.localization2D.networking;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import org.team1540.localization2D.Tuning;
 
 public class UDPServer implements Runnable {
 
