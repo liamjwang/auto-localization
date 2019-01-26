@@ -9,7 +9,7 @@ public class Transform {
   public Vector3D position;
   public Rotation orientation;
 
-  Transform(Vector3D position, Rotation orientation) {
+  public Transform(Vector3D position, Rotation orientation) {
     this.position = position;
     this.orientation = orientation;
   }

@@ -29,7 +29,7 @@ public class UDPServer implements Runnable {
 
   private InetAddress IPAddress = InetAddress.getByName("10.15.40.43");
 
-  UDPServer() throws SocketException, UnknownHostException {
+  public UDPServer() throws SocketException, UnknownHostException {
     t = new Thread(this);
     System.out.println("UDP Server Thread Starting");
     t.start();
