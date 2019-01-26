@@ -14,12 +14,8 @@ public class UDPInput implements Input<TankDriveData> {
 
   @Override
   public TankDriveData get() {
-    double leftSetpoint =
-        (cmdVelX - cmdVelOmega * Tuning.drivetrainRadius);
-            // * Tuning.drivetrainTicksPerMeter / 10;
-    double rightSetpoint =
-        (cmdVelX + cmdVelOmega * Tuning.drivetrainRadius);
-            // * Tuning.drivetrainTicksPerMeter / 10;
+    double leftSetpoint = (cmdVelX - cmdVelOmega * Tuning.drivetrainRadius);
+    double rightSetpoint = (cmdVelX + cmdVelOmega * Tuning.drivetrainRadius);
     return new TankDriveData(new DriveData(OptionalDouble.of(leftSetpoint)), new DriveData(OptionalDouble.of(rightSetpoint)), OptionalDouble.empty(), OptionalDouble.empty());
   }
 }
