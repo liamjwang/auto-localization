@@ -255,7 +255,7 @@ public class Robot extends IterativeRobot {
 
     double[] angles = odom_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
 
-    double off = -0.5; // TODO: do this with transforms
+    double off = -0.6; // TODO: do this with transforms
     // double off = 0;
     double x_off = odom_to_target.position.getX()+off*Math.cos(angles[2]);
     double y_off = odom_to_target.position.getY()+off*Math.sin(angles[2]);
