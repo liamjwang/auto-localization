@@ -79,8 +79,8 @@ public class OI {
     return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 
-  static JoystickButton autoAlignButton = new JoystickButton(driver, A);
-  static JoystickButton autoAlignCancelButton = new JoystickButton(driver, B);
+  static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
+  static JoystickButton autoAlignCancelButton = new JoystickButton(driver, LB);
 
   static Command alignCommand = null;
 
