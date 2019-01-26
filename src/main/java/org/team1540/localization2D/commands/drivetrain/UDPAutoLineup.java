@@ -47,8 +47,8 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
     tebConfigTable.getEntry("AccLimX").setNumber(0.7);
-    tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(8.0);
+    tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
     updateGoal();
   }
 
