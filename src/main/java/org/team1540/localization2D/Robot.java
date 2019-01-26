@@ -39,10 +39,6 @@ public class Robot extends IterativeRobot {
     }
   }
 
-  private SendableChooser<String> autoPosition;
-  private SendableChooser<Boolean> driveMode;
-
-  private Command autoCommand;
   private Transform goal_pose = Transform.ZERO;
   private Transform map_to_odom = Transform.ZERO;
   private Transform odom_to_base_link = Transform.ZERO;
