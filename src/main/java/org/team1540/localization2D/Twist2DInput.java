@@ -5,7 +5,7 @@ import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.Input;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 
-public class UDPInput implements Input<TankDriveData> {
+public class Twist2DInput implements Input<TankDriveData> {
   private double cmdVelX = 0;
   private double cmdVelOmega = 0;
 

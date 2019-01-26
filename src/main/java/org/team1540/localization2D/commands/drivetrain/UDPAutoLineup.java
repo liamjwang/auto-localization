@@ -5,11 +5,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.Robot;
 import org.team1540.localization2D.Tuning;
-import org.team1540.localization2D.UDPInput;
+import org.team1540.localization2D.Twist2DInput;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
-import org.team1540.rooster.drive.pipeline.Input;
-import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.util.Executable;
 import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
@@ -19,7 +17,7 @@ public class UDPAutoLineup extends Command {
   double yGoal = 0;
   double angleGoal = 0;
   private Executable pipeline;
-  private UDPInput udpInput;
+  private Twist2DInput twist2DInput;
 
   long finishedTime = 0;
   // boolean freeGoalVel;
@@ -28,8 +26,8 @@ public class UDPAutoLineup extends Command {
 
   public UDPAutoLineup() {
     requires(Robot.drivetrain);
-    udpInput = new UDPInput();
-    pipeline = udpInput
+    twist2DInput = new Twist2DInput();
+    pipeline = twist2DInput
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
         .then(new CTREOutput(Robot.drivetrain.driveLeftMotorA, Robot.drivetrain.driveRightMotorA, true));
@@ -87,8 +85,8 @@ public class UDPAutoLineup extends Command {
         cmdVelOmega = Robot.serv.getCmdVelTheta();
       }
 
-      udpInput.setCmdVelX(cmdVelX);
-    udpInput.setCmdVelTheta(cmdVelOmega);
+    twist2DInput.setCmdVelX(cmdVelX);
+    twist2DInput.setCmdVelTheta(cmdVelOmega);
     pipeline.execute();
     // SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
       // SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
