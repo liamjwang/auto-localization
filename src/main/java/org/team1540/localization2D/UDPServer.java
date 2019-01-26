@@ -18,13 +18,23 @@ public class UDPServer implements Runnable {
   private double cmdVelTheta = 0;
   private double timeStamp = 0;
 
-  private InetAddress IPAddress = InetAddress.getByName("10.15.40.75");
+  private double goalX = 0;
+  private double goalY = 0;
+  private double goalTheta = 0;
+
+  private InetAddress IPAddress = InetAddress.getByName("10.15.40.43");
 
   UDPServer() throws SocketException, UnknownHostException {
     t = new Thread(this);
     System.out.println("UDP Server Thread Starting");
     t.start();
     clientSocket = new DatagramSocket();
+  }
+
+  public void setGoal(double goalX, double goalY, double goalTheta) {
+    this.goalX = goalX;
+    this.goalY = goalY;
+    this.goalTheta = goalTheta;
   }
 
   @Override
@@ -50,12 +60,15 @@ public class UDPServer implements Runnable {
   }
 
   public void sendPoseAndTwist(double poseX, double poseY, double poseTheta, double twistX, double twistOmega) throws IOException {
-    byte[] data = ByteBuffer.allocate(DOUBLE_LENGTH * 5)
+    byte[] data = ByteBuffer.allocate(DOUBLE_LENGTH * 8)
         .putDouble(poseX)
         .putDouble(poseY)
         .putDouble(poseTheta)
         .putDouble(twistX)
         .putDouble(twistOmega)
+        .putDouble(goalX)
+        .putDouble(goalY)
+        .putDouble(goalTheta)
         .array();
     DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 5800);
     clientSocket.send(sendPacket);
