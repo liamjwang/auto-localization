@@ -8,7 +8,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
-public class LimelightLocalization {
+public class CameraLocalization {
 
   private static double TOLERANCE = 0.0001;
 

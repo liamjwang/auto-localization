@@ -218,7 +218,7 @@ public class Robot extends IterativeRobot {
     Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
 
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
-    Transform base_link_to_target = LimelightLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
+    Transform base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation);
 
     Transform odom_to_target = addPoses(this.odom_to_base_link, base_link_to_target);
 
