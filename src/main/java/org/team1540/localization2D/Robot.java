@@ -16,12 +16,14 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.base.power.PowerManager;
-import org.team1540.base.util.SimpleCommand;
 import org.team1540.localization2D.autogroups.TestSequence;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.subsystems.DriveTrain;
+import org.team1540.rooster.power.PowerManager;
+import org.team1540.rooster.util.SimpleCommand;
+import org.team1540.rooster.wrappers.RevBlinken;
+import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();

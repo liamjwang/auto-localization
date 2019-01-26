@@ -1,6 +1,6 @@
 package org.team1540.localization2D;
 
-import org.team1540.base.adjustables.Tunable;
+import org.team1540.rooster.adjustables.Tunable;
 
 public class Tuning {
 
