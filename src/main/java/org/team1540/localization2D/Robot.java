@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
     Scheduler.getInstance().run();
     localizationPeriodic();
     limelightLocalizationPeriodic();
+    hatchCamPeriodic();
   }
 
   @Override
@@ -249,6 +250,66 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("map-odom/position/x", map_to_odom.position.getX());
     SmartDashboard.putNumber("map-odom/position/y", map_to_odom.position.getY());
     SmartDashboard.putNumber("map-odom/orientation/z", map_to_odom.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+  }
+
+
+  private void hatchCamPeriodic() {
+    NetworkTable hatchTable = NetworkTableInstance.getDefault().getTable("hatch-cam");
+
+    Number[] centers = hatchTable.getEntry("hatch-centers").getNumberArray(new Number[0]);
+
+    if (centers.length == 0) {
+      return;
+    }
+
+    double CAMERA_TILT = Math.toRadians(-54);
+    // double CAMERA_TILT = Math.toRadians((90-54)*-1);
+    double CAMERA_ROLL = Math.toRadians(0);
+    double CAMERA_YAW = Math.toRadians(-11.42);
+
+    double hoz_fov = Math.toRadians(59.70);
+    double vert_fov = Math.toRadians(33.58);
+
+    double planeHeight = 0; // Height of vision targets in meters
+    // Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.26); // Position of camera in meters
+    Vector3D cameraPosition = new Vector3D(0.076, -0.18, 1.32); // Position of camera in meters
+
+    double screenHeight = 198;
+    double screenWidth = 320;
+
+    Vector2D topAngle = new Vector2D(0, 1);
+    Vector2D bottomAngle = new Vector2D(0, -1);
+
+    Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraYaw = new Rotation(Vector3D.PLUS_K, CAMERA_YAW, RotationConvention.FRAME_TRANSFORM);
+
+    Rotation cameraRotation = cameraYaw.applyTo(cameraTilt.applyTo(cameraRoll));
+
+    Vector3D topPoint = CameraLocalization.getIntersection(
+        CameraLocalization.lineFromScreenAngles(
+            CameraLocalization.anglesFromScreenSpace(topAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+    Vector3D bottomPoint = CameraLocalization.getIntersection(
+        CameraLocalization.lineFromScreenAngles(
+            CameraLocalization.anglesFromScreenSpace(bottomAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+
+    hatchTable.getEntry("debug/top").setNumberArray(new Number[]{topPoint.getX(), topPoint.getY(), topPoint.getZ()});
+    hatchTable.getEntry("debug/bottom").setNumberArray(new Number[]{bottomPoint.getX(), bottomPoint.getY(), topPoint.getZ()});
+
+    double distance = topPoint.distance(bottomPoint);
+
+    hatchTable.getEntry("debug/distance").setNumber(distance);
+
+    Vector3D hatchCenterPoint = new Vector3D(
+        -((double) centers[1] - screenHeight) / screenHeight * distance,
+        -((double) centers[0] - screenWidth / 2) / screenHeight * distance,
+        0);
+
+    hatchTable.getEntry("debug/center-point").setNumberArray(new Number[]{hatchCenterPoint.getX(), hatchCenterPoint.getY()});
+
+    Transform base_link_to_hatch_flat = new Transform(bottomPoint, new Rotation(Vector3D.PLUS_I, topPoint.subtract(bottomPoint)));
+
+    Transform base_link_to_hatch = addPoses(base_link_to_hatch_flat, new Transform(hatchCenterPoint, Rotation.IDENTITY));
   }
 
 
