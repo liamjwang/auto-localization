@@ -1,5 +1,7 @@
 package org.team1540.localization2D.commands.drivetrain;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -41,11 +43,12 @@ public class UDPAutoLineup extends Command {
     lastUpdate = System.currentTimeMillis();
     Robot.leds.set(ColorPattern.CHASE_BLUE);
     // SmartDashboard.putBoolean("teb-reset", true);
-    SmartDashboard.putNumber("max_vel_x", 2.0);
-    SmartDashboard.putNumber("max_vel_x_backwards", 1.5);
-    SmartDashboard.putNumber("acc_lim_x", 0.7);
-    SmartDashboard.putNumber("max_vel_theta", 6.0);
-    SmartDashboard.putNumber("acc_lim_theta", 8.0);
+    NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
+    tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
+    tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
+    tebConfigTable.getEntry("AccLimX").setNumber(0.7);
+    tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(8.0);
     updateGoal();
   }
 
