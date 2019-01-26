@@ -6,12 +6,12 @@ import org.team1540.localization2D.Robot;
 import org.team1540.localization2D.Tuning;
 
 public class UDPVelocityTwistDrive extends Command {
-    double xGoal;
-    double yGoal;
-    double angleGoal;
-    boolean freeGoalVel;
+    double xGoal = 0;
+    double yGoal = 0;
+    double angleGoal = 0;
+    boolean freeGoalVel = false;
 
-    boolean checkEnd;
+    boolean checkEnd = false;
 
   public UDPVelocityTwistDrive(double xGoal, double yGoal, double angleGoal, boolean freeGoalVel) {
       this.xGoal = xGoal;
@@ -35,6 +35,7 @@ public class UDPVelocityTwistDrive extends Command {
       SmartDashboard.putNumber("--------goal_position_y", yGoal);
       SmartDashboard.putNumber("--------goal_orientation_z", angleGoal);
       SmartDashboard.putBoolean("--------free_goal_vel", freeGoalVel);
+      Robot.serv.setGoal(xGoal, yGoal, angleGoal);
     }
         Robot.drivetrain.reset();
         Robot.drivetrain.configTalonsForVelocity();
