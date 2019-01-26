@@ -78,4 +78,23 @@ public class OI {
   public static double getTankdriveForwardsAxis() {
     return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
+
+  static JoystickButton autoAlignButton = new JoystickButton(driver, A);
+  static JoystickButton autoAlignCancelButton = new JoystickButton(driver, B);
+
+  static Command alignCommand = null;
+
+  static {
+    OI.autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
+      double pos_x = SmartDashboard.getNumber("limelight-pose/position/x", 0);
+      double pos_y = SmartDashboard.getNumber("limelight-pose/position/y", 0);
+      double ori_z = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
+      alignCommand = new UDPAutoLineup();
+      // alignCommand = new TestSequence(pos_x, pos_y, ori_z);
+      alignCommand.start();
+    }));
+    OI.autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
+      alignCommand.cancel();
+    }));
+  }
 }
