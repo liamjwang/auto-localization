@@ -29,6 +29,7 @@ public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static AHRS navx = new AHRS(Port.kMXP);
   public static UDPServer serv;
+  public static RevBlinken leds = new RevBlinken(9);
 
   static {
     try {
@@ -227,22 +228,29 @@ public class Robot extends IterativeRobot {
     double leftAndRightLimit = 0.90;
 
     if (tx0 == 0 || tx1 == 0 || ty0 == 0 || ty1 == 0) {
-      System.out.println("Ignoring limelight - highly unlikely values");
+      if (debug) { System.out.println("Ignoring limelight - highly unlikely values"); }
+      disableLimelightValues();
       return;
     }
     if (ty0 > upperLimit || ty1 > upperLimit) {
-      System.out.println("Ignoring limelight - upper limit");
+      if (debug) {System.out.println("Ignoring limelight - upper limit");}
+      disableLimelightValues();
       return;
     }
     if (ty0 < lowerLimit || ty1 < lowerLimit) {
-      System.out.println("Ignoring limelight - lower limit");
+      if (debug) {System.out.println("Ignoring limelight - lower limit");}
+      disableLimelightValues();
       return;
     }
     if (Math.abs(tx0) > leftAndRightLimit || Math.abs(tx1) > leftAndRightLimit) {
-      System.out.println("Ignoring limelight - left/right limit");
+      if (debug) {System.out.println("Ignoring limelight - left/right limit");}
+      disableLimelightValues();
       return;
     }
-    System.out.println("Good limelight values!");
+    if (debug) {System.out.println("Good limelight values!");}
+    if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
+      leds.set(ColorPattern.LIME);
+    }
 
     Vector2D leftAngles = new Vector2D(-tx0, ty0);
     Vector2D rightAngles = new Vector2D(-tx1, ty1);
@@ -275,6 +283,13 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
   }
 
+
+  private void disableLimelightValues() {
+    SmartDashboard.putBoolean("limelight-pose/correct", false);
+    if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
+      leds.set(ColorPattern.RED);
+    }
+  }
   private Transform addPoses(Transform from, Transform to) {
     return new Transform(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
   }
