@@ -190,10 +190,10 @@ public class Tuning {
   public static double drivetrainUDPTimeout = 1000;
 
   @Tunable("[Drivetrain] ticksPerMeter")
-  public static double drivetrainTicksPerMeter = 2056.97193;
+  public static double drivetrainTicksPerMeter = 2117.78;
 
   @Tunable("[Drivetrain] radius")
-  public static double drivetrainRadius = 0.312043043;
+  public static double drivetrainRadius = 0.305;
 
   @Tunable("[Drivetrain] kP")
   public static double drivetrainVelocityP = 2;
@@ -224,7 +224,7 @@ public class Tuning {
   public static double drivetrainBrakeOverrideThreshold = 0.9;
 
   //@Tunable("[Drivetrain] Ramp Rate")
-  public static double drivetrainRampRate = 0.1;
+  public static double drivetrainRampRate = 0;
 
   //@Tunable("[Drivetrain] Velocity")
   public static double drivetrainMaxVelocity = 750;
