@@ -170,7 +170,7 @@ public class Robot extends IterativeRobot {
 
     this.odom_to_base_link = new Transform(
         new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
-        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, Math.toRadians(gyroAngle)));
+        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, gyroAngle));
 
     Transform map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
 
