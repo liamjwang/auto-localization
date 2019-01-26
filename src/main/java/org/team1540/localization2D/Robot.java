@@ -88,13 +88,6 @@ public class Robot extends IterativeRobot {
   }
 
   @Override
-  public void testInit() {
-    Robot.drivetrain.reset();
-    Robot.drivetrain.configTalonsForVelocity();
-    new UDPVelocityTwistDrive(0, 0, 0, false).start();
-  }
-
-  @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
     localizationPeriodic();
@@ -111,10 +104,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-  }
-
-  @Override
-  public void testPeriodic() {
   }
 
   private static LocalizationAccum2D accum2D = new LocalizationAccum2D();
