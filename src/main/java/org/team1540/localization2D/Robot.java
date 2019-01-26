@@ -52,10 +52,10 @@ public class Robot extends IterativeRobot {
 
     localizationInit();
 
-      Command runTEB = new SimpleCommand("Start segment", () -> {
-        new UDPVelocityTwistDrive(2, 0, 0, false).start();
+    Command runTEB = new SimpleCommand("Start segment", () -> {
+      new UDPVelocityTwistDrive(2, 0, 0, false).start();
     });
-//      runTEB.start();
+    //      runTEB.start();
     SmartDashboard.putData(runTEB);
   }
 
@@ -86,7 +86,7 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.enableCurrentLimiting();
     Robot.drivetrain.configTalonsForVelocity();
     new PercentDrive().start();
-//    new VelocityDrive().start();
+    //    new VelocityDrive().start();
   }
 
   @Override
@@ -98,13 +98,13 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotPeriodic() {
-//    SmartDashboard.putData(Scheduler.getInstance());
+    //    SmartDashboard.putData(Scheduler.getInstance());
     NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight-a");
-    double tx0 = 27.85* limeTable.getEntry("tx0").getDouble(0);
+    double tx0 = 27.85 * limeTable.getEntry("tx0").getDouble(0);
     limeTable.getEntry("tx00").setDouble(tx0);
 
-      double tx1 = 27.85* limeTable.getEntry("tx1").getDouble(0);
-      limeTable.getEntry("tx11").setDouble(tx1);
+    double tx1 = 27.85 * limeTable.getEntry("tx1").getDouble(0);
+    limeTable.getEntry("tx11").setDouble(tx1);
 
     Scheduler.getInstance().run();
     localizationPeriodic();
@@ -136,8 +136,8 @@ public class Robot extends IterativeRobot {
   }
 
   private void localizationPeriodic() {
-    double leftDistance = drivetrain.getLeftPosition()/Tuning.drivetrainTicksPerMeter;
-    double rightDistance = drivetrain.getRightPosition()/Tuning.drivetrainTicksPerMeter;
+    double leftDistance = drivetrain.getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+    double rightDistance = drivetrain.getRightPosition() / Tuning.drivetrainTicksPerMeter;
     double gyroAngle = Math.toRadians(-Robot.navx.getAngle());
 
     accum2D.update(leftDistance, rightDistance, gyroAngle);
@@ -146,17 +146,17 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("pose-position-y", accum2D.getYpos());
     SmartDashboard.putNumber("pose-orientation-z", gyroAngle);
 
-    double leftVelocity = drivetrain.getLeftVelocity()*10/Tuning.drivetrainTicksPerMeter;
-    double rightVelocity = drivetrain.getRightVelocity()*10/Tuning.drivetrainTicksPerMeter;
+    double leftVelocity = drivetrain.getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    double rightVelocity = drivetrain.getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
 
     double xvel = (leftVelocity + rightVelocity) / 2;
-    double thetavel = (leftVelocity-rightVelocity)/(Tuning.drivetrainRadius)/2;
+    double thetavel = (leftVelocity - rightVelocity) / (Tuning.drivetrainRadius) / 2;
 
 
-//          SmartDashboard.putNumber("../limelight/tx00", SmartDashboard.getNumber("../limelight/tx0", 0)*26.85);
+    //          SmartDashboard.putNumber("../limelight/tx00", SmartDashboard.getNumber("../limelight/tx0", 0)*26.85);
 
-//    SmartDashboard.putNumber("twist-linear-x", xvel);
-//    SmartDashboard.putNumber("twist-angular-z", thetavel);
+    //    SmartDashboard.putNumber("twist-linear-x", xvel);
+    //    SmartDashboard.putNumber("twist-angular-z", thetavel);
 
     this.odom_to_base_link = new Transform(
         new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
@@ -168,16 +168,16 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("robot-pose/position/y", map_to_base_link.position.getY());
     SmartDashboard.putNumber("robot-pose/orientation/z", map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
     if (serv != null) {
-        try {
-            serv.sendPoseAndTwist(
-                map_to_base_link.position.getX(),
-                map_to_base_link.position.getY(),
-                map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2],
-                    xvel,
-                    thetavel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+      try {
+        serv.sendPoseAndTwist(
+            map_to_base_link.position.getX(),
+            map_to_base_link.position.getY(),
+            map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2],
+            xvel,
+            thetavel);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
 
@@ -256,8 +256,8 @@ public class Robot extends IterativeRobot {
 
     double off = -0.6; // TODO: do this with transforms
     // double off = 0;
-    double x_off = odom_to_target.position.getX()+off*Math.cos(angles[2]);
-    double y_off = odom_to_target.position.getY()+off*Math.sin(angles[2]);
+    double x_off = odom_to_target.position.getX() + off * Math.cos(angles[2]);
+    double y_off = odom_to_target.position.getY() + off * Math.sin(angles[2]);
 
     Transform limePoseWithOffset = new Transform(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
@@ -283,6 +283,7 @@ public class Robot extends IterativeRobot {
       leds.set(ColorPattern.RED);
     }
   }
+
   private Transform addPoses(Transform from, Transform to) {
     return new Transform(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
   }
@@ -291,7 +292,11 @@ public class Robot extends IterativeRobot {
     return new Transform(from.position.subtract(from.orientation.applyInverseTo(to.position)), from.orientation.applyInverseTo(to.orientation));
   }
 
-    public static double getPosX() { return accum2D.getXpos(); }
-    public static double getPosY() { return accum2D.getYpos(); }
+  public static double getPosX() {
+    return accum2D.getXpos();
+  }
 
+  public static double getPosY() {
+    return accum2D.getYpos();
+  }
 }
