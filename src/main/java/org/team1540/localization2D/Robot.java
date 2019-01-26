@@ -43,9 +43,9 @@ public class Robot extends IterativeRobot {
   private SendableChooser<Boolean> driveMode;
 
   private Command autoCommand;
-  private Transform goal_pose;
-  private Transform map_to_odom;
-  private Transform odom_to_base_link;
+  private Transform goal_pose = Transform.ZERO;
+  private Transform map_to_odom = Transform.ZERO;
+  private Transform odom_to_base_link = Transform.ZERO;
 
 
   @Override
@@ -112,7 +112,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
 //    SmartDashboard.putData(Scheduler.getInstance());
-    NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable limeTable = NetworkTableInstance.getDefault().getTable("limelight-a");
     double tx0 = 27.85* limeTable.getEntry("tx0").getDouble(0);
     limeTable.getEntry("tx00").setDouble(tx0);
 
@@ -177,15 +177,15 @@ public class Robot extends IterativeRobot {
 
     Transform map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
 
-    SmartDashboard.putNumber("robot-pose/position/x", odom_to_base_link.position.getX());
-    SmartDashboard.putNumber("robot-pose/position/y", odom_to_base_link.position.getY());
-    SmartDashboard.putNumber("robot-pose/orientation/z", odom_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+    SmartDashboard.putNumber("robot-pose/position/x", map_to_base_link.position.getX());
+    SmartDashboard.putNumber("robot-pose/position/y", map_to_base_link.position.getY());
+    SmartDashboard.putNumber("robot-pose/orientation/z", map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
     if (serv != null) {
         try {
             serv.sendPoseAndTwist(
-                    accum2D.getXpos(),
-                    accum2D.getYpos(),
-                    gyroAngle,
+                map_to_base_link.position.getX(),
+                map_to_base_link.position.getY(),
+                map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2],
                     xvel,
                     thetavel);
         } catch (IOException e) {
@@ -209,7 +209,7 @@ public class Robot extends IterativeRobot {
     Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
 
 
-    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-a");
 
     // TODO: Filter limelight contours using size, angle, etc.
     double tx0 = limelightTable.getEntry("tx0").getDouble(100);
@@ -224,8 +224,10 @@ public class Robot extends IterativeRobot {
     }
 
     double upperLimit = 0.86;
-    double lowerLimit = -0.61;
+    double lowerLimit = -0.65;
     double leftAndRightLimit = 0.90;
+
+    boolean debug = false;
 
     if (tx0 == 0 || tx1 == 0 || ty0 == 0 || ty1 == 0) {
       if (debug) { System.out.println("Ignoring limelight - highly unlikely values"); }
@@ -272,15 +274,19 @@ public class Robot extends IterativeRobot {
 
     Transform limePoseWithOffset = new Transform(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
-    this.map_to_odom = subtractPoses(this.goal_pose, limePoseWithOffset);
 
     SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.position.getX());
-    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.position.getZ());
+    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.position.getY());
     SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+    SmartDashboard.putBoolean("limelight-pose/correct", true);
 
     SmartDashboard.putNumber("limelight-pose/position/x_og", base_link_to_target.position.getX());
     SmartDashboard.putNumber("limelight-pose/position/y_og", base_link_to_target.position.getY());
     SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+
+    SmartDashboard.putNumber("map-odom/position/x", map_to_odom.position.getX());
+    SmartDashboard.putNumber("map-odom/position/y", map_to_odom.position.getY());
+    SmartDashboard.putNumber("map-odom/orientation/z", map_to_odom.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
   }
 
 
@@ -295,7 +301,7 @@ public class Robot extends IterativeRobot {
   }
 
   private Transform subtractPoses(Transform from, Transform to) {
-    return new Transform(from.position.subtract(from.orientation.applyTo(to.position)), from.orientation.applyInverseTo(to.orientation));
+    return new Transform(from.position.subtract(from.orientation.applyInverseTo(to.position)), from.orientation.applyInverseTo(to.orientation));
   }
 
     public static double getPosX() { return accum2D.getXpos(); }
