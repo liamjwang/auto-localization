@@ -11,11 +11,11 @@ import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 
 public class DriveTrain extends Subsystem {
 
-  private ChickenTalon driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
+  public ChickenTalon driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
   private ChickenTalon driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
   private ChickenTalon driveLeftMotorC = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
   private ChickenTalon[] driveLeftMotors = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
-  private ChickenTalon driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
+  public ChickenTalon driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
   private ChickenTalon driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
   private ChickenTalon driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
   private ChickenTalon[] driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
@@ -99,7 +99,7 @@ public class DriveTrain extends Subsystem {
       talon.config_kP(0, Tuning.drivetrainVelocityP);
       talon.config_kI(0, Tuning.drivetrainVelocityI);
       talon.config_kD(0, Tuning.drivetrainVelocityD);
-      talon.config_kF(0, Tuning.drivetrainVelocityF);
+      talon.config_kF(0, 0);
       talon.config_IntegralZone(0, Tuning.drivetrainVelocityIZone);
     }
   }
