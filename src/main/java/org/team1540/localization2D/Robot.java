@@ -126,12 +126,6 @@ public class Robot extends IterativeRobot {
     double xvel = (leftVelocity + rightVelocity) / 2;
     double thetavel = (leftVelocity - rightVelocity) / (Tuning.drivetrainRadius) / 2;
 
-
-    //          SmartDashboard.putNumber("../limelight/tx00", SmartDashboard.getNumber("../limelight/tx0", 0)*26.85);
-
-    //    SmartDashboard.putNumber("twist-linear-x", xvel);
-    //    SmartDashboard.putNumber("twist-angular-z", thetavel);
-
     this.odom_to_base_link = new Transform(
         new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
         new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, gyroAngle));
