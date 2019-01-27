@@ -1,4 +1,4 @@
-package org.team1540.localization2D.datastructures;
+package org.team1540.localization2D.datastructures.twod;
 
 /**
  *  2D pose data structure class

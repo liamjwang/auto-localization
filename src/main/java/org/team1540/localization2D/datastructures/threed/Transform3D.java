@@ -1,4 +1,4 @@
-package org.team1540.localization2D.datastructures;
+package org.team1540.localization2D.datastructures.threed;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
