@@ -22,7 +22,7 @@ import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDri
 import org.team1540.localization2D.robot.rumble.RumbleForTime;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.utils.CameraLocalization;
-import org.team1540.localization2D.utils.LocalizationAccum2D;
+import org.team1540.localization2D.utils.TankDriveOdometryAccumulator;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.RevBlinken;
@@ -103,11 +103,11 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
   }
 
-  private static LocalizationAccum2D accum2D = new LocalizationAccum2D();
+  private static TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
 
   private void localizationInit() {
     Robot.navx.zeroYaw();
-    accum2D.reset();
+    odometryAccumulator = new TankDriveOdometryAccumulator();
     Robot.drivetrain.zeroEncoders();
   }
 
@@ -116,10 +116,11 @@ public class Robot extends IterativeRobot {
     double rightDistance = drivetrain.getRightPosition() / Tuning.drivetrainTicksPerMeter;
     double gyroAngle = Math.toRadians(-Robot.navx.getAngle());
 
-    accum2D.update(leftDistance, rightDistance, gyroAngle);
+    odometryAccumulator.update(leftDistance, rightDistance, gyroAngle);
+    Transform3D odomToBaseLink = odometryAccumulator.getTransform();
 
-    SmartDashboard.putNumber("pose-position-x", accum2D.getXpos());
-    SmartDashboard.putNumber("pose-position-y", accum2D.getYpos());
+    SmartDashboard.putNumber("pose-position-x", odomToBaseLink.position.getX());
+    SmartDashboard.putNumber("pose-position-y", odomToBaseLink.position.getY());
     SmartDashboard.putNumber("pose-orientation-z", gyroAngle);
 
     double leftVelocity = drivetrain.getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
@@ -129,10 +130,10 @@ public class Robot extends IterativeRobot {
     double thetavel = (leftVelocity - rightVelocity) / (Tuning.drivetrainRadius) / 2;
 
     this.odom_to_base_link = new Transform3D(
-        new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
+        new Vector3D(odomToBaseLink.position.getX(), odomToBaseLink.position.getY(), 0),
         new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, gyroAngle));
 
-    Transform3D map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
+    Transform3D map_to_base_link = this.map_to_odom.add(this.odom_to_base_link);
 
     SmartDashboard.putNumber("robot-pose/position/x", map_to_base_link.position.getX());
     SmartDashboard.putNumber("robot-pose/position/y", map_to_base_link.position.getY());
@@ -149,12 +150,6 @@ public class Robot extends IterativeRobot {
         e.printStackTrace();
       }
     }
-
-
-    // SmartDashboard.putNumber("Left Distance", leftDistance);
-    // SmartDashboard.putNumber("Right Distance", rightDistance);
-
-
   }
 
   private boolean isFound = false;
@@ -226,7 +221,7 @@ public class Robot extends IterativeRobot {
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
     Transform3D base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
 
-    Transform3D odom_to_target = addPoses(this.odom_to_base_link, base_link_to_target);
+    Transform3D odom_to_target = this.odom_to_base_link.add(base_link_to_target);
 
     double[] angles = odom_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
 
@@ -309,7 +304,7 @@ public class Robot extends IterativeRobot {
 
     Transform3D base_link_to_hatch_flat = new Transform3D(bottomPoint, new Rotation(Vector3D.PLUS_I, topPoint.subtract(bottomPoint)));
 
-    Transform3D base_link_to_hatch = addPoses(base_link_to_hatch_flat, new Transform3D(hatchCenterPoint, Rotation.IDENTITY));
+    Transform3D base_link_to_hatch = base_link_to_hatch_flat.add(new Transform3D(hatchCenterPoint, Rotation.IDENTITY));
   }
 
 
@@ -321,21 +316,5 @@ public class Robot extends IterativeRobot {
     if (isFound) {
       isFound = false;
     }
-  }
-
-  private Transform3D addPoses(Transform3D from, Transform3D to) {
-    return new Transform3D(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
-  }
-
-  private Transform3D subtractPoses(Transform3D from, Transform3D to) {
-    return new Transform3D(from.position.subtract(from.orientation.applyInverseTo(to.position)), from.orientation.applyInverseTo(to.orientation));
-  }
-
-  public static double getPosX() {
-    return accum2D.getXpos();
-  }
-
-  public static double getPosY() {
-    return accum2D.getYpos();
   }
 }
