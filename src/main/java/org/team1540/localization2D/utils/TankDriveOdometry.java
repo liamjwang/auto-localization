@@ -3,15 +3,14 @@ package org.team1540.localization2D.utils;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 
 public class TankDriveOdometry {
-  public static Transform3D calcDeltaPoseFromTankDriveDistances(double deltaDistanceLeft, double deltaDistanceRight, double deltaAngle) {
+  public static Transform3D calcDeltaTransformFromTankDriveDistances(double deltaDistanceLeft, double deltaDistanceRight, double deltaAngle) {
     double deltaX;
     double deltaY;
 
-    if (deltaAngle == 0) { // If the robot has not turned,
-      deltaX = (deltaDistanceLeft + deltaDistanceRight)
-          / 2; // The pose x has changed by the average of the wheel distances
-      deltaY = 0; // And there was no change in Y
-    } else {
+    if (deltaAngle == 0) { // If the robot has not turned, it has only moved in the X direction
+      deltaX = (deltaDistanceLeft + deltaDistanceRight) / 2;
+      deltaY = 0;
+    } else { // Otherwise, calculate the radius of the turn and calculate the delta position
       double radiusFromLeftArc = TrigUtils.radiusFromArcAndAngle(deltaDistanceLeft, deltaAngle);
       double radiusFromRightArc = TrigUtils.radiusFromArcAndAngle(deltaDistanceRight, deltaAngle);
 
