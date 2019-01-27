@@ -6,9 +6,9 @@ package org.team1540.localization2D.datastructures.twod;
 public class Twist2D {
   public static final Twist2D ZERO = new Twist2D(0, 0, 0);
 
-  public double x = 0;
-  public double y = 0;
-  public double omega = 0;
+  private final double x;
+  private final double y;
+  private final double omega;
 
   /**
    * @param x Linear velocity in X direction in meters per second
@@ -19,5 +19,17 @@ public class Twist2D {
     this.x = x;
     this.y = y;
     this.omega = omega;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  public double getOmega() {
+    return omega;
   }
 }
