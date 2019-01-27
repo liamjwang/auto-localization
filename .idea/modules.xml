@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.iml" filepath="$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.test.iml" filepath="$PROJECT_DIR$/.idea/modules/org.team1540.localization2D.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D_main.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D_main.iml" group="localization2D" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/localization2D_test.iml" filepath="$PROJECT_DIR$/.idea/modules/localization2D_test.iml" group="localization2D" />
     </modules>
   </component>
 </project>

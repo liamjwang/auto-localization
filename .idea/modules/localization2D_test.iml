@@ -6,7 +6,7 @@
     <content url="file://$MODULE_DIR$/../../src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="org.team1540.localization2D.main" />
+    <orderEntry type="module" module-name="localization2D_main" />
     <orderEntry type="library" name="Gradle: org.team1540:rooster:0.14.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpilibj:wpilibj-java:2018.4.1" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.ntcore:ntcore-java:4.1.0" level="project" />
@@ -34,5 +34,5 @@
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.0" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="org.team1540.localization2D.main" />
+  <component name="TestModuleProperties" production-module="localization2D_main" />
 </module>
