@@ -6,21 +6,21 @@ import static java.lang.Math.sin;
 
 import com.google.common.collect.EvictingQueue;
 import java.util.Queue;
-import org.team1540.localization2D.datastructures.twod.Pose2D;
+import org.team1540.localization2D.datastructures.twod.Transform2D;
 
-public class PoseSE2RollingAverage {
+public class Transform2DRollingAverage {
 
-  private Queue<Pose2D> poseQueue;
+  private Queue<Transform2D> poseQueue;
 
-  public PoseSE2RollingAverage(int numElements) {
+  public Transform2DRollingAverage(int numElements) {
     this.poseQueue = EvictingQueue.create(numElements);
   }
 
-  public void addPose(Pose2D pose) {
+  public void addPose(Transform2D pose) {
     poseQueue.add(pose);
   }
 
-  public Pose2D getAverage() {
+  public Transform2D getAverage() {
     int listSize = poseQueue.size();
     if (listSize == 0) {
       return null;
@@ -29,13 +29,13 @@ public class PoseSE2RollingAverage {
     double sumY = 0;
     double sumSin = 0;
     double sumCos = 0;
-    for (Pose2D pose : poseQueue) {
+    for (Transform2D pose : poseQueue) {
       sumX += pose.getX();
       sumY += pose.getY();
       sumSin += sin(pose.getTheta());
       sumCos += cos(pose.getTheta());
     }
-    return new Pose2D(
+    return new Transform2D(
         sumX / listSize, sumY / listSize, atan2(sumSin / listSize, sumCos / listSize));
   }
 }
