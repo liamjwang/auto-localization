@@ -6,7 +6,7 @@ import static java.lang.Math.sin;
 
 import com.google.common.collect.EvictingQueue;
 import java.util.Queue;
-import org.team1540.localization2D.datastructures.Pose2D;
+import org.team1540.localization2D.datastructures.twod.Pose2D;
 
 public class PoseSE2RollingAverage {
 
@@ -30,10 +30,10 @@ public class PoseSE2RollingAverage {
     double sumSin = 0;
     double sumCos = 0;
     for (Pose2D pose : poseQueue) {
-      sumX += pose.x;
-      sumY += pose.y;
-      sumSin += sin(pose.theta);
-      sumCos += cos(pose.theta);
+      sumX += pose.getX();
+      sumY += pose.getY();
+      sumSin += sin(pose.getTheta());
+      sumCos += cos(pose.getTheta());
     }
     return new Pose2D(
         sumX / listSize, sumY / listSize, atan2(sumSin / listSize, sumCos / listSize));

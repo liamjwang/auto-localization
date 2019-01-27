@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.Robot;
+import org.team1540.localization2D.TankDriveTwist2DInput;
 import org.team1540.localization2D.Tuning;
-import org.team1540.localization2D.Twist2DInput;
+import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
@@ -19,7 +20,7 @@ public class UDPAutoLineup extends Command {
   double yGoal = 0;
   double angleGoal = 0;
   private Executable pipeline;
-  private Twist2DInput twist2DInput;
+  private TankDriveTwist2DInput twist2DInput;
 
   long finishedTime = 0;
   // boolean freeGoalVel;
@@ -28,7 +29,7 @@ public class UDPAutoLineup extends Command {
 
   public UDPAutoLineup() {
     requires(Robot.drivetrain);
-    twist2DInput = new Twist2DInput();
+    twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
     pipeline = twist2DInput
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
@@ -88,8 +89,7 @@ public class UDPAutoLineup extends Command {
         cmdVelOmega = Robot.serv.getCmdVelTheta();
       }
 
-    twist2DInput.setCmdVelX(cmdVelX);
-    twist2DInput.setCmdVelTheta(cmdVelOmega);
+    twist2DInput.setTwist(new Twist2D(cmdVelX, 0, cmdVelOmega));
     pipeline.execute();
     // SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
       // SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
