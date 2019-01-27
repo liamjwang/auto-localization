@@ -3,7 +3,7 @@ package org.team1540.localization2D.datastructures.twod;
 /**
  *  2D pose data structure class
  */
-public class Pose2D {
+public class Pose2D { // TODO: Replace this with Transform2D
   public static final Pose2D ZERO = new Pose2D(0, 0, 0);
 
   private final double x;
