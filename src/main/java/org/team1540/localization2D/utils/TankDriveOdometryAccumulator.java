@@ -26,7 +26,7 @@ public class TankDriveOdometryAccumulator {
 
     Transform3D deltaDistance = TankDriveOdometry.calcDeltaTransformFromTankDriveDistances(deltaDistanceLeft, deltaDistanceRight, deltaRads);
 
-    odomToBaseLink = odomToBaseLink.add(deltaDistance);
+    odomToBaseLink = odomToBaseLink.add(deltaDistance); // TODO: Should the absolute angle replace the calculated one?
   }
 
   public Transform3D getTransform() {
