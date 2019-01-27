@@ -1,6 +1,8 @@
 package org.team1540.localization2D.datastructures.threed;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class Transform3D {
@@ -12,5 +14,26 @@ public class Transform3D {
   public Transform3D(Vector3D position, Rotation orientation) {
     this.position = position;
     this.orientation = orientation;
+  }
+
+  public Transform3D(Vector3D position) {
+    this(position, Rotation.IDENTITY);
+  }
+
+  public Transform3D(Rotation rotation) {
+    this(Vector3D.ZERO, rotation);
+  }
+
+  public Transform3D(double x, double y, double theta) {
+    this.position = new Vector3D(x, y, 0);
+    this.orientation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, theta);
+  }
+
+  public Transform3D add(Transform3D other) {
+    return new Transform3D(this.orientation.applyInverseTo(other.position).add(this.position), this.orientation.applyTo(other.orientation));
+  }
+
+  public Transform3D subtract(Transform3D other) {
+    return new Transform3D(this.position.subtract(this.orientation.applyInverseTo(other.position)), this.orientation.applyInverseTo(other.orientation));
   }
 }
