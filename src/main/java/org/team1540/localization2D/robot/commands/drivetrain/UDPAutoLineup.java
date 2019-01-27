@@ -1,14 +1,14 @@
-package org.team1540.localization2D.commands.drivetrain;
+package org.team1540.localization2D.robot.commands.drivetrain;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.localization2D.Robot;
-import org.team1540.localization2D.TankDriveTwist2DInput;
-import org.team1540.localization2D.Tuning;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
+import org.team1540.localization2D.robot.Robot;
+import org.team1540.localization2D.robot.TankDriveTwist2DInput;
+import org.team1540.localization2D.robot.Tuning;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;

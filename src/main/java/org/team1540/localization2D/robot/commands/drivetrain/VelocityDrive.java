@@ -1,10 +1,10 @@
-package org.team1540.localization2D.commands.drivetrain;
+package org.team1540.localization2D.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.localization2D.OI;
-import org.team1540.localization2D.Robot;
-import org.team1540.localization2D.Tuning;
+import org.team1540.localization2D.robot.OI;
+import org.team1540.localization2D.robot.Robot;
+import org.team1540.localization2D.robot.Tuning;
 
 public class VelocityDrive extends Command {
   public VelocityDrive() {

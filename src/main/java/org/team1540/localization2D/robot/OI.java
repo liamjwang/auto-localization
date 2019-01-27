@@ -1,10 +1,10 @@
-package org.team1540.localization2D;
+package org.team1540.localization2D.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.localization2D.commands.drivetrain.UDPAutoLineup;
+import org.team1540.localization2D.robot.commands.drivetrain.UDPAutoLineup;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.util.SimpleCommand;
 

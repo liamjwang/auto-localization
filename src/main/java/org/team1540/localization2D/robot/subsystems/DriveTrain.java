@@ -1,13 +1,13 @@
-package org.team1540.localization2D.subsystems;
+package org.team1540.localization2D.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.localization2D.robot.RobotMap;
+import org.team1540.localization2D.robot.Tuning;
+import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
 import org.team1540.rooster.wrappers.ChickenTalon;
-import org.team1540.localization2D.RobotMap;
-import org.team1540.localization2D.Tuning;
-import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 
 public class DriveTrain extends Subsystem {
 

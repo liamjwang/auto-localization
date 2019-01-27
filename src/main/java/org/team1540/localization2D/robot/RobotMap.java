@@ -1,4 +1,4 @@
-package org.team1540.localization2D;
+package org.team1540.localization2D.robot;
 
 public class RobotMap {
 

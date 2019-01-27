@@ -8,7 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import org.team1540.localization2D.Tuning;
+import org.team1540.localization2D.robot.Tuning;
 
 public class UDPServer implements Runnable {
 

@@ -1,9 +1,8 @@
-package org.team1540.localization2D.autogroups;
+package org.team1540.localization2D.robot.autogroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
+import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 
 public class TestSequence extends CommandGroup {
     public TestSequence(double pos_x, double pos_y, double ori_z) {

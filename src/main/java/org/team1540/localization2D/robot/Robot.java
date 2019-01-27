@@ -1,4 +1,4 @@
-package org.team1540.localization2D;
+package org.team1540.localization2D.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
@@ -15,12 +15,12 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.localization2D.commands.drivetrain.PercentDrive;
-import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPServer;
-import org.team1540.localization2D.rumble.RumbleForTime;
-import org.team1540.localization2D.subsystems.DriveTrain;
+import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
+import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
+import org.team1540.localization2D.robot.rumble.RumbleForTime;
+import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.utils.CameraLocalization;
 import org.team1540.localization2D.utils.LocalizationAccum2D;
 import org.team1540.rooster.power.PowerManager;

@@ -1,4 +1,4 @@
-package org.team1540.localization2D.rumble;
+package org.team1540.localization2D.robot.rumble;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.CommandGroup;

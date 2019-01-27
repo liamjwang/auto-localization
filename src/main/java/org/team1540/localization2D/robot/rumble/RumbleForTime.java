@@ -1,4 +1,4 @@
-package org.team1540.localization2D.rumble;
+package org.team1540.localization2D.robot.rumble;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
