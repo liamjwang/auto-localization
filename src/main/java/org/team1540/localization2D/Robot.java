@@ -17,7 +17,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.commands.drivetrain.UDPVelocityTwistDrive;
-import org.team1540.localization2D.datastructures.Transform;
+import org.team1540.localization2D.datastructures.Transform3D;
 import org.team1540.localization2D.networking.UDPServer;
 import org.team1540.localization2D.rumble.RumbleForTime;
 import org.team1540.localization2D.subsystems.DriveTrain;
@@ -42,9 +42,9 @@ public class Robot extends IterativeRobot {
     }
   }
 
-  private Transform goal_pose = Transform.ZERO;
-  private Transform map_to_odom = Transform.ZERO;
-  private Transform odom_to_base_link = Transform.ZERO;
+  private Transform3D goal_pose = Transform3D.ZERO;
+  private Transform3D map_to_odom = Transform3D.ZERO;
+  private Transform3D odom_to_base_link = Transform3D.ZERO;
 
 
   @Override
@@ -128,11 +128,11 @@ public class Robot extends IterativeRobot {
     double xvel = (leftVelocity + rightVelocity) / 2;
     double thetavel = (leftVelocity - rightVelocity) / (Tuning.drivetrainRadius) / 2;
 
-    this.odom_to_base_link = new Transform(
+    this.odom_to_base_link = new Transform3D(
         new Vector3D(accum2D.getXpos(), accum2D.getYpos(), 0),
         new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, gyroAngle));
 
-    Transform map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
+    Transform3D map_to_base_link = addPoses(this.map_to_odom, this.odom_to_base_link);
 
     SmartDashboard.putNumber("robot-pose/position/x", map_to_base_link.position.getX());
     SmartDashboard.putNumber("robot-pose/position/y", map_to_base_link.position.getY());
@@ -224,9 +224,9 @@ public class Robot extends IterativeRobot {
     Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
 
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
-    Transform base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, CameraLocalization.LIMELIGHT_HORIZONTAL_FOV, CameraLocalization.LIMELIGHT_VERTICAL_FOV);
+    Transform3D base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
 
-    Transform odom_to_target = addPoses(this.odom_to_base_link, base_link_to_target);
+    Transform3D odom_to_target = addPoses(this.odom_to_base_link, base_link_to_target);
 
     double[] angles = odom_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
 
@@ -235,7 +235,7 @@ public class Robot extends IterativeRobot {
     double x_off = odom_to_target.position.getX() + off * Math.cos(angles[2]);
     double y_off = odom_to_target.position.getY() + off * Math.sin(angles[2]);
 
-    Transform limePoseWithOffset = new Transform(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
+    Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
 
     SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.position.getX());
@@ -307,9 +307,9 @@ public class Robot extends IterativeRobot {
 
     hatchTable.getEntry("debug/center-point").setNumberArray(new Number[]{hatchCenterPoint.getX(), hatchCenterPoint.getY()});
 
-    Transform base_link_to_hatch_flat = new Transform(bottomPoint, new Rotation(Vector3D.PLUS_I, topPoint.subtract(bottomPoint)));
+    Transform3D base_link_to_hatch_flat = new Transform3D(bottomPoint, new Rotation(Vector3D.PLUS_I, topPoint.subtract(bottomPoint)));
 
-    Transform base_link_to_hatch = addPoses(base_link_to_hatch_flat, new Transform(hatchCenterPoint, Rotation.IDENTITY));
+    Transform3D base_link_to_hatch = addPoses(base_link_to_hatch_flat, new Transform3D(hatchCenterPoint, Rotation.IDENTITY));
   }
 
 
@@ -323,12 +323,12 @@ public class Robot extends IterativeRobot {
     }
   }
 
-  private Transform addPoses(Transform from, Transform to) {
-    return new Transform(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
+  private Transform3D addPoses(Transform3D from, Transform3D to) {
+    return new Transform3D(from.orientation.applyInverseTo(to.position).add(from.position), from.orientation.applyTo(to.orientation));
   }
 
-  private Transform subtractPoses(Transform from, Transform to) {
-    return new Transform(from.position.subtract(from.orientation.applyInverseTo(to.position)), from.orientation.applyInverseTo(to.orientation));
+  private Transform3D subtractPoses(Transform3D from, Transform3D to) {
+    return new Transform3D(from.position.subtract(from.orientation.applyInverseTo(to.position)), from.orientation.applyInverseTo(to.orientation));
   }
 
   public static double getPosX() {

@@ -7,14 +7,11 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.localization2D.datastructures.Transform;
+import org.team1540.localization2D.datastructures.Transform3D;
 
 public class CameraLocalization {
 
-  private static double TOLERANCE = 0.0001;
-
-  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
-  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
+  private static double CM_TOLERANCE = 0.0001;
 
   public static Vector2D anglesFromScreenSpace(Vector2D normalizedScreenPoint, double hoz_fov, double vert_fov) {
     //http://docs.limelightvision.io/en/latest/theory.html#from-pixels-to-angles
@@ -45,11 +42,11 @@ public class CameraLocalization {
 
     Vector3D pixelVectorRotated = cameraRotation.applyTo(pixelVector);
 
-    return new Line(cameraPosition, cameraPosition.add(pixelVectorRotated), TOLERANCE);
+    return new Line(cameraPosition, cameraPosition.add(pixelVectorRotated), CM_TOLERANCE);
   }
 
   public static Vector3D getIntersection(Line line, double height) {
-    return new Plane(Vector3D.PLUS_K.scalarMultiply(height), Vector3D.PLUS_K, TOLERANCE)
+    return new Plane(Vector3D.PLUS_K.scalarMultiply(height), Vector3D.PLUS_K, CM_TOLERANCE)
         .intersection(line);
   }
 
@@ -74,12 +71,12 @@ public class CameraLocalization {
     return new Vector2D(vec.getX(), vec.getY());
   }
 
-  public static Transform poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation, double hoz_fov, double vert_fov) {
+  public static Transform3D poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation, double hoz_fov, double vert_fov) {
 
     Vector3D leftPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(leftAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
     Vector3D rightPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(rightAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
 
-    return new Transform(
+    return new Transform3D(
         midpoint(leftPoint, rightPoint),
         new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
             xyFromVector3D(leftPoint),
