@@ -37,7 +37,7 @@ def TEAM = 1540
 //def ROBOT_CLASS = "org.team1540.localization2D.testing.ElevatorTuningRobot"
 //def ROBOT_CLASS = "org.team1540.localization2D.testing.SpinnyTestRobot"
 //def ROBOT_CLASS = "org.team1540.localization2D.testing.RobotMotorTest"
-def ROBOT_CLASS = "org.team1540.localization2D.Robot"
+def ROBOT_CLASS = "org.team1540.localization2D.robot.Robot"
 
 //task generateProfiles(type:Exec) {
 //    workingDir 'profiles'
