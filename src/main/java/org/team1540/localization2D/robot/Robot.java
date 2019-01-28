@@ -53,12 +53,38 @@ public class Robot extends IterativeRobot {
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
 
-    localizationInit();
+    Robot.navx.zeroYaw();
+    Robot.drivetrain.zeroEncoders();
 
-    Command runTEB = new SimpleCommand("Start segment", () -> {
-      new UDPVelocityTwistDrive(2, 0, 0, false).start();
+    odometry = new OdometryRunnable(
+        drivetrain::getLeftPositionMeters,
+        drivetrain::getRightPositionMeters,
+        () -> Math.toRadians(-Robot.navx.getAngle())
+    );
+
+    udpReceiver = new UDPTwistReceiver(5801, () -> {
+      new Notifier(udpReceiver::attemptConnection).startSingle(1);
     });
-    SmartDashboard.putData(runTEB);
+
+    udpSender = new UDPOdometryGoalSender("10.15.40.43", 5800, () -> {
+      new Notifier(udpSender::attemptConnection).startSingle(1);
+    });
+
+    new Notifier(() -> {
+      odometry.run();
+      udpSender.setOdometry(new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()));
+      try {
+        udpSender.sendIt();
+      } catch (IOException e) {
+        DriverStation.reportWarning("Unable to send Odometry packet!", false);
+      }
+    }).startPeriodic(0.01);
+
+    // Testing code
+    Command testTEB = new SimpleCommand("Test TEB", () -> {
+      new UDPVelocityTwistDrive().start();
+    });
+    SmartDashboard.putData(testTEB);
   }
 
   @Override
