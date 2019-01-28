@@ -1,4 +1,4 @@
-package org.team1540.localization2D.notifiers;
+package org.team1540.localization2D.runnables;
 
 import java.util.function.DoubleSupplier;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
@@ -7,7 +7,7 @@ import org.team1540.localization2D.utils.TankDriveOdometryAccumulator;
 /**
  * Runnable wrapper class for the TankDriveOdometryAccumulator
  */
-public class OdometryRunnable implements Runnable {
+public class TankDriveOdometryRunnable implements Runnable {
 
   private TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
 
@@ -22,7 +22,7 @@ public class OdometryRunnable implements Runnable {
    * @param rightPosSupplier Supplier for right tank drive position in meters
    * @param angleSupplier Supplier for continuous angle measurement in radians // TODO: This should not require angles to be continuous
    */
-  public OdometryRunnable(
+  public TankDriveOdometryRunnable(
       DoubleSupplier leftPosSupplier,
       DoubleSupplier rightPosSupplier,
       DoubleSupplier angleSupplier) {
