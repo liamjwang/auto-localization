@@ -17,14 +17,16 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
-import org.team1540.localization2D.networking.UDPServer;
+import org.team1540.localization2D.networking.UDPOdometryGoalSender;
+import org.team1540.localization2D.networking.UDPTwistReceiver;
+import org.team1540.localization2D.notifiers.OdometryRunnable;
 import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.rumble.RumbleForTime;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.utils.CameraLocalization;
-import org.team1540.localization2D.utils.TankDriveOdometryAccumulator;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.RevBlinken;
@@ -33,21 +35,16 @@ import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
   public static AHRS navx = new AHRS(Port.kMXP);
-  public static UDPServer serv;
   public static RevBlinken leds = new RevBlinken(9);
 
-  static {
-    try {
-      serv = new UDPServer();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  private static Transform3D goal_pose = Transform3D.IDENTITY;
+  private static Transform3D map_to_odom = Transform3D.IDENTITY;
+  private static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
-  private Transform3D goal_pose = Transform3D.ZERO;
-  private Transform3D map_to_odom = Transform3D.ZERO;
-  private Transform3D odom_to_base_link = Transform3D.ZERO;
+  public static OdometryRunnable odometry;
 
+  public static UDPOdometryGoalSender udpSender;
+  public static UDPTwistReceiver udpReceiver;
 
   @Override
   public void robotInit() {
@@ -114,7 +111,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    localizationPeriodic();
     limelightLocalizationPeriodic();
     hatchCamPeriodic();
   }
@@ -129,55 +125,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-  }
-
-  private static TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
-
-  private void localizationInit() {
-    Robot.navx.zeroYaw();
-    odometryAccumulator = new TankDriveOdometryAccumulator();
-    Robot.drivetrain.zeroEncoders();
-  }
-
-  private void localizationPeriodic() {
-    double leftDistance = drivetrain.getLeftPosition() / Tuning.drivetrainTicksPerMeter;
-    double rightDistance = drivetrain.getRightPosition() / Tuning.drivetrainTicksPerMeter;
-    double gyroAngle = Math.toRadians(-Robot.navx.getAngle());
-
-    odometryAccumulator.update(leftDistance, rightDistance, gyroAngle);
-    Transform3D odomToBaseLink = odometryAccumulator.getTransform();
-
-    SmartDashboard.putNumber("pose-position-x", odomToBaseLink.position.getX());
-    SmartDashboard.putNumber("pose-position-y", odomToBaseLink.position.getY());
-    SmartDashboard.putNumber("pose-orientation-z", gyroAngle);
-
-    double leftVelocity = drivetrain.getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
-    double rightVelocity = drivetrain.getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
-
-    double xvel = (leftVelocity + rightVelocity) / 2;
-    double thetavel = (leftVelocity - rightVelocity) / (Tuning.drivetrainRadius) / 2;
-
-    this.odom_to_base_link = new Transform3D(
-        new Vector3D(odomToBaseLink.position.getX(), odomToBaseLink.position.getY(), 0),
-        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, gyroAngle));
-
-    Transform3D map_to_base_link = this.map_to_odom.add(this.odom_to_base_link);
-
-    SmartDashboard.putNumber("robot-pose/position/x", map_to_base_link.position.getX());
-    SmartDashboard.putNumber("robot-pose/position/y", map_to_base_link.position.getY());
-    SmartDashboard.putNumber("robot-pose/orientation/z", map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
-    if (serv != null) {
-      try {
-        serv.sendPoseAndTwist(
-            map_to_base_link.position.getX(),
-            map_to_base_link.position.getY(),
-            map_to_base_link.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2],
-            xvel,
-            thetavel);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
   }
 
   private boolean isFound = false;
@@ -251,28 +198,28 @@ public class Robot extends IterativeRobot {
 
     Transform3D odom_to_target = this.odom_to_base_link.add(base_link_to_target);
 
-    double[] angles = odom_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
+    double[] angles = odom_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
 
     double off = -0.6; // TODO: do this with transforms
     // double off = 0;
-    double x_off = odom_to_target.position.getX() + off * Math.cos(angles[2]);
-    double y_off = odom_to_target.position.getY() + off * Math.sin(angles[2]);
+    double x_off = odom_to_target.getPosition().getX() + off * Math.cos(angles[2]);
+    double y_off = odom_to_target.getPosition().getY() + off * Math.sin(angles[2]);
 
     Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
 
-    SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.position.getX());
-    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.position.getY());
-    SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+    SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.getPosition().getX());
+    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.getPosition().getY());
+    SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
     SmartDashboard.putBoolean("limelight-pose/correct", true);
 
-    SmartDashboard.putNumber("limelight-pose/position/x_og", base_link_to_target.position.getX());
-    SmartDashboard.putNumber("limelight-pose/position/y_og", base_link_to_target.position.getY());
-    SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+    SmartDashboard.putNumber("limelight-pose/position/x_og", base_link_to_target.getPosition().getX());
+    SmartDashboard.putNumber("limelight-pose/position/y_og", base_link_to_target.getPosition().getY());
+    SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
 
-    SmartDashboard.putNumber("map-odom/position/x", map_to_odom.position.getX());
-    SmartDashboard.putNumber("map-odom/position/y", map_to_odom.position.getY());
-    SmartDashboard.putNumber("map-odom/orientation/z", map_to_odom.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+    SmartDashboard.putNumber("map-odom/position/x", map_to_odom.getPosition().getX());
+    SmartDashboard.putNumber("map-odom/position/y", map_to_odom.getPosition().getY());
+    SmartDashboard.putNumber("map-odom/orientation/z", map_to_odom.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
   }
 
 
