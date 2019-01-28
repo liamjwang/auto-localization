@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.localization2D.robot.RobotMap;
 import org.team1540.localization2D.robot.Tuning;
 import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
@@ -163,12 +164,34 @@ public class DriveTrain extends Subsystem {
     return driveRightMotorA.getSelectedSensorPosition();
   }
 
+  public double getLeftPositionMeters() {
+    return getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public double getRightPositionMeters() {
+    return getRightPosition() / Tuning.drivetrainTicksPerMeter;
+  }
+
   public double getLeftVelocity() {
     return driveLeftMotorA.getSelectedSensorVelocity();
   }
 
   public double getRightVelocity() {
     return driveRightMotorA.getSelectedSensorVelocity();
+  }
+
+  public double getLeftVelocityMetersPerSecond() {
+    return getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public double getRightVelocityMetersPerSecond() {
+    return getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public Twist2D getTwist() {
+    double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
+    double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
+    return new Twist2D(xvel, 0, thetavel);
   }
 
   @Override
