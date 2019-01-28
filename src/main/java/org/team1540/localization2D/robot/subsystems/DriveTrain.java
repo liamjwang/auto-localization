@@ -202,4 +202,9 @@ public class DriveTrain extends Subsystem {
     driveLeftMotorA.setSelectedSensorPosition(0);
     driveRightMotorA.setSelectedSensorPosition(0);
   }
+
+  public void stop() {
+    setLeftVelocity(0);
+    setRightVelocity(0);
+  }
 }
