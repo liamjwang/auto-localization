@@ -1,5 +1,7 @@
 package org.team1540.localization2D.datastructures.twod;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
 /**
  * 2D pose data structure class
  */
@@ -31,5 +33,9 @@ public class Transform2D {
 
   public double getTheta() {
     return theta;
+  }
+
+  public Vector2D getPositionVector() {
+    return new Vector2D(x, y);
   }
 }
