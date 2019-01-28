@@ -87,7 +87,7 @@ public class UDPVelocityTwistDrive extends Command {
       return false;
     }
     // isFinished Checking
-    Vector3D odomPosition = Robot.odometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+    Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
     double xError = goal.getX() - odomPosition.getX();
     double yError = goal.getY() - odomPosition.getY();
     double angleError = TrigUtils.SignedAngleDifference(goal.getTheta(), Math.toRadians(-Robot.navx.getYaw())); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class

@@ -21,11 +21,11 @@ import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
-import org.team1540.localization2D.notifiers.OdometryRunnable;
 import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.rumble.RumbleForTime;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
+import org.team1540.localization2D.runnables.TankDriveOdometryRunnable;
 import org.team1540.localization2D.utils.CameraLocalization;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
@@ -37,11 +37,10 @@ public class Robot extends IterativeRobot {
   public static AHRS navx = new AHRS(Port.kMXP);
   public static RevBlinken leds = new RevBlinken(9);
 
-  private static Transform3D goal_pose = Transform3D.IDENTITY;
   private static Transform3D map_to_odom = Transform3D.IDENTITY;
   private static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
-  public static OdometryRunnable odometry;
+  public static TankDriveOdometryRunnable wheelOdometry;
 
   public static UDPOdometryGoalSender udpSender;
   public static UDPTwistReceiver udpReceiver;
@@ -55,7 +54,7 @@ public class Robot extends IterativeRobot {
     Robot.navx.zeroYaw();
     Robot.drivetrain.zeroEncoders();
 
-    odometry = new OdometryRunnable(
+    wheelOdometry = new TankDriveOdometryRunnable(
         drivetrain::getLeftPositionMeters,
         drivetrain::getRightPositionMeters,
         () -> Math.toRadians(-Robot.navx.getAngle())
@@ -70,8 +69,14 @@ public class Robot extends IterativeRobot {
     });
 
     new Notifier(() -> {
-      odometry.run();
-      udpSender.setOdometry(new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()));
+      wheelOdometry.run();
+      udpSender.setOdometry(new Odometry(wheelOdometry.getOdomToBaseLink(), drivetrain.getTwist()));
+      odom_to_base_link = wheelOdometry.getOdomToBaseLink();
+
+      // Debug
+      SmartDashboard.putNumber("pose-position-x", wheelOdometry.getOdomToBaseLink().getPosition().getX());
+      SmartDashboard.putNumber("pose-position-y", wheelOdometry.getOdomToBaseLink().getPosition().getY());
+      SmartDashboard.putNumber("pose-orientation-z", wheelOdometry.getOdomToBaseLink().getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
       try {
         udpSender.sendIt();
       } catch (IOException e) {
@@ -196,7 +201,7 @@ public class Robot extends IterativeRobot {
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
     Transform3D base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
 
-    Transform3D odom_to_target = this.odom_to_base_link.add(base_link_to_target);
+    Transform3D odom_to_target = odom_to_base_link.add(base_link_to_target);
 
     double[] angles = odom_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
 

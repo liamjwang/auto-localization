@@ -35,7 +35,6 @@ public class UDPAutoLineup extends Command {
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
         .then(new CTREOutput(Robot.drivetrain.driveLeftMotorA, Robot.drivetrain.driveRightMotorA, true));
-
   }
 
   @Override
@@ -62,12 +61,14 @@ public class UDPAutoLineup extends Command {
     double yGoal = SmartDashboard.getNumber("limelight-pose/position/y", 0);
     double angleGoal = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
 
-    Robot.udpSender.setGoal(new Transform2D(xGoal, yGoal, angleGoal));
+    goal = new Transform2D(xGoal, yGoal, angleGoal);
+    Robot.udpSender.setGoal(goal);
+
   }
 
   @Override
   protected void execute() {
-    Vector3D odomPosition = Robot.odometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+    Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
     double distanceError = goal.getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
 
     if (SmartDashboard.getBoolean("limelight-pose/correct", false) // TODO: Use Pose2D averaging
