@@ -139,7 +139,6 @@ public class Robot extends IterativeRobot {
     double CAMERA_TILT = Math.toRadians(-40.2);
     double CAMERA_ROLL = Math.toRadians(-1.38);
     double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
-    // Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.26); // Position of camera in meters
     Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
 
 
@@ -212,19 +211,10 @@ public class Robot extends IterativeRobot {
 
     Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
-
     SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.getPosition().getX());
     SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.getPosition().getY());
     SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
     SmartDashboard.putBoolean("limelight-pose/correct", true);
-
-    SmartDashboard.putNumber("limelight-pose/position/x_og", base_link_to_target.getPosition().getX());
-    SmartDashboard.putNumber("limelight-pose/position/y_og", base_link_to_target.getPosition().getY());
-    SmartDashboard.putNumber("limelight-pose/orientation/z_og", base_link_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
-
-    SmartDashboard.putNumber("map-odom/position/x", map_to_odom.getPosition().getX());
-    SmartDashboard.putNumber("map-odom/position/y", map_to_odom.getPosition().getY());
-    SmartDashboard.putNumber("map-odom/orientation/z", map_to_odom.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
   }
 
 
@@ -246,7 +236,6 @@ public class Robot extends IterativeRobot {
     double vert_fov = Math.toRadians(33.58);
 
     double planeHeight = 0; // Height of vision targets in meters
-    // Vector3D CAMERA_POSITION = new Vector3D(0, 0, 1.26); // Position of camera in meters
     Vector3D cameraPosition = new Vector3D(0.076, -0.18, 1.32); // Position of camera in meters
 
     double screenHeight = 198;
