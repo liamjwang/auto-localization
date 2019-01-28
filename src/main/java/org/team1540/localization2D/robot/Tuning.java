@@ -187,7 +187,7 @@ public class Tuning {
 
   // DRIVETRAIN
   @Tunable("[Drivetrain] UDP Timeout")
-  public static double drivetrainUDPTimeout = 1000;
+  public static double drivetrainUDPTimeout = 500;
 
   @Tunable("[Drivetrain] ticksPerMeter")
   public static double drivetrainTicksPerMeter = 2117.78;
