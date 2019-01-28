@@ -6,10 +6,10 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class Transform3D {
-  public static final Transform3D ZERO = new Transform3D(Vector3D.ZERO, Rotation.IDENTITY);
+  public static final Transform3D IDENTITY = new Transform3D(Vector3D.ZERO, Rotation.IDENTITY);
 
-  public Vector3D position;
-  public Rotation orientation;
+  private final Vector3D position;
+  private final Rotation orientation;
 
   public Transform3D(Vector3D position, Rotation orientation) {
     this.position = position;
@@ -27,6 +27,14 @@ public class Transform3D {
   public Transform3D(double x, double y, double theta) {
     this.position = new Vector3D(x, y, 0);
     this.orientation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, theta);
+  }
+
+  public Vector3D getPosition() {
+    return position;
+  }
+
+  public Rotation getOrientation() {
+    return orientation;
   }
 
   public Transform3D add(Transform3D other) {

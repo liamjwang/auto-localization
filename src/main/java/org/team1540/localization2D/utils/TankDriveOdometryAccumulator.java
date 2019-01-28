@@ -4,7 +4,7 @@ import org.team1540.localization2D.datastructures.threed.Transform3D;
 
 public class TankDriveOdometryAccumulator {
 
-  private Transform3D odomToBaseLink = Transform3D.ZERO;
+  private Transform3D odomToBaseLink = Transform3D.IDENTITY;
 
   private double distancePrevLeft;
   private double distancePrevRight;
