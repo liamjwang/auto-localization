@@ -35,6 +35,7 @@ public class UDPAutoLineup extends Command {
     twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
     pipeline = twist2DInput
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
+        // .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
         .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
         .then(new CTREOutput(Robot.drivetrain.driveLeftMotorA, Robot.drivetrain.driveRightMotorA, true));
   }
