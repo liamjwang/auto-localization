@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.twod.Transform2D;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.localization2D.robot.Robot;
@@ -62,16 +63,19 @@ public class UDPVelocityTwistDrive extends Command {
       tebConfigTable.getEntry("AccLimX").setNumber(0.7);
       tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
       tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
-      updateGoal();
     }
+    updateGoal();
   }
 
   private void updateGoal() {
-    double xGoal = SmartDashboard.getNumber("limelight-pose/position/x", 0);
-    double yGoal = SmartDashboard.getNumber("limelight-pose/position/y", 0);
-    double angleGoal = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
+    double xGoal = SmartDashboard.getNumber("test-goal/position/x", 2);
+    double yGoal = SmartDashboard.getNumber("test-goal/position/y", 0);
+    double angleGoal = SmartDashboard.getNumber("test-goal/orientation/z", 0);
+    System.out.println("Updated goal!");
 
+    Robot.wheelOdometry.reset();
     Robot.udpSender.setGoal(new Transform2D(xGoal, yGoal, angleGoal));
+    Robot.udpSender.setViaPoint(new Vector2D(1, -1));
   }
 
   @Override
@@ -96,7 +100,7 @@ public class UDPVelocityTwistDrive extends Command {
         Math.abs(yError) < 0.038 &&
         Math.abs(angleError) < Math.toRadians(3);
     if (finished) {
-      System.out.println("Close to goal: " + goal.getX() + " " + goal.getY());
+      System.out.println("Close to goalAvg: " + goal.getX() + " " + goal.getY());
       Robot.drivetrain.stop();
     }
     return finished;
