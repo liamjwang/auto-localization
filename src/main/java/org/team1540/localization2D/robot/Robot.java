@@ -110,7 +110,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
-    limelightLocalizationPeriodic();
     hatchCamPeriodic();
   }
 
@@ -125,95 +124,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
   }
-
-  private boolean isFound = false;
-
-  private void limelightLocalizationPeriodic() {
-
-    double CAMERA_TILT = Math.toRadians(-40.2);
-    double CAMERA_ROLL = Math.toRadians(-1.38);
-    double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
-    Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
-
-
-    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-a");
-
-    // TODO: Filter limelight contours using size, angle, etc.
-    double tx0 = limelightTable.getEntry("tx0").getDouble(100);
-    double ty0 = limelightTable.getEntry("ty0").getDouble(100);
-
-    double tx1 = limelightTable.getEntry("tx1").getDouble(100);
-    double ty1 = limelightTable.getEntry("ty1").getDouble(100);
-
-    if (tx0 + tx1 + ty0 + ty1 > 5) {
-      System.out.println("Unable to get limelight values!");
-      return;
-    }
-
-    double upperLimit = 0.86;
-    double lowerLimit = -0.65;
-    double leftAndRightLimit = 0.90;
-
-    boolean debug = false;
-
-    if (tx0 == 0 || tx1 == 0 || ty0 == 0 || ty1 == 0) {
-      if (debug) { System.out.println("Ignoring limelight - highly unlikely values"); }
-      disableLimelightValues();
-      return;
-    }
-    if (ty0 > upperLimit || ty1 > upperLimit) {
-      if (debug) {System.out.println("Ignoring limelight - upper limit");}
-      disableLimelightValues();
-      return;
-    }
-    if (ty0 < lowerLimit || ty1 < lowerLimit) {
-      if (debug) {System.out.println("Ignoring limelight - lower limit");}
-      disableLimelightValues();
-      return;
-    }
-    if (Math.abs(tx0) > leftAndRightLimit || Math.abs(tx1) > leftAndRightLimit) {
-      if (debug) {System.out.println("Ignoring limelight - left/right limit");}
-      disableLimelightValues();
-      return;
-    }
-    if (debug) {System.out.println("Good limelight values!");}
-    if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
-      leds.set(ColorPattern.LIME);
-      if (!isFound) {
-        isFound = true;
-        new RumbleForTime(OI.driver, 1, 0.2).start();
-      }
-    }
-
-    Vector2D leftAngles = new Vector2D(-tx0, ty0);
-    Vector2D rightAngles = new Vector2D(-tx1, ty1);
-
-    Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
-    Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
-
-    Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
-    Transform3D base_link_to_target = CameraLocalization.poseFromTwoCamPoints(leftAngles, rightAngles, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
-
-    Transform3D odom_to_target = odom_to_base_link.add(base_link_to_target);
-
-    // double[] angles = odom_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
-    //
-    // double off = -0.65; // TODO: do this with transforms
-    // // double off = 0;
-    // double x_off = odom_to_target.getPosition().getX() + off * Math.cos(angles[2]);
-    // double y_off = odom_to_target.getPosition().getY() + off * Math.sin(angles[2]);
-
-    // Transform3D limePoseWithOffset = odom_to_target;
-    Transform3D limePoseWithOffset = odom_to_target.add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
-
-    // Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
-
-    SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.getPosition().getX());
-    SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.getPosition().getY());
-    SmartDashboard.putNumber("limelight-pose/orientation/z", limePoseWithOffset.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
-    SmartDashboard.putBoolean("limelight-pose/correct", true);
-  }
-
 
   private void hatchCamPeriodic() {
     NetworkTable hatchTable = NetworkTableInstance.getDefault().getTable("hatch-cam");
@@ -271,16 +181,5 @@ public class Robot extends IterativeRobot {
     Transform3D base_link_to_hatch_flat = new Transform3D(bottomPoint, new Rotation(Vector3D.PLUS_I, topPoint.subtract(bottomPoint)));
 
     Transform3D base_link_to_hatch = base_link_to_hatch_flat.add(new Transform3D(hatchCenterPoint, Rotation.IDENTITY));
-  }
-
-
-  private void disableLimelightValues() {
-    SmartDashboard.putBoolean("limelight-pose/correct", false);
-    if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
-      leds.set(ColorPattern.RED);
-    }
-    if (isFound) {
-      isFound = false;
-    }
   }
 }
