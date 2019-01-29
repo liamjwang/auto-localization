@@ -9,7 +9,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 
-public class CameraLocalization {
+public class DualVisionTargetLocalizationUtils {
 
   private static double CM_TOLERANCE = 0.0001;
 
