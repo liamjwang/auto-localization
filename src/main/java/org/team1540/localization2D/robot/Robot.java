@@ -21,8 +21,8 @@ import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
-import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
+import org.team1540.localization2D.robot.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.robot.rumble.RumbleForTime;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.runnables.TankDriveOdometryRunnable;
@@ -64,7 +64,7 @@ public class Robot extends IterativeRobot {
       new Notifier(udpReceiver::attemptConnection).startSingle(1);
     });
 
-    udpSender = new UDPOdometryGoalSender("10.15.40.43", 5800, () -> {
+    udpSender = new UDPOdometryGoalSender("10.15.40.201", 5800, () -> {
       new Notifier(udpSender::attemptConnection).startSingle(1);
     });
 
@@ -109,8 +109,8 @@ public class Robot extends IterativeRobot {
     Robot.drivetrain.reset();
     Robot.drivetrain.enableCurrentLimiting();
     Robot.drivetrain.configTalonsForVelocity();
-    new PercentDrive().start();
-    //    new VelocityDrive().start();
+    // new PercentDrive().start();
+    new VelocityDrive().start();
   }
 
   @Override
@@ -202,14 +202,17 @@ public class Robot extends IterativeRobot {
 
     Transform3D odom_to_target = odom_to_base_link.add(base_link_to_target);
 
-    double[] angles = odom_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
+    // double[] angles = odom_to_target.getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
+    //
+    // double off = -0.65; // TODO: do this with transforms
+    // // double off = 0;
+    // double x_off = odom_to_target.getPosition().getX() + off * Math.cos(angles[2]);
+    // double y_off = odom_to_target.getPosition().getY() + off * Math.sin(angles[2]);
 
-    double off = -0.6; // TODO: do this with transforms
-    // double off = 0;
-    double x_off = odom_to_target.getPosition().getX() + off * Math.cos(angles[2]);
-    double y_off = odom_to_target.getPosition().getY() + off * Math.sin(angles[2]);
+    // Transform3D limePoseWithOffset = odom_to_target;
+    Transform3D limePoseWithOffset = odom_to_target.add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
-    Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
+    // Transform3D limePoseWithOffset = new Transform3D(new Vector3D(x_off, y_off, 0), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angles[2]));
 
     SmartDashboard.putNumber("limelight-pose/position/x", limePoseWithOffset.getPosition().getX());
     SmartDashboard.putNumber("limelight-pose/position/y", limePoseWithOffset.getPosition().getY());
