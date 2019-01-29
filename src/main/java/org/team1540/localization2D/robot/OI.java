@@ -3,7 +3,6 @@ package org.team1540.localization2D.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPAutoLineup;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.util.SimpleCommand;
@@ -89,11 +88,7 @@ public class OI {
 
   static {
     OI.autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-      double pos_x = SmartDashboard.getNumber("limelight-pose/position/x", 0);
-      double pos_y = SmartDashboard.getNumber("limelight-pose/position/y", 0);
-      double ori_z = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
       alignCommand = new UDPAutoLineup();
-      // alignCommand = new TestSequence(pos_x, pos_y, ori_z);
       alignCommand.start();
     }));
     OI.autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
