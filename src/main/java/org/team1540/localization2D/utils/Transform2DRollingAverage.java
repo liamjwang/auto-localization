@@ -16,7 +16,7 @@ public class Transform2DRollingAverage {
     this.poseQueue = EvictingQueue.create(numElements);
   }
 
-  public void addPose(Transform2D pose) {
+  public void addTransform(Transform2D pose) {
     poseQueue.add(pose);
   }
 
