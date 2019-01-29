@@ -5,7 +5,8 @@ import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.utils.TankDriveOdometryAccumulator;
 
 /**
- * Runnable wrapper class for the TankDriveOdometryAccumulator
+ * Runnable wrapper class for the TankDriveOdometryAccumulator.
+ * The {@link #run()} method is meant to be called periodically using a {@link edu.wpi.first.wpilibj.Notifier}
  */
 public class TankDriveOdometryRunnable implements Runnable {
 
