@@ -1,5 +1,7 @@
 package org.team1540.localization2D.datastructures.twod;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 
@@ -56,5 +58,12 @@ public class Transform2D {
     Transform3D otherTransform3D = other.toTransform3D();
     Transform3D transform3D = new Transform3D(thisTransform3D.getPosition().subtract(thisTransform3D.getOrientation().applyInverseTo(otherTransform3D.getPosition())), thisTransform3D.getOrientation().applyInverseTo(otherTransform3D.getOrientation()));
     return transform3D.toTransform2D();
+  }
+
+  public void putToNetworkTable(String networkTablesPath) {
+    NetworkTable table = NetworkTableInstance.getDefault().getTable(networkTablesPath);
+    table.getEntry("position/x").setNumber(getX());
+    table.getEntry("position/y").setNumber(getY());
+    table.getEntry("orientation/z").setNumber(getTheta());
   }
 }

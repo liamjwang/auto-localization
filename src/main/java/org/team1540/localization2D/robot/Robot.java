@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.Odometry;
@@ -23,14 +22,12 @@ import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.VelocityDrive;
-import org.team1540.localization2D.robot.rumble.RumbleForTime;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.runnables.TankDriveOdometryRunnable;
-import org.team1540.localization2D.utils.CameraLocalization;
+import org.team1540.localization2D.utils.DualVisionTargetLocalizationUtils;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.RevBlinken;
-import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
@@ -70,13 +67,10 @@ public class Robot extends IterativeRobot {
 
     new Notifier(() -> {
       wheelOdometry.run();
-      udpSender.setOdometry(new Odometry(wheelOdometry.getOdomToBaseLink(), drivetrain.getTwist()));
       odom_to_base_link = wheelOdometry.getOdomToBaseLink();
+      udpSender.setOdometry(new Odometry(odom_to_base_link, drivetrain.getTwist()));
+      odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
 
-      // Debug
-      SmartDashboard.putNumber("pose-position-x", wheelOdometry.getOdomToBaseLink().getPosition().getX());
-      SmartDashboard.putNumber("pose-position-y", wheelOdometry.getOdomToBaseLink().getPosition().getY());
-      SmartDashboard.putNumber("pose-orientation-z", wheelOdometry.getOdomToBaseLink().getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
       try {
         udpSender.sendIt();
       } catch (IOException e) {
@@ -253,12 +247,12 @@ public class Robot extends IterativeRobot {
 
     Rotation cameraRotation = cameraYaw.applyTo(cameraTilt.applyTo(cameraRoll));
 
-    Vector3D topPoint = CameraLocalization.getIntersection(
-        CameraLocalization.lineFromScreenAngles(
-            CameraLocalization.anglesFromScreenSpace(topAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
-    Vector3D bottomPoint = CameraLocalization.getIntersection(
-        CameraLocalization.lineFromScreenAngles(
-            CameraLocalization.anglesFromScreenSpace(bottomAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+    Vector3D topPoint = DualVisionTargetLocalizationUtils.getIntersection(
+        DualVisionTargetLocalizationUtils.lineFromScreenAngles(
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(topAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+    Vector3D bottomPoint = DualVisionTargetLocalizationUtils.getIntersection(
+        DualVisionTargetLocalizationUtils.lineFromScreenAngles(
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(bottomAngle, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
 
     hatchTable.getEntry("debug/top").setNumberArray(new Number[]{topPoint.getX(), topPoint.getY(), topPoint.getZ()});
     hatchTable.getEntry("debug/bottom").setNumberArray(new Number[]{bottomPoint.getX(), bottomPoint.getY(), topPoint.getZ()});
