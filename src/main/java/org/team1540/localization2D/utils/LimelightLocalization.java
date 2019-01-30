@@ -1,4 +1,4 @@
-package org.team1540.localization2D.runnables;
+package org.team1540.localization2D.utils;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
@@ -6,9 +6,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.robot.OI;
-import org.team1540.localization2D.utils.DualVisionTargetLocalizationUtils;
-import org.team1540.localization2D.utils.LimelightInterface;
-import org.team1540.localization2D.utils.VisionUtils;
 
 /**
  * Class for localization with a Limelight over NetworkTables.
