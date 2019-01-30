@@ -26,9 +26,11 @@ import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.runnables.TankDriveOdometryRunnable;
 import org.team1540.localization2D.utils.DualVisionTargetLocalizationUtils;
 import org.team1540.localization2D.utils.LimelightLocalization;
+import org.team1540.localization2D.utils.StateChangeDetector;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.RevBlinken;
+import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class Robot extends IterativeRobot {
   public static final DriveTrain drivetrain = new DriveTrain();
@@ -43,6 +45,8 @@ public class Robot extends IterativeRobot {
   public static UDPOdometryGoalSender udpSender;
   public static UDPTwistReceiver udpReceiver;
   public static LimelightLocalization limelightLocalization;
+
+  public static Transform3D lastOdomToLimelight;
 
   @Override
   public void robotInit() {
@@ -69,12 +73,31 @@ public class Robot extends IterativeRobot {
 
     limelightLocalization = new LimelightLocalization("limelight-a");
 
+    StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
+
     new Notifier(() -> {
       wheelOdometry.run();
       odom_to_base_link = wheelOdometry.getOdomToBaseLink();
       udpSender.setOdometry(new Odometry(odom_to_base_link, drivetrain.getTwist()));
       odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
+      boolean targetFound = limelightLocalization.attemptUpdatePose();
+      if (targetFound) {
+        limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
+        Transform3D goal = Robot.wheelOdometry.getOdomToBaseLink()
+            .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+            .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
+        lastOdomToLimelight = goal;
+        goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
+      }
+      if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
+        if (limelightStateDetector.didChangeToTrue(targetFound)) {
+          leds.set(ColorPattern.LIME);
+        }
+        if (limelightStateDetector.didChangeToFalse(targetFound)) {
+          leds.set(ColorPattern.RED);
+        }
+      }
       try {
         udpSender.sendIt();
       } catch (IOException e) {

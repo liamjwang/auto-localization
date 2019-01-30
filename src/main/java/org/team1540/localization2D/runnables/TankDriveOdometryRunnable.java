@@ -16,7 +16,7 @@ public class TankDriveOdometryRunnable implements Runnable {
   private DoubleSupplier rightPosSupplier;
   private DoubleSupplier angleSupplier;
 
-  private Transform3D odomToBaseLink;
+  private Transform3D odomToBaseLink = Transform3D.IDENTITY;
 
   /**
    * @param leftPosSupplier Supplier for left tank drive position in meters

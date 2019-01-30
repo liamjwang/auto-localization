@@ -47,12 +47,25 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("AccLimX").setNumber(0.7);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
     tebConfigTable.getEntry("AccLimTheta").setNumber(5.0);
-    updateGoal();
+    if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
+      computeGoal();
+    } else {
+      if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
+        goal = Robot.lastOdomToLimelight;
+      }
+      Robot.leds.set(ColorPattern.RED);
+      ;
+      cancel();
+    }
+  }
+
+  private void computeGoal() {
+    goal = Robot.wheelOdometry.getOdomToBaseLink()
+        .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+        .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
   }
 
   private void updateGoal() {
-    goal = Robot.limelightLocalization.getBaseLinkToVisionTarget()
-        .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
     Robot.udpSender.setGoal(goal.toTransform2D());
 
     Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
@@ -62,7 +75,7 @@ public class UDPAutoLineup extends Command {
   @Override
   protected void execute() {
     if (Robot.limelightLocalization.attemptUpdatePose() && (getDistanceError() > 0.07)) { // TODO: Make this distance tunable
-      updateGoal();
+      computeGoal();
     }
 
     // Send velocity command
@@ -73,8 +86,12 @@ public class UDPAutoLineup extends Command {
 
   @Override
   protected boolean isFinished() {
+    if (goal == null) {
+      return true;
+    }
     if (getDistanceError() < 0.018 && Math.abs(getAngleError()) < Math.toRadians(3)) {
       Robot.drivetrain.stop();
+      Robot.leds.set(ColorPattern.LIME);
       return true;
     }
     return false;

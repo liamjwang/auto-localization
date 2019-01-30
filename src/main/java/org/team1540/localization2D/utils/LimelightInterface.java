@@ -13,7 +13,7 @@ public class LimelightInterface {
 
   public Vector2D getRawPoint(int id) {
     return new Vector2D(
-        limelightTable.getEntry("tx" + id).getDouble(0),
+        -limelightTable.getEntry("tx" + id).getDouble(0), // TODO: X should not be negated here
         limelightTable.getEntry("ty" + id).getDouble(0)
     );
   }

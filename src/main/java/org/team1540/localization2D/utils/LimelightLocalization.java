@@ -14,6 +14,7 @@ public class LimelightLocalization {
 
   private Transform3D baseLinkToVisionTarget;
   private LimelightInterface limelightInterface;
+  private long timeLastAcquired = 0;
 
   public LimelightLocalization(String limeTableName) {
     limelightInterface = new LimelightInterface(limeTableName);
@@ -45,10 +46,20 @@ public class LimelightLocalization {
 
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
     baseLinkToVisionTarget = DualVisionTargetLocalizationUtils.poseFromTwoCamPoints(point0, point1, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
+
+    timeLastAcquired = System.currentTimeMillis();
     return true;
+  }
+
+  public boolean targetWasAcquired() {
+    return baseLinkToVisionTarget != null;
   }
 
   public Transform3D getBaseLinkToVisionTarget() {
     return baseLinkToVisionTarget;
+  }
+
+  public long millisSinceLastAcquired() {
+    return System.currentTimeMillis() - timeLastAcquired;
   }
 }
