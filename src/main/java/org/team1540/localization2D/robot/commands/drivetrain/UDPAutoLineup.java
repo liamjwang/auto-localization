@@ -4,14 +4,15 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.datastructures.twod.Transform2D;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.localization2D.robot.Robot;
 import org.team1540.localization2D.robot.TankDriveTwist2DInput;
 import org.team1540.localization2D.robot.Tuning;
-import org.team1540.localization2D.utils.Transform2DRollingAverage;
 import org.team1540.localization2D.utils.TrigUtils;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -20,7 +21,7 @@ import org.team1540.rooster.util.Executable;
 import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class UDPAutoLineup extends Command {
-  Transform2DRollingAverage goalAvg;
+  Transform3D goal;
 
   private Executable pipeline;
   private TankDriveTwist2DInput twist2DInput;
@@ -31,7 +32,6 @@ public class UDPAutoLineup extends Command {
 
   public UDPAutoLineup() {
     requires(Robot.drivetrain);
-    goalAvg = new Transform2DRollingAverage(1);
     twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
     pipeline = twist2DInput
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
@@ -60,27 +60,23 @@ public class UDPAutoLineup extends Command {
   }
 
   private void updateGoal() {
-    double xGoal = SmartDashboard.getNumber("limelight-pose/position/x", 0);
-    double yGoal = SmartDashboard.getNumber("limelight-pose/position/y", 0);
-    double angleGoal = SmartDashboard.getNumber("limelight-pose/orientation/z", 0);
-
-    goalAvg.addTransform(new Transform2D(xGoal, yGoal, angleGoal));
-    Robot.udpSender.setGoal(goalAvg.getAverage());
-    Transform2D via_point = goalAvg.getAverage().add(new Transform2D(-0.7, 0, 0));
-    Robot.udpSender.setViaPoint(via_point.getPositionVector());
+    goal = Robot.limelightLocalization.getBaseLinkToVisionTarget()
+        .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
+    Robot.udpSender.setGoal(goal.toTransform2D());
+    Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
+    Robot.udpSender.setViaPoint(via_point.toTransform2D().getPositionVector());
   }
 
   @Override
   protected void execute() {
     Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
-    Transform2D average = goalAvg.getAverage();
-    double angleError = TrigUtils.SignedAngleDifference(average.getTheta(), Math.toRadians(-Robot.navx.getYaw())); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class
+    Transform2D goal2D = goal.toTransform2D();
+    double angleError = TrigUtils.SignedAngleDifference(goal2D.getTheta(), Math.toRadians(-Robot.navx.getYaw())); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class
 
-    double distanceError = average.getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
+    double distanceError = goal2D.getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
 
     if (SmartDashboard.getBoolean("limelight-pose/correct", false) // TODO: Use Pose2D averaging
-        && (distanceError > 0.07)
-        // || angleError > Math.toRadians(10)) // TODO: Make this distance tunable
+        && (distanceError > 0.07) // TODO: Make this distance tunable
         && finishedTime == 0
     ) {
       lastUpdate = System.currentTimeMillis();
@@ -93,8 +89,8 @@ public class UDPAutoLineup extends Command {
     pipeline.execute();
 
     // isFinished Checking
-    double xError = average.getX() - odomPosition.getX();
-    double yError = average.getY() - odomPosition.getY();
+    double xError = goal2D.getX() - odomPosition.getX();
+    double yError = goal2D.getY() - odomPosition.getY();
 
     boolean finished = Math.abs(xError) < 0.018 && // TODO: Make this a static function
         Math.abs(yError) < 0.018 &&

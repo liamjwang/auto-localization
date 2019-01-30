@@ -23,6 +23,7 @@ import org.team1540.localization2D.networking.UDPTwistReceiver;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
+import org.team1540.localization2D.runnables.LimelightLocalization;
 import org.team1540.localization2D.runnables.TankDriveOdometryRunnable;
 import org.team1540.localization2D.utils.DualVisionTargetLocalizationUtils;
 import org.team1540.rooster.power.PowerManager;
@@ -41,6 +42,7 @@ public class Robot extends IterativeRobot {
 
   public static UDPOdometryGoalSender udpSender;
   public static UDPTwistReceiver udpReceiver;
+  public static LimelightLocalization limelightLocalization;
 
   @Override
   public void robotInit() {
@@ -64,6 +66,8 @@ public class Robot extends IterativeRobot {
     udpSender = new UDPOdometryGoalSender("10.15.40.201", 5800, () -> {
       new Notifier(udpSender::attemptConnection).startSingle(1);
     });
+
+    limelightLocalization = new LimelightLocalization("limelight-a");
 
     new Notifier(() -> {
       wheelOdometry.run();
