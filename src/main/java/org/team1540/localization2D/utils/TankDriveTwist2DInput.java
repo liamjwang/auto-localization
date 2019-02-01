@@ -1,4 +1,4 @@
-package org.team1540.localization2D.robot;
+package org.team1540.localization2D.utils;
 
 import java.util.OptionalDouble;
 import org.team1540.localization2D.datastructures.twod.Twist2D;

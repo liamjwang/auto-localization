@@ -1,8 +1,7 @@
-package org.team1540.localization2D.runnables;
+package org.team1540.localization2D.utils;
 
 import java.util.function.DoubleSupplier;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
-import org.team1540.localization2D.utils.TankDriveOdometryAccumulator;
 
 /**
  * Runnable wrapper class for the TankDriveOdometryAccumulator.
