@@ -1,5 +1,8 @@
 package org.team1540.localization2D.datastructures.twod;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 /**
  * 2D twist data structure class
  */
@@ -31,5 +34,12 @@ public class Twist2D {
 
   public double getOmega() {
     return omega;
+  }
+
+  public void putToNetworkTable(String networkTablesPath) {
+    NetworkTable table = NetworkTableInstance.getDefault().getTable(networkTablesPath);
+    table.getEntry("position/x").setNumber(getX());
+    table.getEntry("position/y").setNumber(getY());
+    table.getEntry("orientation/z").setNumber(getOmega());
   }
 }
