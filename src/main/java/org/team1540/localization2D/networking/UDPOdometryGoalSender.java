@@ -36,7 +36,10 @@ public class UDPOdometryGoalSender {
     try {
       this.address = InetAddress.getByName(addressString);
       this.clientSocket = new DatagramSocket();
+      System.out.println("[UDP Sender]: Connected to " + addressString);
     } catch (UnknownHostException | SocketException e) {
+      System.out.println("[UDP Sender]: Couldn't connect to " + addressString);
+      e.printStackTrace();
       onException.run();
     }
   }
