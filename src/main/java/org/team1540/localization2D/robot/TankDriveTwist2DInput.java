@@ -3,8 +3,8 @@ package org.team1540.localization2D.robot;
 import java.util.OptionalDouble;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
-import org.team1540.rooster.drive.pipeline.Input;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
+import org.team1540.rooster.functional.Input;
 
 public class TankDriveTwist2DInput implements Input<TankDriveData> {
   private Twist2D twist;

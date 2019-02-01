@@ -1,73 +1,59 @@
-import jaci.openrio.gradle.GradleRIOPlugin
-import jaci.openrio.gradle.frc.FRCJavaArtifact
-import jaci.openrio.gradle.frc.RoboRIO
+import edu.wpi.first.gradlerio.GradleRIOPlugin
 
 plugins {
     id "java"
-    id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
 
-group 'org.team1540'
-
-sourceCompatibility = 1.8
-
-repositories {
-    maven { url "https://jitpack.io" }
-    mavenCentral()
-}
-
-wpi {
-    ctreVersion = "5.3.1.0"
-}
-
-dependencies {
-    compile wpilib()
-    compile ctre()
-    compile navx()
-    compile pathfinder()
-    compile openrio.powerup.matchData()
-    compile "org.team1540:rooster:0.14.1"
-    compile "org.apache.commons:commons-math3:3.6.1"
-}
-
-def TEAM = 1540
-
-//def ROBOT_CLASS = "org.team1540.localization2D.testing.WristTuningRobot"
-//def ROBOT_CLASS = "org.team1540.localization2D.testing.ElevatorTuningRobot"
-//def ROBOT_CLASS = "org.team1540.localization2D.testing.SpinnyTestRobot"
-//def ROBOT_CLASS = "org.team1540.localization2D.testing.RobotMotorTest"
-def ROBOT_CLASS = "org.team1540.localization2D.robot.Robot"
-
-//task generateProfiles(type:Exec) {
-//    workingDir 'profiles'
-//    commandLine 'java', '-jar', '../generation/path-util.jar'
-//}
+def ROBOT_MAIN_CLASS = "org.team1540.localization2D.robot.Main"
 
 deploy {
     targets {
-        target("roborio", RoboRIO) {
-            team = TEAM
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = frc.getTeamOrDefault(1540)
         }
     }
     artifacts {
-        artifact('frcJava', FRCJavaArtifact) {
+        frcJavaArtifact('frcJava') {
             targets << "roborio"
+            // Debug can be overridden by command line, for use with VSCode
+            debug = frc.getDebugOrDefault(false)
         }
-//        fileCollectionArtifact('motionProfiles') {
-//            dependsOn("generateProfiles")
-//            targets << 'roborio'
-//            files = fileTree(dir: 'profiles/generated', include: "**/*.csv")
-//            directory = "/home/lvuser/profiles"
-//        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
     }
 }
 
-jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
+dependencies {
+    compile wpi.deps.wpilib()
+    compile wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    compile "org.team1540:rooster:master-SNAPSHOT"
+//    compile "com.github.TeamMeanMachine:meanlib:frc2019-SNAPSHOT"
+}
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}
+
+wrapper {
+    gradleVersion = '5.0'
 }

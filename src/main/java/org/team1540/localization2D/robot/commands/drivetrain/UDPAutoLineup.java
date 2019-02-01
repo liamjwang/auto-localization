@@ -15,7 +15,7 @@ import org.team1540.localization2D.utils.TrigUtils;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
-import org.team1540.rooster.util.Executable;
+import org.team1540.rooster.functional.Executable;
 import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class UDPAutoLineup extends Command {
@@ -41,32 +41,37 @@ public class UDPAutoLineup extends Command {
     Robot.leds.set(ColorPattern.CHASE_BLUE);
 
     NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
-    tebConfigTable.getEntry("TebReset").setBoolean(true);
+    tebConfigTable.getEntry("TEBReset").setBoolean(true);
     tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
     tebConfigTable.getEntry("AccLimX").setNumber(0.7);
-    tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(5.0);
+    tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(7.0);
     if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
-      computeGoal();
+      computeAndUpdateGoal();
     } else {
       if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
-        goal = Robot.lastOdomToLimelight;
+        updateGoal(Robot.lastOdomToLimelight);
       }
       Robot.leds.set(ColorPattern.RED);
-      ;
       cancel();
     }
   }
 
-  private void computeGoal() {
-    goal = Robot.wheelOdometry.getOdomToBaseLink()
+  private void computeAndUpdateGoal() {
+    updateGoal(computeGoal());
+  }
+
+  private Transform3D computeGoal() {
+    return Robot.wheelOdometry.getOdomToBaseLink()
         .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
         .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
   }
 
-  private void updateGoal() {
+  private void updateGoal(Transform3D newGoal) {
+    this.goal = newGoal;
     Robot.udpSender.setGoal(goal.toTransform2D());
+    System.out.println("Goal updated");
 
     Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
     Robot.udpSender.setViaPoint(via_point.toTransform2D().getPositionVector());
@@ -75,7 +80,7 @@ public class UDPAutoLineup extends Command {
   @Override
   protected void execute() {
     if (Robot.limelightLocalization.attemptUpdatePose() && (getDistanceError() > 0.07)) { // TODO: Make this distance tunable
-      computeGoal();
+      computeAndUpdateGoal();
     }
 
     // Send velocity command
@@ -89,7 +94,7 @@ public class UDPAutoLineup extends Command {
     if (goal == null) {
       return true;
     }
-    if (getDistanceError() < 0.018 && Math.abs(getAngleError()) < Math.toRadians(3)) {
+    if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(2)) {
       Robot.drivetrain.stop();
       Robot.leds.set(ColorPattern.LIME);
       return true;
