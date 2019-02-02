@@ -52,9 +52,10 @@ public class UDPAutoLineup extends Command {
     } else {
       if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
         updateGoal(Robot.lastOdomToLimelight);
+      } else {
+        Robot.leds.set(ColorPattern.RED);
+        cancel();
       }
-      Robot.leds.set(ColorPattern.RED);
-      cancel();
     }
   }
 
