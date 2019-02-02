@@ -46,7 +46,7 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
     tebConfigTable.getEntry("AccLimX").setNumber(0.7);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(7.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
     if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
@@ -94,7 +94,7 @@ public class UDPAutoLineup extends Command {
     if (goal == null) {
       return true;
     }
-    if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(2)) {
+    if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(3)) {
       Robot.drivetrain.stop();
       Robot.leds.set(ColorPattern.LIME);
       return true;
