@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
       new Notifier(udpReceiver::attemptConnection).startSingle(1);
     });
 
-    udpSender = new UDPOdometryGoalSender("10.15.40.201", 5800, () -> {
+    udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, () -> {
       new Notifier(udpSender::attemptConnection).startSingle(1);
     });
 
@@ -91,10 +91,9 @@ public class Robot extends IterativeRobot {
         goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
       }
       if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
-        if (limelightStateDetector.didChangeToTrue(targetFound)) {
+        if (targetFound) {
           leds.set(ColorPattern.LIME);
-        }
-        if (limelightStateDetector.didChangeToFalse(targetFound)) {
+        } else {
           leds.set(ColorPattern.RED);
         }
       }

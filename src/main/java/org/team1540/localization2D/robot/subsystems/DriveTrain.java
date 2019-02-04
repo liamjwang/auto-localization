@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.localization2D.robot.RobotMap;
 import org.team1540.localization2D.robot.Tuning;
@@ -191,6 +192,9 @@ public class DriveTrain extends Subsystem {
   public Twist2D getTwist() {
     double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
     double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
+    // new Twist2D(xvel, 0, thetavel).putToNetworkTable("LineupDebug/Actual/");
+    SmartDashboard.putNumber("LineupDebug/Actual/x", xvel);
+    SmartDashboard.putNumber("LineupDebug/Actual/z", -thetavel);
     return new Twist2D(xvel, 0, thetavel);
   }
 

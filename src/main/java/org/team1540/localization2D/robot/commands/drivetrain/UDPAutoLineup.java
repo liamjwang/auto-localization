@@ -3,6 +3,7 @@ package org.team1540.localization2D.robot.commands.drivetrain;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -44,18 +45,18 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("TEBReset").setBoolean(true);
     tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
-    tebConfigTable.getEntry("AccLimX").setNumber(0.7);
+    tebConfigTable.getEntry("AccLimX").setNumber(0.8);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(12.0);
     if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
-      if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
+      // if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
         updateGoal(Robot.lastOdomToLimelight);
-      } else {
-        Robot.leds.set(ColorPattern.RED);
-        cancel();
-      }
+      // } else {
+      //   Robot.leds.set(ColorPattern.RED);
+      //   cancel();
+      // }
     }
   }
 
@@ -86,6 +87,9 @@ public class UDPAutoLineup extends Command {
 
     // Send velocity command
     Twist2D cmdVel = Robot.udpReceiver.getCmdVel();
+    // cmdVel.putToNetworkTable("LineupDebug/Target/");
+    SmartDashboard.putNumber("LineupDebug/Target/x", cmdVel.getX());
+    SmartDashboard.putNumber("LineupDebug/Target/z", cmdVel.getOmega());
     twist2DInput.setTwist(cmdVel);
     pipeline.execute();
   }
