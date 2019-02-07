@@ -199,10 +199,10 @@ public class Tuning {
   public static double drivetrainVelocityP = 2;
 
   @Tunable("[Drivetrain] kI")
-  public static double drivetrainVelocityI = 0.01;
+  public static double drivetrainVelocityI = 0.02;
 
   @Tunable("[Drivetrain] kD")
-  public static double drivetrainVelocityD = 4;
+  public static double drivetrainVelocityD = 2;
 
   @Tunable("[Drivetrain] kF")
   public static double drivetrainVelocityF = 1.2;

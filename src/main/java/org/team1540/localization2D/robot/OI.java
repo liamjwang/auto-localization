@@ -3,6 +3,8 @@ package org.team1540.localization2D.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.localization2D.robot.autogroups.LineupSequence;
+import org.team1540.localization2D.robot.commands.drivetrain.LimelightPoint;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPAutoLineup;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.util.SimpleCommand;
@@ -88,6 +90,8 @@ public class OI {
 
   static {
     OI.autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
+      // alignCommand = new LineupSequence();
+      // alignCommand = new LimelightPoint();
       alignCommand = new UDPAutoLineup();
       alignCommand.start();
     }));

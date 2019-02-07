@@ -20,6 +20,7 @@ import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
+import org.team1540.localization2D.robot.commands.drivetrain.NetworkTablesTest;
 import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.commands.drivetrain.VelocityDrive;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
@@ -50,9 +51,17 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
+
+    SmartDashboard.putNumber("lp_p", 0);
+    SmartDashboard.putNumber("lp_i", 0);
+    SmartDashboard.putNumber("lp_d", 0);
     // disable unused things
     LiveWindow.disableAllTelemetry();
     PowerManager.getInstance().interrupt();
+
+    // NetworkTablesTest networkTablesTest = new NetworkTablesTest();
+    // networkTablesTest.setRunWhenDisabled(true);
+    // networkTablesTest.start();
 
     Robot.navx.zeroYaw();
     Robot.drivetrain.zeroEncoders();
@@ -102,7 +111,7 @@ public class Robot extends IterativeRobot {
       } catch (IOException e) {
         DriverStation.reportWarning("Unable to send Odometry packet!", false);
       }
-    }).startPeriodic(0.01);
+    }).startPeriodic(0.02);
 
     // Testing code
     Command testTEB = new SimpleCommand("Test TEB", () -> {

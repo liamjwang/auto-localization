@@ -14,7 +14,9 @@ import org.team1540.localization2D.robot.Tuning;
 import org.team1540.localization2D.utils.TankDriveTwist2DInput;
 import org.team1540.localization2D.utils.TrigUtils;
 import org.team1540.rooster.drive.pipeline.CTREOutput;
+import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
+import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
@@ -27,11 +29,11 @@ public class UDPAutoLineup extends Command {
   public UDPAutoLineup() {
     requires(Robot.drivetrain);
     twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
-    pipeline = twist2DInput
-        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
-        // .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
-        .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-        .then(new CTREOutput(Robot.drivetrain.driveLeftMotorA, Robot.drivetrain.driveRightMotorA, true));
+    // pipeline = twist2DInput
+    //     .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
+    //     .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
+        // .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
+        // .then(new CTREOutput(Robot.drivetrain.driveLeftMotorA, Robot.drivetrain.driveRightMotorA, true));
   }
 
   @Override
@@ -47,7 +49,7 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
     tebConfigTable.getEntry("AccLimX").setNumber(0.8);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(11.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(10.0);
     if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
@@ -90,8 +92,12 @@ public class UDPAutoLineup extends Command {
     // cmdVel.putToNetworkTable("LineupDebug/Target/");
     SmartDashboard.putNumber("LineupDebug/Target/x", cmdVel.getX());
     SmartDashboard.putNumber("LineupDebug/Target/z", cmdVel.getOmega());
-    twist2DInput.setTwist(cmdVel);
-    pipeline.execute();
+    // twist2DInput.setTwist(cmdVel);
+    // pipeline.execute();
+    double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
+    double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadius)*Tuning.drivetrainTicksPerMeter/10;
+    Robot.drivetrain.setLeftVelocity(leftSetpoint);
+    Robot.drivetrain.setRightVelocity(rightSetpoint);
   }
 
   @Override

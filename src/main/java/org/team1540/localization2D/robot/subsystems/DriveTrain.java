@@ -9,6 +9,7 @@ import org.team1540.localization2D.datastructures.twod.Twist2D;
 import org.team1540.localization2D.robot.RobotMap;
 import org.team1540.localization2D.robot.Tuning;
 import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
+import org.team1540.localization2D.robot.commands.drivetrain.VelocityDrive;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class DriveTrain extends Subsystem {
@@ -30,7 +31,8 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new PercentDrive());
+    setDefaultCommand(new VelocityDrive());
+    // setDefaultCommand(new PercentDrive());
     // setDefaultCommand(new PidDriveFactory()
     //     .setSubsystem(this)
     //     .setLeft(driveLeftMotorA)
