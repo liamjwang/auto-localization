@@ -3,6 +3,7 @@ package org.team1540.localization2D.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
@@ -62,18 +63,22 @@ public class DriveTrain extends Subsystem {
 
   public void setLeftVelocity(double velocity) {
     driveLeftMotorA.set(ControlMode.Velocity, velocity);
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/CmdTankVelRaw").getEntry("left").setNumber(velocity);
   }
 
   public void setRightVelocity(double velocity) {
     driveRightMotorA.set(ControlMode.Velocity, velocity);
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/CmdTankVelRaw").getEntry("right").setNumber(velocity);
   }
 
   public void setLeftVelocityMetersPerSecond(double velocity) {
     setLeftVelocity(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/CmdTankVel").getEntry("left").setNumber(velocity);
   }
 
   public void setRightVelocityMetersPerSecond(double velocity) {
     setRightVelocity(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/CmdTankVel").getEntry("right").setNumber(velocity);
   }
 
   public void setTwist(Twist2D cmdVel) {
@@ -81,6 +86,7 @@ public class DriveTrain extends Subsystem {
     double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadius);
     setLeftVelocityMetersPerSecond(leftSetpoint);
     setRightVelocityMetersPerSecond(rightSetpoint);
+    cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVel");
   }
 
   public void configTalonsForPosition() {
@@ -155,43 +161,59 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getLeftPosition() {
-    return driveLeftMotorA.getSelectedSensorPosition();
+    int posRaw = driveLeftMotorA.getSelectedSensorPosition();
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankPosRaw").getEntry("left").setNumber(posRaw);
+    return posRaw;
   }
 
   public double getRightPosition() {
-    return driveRightMotorA.getSelectedSensorPosition();
+    int posRaw = driveRightMotorA.getSelectedSensorPosition();
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankPosRaw").getEntry("right").setNumber(posRaw);
+    return posRaw;
   }
 
   public double getLeftPositionMeters() {
-    return getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+    double pos = getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankPos").getEntry("left").setNumber(pos);
+    return pos;
   }
 
   public double getRightPositionMeters() {
-    return getRightPosition() / Tuning.drivetrainTicksPerMeter;
+    double pos = getRightPosition() / Tuning.drivetrainTicksPerMeter;
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankPos").getEntry("right").setNumber(pos);
+    return pos;
   }
 
   public double getLeftVelocity() {
-    return driveLeftMotorA.getSelectedSensorVelocity();
+    int rawVelocity = driveLeftMotorA.getSelectedSensorVelocity();
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankVelRaw").getEntry("left").setNumber(rawVelocity);
+    return rawVelocity;
   }
 
   public double getRightVelocity() {
-    return driveRightMotorA.getSelectedSensorVelocity();
+    int rawVelocity = driveRightMotorA.getSelectedSensorVelocity();
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankVelRaw").getEntry("right").setNumber(rawVelocity);
+    return rawVelocity;
   }
 
   public double getLeftVelocityMetersPerSecond() {
-    return getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    double velocity = getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankVel").getEntry("left").setNumber(velocity);
+    return velocity;
   }
 
   public double getRightVelocityMetersPerSecond() {
-    return getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    double velocity = getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    NetworkTableInstance.getDefault().getTable("Debug/DriveTrain/TankVel").getEntry("right").setNumber(velocity);
+    return velocity;
   }
 
   public Twist2D getTwist() {
     double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
     double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
-    SmartDashboard.putNumber("LineupDebug/Actual/x", xvel);
-    SmartDashboard.putNumber("LineupDebug/Actual/z", -thetavel);
-    return new Twist2D(xvel, 0, thetavel);
+    Twist2D twist2D = new Twist2D(xvel, 0, thetavel);
+    twist2D.putToNetworkTable("Debug/DriveTrain/Vel");
+    return twist2D;
   }
 
   @Override
