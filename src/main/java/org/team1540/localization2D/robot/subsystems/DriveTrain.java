@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.localization2D.datastructures.twod.Twist2D;
+import org.team1540.localization2D.robot.Robot;
 import org.team1540.localization2D.robot.RobotMap;
 import org.team1540.localization2D.robot.Tuning;
 import org.team1540.localization2D.robot.commands.drivetrain.PercentDrive;
@@ -65,6 +66,21 @@ public class DriveTrain extends Subsystem {
 
   public void setRightVelocity(double velocity) {
     driveRightMotorA.set(ControlMode.Velocity, velocity);
+  }
+
+  public void setLeftVelocityMetersPerSecond(double velocity) {
+    setLeftVelocity(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+  }
+
+  public void setRightVelocityMetersPerSecond(double velocity) {
+    setRightVelocity(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+  }
+
+  public void setTwist(Twist2D cmdVel) {
+    double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadius);
+    double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadius);
+    setLeftVelocityMetersPerSecond(leftSetpoint);
+    setRightVelocityMetersPerSecond(rightSetpoint);
   }
 
   public void configTalonsForPosition() {
@@ -173,7 +189,6 @@ public class DriveTrain extends Subsystem {
   public Twist2D getTwist() {
     double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
     double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
-    // new Twist2D(xvel, 0, thetavel).putToNetworkTable("LineupDebug/Actual/");
     SmartDashboard.putNumber("LineupDebug/Actual/x", xvel);
     SmartDashboard.putNumber("LineupDebug/Actual/z", -thetavel);
     return new Twist2D(xvel, 0, thetavel);
