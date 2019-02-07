@@ -33,27 +33,6 @@ public class DriveTrain extends Subsystem {
   public void initDefaultCommand() {
     setDefaultCommand(new VelocityDrive());
     // setDefaultCommand(new PercentDrive());
-    // setDefaultCommand(new PidDriveFactory()
-    //     .setSubsystem(this)
-    //     .setLeft(driveLeftMotorA)
-    //     .setRight(driveRightMotorA)
-    //     .setJoystick(OI.driver)
-    //     .setLeftAxis(1)
-    //     .setRightAxis(5)
-    //     .setForwardTrigger(3)
-    //     .setBackTrigger(2)
-    //     .setDeadzone(Tuning.axisDeadzone)
-    //     .setScaling(new PowerJoystickScaling(Tuning.drivetrainJoystickPower))
-    //     .setInvertLeft(true)
-    //     .setInvertRight(true)
-    //     .setInvertLeftBrakeDirection(false)
-    //     .setInvertRightBrakeDirection(false)
-    //     .setBrakeOverrideThresh(Tuning.drivetrainBrakeOverrideThreshold)
-    //     .setBrakingStopZone(Tuning.axisDeadzone)
-    //     .setMaxBrakePct(Tuning.drivetrainBrakingPercent)
-    //     .setMaxVel(Tuning.drivetrainMaxVelocity)
-    //     .createPidDrive()
-    // );
   }
 
   public void setLeft(ControlMode mode, double value) {
