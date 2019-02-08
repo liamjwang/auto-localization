@@ -13,6 +13,7 @@ public class Tuning {
 
   // TODO: Better method of switching tuning values globally between robots
   @Tunable("-[General] Is Pandora")
+  // @Tunable("-[General] Is Pandora")
   public static boolean isPandora = true;
 
   @Tunable("-[DriveTrain] Current Limit")

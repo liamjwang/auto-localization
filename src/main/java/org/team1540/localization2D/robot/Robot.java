@@ -28,6 +28,7 @@ import org.team1540.localization2D.utils.DualVisionTargetLocalizationUtils;
 import org.team1540.localization2D.utils.LimelightLocalization;
 import org.team1540.localization2D.utils.StateChangeDetector;
 import org.team1540.localization2D.utils.TankDriveOdometryRunnable;
+import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.RevBlinken;
@@ -51,6 +52,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
+    AdjustableManager.getInstance().add(new Tuning());
 
     SmartDashboard.putNumber("lp_p", 0);
     SmartDashboard.putNumber("lp_i", 0);
