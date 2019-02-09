@@ -3,7 +3,7 @@ package org.team1540.localization2D.robot.autogroups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.localization2D.datastructures.twod.Transform2D;
-import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
+import org.team1540.localization2D.vision.commands.UDPVelocityTwistDrive;
 
 public class TestSequence extends CommandGroup {
   public TestSequence() {

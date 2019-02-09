@@ -9,7 +9,7 @@ import org.team1540.localization2D.datastructures.threed.Transform3D;
  */
 public class TankDriveOdometryRunnable implements Runnable {
 
-  private TankDriveOdometryAccumulator odometryAccumulator;
+  private TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
 
   private DoubleSupplier leftPosSupplier;
   private DoubleSupplier rightPosSupplier;
@@ -30,7 +30,6 @@ public class TankDriveOdometryRunnable implements Runnable {
     this.leftPosSupplier = leftPosSupplier;
     this.rightPosSupplier = rightPosSupplier;
     this.angleSupplier = angleSupplier;
-    reset();
   }
 
   @Override
@@ -45,9 +44,5 @@ public class TankDriveOdometryRunnable implements Runnable {
 
   public Transform3D getOdomToBaseLink() {
     return odomToBaseLink;
-  }
-
-  public void reset() { // TODO: This should not be necessary when used with a better transformations/localization manager
-    odometryAccumulator = new TankDriveOdometryAccumulator();
   }
 }

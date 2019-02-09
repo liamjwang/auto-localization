@@ -1,4 +1,4 @@
-package org.team1540.localization2D.robot.commands.drivetrain;
+package org.team1540.localization2D.vision.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -73,7 +73,6 @@ public class UDPVelocityTwistDrive extends Command {
     double angleGoal = SmartDashboard.getNumber("test-goal/orientation/z", 0);
     System.out.println("Updated goal!");
 
-    Robot.wheelOdometry.reset();
     Robot.udpSender.setGoal(new Transform2D(xGoal, yGoal, angleGoal));
     Robot.udpSender.setViaPoint(new Vector2D(1, -1));
   }
