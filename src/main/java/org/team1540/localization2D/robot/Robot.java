@@ -16,11 +16,12 @@ import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
+import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
-import org.team1540.localization2D.utils.LimelightLocalization;
+import org.team1540.localization2D.utils.DualTargetOffsetLocalization;
+import org.team1540.localization2D.utils.LimelightInterface;
 import org.team1540.localization2D.utils.StateChangeDetector;
 import org.team1540.localization2D.utils.TankDriveOdometryRunnable;
-import org.team1540.localization2D.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
@@ -39,9 +40,10 @@ public class Robot extends IterativeRobot {
 
   public static UDPOdometryGoalSender udpSender;
   public static UDPTwistReceiver udpReceiver;
-  public static LimelightLocalization limelightLocalization;
+  public static DualTargetOffsetLocalization visionLocalization;
 
-  public static Transform3D lastOdomToLimelight;
+  public static Transform3D lastOdomToGoal;
+  public static LimelightInterface limelightInterface;
 
   @Override
   public void robotInit() {
@@ -75,24 +77,45 @@ public class Robot extends IterativeRobot {
       new Notifier(udpSender::attemptConnection).startSingle(1);
     });
 
-    limelightLocalization = new LimelightLocalization("limelight-a");
+    double cameraTilt = Math.toRadians(-40.34981515);
+    double cameraRoll = Math.toRadians(-1.38);
+    Rotation cameraTiltRotation = new Rotation(Vector3D.PLUS_J, cameraTilt, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraRollRotation = new Rotation(Vector3D.PLUS_I, cameraRoll, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraRotation = cameraTiltRotation.applyTo(cameraRollRotation);
 
-    StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
+    double planeHeight = 0.71; // Height of vision targets in meters
+
+    Vector3D cameraPosition = new Vector3D(0.11, 0, 1.26); // Position of camera in meters
+
+    Transform3D baseLinkToCamera = new Transform3D(cameraPosition, cameraRotation);
+
+    limelightInterface = new LimelightInterface("limelight-a");
+
+    Vector2D cameraFOV = new Vector2D(Tuning.LIMELIGHT_HORIZONTAL_FOV, Tuning.LIMELIGHT_VERTICAL_FOV);
+
+    visionLocalization = new DualTargetOffsetLocalization(cameraFOV, baseLinkToCamera, planeHeight, () -> limelightInterface.getRawPointOrNull(1), () -> limelightInterface.getRawPointOrNull(0));
 
     new Notifier(() -> {
       wheelOdometry.run();
       odom_to_base_link = wheelOdometry.getOdomToBaseLink();
       udpSender.setOdometry(new Odometry(odom_to_base_link, drivetrain.getTwist()));
       odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
-      boolean targetFound = limelightLocalization.attemptUpdatePose();
+      boolean targetFound = visionLocalization.attemptUpdatePose();
+      // Transform3D visionTargetToLimelightOrNull = limelightInterface.getVisionTargetToLimelightOrNull();
       if (targetFound) {
-        limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
+      // if (visionTargetToLimelightOrNull != null) {
+      //   Transform3D solvepnp = visionTargetToLimelightOrNull.negate();
+      //   solvepnp.toTransform2D().putToNetworkTable("VisionLocalization/Debug/SolvePNP");
+        // if (visionTargetToLimelightOrNull != null) {
+        // }
+        visionLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("VisionLocalization/Debug/BaseLinkToVisionTarget");
         Transform3D goal = Robot.wheelOdometry.getOdomToBaseLink()
-            .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+            // .add(solvepnp)
+            .add(Robot.visionLocalization.getBaseLinkToVisionTarget())
             .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
-        lastOdomToLimelight = goal;
-        goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
+        lastOdomToGoal = goal;
+        goal.toTransform2D().putToNetworkTable("VisionLocalization/Debug/OdomToGoal");
       }
       if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
         if (targetFound) {

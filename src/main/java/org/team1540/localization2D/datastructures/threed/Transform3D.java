@@ -25,6 +25,11 @@ public class Transform3D {
     this(Vector3D.ZERO, rotation);
   }
 
+  public Transform3D(double x, double y, double z, double roll, double pitch, double yaw) {
+    this(new Vector3D(x, y, z), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, roll, pitch, yaw));
+  }
+
+
   public Transform3D(double x, double y, double theta) {
     this.position = new Vector3D(x, y, 0);
     this.orientation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, theta);
@@ -47,6 +52,10 @@ public class Transform3D {
   }
 
   public Transform3D subtract(Transform3D other) {
-    return new Transform3D(this.position.subtract(this.orientation.applyInverseTo(other.position)), this.orientation.applyInverseTo(other.orientation));
+    return add(other.negate());
+  }
+
+  public Transform3D negate() {
+    return new Transform3D(orientation.applyTo(position.negate()), orientation.revert());
   }
 }

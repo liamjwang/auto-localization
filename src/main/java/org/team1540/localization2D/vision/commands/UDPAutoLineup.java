@@ -45,11 +45,11 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("AccLimX").setNumber(0.8);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
     tebConfigTable.getEntry("AccLimTheta").setNumber(10.0);
-    if (Robot.limelightLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
+    if (Robot.visionLocalization.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
-      // if (Robot.limelightLocalization.millisSinceLastAcquired() < 2000) {
-        updateGoal(Robot.lastOdomToLimelight);
+      // if (Robot.visionLocalization.millisSinceLastAcquired() < 2000) {
+        updateGoal(Robot.lastOdomToGoal);
       // } else {
       //   Robot.leds.set(ColorPattern.RED);
       //   cancel();
@@ -62,8 +62,15 @@ public class UDPAutoLineup extends Command {
   }
 
   private Transform3D computeGoal() {
+    Transform3D visionTargetToLimelightOrNull = Robot.limelightInterface.getVisionTargetToLimelightOrNull();
+    // if (targetFound) {
+    Transform3D solvepnp = Transform3D.IDENTITY;
+    if (visionTargetToLimelightOrNull != null) {
+      solvepnp = visionTargetToLimelightOrNull.negate();
+    }
     return Robot.wheelOdometry.getOdomToBaseLink()
-        .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+        // .add(solvepnp)
+        .add(Robot.visionLocalization.getBaseLinkToVisionTarget())
         .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
   }
 
@@ -78,7 +85,7 @@ public class UDPAutoLineup extends Command {
 
   @Override
   protected void execute() {
-    if (Robot.limelightLocalization.attemptUpdatePose() && (getDistanceError() > 0.07)) { // TODO: Make this distance tunable
+    if (Robot.visionLocalization.attemptUpdatePose() && (getDistanceError() > 0.05)) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     }
 

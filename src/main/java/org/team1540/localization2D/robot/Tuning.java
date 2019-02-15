@@ -4,6 +4,11 @@ import org.team1540.rooster.adjustables.Tunable;
 
 public class Tuning {
 
+  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
+  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
+
+  public static double JONATHAN_HORIZONTAL_FOV = Math.toRadians(140);
+  public static double JONATHAN_VERTICAL_FOV = Math.toRadians(105);
   // GENERAL
   //@Tunable("-[General] Dead Zone")
   public static double axisDeadzone = 0.1;

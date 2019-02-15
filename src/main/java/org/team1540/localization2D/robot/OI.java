@@ -35,8 +35,6 @@ import org.team1540.rooster.util.SimpleCommand;
 
 
 public class OI {
-  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
-  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
 
   private static double scale(double input, double pow) {
     return Math.copySign(Math.pow(Math.abs(input), pow), input);

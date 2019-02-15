@@ -18,8 +18,7 @@ public class DualVisionTargetLocalizationUtils {
     double vpw = 2.0 * Math.tan(hoz_fov / 2);
     double vph = 2.0 * Math.tan(vert_fov / 2);
 
-    double screenSpaceX = vpw / 2.0
-        * -normalizedScreenPoint.getX(); // X is negated TODO: Move this negation elsewhere
+    double screenSpaceX = vpw / 2.0 * normalizedScreenPoint.getX();
     double screenSpaceY = vph / 2.0 * normalizedScreenPoint.getY();
 
     return new Vector2D(
