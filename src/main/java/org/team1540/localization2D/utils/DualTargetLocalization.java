@@ -10,19 +10,22 @@ import org.team1540.localization2D.robot.OI;
 /**
  * Class for localization with a Limelight over NetworkTables.
  */
-public class LimelightLocalization {
+public class DualTargetLocalization {
 
   private Transform3D baseLinkToVisionTarget;
   private LimelightInterface limelightInterface;
   private long timeLastAcquired = 0;
 
-  public LimelightLocalization(String limeTableName) {
+  public DualTargetLocalization(String limeTableName) {
     limelightInterface = new LimelightInterface(limeTableName);
   }
 
   public boolean attemptUpdatePose() {
     double CAMERA_TILT = Math.toRadians(-40.34981515);
     double CAMERA_ROLL = Math.toRadians(-1.38);
+    Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
+    Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
+
     double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
     Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
 
@@ -41,8 +44,6 @@ public class LimelightLocalization {
       return false;
     }
 
-    Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
-    Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
 
     Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
     baseLinkToVisionTarget = DualVisionTargetLocalizationUtils.poseFromTwoCamPoints(point0, point1, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, OI.LIMELIGHT_HORIZONTAL_FOV, OI.LIMELIGHT_VERTICAL_FOV);
