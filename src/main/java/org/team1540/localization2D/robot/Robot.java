@@ -2,6 +2,7 @@ package org.team1540.localization2D.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -11,17 +12,18 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.localization2D.datastructures.Odometry;
 import org.team1540.localization2D.datastructures.threed.Transform3D;
 import org.team1540.localization2D.networking.UDPOdometryGoalSender;
 import org.team1540.localization2D.networking.UDPTwistReceiver;
-import org.team1540.localization2D.robot.commands.drivetrain.UDPVelocityTwistDrive;
 import org.team1540.localization2D.robot.subsystems.DriveTrain;
 import org.team1540.localization2D.utils.DualTargetOffsetLocalization;
 import org.team1540.localization2D.utils.LimelightInterface;
-import org.team1540.localization2D.utils.StateChangeDetector;
 import org.team1540.localization2D.utils.TankDriveOdometryRunnable;
+import org.team1540.localization2D.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
@@ -119,8 +121,10 @@ public class Robot extends IterativeRobot {
       }
       if (OI.alignCommand == null || !OI.alignCommand.isRunning()) {
         if (targetFound) {
+          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
           leds.set(ColorPattern.LIME);
         } else {
+          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
           leds.set(ColorPattern.RED);
         }
       }
